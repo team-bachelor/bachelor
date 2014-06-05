@@ -54,7 +54,7 @@ public class RejectToStartServiceImpl implements IBpmRejectService{
 		TaskEx task = bpmTaskService.getTask(taskId);
 		PvmActivity firstActiviti = bpmTaskService.getFirstTask(task.getTask().getProcessDefinitionId());
 		//退回到初始节点
-		bpmRuntimeService.signal(taskId, firstActiviti.getId(),bpDataEx);
+		bpmRuntimeService.signal(taskId, "", firstActiviti.getId(),bpDataEx);
 		//取得初始节点的历史信息
 		String piId = task.getTask().getProcessInstanceId();
 		List<HistoricTaskInstance> hisTasks = 

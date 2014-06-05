@@ -39,7 +39,26 @@ public class BpmTaskReviewDao extends GenericDaoImpl<BpmTaskReview, String>
 		return reviews;
 	}
 
-	public BaseBpDataEx getBpExData(String piid) {
+
+	@Override
+	public List<BpmTaskReview> getWaitingTasks(String userId) {
+		DetachedCriteria dc = getDetachedCriteria();
+		dc.add(Restrictions.eq("reviewUserId", userId)).addOrder(
+				Order.desc("reviewDate"));
+		List<BpmTaskReview> reviews = findByCriteriaNoPage(dc);
+		return reviews;
+	}
+
+	@Override
+	public List<BpmTaskReview> getFinishedTasks(String userId) {
+		DetachedCriteria dc = getDetachedCriteria();
+		dc.add(Restrictions.eq("reviewUserId", userId)).addOrder(
+				Order.desc("reviewDate"));
+		List<BpmTaskReview> reviews = findByCriteriaNoPage(dc);
+		return reviews;
+	}
+	
+	private BaseBpDataEx getBpExData(String piid) {
 		JdbcTemplate jdbcTemplate = this.getJdbcTemplate();
 //		String sql = "select bytes_ from ACT_RU_VARIABLE t join ACT_GE_BYTEARRAY b on t.bytearray_id_ = b.id_ where t.proc_inst_id_ = '"
 //				+ piid + "' and t.name_ = '" + Constant.BPM_BP_DATA_EX_KEY + "'";

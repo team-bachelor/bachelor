@@ -7,7 +7,7 @@ package org.bachelor.bpm.domain;
  */
 public enum ReviewResult {
 
-	pass("通过"),reject("退回"),unpass("不通过");
+	pass("通过"),reject("退回");
 	
 	private String name;
 	private ReviewResult(String name){

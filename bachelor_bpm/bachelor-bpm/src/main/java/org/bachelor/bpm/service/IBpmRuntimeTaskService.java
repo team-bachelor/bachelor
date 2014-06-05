@@ -93,6 +93,7 @@ public interface IBpmRuntimeTaskService {
 	 * @return 活动节点
 	 */
 	public TaskEx getActiveTask(String piId);
+	public TaskEx getActiveTask(String piId, String userId);
 
 	/**
 	 * 查询指定Id的人工节点定义
@@ -147,6 +148,8 @@ public interface IBpmRuntimeTaskService {
      * @return
      */
 	public List<TaskDefinition> getLastTaskDef(String bizKey);
+
+	
 
 	
 	

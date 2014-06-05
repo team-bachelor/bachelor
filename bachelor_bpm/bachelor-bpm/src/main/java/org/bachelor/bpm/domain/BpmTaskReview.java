@@ -8,18 +8,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.bachelor.web.json.DefaultDateSerialize;
 import org.hibernate.annotations.GenericGenerator;
-
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * 流程审核信息实体类
  * 
- * @author 
+ * @author hubin
  * 
  */
-@Entity()
+@Entity
 @Table(name = "t_ufp_bpm_task_review")
 public class BpmTaskReview {
 
@@ -94,7 +91,7 @@ public class BpmTaskReview {
 	private String reviewDepartmentName;
 
 	/** 审核时间 **/
-	@JsonSerialize(using=DefaultDateSerialize.class) 
+	//@JsonSerialize(using=DefaultDateSerialize.class) 
 	@Column(name = "REVIEW_DATE")
 	private Date reviewDate;
 
@@ -130,17 +127,34 @@ public class BpmTaskReview {
 	/** 审核节点的退回原因 **/
 	@Column(name = "REVIEW_FALLBACK_REASON")
 	private String reviewFallbackReasoin;
+	/** 审核节点的代办人类型**/
+	@Column(name= "REVIEW_TASK_ASSIGN_TYPE")
+	private String reviewTaskAssignType;
 	
+	
+	
+	//增加代办人字段
+	@Column(name = "CAND_USER_ID")
+	private String candUserId; 
+	
+	//增加代办人字段
 	@Column(name = "IS_TASK_FINISH")
 	private String isTaskFinish;
-	
 
-	public String getIsTaskFinish() {
-		return isTaskFinish;
+	public String getCandUserId() {
+		return candUserId;
 	}
 
-	public void setIsTaskFinish(String isTaskFinish) {
-		this.isTaskFinish = isTaskFinish;
+	public void setCandUserId(String candUserId) {
+		this.candUserId = candUserId;
+	}
+
+	public String getReviewTaskAssignType() {
+		return reviewTaskAssignType;
+	}
+
+	public void setReviewTaskAssignType(String reviewTaskAssignType) {
+		this.reviewTaskAssignType = reviewTaskAssignType;
 	}
 
 	public String getReviewFallbackReasoin() {
@@ -584,7 +598,7 @@ public class BpmTaskReview {
 	/**
 	 * 取得审核结果.0：通过，1：驳回
 	 * 
-	 * @see org.bachelor.bpm.common.BpmConstant
+	 * @see cn.com.bpsc.ufp.bpm.common.Constant
 	 * @return 审核结果.0：通过，1：驳回
 	 */
 	public String getReviewResult() {
@@ -594,7 +608,7 @@ public class BpmTaskReview {
 	/**
 	 * 设置审核结果.0：通过，1：驳回
 	 * 
-	 * @see org.bachelor.bpm.common.BpmConstant
+	 * @see cn.com.bpsc.ufp.bpm.common.Constant
 	 * 
 	 * @param reviewResult
 	 *            审核结果.0：通过，1：驳回
@@ -632,6 +646,14 @@ public class BpmTaskReview {
 		} else if (!bizKey.equals(other.bizKey))
 			return false;
 		return true;
+	}
+
+	public String getIsTaskFinish() {
+		return isTaskFinish;
+	}
+
+	public void setIsTaskFinish(String isTaskFinish) {
+		this.isTaskFinish = isTaskFinish;
 	}
 
 }

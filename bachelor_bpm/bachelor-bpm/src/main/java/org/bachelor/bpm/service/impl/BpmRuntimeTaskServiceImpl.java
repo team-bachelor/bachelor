@@ -263,7 +263,7 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 
 	@Override
 	public List<IBpmUser> getUsersByTaskId(String taskId) {
-		BaseBpDataEx bpDataEx = bpmRuntimeService.getBpDataExByTaskId(taskId);
+		BaseBpDataEx bpDataEx = bpmRuntimeService.getBpDataExByTaskId(taskId, null);
 		List<IBpmUser> userList = new ArrayList<IBpmUser>();
 		// 判断是会审节点
 		if (bpDataEx.getTaskEx().getTaskType() != null
@@ -461,7 +461,7 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 	}
 
 	@Override
-	public TaskEx getActiveTask(String piId) {
+	public TaskEx getActiveTask(String piId, String userId) {
 		TaskEx taskEx = null;
 		TaskQuery query = taskService.createTaskQuery();
 		List<Task> taskList = query.processInstanceId(piId).active().list();
@@ -469,17 +469,22 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 			return null;
 		}
 		Task task = taskList.get(0);
-		IBpmUser user = (IBpmUser) vlService
-				.getSessionAttribute(BpmConstant.BPM_LOGON_USER);
-		if (taskList.size() > 1) {
+		if (taskList.size() > 1 && userId != null) {
 			for (Task t : taskList) {
-				if (user.getId().equals(t.getAssignee())) {
+				if (t.getAssignee().equals(userId)) {
 					task = t;
 				}
 			}
 		}
 		taskEx = warpTask(task);
 		return taskEx;
+	}
+	
+	@Override
+	public TaskEx getActiveTask(String piId) {
+		IBpmUser user = (IBpmUser) vlService
+				.getSessionAttribute(BpmConstant.BPM_LOGON_USER);
+		return getActiveTask(piId, user.getId());
 	}
 
 	public List<TaskEx> getAllActiveTask(String piId) {
@@ -507,7 +512,7 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 	@Override
 	public List<String> getRoleByTaskDefinition(TaskDefinition taskDefinition,
 			String piId) {
-		BaseBpDataEx bpDataEx = bpmRuntimeService.getBpDataEx(piId);
+		BaseBpDataEx bpDataEx = bpmRuntimeService.getBpDataEx(piId, null);
 		List<String> roleNameList = new ArrayList<String>();
 
 		Set<Expression> gruopExpressionSet = taskDefinition
@@ -612,9 +617,9 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 
 		for (Task task : taskList) {
 			bpDataEx = (BaseBpDataEx) bpmRuntimeService.getBpDataEx(task
-					.getProcessInstanceId());
+					.getProcessInstanceId(), null);
 			bpDataEx.setPiId(task.getProcessInstanceId());
-			TaskEx taskEx = getActiveTask(task.getProcessInstanceId());
+			TaskEx taskEx = warpTask(task);
 			bpDataEx.setTaskEx(taskEx);
 			bpDataExs.add(bpDataEx);
 		}
@@ -633,9 +638,9 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 
 		for (Task task : taskList) {
 			bpDataEx = (BaseBpDataEx) bpmRuntimeService.getBpDataEx(task
-					.getProcessInstanceId());
+					.getProcessInstanceId(), null);
 			bpDataEx.setPiId(task.getProcessInstanceId());
-			TaskEx taskEx = getActiveTask(task.getProcessInstanceId());
+			TaskEx taskEx = warpTask(task);
 			bpDataEx.setTaskEx(taskEx);
 			bpDataExs.add(bpDataEx);
 		}

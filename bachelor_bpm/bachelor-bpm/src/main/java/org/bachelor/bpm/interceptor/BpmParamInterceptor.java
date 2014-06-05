@@ -68,12 +68,12 @@ public class BpmParamInterceptor extends AllManagedIntercepter{
 	            log.info("结束 BusinessProcessBeginInterceptor.preHandle 方法。");
 	            return true;
 	        }
-	        bpInfoEx = runtimeService.getBpDataEx(taskEx.getTask().getProcessInstanceId());
+	        bpInfoEx = runtimeService.getBpDataEx(taskEx.getTask().getProcessInstanceId(), user.getId());
 	        if(bpInfoEx != null){
 				bpInfoEx.setTaskEx(taskEx);
 			}
 		}else{
-			bpInfoEx = runtimeService.getBpDataExByBizKey(bizKey);
+			bpInfoEx = runtimeService.getBpDataExByBizKey(bizKey, user.getId());
 		}
 		
 		if(bpInfoEx != null){

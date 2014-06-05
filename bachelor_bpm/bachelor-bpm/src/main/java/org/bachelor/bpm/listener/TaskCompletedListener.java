@@ -26,9 +26,9 @@ public class TaskCompletedListener implements ApplicationListener<TaskCompletedE
 	@Override
 	public void onApplicationEvent(TaskCompletedEvent event) {
 		BaseBpDataEx  bpDataEx=(BaseBpDataEx) event.getSource();
-		BaseBpDataEx newBpDateEx = bpmRuntimeService.getBpDataEx(bpDataEx.getPiId());
+		BaseBpDataEx newBpDateEx = bpmRuntimeService.getBpDataEx(bpDataEx.getPiId(), bpDataEx.getLastOptUserId());
 		if(newBpDateEx!=null && newBpDateEx.getPiId()!=null){
-			TaskEx taskEx = bpmRuntimeTaskService.getActiveTask(newBpDateEx.getPiId());
+			TaskEx taskEx = bpmRuntimeTaskService.getActiveTask(newBpDateEx.getPiId(), bpDataEx.getLastOptUserId());
 			newBpDateEx.setTaskEx(taskEx);
 			vlService.setRequestAttribute(BpmConstant.BPM_BP_DATA_EX_KEY, newBpDateEx);
 		}else{

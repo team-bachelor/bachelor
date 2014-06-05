@@ -18,6 +18,10 @@ public class BaseBpDataEx implements Serializable {
 	private String domainId;
 	/** 流程实例Id **/
 	private String piId;
+	/** 最后一次办理人Id **/
+	private String lastOptUserId;
+	/** 最后一次操作Id **/
+	private String lastOpt;
 	/** 发起单位Id **/
 	private String startCompanyId;
 	/** 发起单位名称 **/
@@ -111,6 +115,22 @@ public class BaseBpDataEx implements Serializable {
 		if (this.taskEx != null && this.getTaskEx().getTask() != null) {
 			this.piId = this.getTaskEx().getTask().getProcessInstanceId();
 		}
+	}
+
+	public String getLastOptUserId() {
+		return lastOptUserId;
+	}
+
+	public void setLastOptUserId(String userId) {
+		this.lastOptUserId = userId;
+	}
+
+	public String getLastOpt() {
+		return lastOpt;
+	}
+
+	public void setLastOpt(String lastOpt) {
+		this.lastOpt = lastOpt;
 	}
 
 }

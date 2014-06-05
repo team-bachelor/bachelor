@@ -2,7 +2,6 @@ package org.bachelor.bpm.dao;
 
 import java.util.List;
 
-import org.bachelor.bpm.domain.BaseBpDataEx;
 import org.bachelor.bpm.domain.BpmTaskReview;
 import org.bachelor.dao.IGenericDao;
 
@@ -35,6 +34,20 @@ public interface IBpmTaskReviewDao extends IGenericDao<BpmTaskReview, String> {
 	 */
 	public List<BpmTaskReview> getTaskReviewsByBizKey(String bizKey);
 	
-	public BaseBpDataEx getBpExData(String piid);
+	/**
+	 * 得到某个用户的待办列表
+	 * @param userId
+	 * @return
+	 */
+	public List<BpmTaskReview> getWaitingTasks(String userId);
+	
+	/**
+	 * 得到某个用户的已办列表
+	 * @param userId
+	 * @return
+	 */
+	public List<BpmTaskReview> getFinishedTasks(String userId);
+	
+//	public BaseBpDataEx getBpExData(String piid);
 
 }

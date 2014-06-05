@@ -10,6 +10,7 @@ import org.activiti.engine.task.Comment;
 import org.bachelor.bpm.auth.IBpmUser;
 import org.bachelor.bpm.domain.BaseBpDataEx;
 import org.bachelor.bpm.domain.BpmTaskReview;
+import org.bachelor.bpm.domain.ReviewResult;
 import org.bachelor.bpm.domain.TaskEx;
 import org.bachelor.bpm.vo.PiStatus;
 
@@ -81,7 +82,7 @@ public interface IBpmRuntimeService {
 	 * @param taskId
 	 *            节点Id
 	 */
-	public <T extends BaseBpDataEx> void complete(String taskId,T bpDataEx);
+	public <T extends BaseBpDataEx> void complete(String taskId, String userId, T bpDataEx);
 
 	/**
 	 * 完成节点并进行流程流转,并且由指定用户接管下个节点
@@ -116,18 +117,19 @@ public interface IBpmRuntimeService {
 	 * 
 	 * @param piId
 	 *            流程实例Id
+	 * @param userId  可以传空
 	 * 
 	 */
-	public BaseBpDataEx getBpDataEx(String piId);
+	public BaseBpDataEx getBpDataEx(String piId, String userId);
 
 	/**
 	 * 取得BpInfoEx对象
 	 * 
 	 * @param piId
 	 *            TaskId
-	 * 
+	 * @param userId 可以为空
 	 */
-	public BaseBpDataEx getBpDataExByTaskId(String taskId);
+	public BaseBpDataEx getBpDataExByTaskId(String taskId, String userId);
 
 	/**
 	 * 为节点分派代理人
@@ -166,7 +168,7 @@ public interface IBpmRuntimeService {
 	 * @param bizKey
 	 * @return
 	 */
-	public BaseBpDataEx getBpDataExByBizKey(String bizKey);
+	public BaseBpDataEx getBpDataExByBizKey(String bizKey, String userId);
 
 	/**
 	 * 根据bizKey，查询当前节点的候选人
@@ -174,7 +176,7 @@ public interface IBpmRuntimeService {
 	 * @param bizKey
 	 * @return 候选人用户集合
 	 */
-	public List<IBpmUser> getTaskCandidateUserByBizKey(String bizKey);
+	public List<IBpmUser> getTaskCandidateUserByBizKey(String bizKey, String userId);
 
 	/**
 	 * 获取指定流程和指定节点的注释信息
@@ -212,19 +214,15 @@ public interface IBpmRuntimeService {
 	 * 
 	 * @return 审核信息实体类
 	 */
-	public <T extends BaseBpDataEx>BpmTaskReview completeReview(String taskId, String title,
-			String content, String comment, String fallBackReason,
-			String result, String taskCandidate,T bpDataEx);
+	public <T extends BaseBpDataEx>BpmTaskReview completeReview(String taskId, String userId,
+			String title, String content, String comment, String fallBackReason,
+			ReviewResult result, String taskCandidate,T bpDataEx);
 
-	public <T extends BaseBpDataEx> BpmTaskReview completeReview(String taskId, String comment, String result,
-			String taskCandidate, T bpDataEx);
+	public <T extends BaseBpDataEx> BpmTaskReview completeReview(String taskId, String userId,
+			String comment,	ReviewResult result, String taskCandidate, T bpDataEx);
 
-	public <T extends BaseBpDataEx> BpmTaskReview completeReview(ProcessInstance pi, String comment,
-			String result, String taskCandidate);
-
-	public <T extends BaseBpDataEx> BpmTaskReview completeReview(String taskId, String title, String content,
-			String comment, String fallBackReason, String result,
-			String taskCandidate, T bpDataEx, IBpmUser user);
+	public <T extends BaseBpDataEx> BpmTaskReview completeReview(ProcessInstance pi, String userId, String comment,
+			ReviewResult result, String taskCandidate);
 	/**
 	 * 查询指定节点相关的审核信息。 此节点必须是审核节点。 审核信息按照审核时间顺序排列。
 	 * 
@@ -321,7 +319,7 @@ public interface IBpmRuntimeService {
 	 * @param targetTaskDefKey
 	 *            流转目标人工节点
 	 */
-	public <T extends BaseBpDataEx> void signal(String taskId, String targetTaskDefKey,T bpDataEx);
+	public <T extends BaseBpDataEx> void signal(String taskId, String userId, String targetTaskDefKey,T bpDataEx);
 
 	/**
 	 * 根据业务key，获取流程当前节点的 所有出线节点的代办人列表
@@ -351,6 +349,9 @@ public interface IBpmRuntimeService {
 	 */
 	public Map<PvmTransition, TaskDefinition> getNextTaskDefinition(
 			String bizKey);
+
+	
+
 
 
 
