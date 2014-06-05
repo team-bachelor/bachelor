@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<beans xmlns="http://www.springframework.org/schema/beans"
+	    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	    xmlns:mvc="http://www.springframework.org/schema/mvc"
+	    xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:aop="http://www.springframework.org/schema/aop"
+	    xmlns:context="http://www.springframework.org/schema/context"
+	    xmlns:p="http://www.springframework.org/schema/p"
+	     
+	    xsi:schemaLocation="
+	        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+	        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+	        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+			http://www.springframework.org/schema/flex http://www.springframework.org/schema/flex/spring-flex-1.0.xsd
+			"
+	    >
+    
+	 <context:annotation-config />
+	 <context:component-scan base-package="org.bachelor">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>	 	
+	 </context:component-scan>
+	 
+	 <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+	 <context:property-placeholder location="classpath:/jdbc.properties" /> 
+	
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${driverClassName}" />
+		<property name="jdbcUrl" value="${url}" />
+		<property name="user" value="bachelor_DEMO" />
+		<property name="password" value="Aa123456" />
+
+		<property name="maxPoolSize" value="5"></property>
+		<property name="minPoolSize" value="1"></property>
+		<property name="initialPoolSize" value="1"></property>
+		<property name="autoCommitOnClose" value="true"></property>
+		<property name="checkoutTimeout" value="36000"></property>
+		<property name="acquireIncrement" value="2"></property>
+		<property name="maxIdleTime" value="600"></property>
+		<property name="maxStatements" value="0"></property>
+		<property name="maxStatementsPerConnection" value="0"></property>
+	</bean>
+
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.jdbc.batch_size">10</prop>
+                <prop key="hibernate.jdbc.fetch_size">3</prop>
+<!--                 <prop key="hibernate.hbm2ddl.auto">update</prop> -->
+                <prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop>
+			</props>
+		</property>
+		<property name="packagesToScan">
+			<list>
+				<value>org.bachelor.**.domain</value>
+			</list>
+		</property>
+		
+	</bean>
+	
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+		<property name="dataSource" ref="dataSource" /> 
+	</bean>
+	
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="query*" read-only="true" />
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="*"  propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut expression="execution(public * org.bachelor.**.service..*Service*.*(..))" id="ufpServicePointcut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="ufpServicePointcut"/>
+	</aop:config>
+	
+	<aop:config>
+		<aop:pointcut expression="execution(public * org.bachelor.**.dao..*Dao*.*(..))" id="ufpDaoPointcut"/>
+	</aop:config>
+	
+	<aop:config>
+		<aop:pointcut expression="execution(public * org.bachelor.**.web..*Controller*.*(..))" id="ufpControllerPointcut"/>
+	</aop:config>
+	
+	<!-- 异常 -->
+	<bean class="org.bachelor.facade.service.ExceptionResolver">
+			  <property name="exceptionMappings">
+		    		<props>
+		    			<prop key="org.bachelor.core.exception.BusinessException">bizException</prop>
+		    			<prop key="org.bachelor.core.exception.SystemException">sysException</prop>
+		    		</props>
+		    	</property>
+	</bean>
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+    		<props>
+    			<prop key="java.lang.Throwable">error</prop>
+    		</props>
+    	</property>
+	</bean>
+	<!-- 异常 -->
+	
+
+</beans>
