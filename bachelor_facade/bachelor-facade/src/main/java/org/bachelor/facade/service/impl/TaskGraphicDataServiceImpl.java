@@ -57,9 +57,9 @@ public class TaskGraphicDataServiceImpl implements ITaskGraphicDataService{
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	@Override
-	public Map<String,Object> findByBizKey(String bizKey) {
+	public Map<String,Object> findByBizKey(String bizKey,String userId) {
 			/** 得到 BaseBpDataEx(流程和业务数据交换)对象 **/	
-			BaseBpDataEx bpDataEx = bpmCtxService.getBpDataExByBizKey(bizKey);
+			BaseBpDataEx bpDataEx = bpmCtxService.getBpDataExByBizKey(bizKey, userId);
 		
 			Map<String,Object> gd_map = new HashMap<String,Object>();
 			//流程尚未执行的节点
@@ -163,12 +163,12 @@ public class TaskGraphicDataServiceImpl implements ITaskGraphicDataService{
 	 * @return
 	 */
 	@Override
-	public Map<String, Object> findHistoricByBizKey(String bizKey) {
+	public Map<String, Object> findHistoricByBizKey(String bizKey,String userId) {
 		Map<String,Object> gd_map = new HashMap<String,Object>();
 		List<HistoricTaskInstance> historics = bpmHistoryService.getProcessHistoricByBizKey(bizKey);
 		HistoricProcessInstance hpi = bpmHistoryService.findByBizKey(bizKey);
 		 
-		TaskEx taskEx = bpmRuntimeTaskService.getActiveTask(hpi.getId());
+		TaskEx taskEx = bpmRuntimeTaskService.getActiveTask(hpi.getId(), userId).get(0);
 		if(taskEx!=null){
 				HistoricTaskInstanceEntity htie = new HistoricTaskInstanceEntity();
 				htie.setAssignee(taskEx.getTask().getAssignee());

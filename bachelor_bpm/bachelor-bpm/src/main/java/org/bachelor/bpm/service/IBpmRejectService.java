@@ -13,5 +13,5 @@ public  interface IBpmRejectService {
 	 * 回退流程
 	 * @param taskId 当前节点Id
 	 */
-	public void reject(String taskId,BaseBpDataEx bpDataEx);
+	public void reject(String taskId, String userId, BaseBpDataEx bpDataEx);
 }

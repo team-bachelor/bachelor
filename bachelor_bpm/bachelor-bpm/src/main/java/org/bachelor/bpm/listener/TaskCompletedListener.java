@@ -1,6 +1,8 @@
 package org.bachelor.bpm.listener;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,11 @@ public class TaskCompletedListener implements ApplicationListener<TaskCompletedE
 		BaseBpDataEx  bpDataEx=(BaseBpDataEx) event.getSource();
 		BaseBpDataEx newBpDateEx = bpmRuntimeService.getBpDataEx(bpDataEx.getPiId(), bpDataEx.getLastOptUserId());
 		if(newBpDateEx!=null && newBpDateEx.getPiId()!=null){
-			TaskEx taskEx = bpmRuntimeTaskService.getActiveTask(newBpDateEx.getPiId(), bpDataEx.getLastOptUserId());
+			List<TaskEx> tl = bpmRuntimeTaskService.getActiveTask(newBpDateEx.getPiId(), null);
+			TaskEx taskEx = null;
+			if(tl != null && !tl.isEmpty()){
+				taskEx = tl.get(0);
+			}
 			newBpDateEx.setTaskEx(taskEx);
 			vlService.setRequestAttribute(BpmConstant.BPM_BP_DATA_EX_KEY, newBpDateEx);
 		}else{

@@ -20,7 +20,7 @@ public interface ITaskGraphicDataService {
 	 * @param bpDataEx
 	 * @return
 	 */
-	public Map<String,Object> findByBizKey(String bizKey) ;
+	public Map<String,Object> findByBizKey(String bizKey,String userId) ;
 	
 	/**
 	 * 获取节点图形集合，根据历史信息
@@ -36,5 +36,5 @@ public interface ITaskGraphicDataService {
 	 * @param bizKey
 	 * @return
 	 */
-	public Map<String,Object> findHistoricByBizKey(String bizKey);
+	public Map<String,Object> findHistoricByBizKey(String bizKey,String userId);
 }

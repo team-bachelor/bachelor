@@ -1,6 +1,6 @@
 package org.bachelor.bpm.domain;
 
-public interface IBaseBizDomain {
+public interface IBaseDomain {
 	public String getId();
 	public String getName();
 }

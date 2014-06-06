@@ -6,10 +6,10 @@ import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.task.TaskDefinition;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
-import org.bachelor.bpm.auth.IBpmUser;
 import org.bachelor.bpm.domain.BaseBpDataEx;
 import org.bachelor.bpm.domain.TaskEx;
 import org.bachelor.bpm.domain.TaskType;
+import org.bachelor.core.entity.IBaseEntity;
 
 /**
  * 节点查询服务类
@@ -52,13 +52,13 @@ public interface IBpmRuntimeTaskService {
 	 * @param taskId
 	 * @return 指定节点的全部候选人
 	 */
-	public List<IBpmUser> getUsersByTaskId(String taskId);
+	public List<? extends IBaseEntity> getUsersByTaskId(String taskId);
     /**
      * 获取指定节点定义的全部候选人
      * @param taskDefinition 节点定义对象
      * @return 指定节点定义的全部候选人
      */
-	public List<IBpmUser> getUserByTaskDefinition(TaskDefinition taskDefinition,String processInstanceId);
+	public List<? extends IBaseEntity> getUserByTaskDefinition(TaskDefinition taskDefinition,String processInstanceId);
 	
     /**
      * 获取指定节点定义的全部候选人
@@ -66,7 +66,7 @@ public interface IBpmRuntimeTaskService {
      * @param taskDefinition 节点定义对象
      * @return 指定节点定义的全部候选人
      */
-	public List<IBpmUser> getUserByTaskDefinition2(TaskDefinition taskDefinition,String processInstanceId);
+	public List<IBaseEntity> getUserByTaskDefinition2(TaskDefinition taskDefinition,String processInstanceId);
 
     /**
      * 获取指定节点定义的候选角色
@@ -92,8 +92,8 @@ public interface IBpmRuntimeTaskService {
 	 * @param piId 流程实例Id
 	 * @return 活动节点
 	 */
-	public TaskEx getActiveTask(String piId);
-	public TaskEx getActiveTask(String piId, String userId);
+	public List<TaskEx> getActiveTask(String piId);
+	public List<TaskEx> getActiveTask(String piId, String userId);
 
 	/**
 	 * 查询指定Id的人工节点定义

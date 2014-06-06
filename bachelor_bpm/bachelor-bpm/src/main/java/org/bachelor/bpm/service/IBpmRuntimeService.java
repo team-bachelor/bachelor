@@ -7,12 +7,12 @@ import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.task.TaskDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
-import org.bachelor.bpm.auth.IBpmUser;
 import org.bachelor.bpm.domain.BaseBpDataEx;
 import org.bachelor.bpm.domain.BpmTaskReview;
 import org.bachelor.bpm.domain.ReviewResult;
 import org.bachelor.bpm.domain.TaskEx;
 import org.bachelor.bpm.vo.PiStatus;
+import org.bachelor.core.entity.IBaseEntity;
 
 /**
  * 工作流运行时服务
@@ -35,13 +35,13 @@ public interface IBpmRuntimeService {
 			BaseBpDataEx bpInfoEx);
 
 	public ProcessInstance startProcessInstanceByKey(String pdkey,
-			BaseBpDataEx bpDataEx, IBpmUser user);
+			BaseBpDataEx bpDataEx, IBaseEntity user);
 	/**
 	 * 取得当前人工节点的待选人列表
 	 * 
 	 * @return 当前人工节点的待选人列表
 	 */
-	public List<IBpmUser> getTaskCandidateUser();
+	public List<? extends IBaseEntity> getTaskCandidateUser();
 
 	/**
 	 * 取得指定人工节点的待选人列表
@@ -52,7 +52,7 @@ public interface IBpmRuntimeService {
 	 *            人工节点定义Key
 	 * @return 待选人列表
 	 */
-	public List<IBpmUser> getTaskCandidateUserByDefKey(String piId,
+	public List<? extends IBaseEntity> getTaskCandidateUserByDefKey(String piId,
 			String taskDefKey);
 
 	/**
@@ -64,7 +64,7 @@ public interface IBpmRuntimeService {
 	 *            人工节点定义Key
 	 * @return 待选人列表
 	 */
-	public List<IBpmUser> getTaskCandidateUserByDefKey2(String piId,
+	public List<? extends IBaseEntity> getTaskCandidateUserByDefKey2(String piId,
 			String taskDefKey);
 
 	/*
@@ -73,7 +73,7 @@ public interface IBpmRuntimeService {
 	 * 
 	 * pdid 流程定义ID piId 流程实例ID taskDefKey 节点定义ID
 	 */
-	public List<IBpmUser> getHisTaskCandidateUserByDefKey(String pdid, String PiId,
+	public List<? extends IBaseEntity> getHisTaskCandidateUserByDefKey(String pdid, String PiId,
 			String taskDefKey);
 
 	/**
@@ -176,7 +176,7 @@ public interface IBpmRuntimeService {
 	 * @param bizKey
 	 * @return 候选人用户集合
 	 */
-	public List<IBpmUser> getTaskCandidateUserByBizKey(String bizKey, String userId);
+	public List<? extends IBaseEntity> getTaskCandidateUserByBizKey(String bizKey, String userId);
 
 	/**
 	 * 获取指定流程和指定节点的注释信息
@@ -211,18 +211,34 @@ public interface IBpmRuntimeService {
 	 *            审核备注
 	 * @param result
 	 *            审核结果
+	 * @param force
+	 *            是否不验证用户强制提交
 	 * 
 	 * @return 审核信息实体类
 	 */
 	public <T extends BaseBpDataEx>BpmTaskReview completeReview(String taskId, String userId,
 			String title, String content, String comment, String fallBackReason,
-			ReviewResult result, String taskCandidate,T bpDataEx);
-
-	public <T extends BaseBpDataEx> BpmTaskReview completeReview(String taskId, String userId,
-			String comment,	ReviewResult result, String taskCandidate, T bpDataEx);
-
-	public <T extends BaseBpDataEx> BpmTaskReview completeReview(ProcessInstance pi, String userId, String comment,
+			ReviewResult result, String taskCandidate,T bpDataEx, boolean force);
+	
+	public <T extends BaseBpDataEx>BpmTaskReview completeReview(String taskId, String id,
+			String comment, ReviewResult result, String string,
+			T bpData, boolean force);
+	
+	public BpmTaskReview completeReview(ProcessInstance pi, String userId, String comment,
 			ReviewResult result, String taskCandidate);
+
+	/**
+	 * 不论当前用户是否有权限，强制提交流程
+	 * @param pi
+	 * @param userId
+	 * @param comment
+	 * @param result
+	 * @param taskCandidate
+	 * @return
+	 */
+	public BpmTaskReview completeReviewForce(ProcessInstance pi, String userId,
+			String comment, ReviewResult result, String taskCandidate);
+	
 	/**
 	 * 查询指定节点相关的审核信息。 此节点必须是审核节点。 审核信息按照审核时间顺序排列。
 	 * 
@@ -327,7 +343,7 @@ public interface IBpmRuntimeService {
 	 * @param bizKey
 	 * @return 所有出线节点的代办人集合
 	 */
-	public List<IBpmUser> getNextTaskCandidateUser(String bizKey);
+	public List<? extends IBaseEntity> getNextTaskCandidateUser(String bizKey);
 
 
 
@@ -337,7 +353,7 @@ public interface IBpmRuntimeService {
 	 * @param taskDef
 	 * @return 节点的代办人集合
 	 */
-	public List<IBpmUser> getNextTaskCandidateUser(String bizKey,
+	public List<? extends IBaseEntity> getNextTaskCandidateUser(String bizKey,
 			String outGoingTransValue, BaseBpDataEx bpDataEx);
 
 	/**
@@ -349,10 +365,5 @@ public interface IBpmRuntimeService {
 	 */
 	public Map<PvmTransition, TaskDefinition> getNextTaskDefinition(
 			String bizKey);
-
 	
-
-
-
-
 }

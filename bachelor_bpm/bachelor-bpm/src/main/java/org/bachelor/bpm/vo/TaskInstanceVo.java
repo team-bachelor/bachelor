@@ -2,8 +2,7 @@ package org.bachelor.bpm.vo;
 
 import java.util.List;
 
-import org.bachelor.bpm.auth.IBpmRole;
-import org.bachelor.bpm.auth.IBpmUser;
+import org.bachelor.core.entity.IBaseEntity;
 
 public class TaskInstanceVo {
 
@@ -15,22 +14,22 @@ public class TaskInstanceVo {
 	private String name;
 	private String desciption;
 	private int priority;
-	private IBpmUser owner;
-	private IBpmUser assignee;
-	private List<IBpmUser> assignments;
-	public IBpmUser getAssignee() {
+	private IBaseEntity owner;
+	private IBaseEntity assignee;
+	private List<IBaseEntity> assignments;
+	public IBaseEntity getAssignee() {
 		return assignee;
 	}
-	public void setAssignee(IBpmUser assignee) {
+	public void setAssignee(IBaseEntity assignee) {
 		this.assignee = assignee;
 	}
-	public List<IBpmUser> getAssignments() {
+	public List<IBaseEntity> getAssignments() {
 		return assignments;
 	}
-	public void setAssignments(List<IBpmUser> assignments) {
+	public void setAssignments(List<IBaseEntity> assignments) {
 		this.assignments = assignments;
 	}
-	private List<IBpmRole> assignmentRole;
+	private List<IBaseEntity> assignmentRole;
 	private String status;
 	private List<TaskActionVo> taskActions;
 	
@@ -82,16 +81,16 @@ public class TaskInstanceVo {
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
-	public IBpmUser getOwner() {
+	public IBaseEntity getOwner() {
 		return owner;
 	}
-	public void setOwner(IBpmUser owner) {
+	public void setOwner(IBaseEntity owner) {
 		this.owner = owner;
 	}
-	public List<IBpmRole> getAssignmentRole() {
+	public List<IBaseEntity> getAssignmentRole() {
 		return assignmentRole;
 	}
-	public void setAssignmentRole(List<IBpmRole> assignmentRole) {
+	public void setAssignmentRole(List<IBaseEntity> assignmentRole) {
 		this.assignmentRole = assignmentRole;
 	}
 	public String getStatus() {

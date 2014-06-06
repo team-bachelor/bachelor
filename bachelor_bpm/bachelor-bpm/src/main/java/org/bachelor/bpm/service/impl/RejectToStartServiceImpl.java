@@ -50,11 +50,11 @@ public class RejectToStartServiceImpl implements IBpmRejectService{
 //	}
 
 	@Override
-	public void reject(String taskId, BaseBpDataEx bpDataEx) {
+	public void reject(String taskId,String userId, BaseBpDataEx bpDataEx) {
 		TaskEx task = bpmTaskService.getTask(taskId);
 		PvmActivity firstActiviti = bpmTaskService.getFirstTask(task.getTask().getProcessDefinitionId());
 		//退回到初始节点
-		bpmRuntimeService.signal(taskId, "", firstActiviti.getId(),bpDataEx);
+		bpmRuntimeService.signal(taskId, userId, firstActiviti.getId(),bpDataEx);
 		//取得初始节点的历史信息
 		String piId = task.getTask().getProcessInstanceId();
 		List<HistoricTaskInstance> hisTasks = 
@@ -67,8 +67,8 @@ public class RejectToStartServiceImpl implements IBpmRejectService{
 		//取得最后一次受理人
 		String assignee = hisTask.getAssignee();
 		//取得当前节点
-		TaskEx newTask = bpmTaskService.getActiveTask(piId);
-		//设置当前节点受理人
-		bpmRuntimeService.setAssignee(newTask.getTask().getId(), assignee);
+//		TaskEx newTask = bpmTaskService.getActiveTask(piId).get(0);
+//		//设置当前节点受理人
+//		bpmRuntimeService.setAssignee(newTask.getTask().getId(), assignee);
 	}
 }

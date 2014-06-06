@@ -13,13 +13,11 @@ import org.activiti.engine.repository.DiagramLayout;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
-import org.activiti.engine.task.Task;
-
 import org.bachelor.bpm.domain.BaseBpDataEx;
 import org.bachelor.bpm.domain.BpmTaskReview;
 import org.bachelor.bpm.domain.TaskEx;
 import org.bachelor.bpm.vo.PiStatus;
-import org.bachelor.org.domain.User;
+import org.bachelor.core.entity.IBaseEntity;
 
 public interface IBpmContextService {
 	/**
@@ -233,14 +231,14 @@ public interface IBpmContextService {
 	 *            流程业务对象key
 	 * @return 业务流程封装数据对象
 	 */
-	public BaseBpDataEx getBpDataExByBizKey(String bizKey);
+	public BaseBpDataEx getBpDataExByBizKey(String bizKey, String userId);
 
 	/**
 	 * 取得当前人工节点的待选人列表
 	 * 
 	 * @return 当前人工节点的待选人列表
 	 */
-	public List<User> getTaskCandidateUser();
+	public List<? extends IBaseEntity> getTaskCandidateUser();
 
 	/**
 	 * 根据bizKey，查询当前节点的候选人
@@ -248,7 +246,7 @@ public interface IBpmContextService {
 	 * @param bizKey
 	 * @return 候选人用户集合
 	 */
-	public List<User> getTaskCandidateUserByBizKey(String bizKey);
+	public List<? extends IBaseEntity> getTaskCandidateUserByBizKey(String bizKey, String userId);
 
 	/**
 	 * 根据bizKey，查询当前节点下一个节点的候选人
@@ -341,7 +339,7 @@ public interface IBpmContextService {
 	 *            人工节点定义Key
 	 * @return 待选人列表
 	 */
-	public List<User> getTaskCandidateUserByDefKey(String piId,
+	public List<? extends IBaseEntity> getTaskCandidateUserByDefKey(String piId,
 			String taskDefKey);
 
 	/**
@@ -459,7 +457,7 @@ public interface IBpmContextService {
 	 *            业务key
 	 * @return 出线节点的代办人集合
 	 */
-	public List<User> getNextTaskCandidateUser(String bizKey);
+	public List<IBaseEntity> getNextTaskCandidateUser(String bizKey, String userId);
 
 	/**
 	 * 根据业务key，获取流程当前活动节点的全部出线节点定义
@@ -480,7 +478,7 @@ public interface IBpmContextService {
 	 *            流程定义对象
 	 * @return 指定节点的代办人集合
 	 */
-	public List<User> getNextTaskCandidateUser(String bizKey,
+	public List<? extends IBaseEntity> getNextTaskCandidateUser(String bizKey,
 			String outGoingTransValue, BaseBpDataEx bpDataEx);
 	
 	

@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bachelor.bpm.auth.IBpmUser;
 import org.bachelor.bpm.common.BpmConstant;
 import org.bachelor.bpm.domain.BaseBpDataEx;
 import org.bachelor.bpm.domain.TaskEx;
@@ -14,6 +13,7 @@ import org.bachelor.bpm.service.IBpmRuntimeService;
 import org.bachelor.bpm.service.IBpmRuntimeTaskService;
 import org.bachelor.context.interceptor.AllManagedIntercepter;
 import org.bachelor.context.service.IVLService;
+import org.bachelor.core.entity.IBaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -53,7 +53,7 @@ public class BpmParamInterceptor extends AllManagedIntercepter{
 		log.info("开始 BusinessProcessBeginInterceptor.preHandle 方法。");
 		String taskId = request.getParameter(BpmConstant.BPM_TASK_ID_KEY);
 		String bizKey = request.getParameter(BpmConstant.BPM_BIZ_KEY);
-		IBpmUser user = (IBpmUser)vlService.getSessionAttribute(BpmConstant.BPM_LOGON_USER);
+		IBaseEntity user = (IBaseEntity)vlService.getSessionAttribute(BpmConstant.BPM_LOGON_USER);
 		if(StringUtils.isBlank(taskId) && StringUtils.isBlank(bizKey)){
 			log.info("没有流程任务Id和BizKey，结束 BusinessProcessBeginInterceptor.preHandle 方法。");
 			return true;

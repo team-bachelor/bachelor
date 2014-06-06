@@ -27,8 +27,6 @@ import org.activiti.engine.task.TaskQuery;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bachelor.bpm.auth.IBpmRole;
-import org.bachelor.bpm.auth.IBpmUser;
 import org.bachelor.bpm.common.BpmConstant;
 import org.bachelor.bpm.common.BpmUtils;
 import org.bachelor.bpm.domain.BaseBpDataEx;
@@ -39,6 +37,7 @@ import org.bachelor.bpm.service.IBpmRuntimeService;
 import org.bachelor.bpm.service.IBpmRuntimeTaskService;
 import org.bachelor.bpm.service.IGroupExpResolveService;
 import org.bachelor.context.service.IVLService;
+import org.bachelor.core.entity.IBaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -243,9 +242,9 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 	 * @param taskEx
 	 * @return
 	 */
-	private List<IBpmUser> getUserFormJointTask(TaskEx taskEx) {
-		List<IBpmUser> userList = new ArrayList<IBpmUser>();
-		IBpmUser assigneer = authService.findUserById(taskEx.getTask().getAssignee());
+	private List<IBaseEntity> getUserFormJointTask(TaskEx taskEx) {
+		List<IBaseEntity> userList = new ArrayList<IBaseEntity>();
+		IBaseEntity assigneer = authService.findUserById(taskEx.getTask().getAssignee());
 		if (assigneer != null) {
 			userList.add(assigneer);
 			return userList;
@@ -253,7 +252,7 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 		List<IdentityLink> ientityLinkList = taskService
 				.getIdentityLinksForTask(taskEx.getTask().getId());
 		for (IdentityLink identityLink : ientityLinkList) {
-			IBpmUser candidateUser = authService.findUserById(identityLink.getUserId());
+			IBaseEntity candidateUser = authService.findUserById(identityLink.getUserId());
 			if (candidateUser != null) {
 				userList.add(candidateUser);
 			}
@@ -262,9 +261,9 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 	}
 
 	@Override
-	public List<IBpmUser> getUsersByTaskId(String taskId) {
+	public List<? extends IBaseEntity> getUsersByTaskId(String taskId) {
 		BaseBpDataEx bpDataEx = bpmRuntimeService.getBpDataExByTaskId(taskId, null);
-		List<IBpmUser> userList = new ArrayList<IBpmUser>();
+		List<IBaseEntity> userList = new ArrayList<IBaseEntity>();
 		// 判断是会审节点
 		if (bpDataEx.getTaskEx().getTaskType() != null
 				&& TaskType.会审.equals(bpDataEx.getTaskEx().getTaskType())) {
@@ -283,8 +282,8 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 
 		List<IdentityLink> ientityLinkList = taskService
 				.getIdentityLinksForTask(taskId);
-		Set<IBpmUser> roleSet = new HashSet<IBpmUser>();
-		Set<IBpmUser> userSet = new HashSet<IBpmUser>();
+		Set<IBaseEntity> roleSet = new HashSet<IBaseEntity>();
+		Set<IBaseEntity> userSet = new HashSet<IBaseEntity>();
 		List<String> roleList = new ArrayList<String>();
 		for (IdentityLink iLink : ientityLinkList) {
 			if (iLink.getGroupId() != null) {
@@ -313,8 +312,8 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 		}
 
 		roleSet.addAll(userSet);
-		Map<String, IBpmUser> userMap = new HashMap<String, IBpmUser>();
-		for (IBpmUser user : roleSet) {
+		Map<String, IBaseEntity> userMap = new HashMap<String, IBaseEntity>();
+		for (IBaseEntity user : roleSet) {
 			userMap.put(user.getId(), user);
 		}
 		for (String string : userMap.keySet()) {
@@ -359,9 +358,9 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 	}
 
 	@Override
-	public List<IBpmUser> getUserByTaskDefinition(TaskDefinition taskDefinition,
+	public List<? extends IBaseEntity> getUserByTaskDefinition(TaskDefinition taskDefinition,
 			String piId) {
-		List<IBpmUser> userList = new ArrayList<IBpmUser>();
+		List<IBaseEntity> userList = new ArrayList<IBaseEntity>();
 		List<String> roleList = new ArrayList<String>();
 		// 获取权限和组织机构表达形式
 		Set<Expression> gruopExpressionSet = taskDefinition
@@ -392,21 +391,21 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 				.findUsersByRoleNameAndOrgId(roleList
 						.toArray(new String[roleList.size()])));
 
-		Map<String, IBpmUser> userMap = new HashMap<String, IBpmUser>();
-		for (IBpmUser user : userList) {
+		Map<String, IBaseEntity> userMap = new HashMap<String, IBaseEntity>();
+		for (IBaseEntity user : userList) {
 			userMap.put(user.getId(), user);
 		}
 
-		return new ArrayList<IBpmUser>(userMap.values());
+		return new ArrayList<IBaseEntity>(userMap.values());
 	}
 
 	@Override
-	public List<IBpmUser> getUserByTaskDefinition2(TaskDefinition taskDefinition,
+	public List<IBaseEntity> getUserByTaskDefinition2(TaskDefinition taskDefinition,
 			String piId) {
-		Set<IBpmUser> roleSet = new HashSet<IBpmUser>();
-		Set<IBpmUser> userSet = new HashSet<IBpmUser>();
+		Set<IBaseEntity> roleSet = new HashSet<IBaseEntity>();
+		Set<IBaseEntity> userSet = new HashSet<IBaseEntity>();
 		List<String> roleList = new ArrayList<String>();
-		List<IBpmUser> userList = new ArrayList<IBpmUser>();
+		List<IBaseEntity> userList = new ArrayList<IBaseEntity>();
 
 		Set<Expression> gruopExpressionSet = taskDefinition
 				.getCandidateGroupIdExpressions();
@@ -444,8 +443,8 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 		roleSet.addAll(authService.findUsersByRoleNameAndOrgId(roleList
 				.toArray(new String[roleList.size()])));
 		roleSet.addAll(userSet);
-		Map<String, IBpmUser> userMap = new HashMap<String, IBpmUser>();
-		for (IBpmUser user : roleSet) {
+		Map<String, IBaseEntity> userMap = new HashMap<String, IBaseEntity>();
+		for (IBaseEntity user : roleSet) {
 			userMap.put(user.getId(), user);
 		}
 		for (String string : userMap.keySet()) {
@@ -461,30 +460,32 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 	}
 
 	@Override
-	public TaskEx getActiveTask(String piId, String userId) {
-		TaskEx taskEx = null;
+	public List<TaskEx> getActiveTask(String piId, String userId) {
 		TaskQuery query = taskService.createTaskQuery();
 		List<Task> taskList = query.processInstanceId(piId).active().list();
 		if (taskList == null || taskList.isEmpty()) {
 			return null;
 		}
-		Task task = taskList.get(0);
-		if (taskList.size() > 1 && userId != null) {
-			for (Task t : taskList) {
-				if (t.getAssignee().equals(userId)) {
-					task = t;
-				}
+		List<TaskEx> result = new ArrayList<TaskEx>();
+		for (Task t : taskList) {
+			String assingee = t.getAssignee();
+			if(assingee == null) continue;
+			if (userId == null || t.getAssignee().equals(userId)) {
+				result.add(warpTask(t));
 			}
 		}
-		taskEx = warpTask(task);
-		return taskEx;
+		return result;
 	}
 	
 	@Override
-	public TaskEx getActiveTask(String piId) {
-		IBpmUser user = (IBpmUser) vlService
+	public List<TaskEx> getActiveTask(String piId) {
+		IBaseEntity user = (IBaseEntity) vlService
 				.getSessionAttribute(BpmConstant.BPM_LOGON_USER);
-		return getActiveTask(piId, user.getId());
+		String userId = null;
+		if(user != null){
+			userId = user.getId();
+		}
+		return getActiveTask(piId, userId);
 	}
 
 	public List<TaskEx> getAllActiveTask(String piId) {
@@ -540,16 +541,17 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 
 	private String toRoleDesc(String roleIdStr) {
 		String roleDesc = "";
-		if (BpmUtils.haveOrgInfo(roleIdStr)) {
-			String roleId = StringUtils.substringBeforeLast(roleIdStr, "#");
-			String orgId = StringUtils.substringAfterLast(roleIdStr, "#");
-
-			String desc = authService.findRoleById(roleId).getDescription();
-			String orgName = authService.findOrgById(orgId).getName();
-			roleDesc = desc + "#" + orgName;
-		} else {
-			roleDesc = authService.findRoleById(roleIdStr).getDescription();
-		}
+		//要重新实现
+//		if (BpmUtils.haveOrgInfo(roleIdStr)) {
+//			String roleId = StringUtils.substringBeforeLast(roleIdStr, "#");
+//			String orgId = StringUtils.substringAfterLast(roleIdStr, "#");
+//
+//			String desc = authService.findRoleById(roleId).getDescription();
+//			String orgName = authService.findOrgById(orgId).getName();
+//			roleDesc = desc + "#" + orgName;
+//		} else {
+//			roleDesc = authService.findRoleById(roleIdStr).getDescription();
+//		}
 		return roleDesc;
 	}
 
@@ -573,7 +575,7 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 	public List<BaseBpDataEx> getBpDataExByCandidateUser(String pdkey,
 			String candidateUserId) {
 		// 获取用户权限信息
-		List<? extends IBpmRole> roles = authService
+		List<? extends IBaseEntity> roles = authService
 				.findRolesByUserId(candidateUserId);
 		/** 查询所有节点数据 **/
 		TaskQuery taskUserQuery = taskService.createTaskQuery();
@@ -590,7 +592,7 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 		List<Task> tasks = null;
 		// 如果权限不为空，将权限名作为查询，进行查询
 		if (roles != null && roles.size() > 0) {
-			for (IBpmRole role : roles) {
+			for (IBaseEntity role : roles) {
 				roleIds.add(role.getName());
 			}
 			tasks = taskGroupQuery.taskCandidateGroupIn(roleIds)

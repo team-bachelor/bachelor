@@ -4,20 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bachelor.bpm.auth.IBpmUser;
 import org.bachelor.bpm.domain.BaseBpDataEx;
 import org.bachelor.bpm.service.IAuthService;
 import org.bachelor.bpm.service.IBpmHistoryService;
 import org.bachelor.bpm.service.IBpmRuntimeService;
 import org.bachelor.bpm.service.IGroupExpResolveService;
 import org.bachelor.bpm.vo.PiStatus;
+import org.bachelor.core.entity.IBaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,8 +38,8 @@ public class GroupExpResolveServiceImpl implements IGroupExpResolveService {
 	private Log log = LogFactory.getLog(this.getClass());
 	
 	@Override
-	public List<? extends IBpmUser> resolve(String groupOrgExp, BaseBpDataEx bpDataEx) {
-		List<? extends IBpmUser> users = null;
+	public List<? extends IBaseEntity> resolve(String groupOrgExp, BaseBpDataEx bpDataEx) {
+		List<? extends IBaseEntity> users = null;
 		List<String> roleOrgIds = new ArrayList<String>();
 		String groupAndOrg = resolveGroupExp(groupOrgExp,bpDataEx);
 		if(!StringUtils.isEmpty(groupAndOrg)){

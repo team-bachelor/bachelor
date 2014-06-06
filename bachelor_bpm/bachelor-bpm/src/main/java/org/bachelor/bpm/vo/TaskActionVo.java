@@ -3,13 +3,12 @@ package org.bachelor.bpm.vo;
 import java.util.Date;
 import java.util.List;
 
-import org.bachelor.bpm.auth.IBpmOrg;
-import org.bachelor.bpm.auth.IBpmUser;
+import org.bachelor.core.entity.IBaseEntity;
 
 public class TaskActionVo {
 
-	private IBpmUser operator;
-	private IBpmOrg operCompany;
+	private IBaseEntity operator;
+	private IBaseEntity operCompany;
 	private Date startDate;
 	private Date completeDate;
 	private List<String> comments;
@@ -19,16 +18,16 @@ public class TaskActionVo {
 	public void setComments(List<String> comments) {
 		this.comments = comments;
 	}
-	public IBpmUser getOperator() {
+	public IBaseEntity getOperator() {
 		return operator;
 	}
-	public void setOperator(IBpmUser operator) {
+	public void setOperator(IBaseEntity operator) {
 		this.operator = operator;
 	}
-	public IBpmOrg getOperCompany() {
+	public IBaseEntity getOperCompany() {
 		return operCompany;
 	}
-	public void setOperCompany(IBpmOrg operCompany) {
+	public void setOperCompany(IBaseEntity operCompany) {
 		this.operCompany = operCompany;
 	}
 	public Date getStartDate() {

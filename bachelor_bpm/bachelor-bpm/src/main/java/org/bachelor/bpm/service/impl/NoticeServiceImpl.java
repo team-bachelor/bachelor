@@ -4,13 +4,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.bachelor.bpm.auth.IBpmOrg;
-import org.bachelor.bpm.auth.IBpmRole;
-import org.bachelor.bpm.auth.IBpmUser;
 import org.bachelor.bpm.dao.INoticeDao;
 import org.bachelor.bpm.domain.Notice;
 import org.bachelor.bpm.service.IAuthService;
 import org.bachelor.bpm.service.INoticeService;
+import org.bachelor.core.entity.IBaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +26,7 @@ public class NoticeServiceImpl implements INoticeService {
 	public Notice publish(String title, String content, String Url,
 			List<String> userIdList, String creatorId) {
 		Notice notice = new Notice();
-		IBpmUser user = authService.findUserById(creatorId);
+		IBaseEntity user = authService.findUserById(creatorId);
 		notice.setCreateTime(new Date());
 		notice.setTitle(title);
 		notice.setContent(content);
@@ -50,7 +48,7 @@ public class NoticeServiceImpl implements INoticeService {
 			String cSQL[] = new String[userIdList.size()];
 			int index = 0;
 			for(String userId:userIdList){
-				IBpmUser user = authService.findUserById(userId);
+				IBaseEntity user = authService.findUserById(userId);
 				cSQL[index] = "insert into T_UFP_BPM_NOTICE_RECEIVER(id,NOTICE_ID,RECEIVER_ID,RECEIVER_NAME) values('"+
 				UUID.randomUUID().toString()+"','"+noticeId+"','"+user.getId()+"','"+user.getName()+"'";
 				index++;
@@ -72,8 +70,8 @@ public class NoticeServiceImpl implements INoticeService {
 			String cSQL[] = new String[roleIdList.size()];
 			int index = 0;
 			for(String roleId:roleIdList){
-				IBpmRole role = authService.findRoleById(roleId);
-				IBpmOrg org = null;
+				IBaseEntity role = authService.findRoleById(roleId);
+				IBaseEntity org = null;
 				if(index<companyIdList.size()){
 					org = authService.findOrgById(companyIdList.get(index));
 				}
@@ -91,7 +89,7 @@ public class NoticeServiceImpl implements INoticeService {
 	public Notice publish(String title, String content, String Url,String creatorId,
 			List<String> roleIdList, List<String> companyIdList) {
 		Notice notice = new Notice();
-		IBpmUser user = authService.findUserById(creatorId);
+		IBaseEntity user = authService.findUserById(creatorId);
 		notice.setCreateTime(new Date());
 		notice.setTitle(title);
 		notice.setContent(content);
@@ -106,7 +104,7 @@ public class NoticeServiceImpl implements INoticeService {
 	@Override
 	public void updateToRead(String noticeId, String readUserId) {
 		Notice notice = noticeDao.findById(noticeId);
-		IBpmUser user = authService.findUserById(readUserId);
+		IBaseEntity user = authService.findUserById(readUserId);
 		notice.setReadId(user.getId());
 		notice.setReadName(user.getName());
 		notice.setReadTime(new Date());
@@ -116,7 +114,7 @@ public class NoticeServiceImpl implements INoticeService {
 	@Override
 	public void updateToDone(String noticeId, String doneUserId) {
 		Notice notice = noticeDao.findById(noticeId);
-		IBpmUser user = authService.findUserById(doneUserId);
+		IBaseEntity user = authService.findUserById(doneUserId);
 		notice.setDoneId(user.getId());
 		notice.setDoneName(user.getName());
 		notice.setFinishTime(new Date());

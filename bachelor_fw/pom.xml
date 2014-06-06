@@ -42,8 +42,6 @@
     <servlet.version>2.5</servlet.version>
     <jstl.version>1.2</jstl.version>
 	
-	<activiti.version>5.13</activiti.version>
-	
 	<cxf.version>2.7.6</cxf.version>
 
   </properties>

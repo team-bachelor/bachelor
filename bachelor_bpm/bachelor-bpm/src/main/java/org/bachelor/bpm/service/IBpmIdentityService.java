@@ -2,7 +2,7 @@ package org.bachelor.bpm.service;
 
 import java.util.List;
 
-import org.bachelor.bpm.auth.IBpmUser;
+import org.bachelor.core.entity.IBaseEntity;
 
 /**
  * 流程办理候选人和办理人服务接口
@@ -18,14 +18,14 @@ public interface IBpmIdentityService {
 	 * @param bizKey
 	 * @return 所有出线节点的代办人集合
 	 */
-	public List<IBpmUser> getNextTaskCandidateUser(String bizKey);
+	public List<? extends IBaseEntity> getNextTaskCandidateUser(String bizKey);
 	
 	/**
 	 * 
 	 * @param taskId
 	 * @return
 	 */
-	public List<IBpmUser> getUsersByTaskId(String taskId);
+	public List<? extends IBaseEntity> getUsersByTaskId(String taskId);
 	
 	
 	

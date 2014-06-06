@@ -43,8 +43,9 @@ public class BpmTaskReviewDao extends GenericDaoImpl<BpmTaskReview, String>
 	@Override
 	public List<BpmTaskReview> getWaitingTasks(String userId) {
 		DetachedCriteria dc = getDetachedCriteria();
-		dc.add(Restrictions.eq("reviewUserId", userId)).addOrder(
-				Order.desc("reviewDate"));
+		dc.add(Restrictions.like("reviewUserId", 
+				new StringBuilder("|").append(userId).append('|')))
+					.addOrder(Order.desc("reviewDate"));
 		List<BpmTaskReview> reviews = findByCriteriaNoPage(dc);
 		return reviews;
 	}

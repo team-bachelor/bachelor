@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.bachelor.core.entity.IBaseEntity;
 import org.bachelor.ext.org.domain.UserExt;
 
 
@@ -25,7 +27,7 @@ import org.bachelor.ext.org.domain.UserExt;
  */
 @Entity
 @Table(name="T_UFP_USER")
-public class User implements Serializable{
+public class User implements Serializable, IBaseEntity{
 	
 	/**
 	 * 
@@ -274,6 +276,12 @@ public class User implements Serializable{
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return this.username;
 	}
 	
 	

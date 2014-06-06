@@ -43,7 +43,7 @@ public class BpmUtils {
 //		}
 //		return resolvedGroupName;
 //	}
-
+	@Deprecated
 	public static boolean isCandidateGroup(IdentityLink il) {
 		if (!StringUtils.isEmpty(il.getGroupId())
 				&& il.getType().equals(IdentityLinkType.CANDIDATE)) {
@@ -52,7 +52,8 @@ public class BpmUtils {
 			return false;
 		}
 	}
-
+	
+	@Deprecated
 	public static boolean haveOrgInfo(String groupId) {
 		return StringUtils.contains(groupId, "#");
 	}

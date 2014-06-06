@@ -23,9 +23,9 @@ import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bachelor.bpm.auth.IBpmUser;
 import org.bachelor.bpm.service.IAuthService;
 import org.bachelor.bpm.service.IBpmRepositoryService;
+import org.bachelor.core.entity.IBaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -115,10 +115,10 @@ public class BpmRepositoryServiceImpl implements IBpmRepositoryService {
 			if (!StringUtils.isEmpty(startedOrgId)
 					&& !StringUtils.isEmpty(pi.getStartUserId())) {
 				String userId = pi.getStartUserId();
-				IBpmUser user = authService.findUserById(userId);
-				if (user != null && !startedOrgId.equals(user.getOrgId())) {
-					temphPis.add(pi);
-				}
+				IBaseEntity user = authService.findUserById(userId);
+//				if (user != null && !startedOrgId.equals(user.getOrgId())) {
+//					temphPis.add(pi);
+//				}
 			}
 		}
 		// 将不满足条件的流程从集合中移除

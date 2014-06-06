@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.task.TaskDefinition;
-
 import org.bachelor.auth.domain.Role;
 import org.bachelor.auth.service.IRoleService;
 import org.bachelor.bpm.domain.TaskEx;
@@ -13,6 +12,7 @@ import org.bachelor.bpm.service.IBpmRepositoryService;
 import org.bachelor.bpm.service.IBpmRuntimeService;
 import org.bachelor.bpm.service.IBpmRuntimeTaskService;
 import org.bachelor.bpm.vo.GraphicData;
+import org.bachelor.core.entity.IBaseEntity;
 import org.bachelor.facade.service.IBpmContextService;
 import org.bachelor.org.domain.User;
 import org.bachelor.org.service.IUserService;
@@ -65,17 +65,17 @@ public class ConvertToVo {
 	 */
 	public static void getCandidateInfoByPidAndTdkey(String pid,String tdKey,GraphicData gd,IBpmContextService bpmCtxService,IBpmRuntimeService bpmRuntimeService){
 		/** 得到待办人信息 **/
-		List<User> users = bpmRuntimeService.getTaskCandidateUserByDefKey2(pid, tdKey);
-		if(users!=null && users.size()>0){
-			StringBuffer candidate = new StringBuffer();
-			StringBuffer candidateName = new StringBuffer();
-			for(User user : users){
-				candidate.append(user.getId()).append(",");
-				candidateName.append(user.getUsername()).append(",");
-			}
-			gd.setCandidate(candidate.toString().length()>0?candidate.toString().substring(0, candidate.toString().length()-1):candidate.toString());
-			gd.setCandidateName(candidateName.toString().length()>0?candidateName.toString().substring(0, candidateName.toString().length()-1):candidateName.toString());
-		}
+//		List<IBaseEntity> users = bpmRuntimeService.getTaskCandidateUserByDefKey2(pid, tdKey);
+//		if(users!=null && users.size()>0){
+//			StringBuffer candidate = new StringBuffer();
+//			StringBuffer candidateName = new StringBuffer();
+//			for(IBaseEntity user : users){
+//				candidate.append(user.getId()).append(",");
+//				candidateName.append(user.getName()).append(",");
+//			}
+//			gd.setCandidate(candidate.toString().length()>0?candidate.toString().substring(0, candidate.toString().length()-1):candidate.toString());
+//			gd.setCandidateName(candidateName.toString().length()>0?candidateName.toString().substring(0, candidateName.toString().length()-1):candidateName.toString());
+//		}
 	}
 	
 	/**

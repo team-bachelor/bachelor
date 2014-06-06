@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.OperationNotSupportedException;
+
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.pvm.PvmTransition;
@@ -13,11 +15,7 @@ import org.activiti.engine.repository.DiagramLayout;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
-import org.activiti.engine.task.Task;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import org.bachelor.bpm.common.Constant;
+import org.bachelor.bpm.common.BpmConstant;
 import org.bachelor.bpm.domain.BaseBpDataEx;
 import org.bachelor.bpm.domain.BpmTaskReview;
 import org.bachelor.bpm.domain.TaskEx;
@@ -28,9 +26,11 @@ import org.bachelor.bpm.service.IBpmRuntimeService;
 import org.bachelor.bpm.service.IBpmRuntimeTaskService;
 import org.bachelor.bpm.vo.PiStatus;
 import org.bachelor.context.service.IVLService;
+import org.bachelor.core.entity.IBaseEntity;
 import org.bachelor.facade.service.IBpmContextService;
 import org.bachelor.facade.service.IContextService;
-import org.bachelor.org.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class BpmContextService implements IBpmContextService {
@@ -95,7 +95,7 @@ public class BpmContextService implements IBpmContextService {
 	@Override
 	public BaseBpDataEx getBpDataEx() {
 		return (BaseBpDataEx) vlService
-				.getRequestAttribute(Constant.BPM_BP_DATA_EX_KEY);
+				.getRequestAttribute(BpmConstant.BPM_BP_DATA_EX_KEY);
 	}
 
 	@Override
@@ -155,7 +155,7 @@ public class BpmContextService implements IBpmContextService {
 	@Override
 	public byte[] getProcessDiagram() {
 		BaseBpDataEx bpDataEx = (BaseBpDataEx) vlService
-				.getRequestAttribute(Constant.BPM_BP_DATA_EX_KEY);
+				.getRequestAttribute(BpmConstant.BPM_BP_DATA_EX_KEY);
 		if (bpDataEx != null && bpDataEx.getTaskEx() != null
 				&& bpDataEx.getTaskEx().getTask() != null) {
 			String pdId = bpDataEx.getTaskEx().getTask()
@@ -171,18 +171,18 @@ public class BpmContextService implements IBpmContextService {
 	}
 
 	@Override
-	public BaseBpDataEx getBpDataExByBizKey(String bizKey) {
-		return bpmRuntimeService.getBpDataExByBizKey(bizKey);
+	public BaseBpDataEx getBpDataExByBizKey(String bizKey, String userId) {
+		return bpmRuntimeService.getBpDataExByBizKey(bizKey, userId);
 	}
 
 	@Override
-	public List<User> getTaskCandidateUser() {
+	public List<? extends IBaseEntity> getTaskCandidateUser() {
 		return bpmRuntimeService.getTaskCandidateUser();
 	}
 
 	@Override
-	public List<User> getTaskCandidateUserByBizKey(String bizKey) {
-		return bpmRuntimeService.getTaskCandidateUserByBizKey(bizKey);
+	public List<? extends IBaseEntity> getTaskCandidateUserByBizKey(String bizKey, String userId) {
+		return bpmRuntimeService.getTaskCandidateUserByBizKey(bizKey, userId);
 	}
 
 	// @Override
@@ -194,7 +194,7 @@ public class BpmContextService implements IBpmContextService {
 	@Override
 	public DiagramLayout getProcessDiagramLayout() {
 		BaseBpDataEx bpDataEx = (BaseBpDataEx) vlService
-				.getRequestAttribute(Constant.BPM_BP_DATA_EX_KEY);
+				.getRequestAttribute(BpmConstant.BPM_BP_DATA_EX_KEY);
 		if (bpDataEx != null && bpDataEx.getTaskEx() != null
 				&& bpDataEx.getTaskEx().getTask() != null) {
 			String pdId = bpDataEx.getTaskEx().getTask()
@@ -238,7 +238,7 @@ public class BpmContextService implements IBpmContextService {
 	}
 
 	@Override
-	public List<User> getTaskCandidateUserByDefKey(String piId,
+	public List<? extends IBaseEntity> getTaskCandidateUserByDefKey(String piId,
 			String taskDefKey) {
 		return bpmRuntimeService.getTaskCandidateUserByDefKey(piId, taskDefKey);
 	}
@@ -246,15 +246,16 @@ public class BpmContextService implements IBpmContextService {
 	@Override
 	public TaskEx getActiveTask(String piId) {
 
-		return bpmTaskService.getActiveTask(piId);
+		return bpmTaskService.getActiveTask(piId).get(0);
 	}
 
 	@Override
 	public <T extends BaseBpDataEx> BpmTaskReview completeReview(String taskId,
 			String title, String content, String comment,
 			String fallBackReason, String result, String assigneer, T bpDataEx) {
-		return bpmRuntimeService.completeReview(taskId, title, content,
-				comment, fallBackReason, result, assigneer, bpDataEx);
+//		return bpmRuntimeService.completeReview(taskId, 
+//				comment, result, assigneer, bpDataEx);
+		throw new IllegalAccessError();
 	}
 
 	@Override
@@ -325,8 +326,9 @@ public class BpmContextService implements IBpmContextService {
 	}
 
 	@Override
-	public List<User> getNextTaskCandidateUser(String bizKey) {
-		return bpmRuntimeService.getNextTaskCandidateUser(bizKey);
+	public List<IBaseEntity> getNextTaskCandidateUser(String bizKey, String userId) {
+//		return bpmRuntimeService.getNextTaskCandidateUser(bizKey, userId);
+		throw new IllegalAccessError();
 	}
 
 	@Override
@@ -336,7 +338,7 @@ public class BpmContextService implements IBpmContextService {
 	}
 
 	@Override
-	public List<User> getNextTaskCandidateUser(String bizKey,
+	public List<? extends IBaseEntity> getNextTaskCandidateUser(String bizKey,
 			String outGoingTransValue, BaseBpDataEx bpDataEx) {
 		return bpmRuntimeService.getNextTaskCandidateUser(bizKey,
 				outGoingTransValue, bpDataEx);

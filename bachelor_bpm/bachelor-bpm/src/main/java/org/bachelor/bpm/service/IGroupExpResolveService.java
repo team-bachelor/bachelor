@@ -1,14 +1,13 @@
 package org.bachelor.bpm.service;
 
 import java.util.List;
-import java.util.Set;
 
-import org.bachelor.bpm.auth.IBpmUser;
 import org.bachelor.bpm.domain.BaseBpDataEx;
+import org.bachelor.core.entity.IBaseEntity;
 
 public interface IGroupExpResolveService {
 
-	public List<? extends IBpmUser> resolve(String groupOrgExp, BaseBpDataEx bpDataEx);
+	public List<? extends IBaseEntity> resolve(String groupOrgExp, BaseBpDataEx bpDataEx);
 	
 	public String resolveGroupExp(String groupExp, BaseBpDataEx bpDataEx);
 	

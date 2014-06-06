@@ -53,7 +53,7 @@ public class UIAuthController {
 			return aurvs;
 		}
 		
-		BaseBpDataEx bpDataEx = bpmContextService.getBpDataExByBizKey(bizKey);
+		BaseBpDataEx bpDataEx = bpmContextService.getBpDataExByBizKey(bizKey, null);
 		
 		/** bpDataEx为空，直接返回集合，不执行下面逻辑代码**/
 		if(bpDataEx==null){
