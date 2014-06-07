@@ -32,7 +32,7 @@ import org.bachelor.bpm.common.BpmUtils;
 import org.bachelor.bpm.domain.BaseBpDataEx;
 import org.bachelor.bpm.domain.TaskEx;
 import org.bachelor.bpm.domain.TaskType;
-import org.bachelor.bpm.service.IAuthService;
+import org.bachelor.bpm.service.IExpressionResolver;
 import org.bachelor.bpm.service.IBpmRuntimeService;
 import org.bachelor.bpm.service.IBpmRuntimeTaskService;
 import org.bachelor.bpm.service.IGroupExpResolveService;
@@ -57,7 +57,7 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 	private IVLService vlService;
 
 	@Autowired
-	private IAuthService authService;
+	private IExpressionResolver authService;
 
 	@Autowired
 	private RepositoryService repositoryService;
@@ -244,7 +244,7 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 	 */
 	private List<IBaseEntity> getUserFormJointTask(TaskEx taskEx) {
 		List<IBaseEntity> userList = new ArrayList<IBaseEntity>();
-		IBaseEntity assigneer = authService.findUserById(taskEx.getTask().getAssignee());
+		IBaseEntity assigneer = authService.resolveUserByUserExp(taskEx.getTask().getAssignee());
 		if (assigneer != null) {
 			userList.add(assigneer);
 			return userList;
@@ -252,7 +252,7 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 		List<IdentityLink> ientityLinkList = taskService
 				.getIdentityLinksForTask(taskEx.getTask().getId());
 		for (IdentityLink identityLink : ientityLinkList) {
-			IBaseEntity candidateUser = authService.findUserById(identityLink.getUserId());
+			IBaseEntity candidateUser = authService.resolveUserByUserExp(identityLink.getUserId());
 			if (candidateUser != null) {
 				userList.add(candidateUser);
 			}
@@ -301,13 +301,13 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 				}
 			}
 			if (iLink.getUserId() != null) {
-				userSet.add(authService.findUserById(iLink.getUserId()));
+				userSet.add(authService.resolveUserByUserExp(iLink.getUserId()));
 			}
 		}
 
 		if (roleList != null) {
 			roleSet.addAll(authService
-					.findUsersByRoleNameAndOrgId(roleList
+					.resolveUsersByGroupExp(roleList
 							.toArray(new String[0])));
 		}
 
@@ -383,12 +383,12 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 		for (Expression expression : userExpressionSet) {
 			String user = expression.getExpressionText();
 			if (user != null) {
-				userList.add(authService.findUserById(user));
+				userList.add(authService.resolveUserByUserExp(user));
 			}
 		}
 		// 根据groupExpression（公司和角色）的配置取得代办人
 		userList.addAll(authService
-				.findUsersByRoleNameAndOrgId(roleList
+				.resolveUsersByGroupExp(roleList
 						.toArray(new String[roleList.size()])));
 
 		Map<String, IBaseEntity> userMap = new HashMap<String, IBaseEntity>();
@@ -426,7 +426,7 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 		for (Expression expression : userExpressionSet) {
 			String user = expression.getExpressionText();
 			if (user != null) {
-				userSet.add(authService.findUserById(user));
+				userSet.add(authService.resolveUserByUserExp(user));
 			}
 		}
 		// 增加对activit参数的解析
@@ -436,11 +436,11 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 				String variableExp = StringUtils.substringBeforeLast(
 						StringUtils.substringAfterLast(roleStr, "{"), "}");
 				roleSet.addAll(authService
-						.findUsersByRoleNameAndOrgId(bpmRuntimeService
+						.resolveUsersByGroupExp(bpmRuntimeService
 								.getPiVariable(piId, variableExp).toString()));
 			}
 		}
-		roleSet.addAll(authService.findUsersByRoleNameAndOrgId(roleList
+		roleSet.addAll(authService.resolveUsersByGroupExp(roleList
 				.toArray(new String[roleList.size()])));
 		roleSet.addAll(userSet);
 		Map<String, IBaseEntity> userMap = new HashMap<String, IBaseEntity>();
@@ -463,10 +463,10 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 	public List<TaskEx> getActiveTask(String piId, String userId) {
 		TaskQuery query = taskService.createTaskQuery();
 		List<Task> taskList = query.processInstanceId(piId).active().list();
-		if (taskList == null || taskList.isEmpty()) {
-			return null;
-		}
 		List<TaskEx> result = new ArrayList<TaskEx>();
+		if (taskList == null || taskList.isEmpty()) {
+			return result;
+		}
 		for (Task t : taskList) {
 			String assingee = t.getAssignee();
 			if(assingee == null) continue;
@@ -571,62 +571,62 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 		return null;
 	}
 
-	@Override
-	public List<BaseBpDataEx> getBpDataExByCandidateUser(String pdkey,
-			String candidateUserId) {
-		// 获取用户权限信息
-		List<? extends IBaseEntity> roles = authService
-				.findRolesByUserId(candidateUserId);
-		/** 查询所有节点数据 **/
-		TaskQuery taskUserQuery = taskService.createTaskQuery();
-		TaskQuery taskGroupQuery = taskService.createTaskQuery();
-		List<String> roleIds = new ArrayList<String>();
-
-		if (!StringUtils.isEmpty(pdkey)) {
-			taskUserQuery.processDefinitionKey(pdkey);
-			taskGroupQuery.processDefinitionKey(pdkey);
-		}
-		if (!StringUtils.isEmpty(candidateUserId)) {
-			taskUserQuery.taskCandidateUser(candidateUserId);
-		}
-		List<Task> tasks = null;
-		// 如果权限不为空，将权限名作为查询，进行查询
-		if (roles != null && roles.size() > 0) {
-			for (IBaseEntity role : roles) {
-				roleIds.add(role.getName());
-			}
-			tasks = taskGroupQuery.taskCandidateGroupIn(roleIds)
-					.orderByTaskCreateTime().asc().orderByTaskName().asc()
-					.list();
-		}
-		;
-		List<Task> taskList = taskUserQuery.orderByTaskCreateTime().asc()
-				.orderByTaskName().asc().list();
-		if (tasks != null && tasks.size() > 0) {
-			for (Task task : taskList) {
-				for (Task tempTask : tasks) {
-					if (task.getId().equals(tempTask.getId())) {
-						tasks.remove(tempTask);
-						break;
-					}
-				}
-			}
-			taskList.addAll(tasks);
-		}
-
-		List<BaseBpDataEx> bpDataExs = new ArrayList<BaseBpDataEx>();
-		BaseBpDataEx bpDataEx = null;
-
-		for (Task task : taskList) {
-			bpDataEx = (BaseBpDataEx) bpmRuntimeService.getBpDataEx(task
-					.getProcessInstanceId(), null);
-			bpDataEx.setPiId(task.getProcessInstanceId());
-			TaskEx taskEx = warpTask(task);
-			bpDataEx.setTaskEx(taskEx);
-			bpDataExs.add(bpDataEx);
-		}
-		return bpDataExs;
-	}
+//	@Override
+//	public List<BaseBpDataEx> getBpDataExByCandidateUser(String pdkey,
+//			String candidateUserId) {
+//		// 获取用户权限信息
+//		List<? extends IBaseEntity> roles = authService
+//				.findRolesByUserId(candidateUserId);
+//		/** 查询所有节点数据 **/
+//		TaskQuery taskUserQuery = taskService.createTaskQuery();
+//		TaskQuery taskGroupQuery = taskService.createTaskQuery();
+//		List<String> roleIds = new ArrayList<String>();
+//
+//		if (!StringUtils.isEmpty(pdkey)) {
+//			taskUserQuery.processDefinitionKey(pdkey);
+//			taskGroupQuery.processDefinitionKey(pdkey);
+//		}
+//		if (!StringUtils.isEmpty(candidateUserId)) {
+//			taskUserQuery.taskCandidateUser(candidateUserId);
+//		}
+//		List<Task> tasks = null;
+//		// 如果权限不为空，将权限名作为查询，进行查询
+//		if (roles != null && roles.size() > 0) {
+//			for (IBaseEntity role : roles) {
+//				roleIds.add(role.getName());
+//			}
+//			tasks = taskGroupQuery.taskCandidateGroupIn(roleIds)
+//					.orderByTaskCreateTime().asc().orderByTaskName().asc()
+//					.list();
+//		}
+//		;
+//		List<Task> taskList = taskUserQuery.orderByTaskCreateTime().asc()
+//				.orderByTaskName().asc().list();
+//		if (tasks != null && tasks.size() > 0) {
+//			for (Task task : taskList) {
+//				for (Task tempTask : tasks) {
+//					if (task.getId().equals(tempTask.getId())) {
+//						tasks.remove(tempTask);
+//						break;
+//					}
+//				}
+//			}
+//			taskList.addAll(tasks);
+//		}
+//
+//		List<BaseBpDataEx> bpDataExs = new ArrayList<BaseBpDataEx>();
+//		BaseBpDataEx bpDataEx = null;
+//
+//		for (Task task : taskList) {
+//			bpDataEx = (BaseBpDataEx) bpmRuntimeService.getBpDataEx(task
+//					.getProcessInstanceId(), null);
+//			bpDataEx.setPiId(task.getProcessInstanceId());
+//			TaskEx taskEx = warpTask(task);
+//			bpDataEx.setTaskEx(taskEx);
+//			bpDataExs.add(bpDataEx);
+//		}
+//		return bpDataExs;
+//	}
 
 	@Override
 	public List<BaseBpDataEx> getBpDataExByAssignee(String pdkey,

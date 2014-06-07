@@ -53,7 +53,8 @@ public interface IBpmRuntimeTaskService {
 	 * @return 指定节点的全部候选人
 	 */
 	public List<? extends IBaseEntity> getUsersByTaskId(String taskId);
-    /**
+    
+	/**
      * 获取指定节点定义的全部候选人
      * @param taskDefinition 节点定义对象
      * @return 指定节点定义的全部候选人
@@ -123,8 +124,8 @@ public interface IBpmRuntimeTaskService {
 	 * @param userId 当前节点的候选人 
 	 * @return BaseBpDataEx的集合
 	 */
-	public List<BaseBpDataEx> getBpDataExByCandidateUser(String pdkey,
-			String candidateUserId);
+//	public List<BaseBpDataEx> getBpDataExByCandidateUser(String pdkey,
+//			String candidateUserId);
 	
 	/**
 	 * 根据当前节点受理人和流程定义Key查询BaseBpDataEx

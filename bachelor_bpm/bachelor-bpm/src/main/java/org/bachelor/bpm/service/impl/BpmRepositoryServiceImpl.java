@@ -23,7 +23,7 @@ import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bachelor.bpm.service.IAuthService;
+import org.bachelor.bpm.service.IExpressionResolver;
 import org.bachelor.bpm.service.IBpmRepositoryService;
 import org.bachelor.core.entity.IBaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class BpmRepositoryServiceImpl implements IBpmRepositoryService {
 	@Autowired
 	private HistoryService historyService;
 	@Autowired
-	private IAuthService authService;
+	private IExpressionResolver authService;
 
 	private Log log = LogFactory.getLog(this.getClass());
 
@@ -115,7 +115,7 @@ public class BpmRepositoryServiceImpl implements IBpmRepositoryService {
 			if (!StringUtils.isEmpty(startedOrgId)
 					&& !StringUtils.isEmpty(pi.getStartUserId())) {
 				String userId = pi.getStartUserId();
-				IBaseEntity user = authService.findUserById(userId);
+				IBaseEntity user = authService.resolveUserByUserExp(userId);
 //				if (user != null && !startedOrgId.equals(user.getOrgId())) {
 //					temphPis.add(pi);
 //				}

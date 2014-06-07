@@ -9,7 +9,7 @@ import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.impl.task.TaskDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.bachelor.bpm.service.IAuthService;
+import org.bachelor.bpm.service.IExpressionResolver;
 import org.bachelor.bpm.service.IBpmCandidateService;
 import org.bachelor.bpm.service.IBpmEngineService;
 import org.bachelor.bpm.service.IBpmRuntimeService;
@@ -27,7 +27,7 @@ private IBpmEngineService bpmEngineService;
 @Autowired
 private IBpmRuntimeTaskService bpmRuntimeTaskService;
 @Autowired
-private IAuthService authService;
+private IExpressionResolver authService;
 	
 	@Override
 	public List<IBaseEntity> getNextTaskCandidateUser(String bizKey) {
@@ -56,17 +56,17 @@ private IAuthService authService;
 	}
 
 	
-	@Override
-	public List<String> getGroupIdByUser(String userId){
-		List<? extends IBaseEntity> roleList= authService.findRolesByUserId(userId);
-		if(roleList!=null || roleList.size()==0)
-		return null;
-		List<String> roleIds=new ArrayList<String>();
-		for (IBaseEntity role : roleList) {
-			roleIds.add(role.getId());
-		}
-		return roleIds;
-	}
+//	@Override
+//	public List<String> getGroupIdByUser(String userId){
+//		List<? extends IBaseEntity> roleList= authService.findRolesByUserId(userId);
+//		if(roleList!=null || roleList.size()==0)
+//		return null;
+//		List<String> roleIds=new ArrayList<String>();
+//		for (IBaseEntity role : roleList) {
+//			roleIds.add(role.getId());
+//		}
+//		return roleIds;
+//	}
 
 	@Override
 	public List<String> getTaskCandidateUserByBpDateEX(String candidateArg) {

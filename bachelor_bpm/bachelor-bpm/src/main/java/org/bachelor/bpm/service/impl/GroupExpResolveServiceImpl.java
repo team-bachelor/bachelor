@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bachelor.bpm.domain.BaseBpDataEx;
-import org.bachelor.bpm.service.IAuthService;
+import org.bachelor.bpm.service.IExpressionResolver;
 import org.bachelor.bpm.service.IBpmHistoryService;
 import org.bachelor.bpm.service.IBpmRuntimeService;
 import org.bachelor.bpm.service.IGroupExpResolveService;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 public class GroupExpResolveServiceImpl implements IGroupExpResolveService {
 
 	@Autowired
-	private IAuthService authService;
+	private IExpressionResolver authService;
 	
 	@Autowired
 	private IBpmRuntimeService bpmRuntimeService;
@@ -44,7 +44,7 @@ public class GroupExpResolveServiceImpl implements IGroupExpResolveService {
 		String groupAndOrg = resolveGroupExp(groupOrgExp,bpDataEx);
 		if(!StringUtils.isEmpty(groupAndOrg)){
 			roleOrgIds.add(groupAndOrg);
-			users = authService.findUsersByRoleNameAndOrgId(roleOrgIds.toArray(new String[0]));
+			users = authService.resolveUsersByGroupExp(roleOrgIds.toArray(new String[0]));
 			
 		}
 		return users;

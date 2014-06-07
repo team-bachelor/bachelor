@@ -31,7 +31,7 @@ public interface IBpmCandidateService {
 	 * @param userId
 	 * @return
 	 */
-	public List<String> getGroupIdByUser(String userId);
+//	public List<String> getGroupIdByUser(String userId);
 	
 	
 	public List<String> getTaskCandidateUserByBpDateEX(String candidateArg);
