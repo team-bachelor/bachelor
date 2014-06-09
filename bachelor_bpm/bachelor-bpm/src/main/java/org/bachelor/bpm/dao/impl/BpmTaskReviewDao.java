@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.bachelor.bpm.common.BpmUtils;
+import org.bachelor.bpm.dao.BpmBaseDao;
 import org.bachelor.bpm.dao.IBpmTaskReviewDao;
 import org.bachelor.bpm.domain.BaseBpDataEx;
 import org.bachelor.bpm.domain.BpmTaskReview;
-import org.bachelor.dao.impl.GenericDaoImpl;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -18,7 +19,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class BpmTaskReviewDao extends GenericDaoImpl<BpmTaskReview, String>
+public class BpmTaskReviewDao extends BpmBaseDao<BpmTaskReview, String>
 		implements IBpmTaskReviewDao {
 
 	@Override
@@ -43,9 +44,10 @@ public class BpmTaskReviewDao extends GenericDaoImpl<BpmTaskReview, String>
 	@Override
 	public List<BpmTaskReview> getWaitingTasks(String userId) {
 		DetachedCriteria dc = getDetachedCriteria();
-		dc.add(Restrictions.like("reviewUserId", 
-				new StringBuilder("|").append(userId).append('|')))
+		dc.add(Restrictions.like("candUserId", 
+				BpmUtils.toTaskReviewCandidate(userId)))
 					.addOrder(Order.desc("reviewDate"));
+		dc.add(Restrictions.eq("isTaskFinish", "0"));
 		List<BpmTaskReview> reviews = findByCriteriaNoPage(dc);
 		return reviews;
 	}
@@ -55,6 +57,7 @@ public class BpmTaskReviewDao extends GenericDaoImpl<BpmTaskReview, String>
 		DetachedCriteria dc = getDetachedCriteria();
 		dc.add(Restrictions.eq("reviewUserId", userId)).addOrder(
 				Order.desc("reviewDate"));
+		dc.add(Restrictions.eq("isTaskFinish", "1"));
 		List<BpmTaskReview> reviews = findByCriteriaNoPage(dc);
 		return reviews;
 	}

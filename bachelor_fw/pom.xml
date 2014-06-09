@@ -25,7 +25,7 @@
     <antlr.version>2.7.7</antlr.version>
     <aspectjweaver.version>1.7.2</aspectjweaver.version>
     <!-- hibernate -->
-    <hibernate.version>4.2.2.Final</hibernate.version>
+    <hibernate.version>4.3.5.Final</hibernate.version>
     <hibernate.jpa.version>1.0.1.Final</hibernate.jpa.version>
     <hibernate.annotation.version>4.0.2.Final</hibernate.annotation.version>
     <!-- 基础工具 -->
@@ -89,7 +89,7 @@
     <dependency>
 	  <groupId>org.hibernate</groupId>
 	  <artifactId>hibernate-core</artifactId>
-	  <version>4.3.5.Final</version>
+	  <version>${hibernate.version}</version>
 	</dependency>
 
     <dependency>

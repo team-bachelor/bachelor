@@ -83,4 +83,7 @@ public class BpmUtils {
 		} catch (Exception e) {
 		}
 	}
+	public static String toTaskReviewCandidate(String userId){
+		return new StringBuilder("|").append(userId).append('|').toString();
+	}
 }

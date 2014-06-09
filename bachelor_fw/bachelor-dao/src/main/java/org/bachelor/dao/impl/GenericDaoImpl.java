@@ -37,12 +37,19 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 
 	private Class<T> persistentClass;
 	
-	@Autowired
+	@Autowired(required=false)
 	private JdbcTemplate jdbcTemplate;
 	
-	@Autowired
+	@Autowired(required=false)
 	private SessionFactory sessionFactory;
 	
+	protected void setJdbcTemplate(JdbcTemplate jdbcTemplate){
+		this.jdbcTemplate = jdbcTemplate;
+	}
+	
+	protected void setSessionFactory(SessionFactory sessionFactory){
+		this.sessionFactory = sessionFactory;
+	}
 	@Autowired
 	private IVLService vlService;
 	

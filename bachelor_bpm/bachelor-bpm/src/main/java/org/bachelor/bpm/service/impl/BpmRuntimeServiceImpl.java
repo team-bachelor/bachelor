@@ -1,4 +1,4 @@
-﻿package org.bachelor.bpm.service.impl;
+package org.bachelor.bpm.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +36,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bachelor.bpm.common.BpmConstant;
+import org.bachelor.bpm.common.BpmUtils;
 import org.bachelor.bpm.dao.IBpmTaskReviewDao;
 import org.bachelor.bpm.domain.BaseBpDataEx;
 import org.bachelor.bpm.domain.BpStartedEvent;
@@ -44,13 +45,13 @@ import org.bachelor.bpm.domain.ReviewResult;
 import org.bachelor.bpm.domain.TaskCompletedEvent;
 import org.bachelor.bpm.domain.TaskEx;
 import org.bachelor.bpm.domain.TaskType;
-import org.bachelor.bpm.service.IExpressionResolver;
 import org.bachelor.bpm.service.IBpmCandidateService;
 import org.bachelor.bpm.service.IBpmEngineService;
 import org.bachelor.bpm.service.IBpmRejectService;
 import org.bachelor.bpm.service.IBpmRepositoryService;
 import org.bachelor.bpm.service.IBpmRuntimeService;
 import org.bachelor.bpm.service.IBpmRuntimeTaskService;
+import org.bachelor.bpm.service.IExpressionResolver;
 import org.bachelor.bpm.service.IGroupExpResolveService;
 import org.bachelor.bpm.vo.PiStatus;
 import org.bachelor.context.service.IVLService;
@@ -446,6 +447,8 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 	@Override
 	public BaseBpDataEx getBpDataExByTaskId(String taskId, String userId) {
 		TaskEx task = bpmTaskService.getTask(taskId);
+		if(task == null)
+			return null;
 		BaseBpDataEx bpDataEx = getBpDataEx(task.getTask()
 				.getProcessInstanceId(), userId);
 		return bpDataEx;
@@ -605,8 +608,6 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		// 为了生成会签的taskReview，将使用 assigneerList
 		List<String> assigneerList = new ArrayList<String>();
 		if (!isCounterSignTask) {
-			StringBuilder candUserId = new StringBuilder();
-			
 			// 获取流程本身的代办人信息
 			// 记录代办人需要用到candidateUserLink
 			List<IdentityLink> candidateUserLink = taskService
@@ -623,13 +624,12 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 					assigneerList.add(idLink.getGroupId());
 				}
 			}
-			candUserId.append('|')
-					.append(StringUtils.join(assigneerList, '|'))
-					.append('|');
+			String candUserId = BpmUtils.toTaskReviewCandidate(
+					StringUtils.join(assigneerList, '|'));
 
 			// 如果target节点是单签节点，则为target节点生成代办查询用的taskReview数据
 			// 如果forceCandidate没有数据，就将节点原本的candidateUserLink赋给
-			saveTaskReview(bpDataEx, candUserId.toString(), "0");
+			saveTaskReview(bpDataEx, candUserId, "0");
 		} else {
 			List<TaskEx> tl = bpmTaskService.getActiveTask(bpDataEx.getPiId(), null);
 			for(TaskEx t : tl){
@@ -681,7 +681,9 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 			BaseBpDataEx bpDataEx, List<String> users, String isTaskFinish) {
 		List<BpmTaskReview> result = new ArrayList<BpmTaskReview>();
 		for (String userId : users) {
-			result.add(saveTaskReview(bpDataEx, userId, isTaskFinish));
+			result.add(saveTaskReview(bpDataEx, 
+					BpmUtils.toTaskReviewCandidate(userId)
+					, isTaskFinish));
 		}
 		return result;
 	}
