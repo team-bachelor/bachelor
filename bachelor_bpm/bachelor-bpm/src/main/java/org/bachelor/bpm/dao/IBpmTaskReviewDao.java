@@ -47,6 +47,13 @@ public interface IBpmTaskReviewDao extends IGenericDao<BpmTaskReview, String> {
 	 * @return
 	 */
 	public List<BpmTaskReview> getFinishedTasks(String userId);
+
+	/**
+	 * 通过任务定义的key得到审核对象
+	 * @param key
+	 * @return
+	 */
+	public List<BpmTaskReview> findByTaskDefinitionKey(String key);
 	
 //	public BaseBpDataEx getBpExData(String piid);
 

@@ -16,6 +16,8 @@ import org.bachelor.bpm.domain.BaseBpDataEx;
  * @author zhangtao
  */
 public interface IBpmEngineService {
+	public Map<PvmTransition, ActivityImpl> nextActivityImpl(
+			ActivityImpl currentTaskDef);
 	/**
 	 * 将底层定义组件转换成节点定义 开发时间：2013-11-29
 	 * 

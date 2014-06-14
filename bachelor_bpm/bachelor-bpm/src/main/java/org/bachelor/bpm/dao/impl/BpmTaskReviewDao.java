@@ -39,6 +39,15 @@ public class BpmTaskReviewDao extends BpmBaseDao<BpmTaskReview, String>
 		List<BpmTaskReview> reviews = findByCriteriaNoPage(dc);
 		return reviews;
 	}
+	
+	@Override
+	public List<BpmTaskReview> findByTaskDefinitionKey(String key) {
+		DetachedCriteria dc = getDetachedCriteria();
+		dc.add(Restrictions.eq("reviewTaskDefKey", key)).addOrder(
+				Order.desc("reviewDate"));
+		List<BpmTaskReview> reviews = findByCriteriaNoPage(dc);
+		return reviews;
+	}
 
 
 	@Override

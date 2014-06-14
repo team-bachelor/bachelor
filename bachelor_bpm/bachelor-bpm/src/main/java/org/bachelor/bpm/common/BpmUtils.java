@@ -67,12 +67,11 @@ public class BpmUtils {
 	public static <T extends BaseBpDataEx> void copyPropertiesFormBase(
 			T childBean, BaseBpDataEx bean) {
 		try {
-			
-			childBean.setDomainId(bean.getDomainId());
-			childBean.setPiId(bean.getPiId());
-			childBean.setTaskEx(bean.getTaskEx());
-			childBean.setBusinessExtMap(bean.getBusinessExtMap());
-			
+//			childBean.setDomainId(bean.getDomainId());
+//			childBean.setPiId(bean.getPiId());
+//			childBean.setTaskEx(bean.getTaskEx());
+//			childBean.setBusinessExtMap(bean.getBusinessExtMap());
+			BeanUtils.copyProperties(childBean, bean);
 			Map<String, Object> businessExtMap = bean.getBusinessExtMap();
 			if (businessExtMap != null) {
 				for (String key : businessExtMap.keySet()) {

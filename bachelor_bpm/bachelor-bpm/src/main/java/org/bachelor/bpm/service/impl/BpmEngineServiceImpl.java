@@ -11,6 +11,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
 import org.activiti.engine.impl.form.FormPropertyHandler;
+import org.activiti.engine.impl.javax.el.Expression;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmTransition;
@@ -63,8 +64,7 @@ public class BpmEngineServiceImpl implements IBpmEngineService {
 		MIAssigneeListName = StringUtils.substringBeforeLast(
 				StringUtils.substringAfterLast(expressionText, "{"), "}");
 		return MIAssigneeListName;
-
-	}
+		}
 
 	@Override
 	public ActivityImpl getOutGoingActivityImpl(String bizKey,
@@ -235,7 +235,7 @@ public class BpmEngineServiceImpl implements IBpmEngineService {
 	 *            当前节点的底层定义
 	 * @return 节点的出线和出线终点的集合，出线作为key，终点定义对象作为value
 	 */
-	private Map<PvmTransition, ActivityImpl> nextActivityImpl(
+	public Map<PvmTransition, ActivityImpl> nextActivityImpl(
 			ActivityImpl currentTaskDef) {
 		Map<PvmTransition, ActivityImpl> result = new HashMap<PvmTransition, ActivityImpl>();
 		List<PvmTransition> outTransitions = currentTaskDef

@@ -218,7 +218,7 @@ public interface IBpmRuntimeService {
 	 */
 	public <T extends BaseBpDataEx>BpmTaskReview completeReview(String taskId, String userId,
 			String title, String content, String comment, String fallBackReason,
-			ReviewResult result, String taskCandidate,T bpDataEx, boolean force);
+			ReviewResult result, String[] taskCandidate,T bpDataEx, boolean force);
 	
 	public <T extends BaseBpDataEx>BpmTaskReview completeReview(String taskId, String id,
 			String comment, ReviewResult result, String string,
@@ -365,5 +365,12 @@ public interface IBpmRuntimeService {
 	 */
 	public Map<PvmTransition, TaskDefinition> getNextTaskDefinition(
 			String bizKey);
+
+	/**
+	 * 将BpDataEx中的数据，与流程变量合并
+	 * @param bpDataEx
+	 * @return 流程变量的Map
+	 */
+	public Map<String, Object> mergeProcessVaribleMap(BaseBpDataEx bpDataEx);
 	
 }

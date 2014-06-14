@@ -21,10 +21,10 @@ public class BpStartedListener implements ApplicationListener<BpStartedEvent>{
 	
 	@Override
 	public void onApplicationEvent(BpStartedEvent event) {
-		BaseBpDataEx  bpDataEx=(BaseBpDataEx) event.getSource();
-		BaseBpDataEx newBpDateEx = bpmRuntimeService.getBpDataEx(bpDataEx.getPiId(), 
-				bpDataEx.getLastOptUserId());
-		vlService.setRequestAttribute(BpmConstant.BPM_BP_DATA_EX_KEY, newBpDateEx);
+//		BaseBpDataEx  bpDataEx=(BaseBpDataEx) event.getSource();
+//		BaseBpDataEx newBpDateEx = bpmRuntimeService.getBpDataEx(bpDataEx.getPiId(), 
+//				bpDataEx.getLastOptUserId());
+//		vlService.setRequestAttribute(BpmConstant.BPM_BP_DATA_EX_KEY, newBpDateEx);
 	}
 	
 }

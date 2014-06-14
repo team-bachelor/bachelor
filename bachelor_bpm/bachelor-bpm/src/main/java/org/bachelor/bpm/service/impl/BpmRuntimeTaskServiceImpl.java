@@ -469,8 +469,8 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 		}
 		for (Task t : taskList) {
 			String assingee = t.getAssignee();
-			if(assingee == null) continue;
-			if (userId == null || t.getAssignee().equals(userId)) {
+			if (userId == null || 
+					(assingee!= null && t.getAssignee().equals(userId))) {
 				result.add(warpTask(t));
 			}
 		}
