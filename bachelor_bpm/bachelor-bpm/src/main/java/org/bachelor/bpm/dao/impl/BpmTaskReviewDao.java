@@ -13,6 +13,7 @@ import org.bachelor.bpm.dao.IBpmTaskReviewDao;
 import org.bachelor.bpm.domain.BaseBpDataEx;
 import org.bachelor.bpm.domain.BpmTaskReview;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -46,7 +47,7 @@ public class BpmTaskReviewDao extends BpmBaseDao<BpmTaskReview, String>
 		dc.add(Restrictions.eq("reviewTaskDefKey", key)).addOrder(
 				Order.desc("reviewDate"));
 		List<BpmTaskReview> reviews = findByCriteriaNoPage(dc);
-		return reviews;
+		return reviews; 
 	}
 
 
@@ -54,7 +55,7 @@ public class BpmTaskReviewDao extends BpmBaseDao<BpmTaskReview, String>
 	public List<BpmTaskReview> getWaitingTasks(String userId) {
 		DetachedCriteria dc = getDetachedCriteria();
 		dc.add(Restrictions.like("candUserId", 
-				BpmUtils.toTaskReviewCandidate(userId)))
+				BpmUtils.toTaskReviewCandidate(userId), MatchMode.ANYWHERE))
 					.addOrder(Order.desc("reviewDate"));
 		dc.add(Restrictions.eq("isTaskFinish", "0"));
 		List<BpmTaskReview> reviews = findByCriteriaNoPage(dc);

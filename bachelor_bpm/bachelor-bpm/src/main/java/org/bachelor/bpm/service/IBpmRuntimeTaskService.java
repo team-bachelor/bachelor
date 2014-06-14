@@ -52,14 +52,14 @@ public interface IBpmRuntimeTaskService {
 	 * @param taskId
 	 * @return 指定节点的全部候选人
 	 */
-	public List<? extends IBaseEntity> getUsersByTaskId(String taskId);
+//	public List<? extends IBaseEntity> getUsersByTaskId(String taskId);
     
 	/**
      * 获取指定节点定义的全部候选人
      * @param taskDefinition 节点定义对象
      * @return 指定节点定义的全部候选人
      */
-	public List<? extends IBaseEntity> getUserByTaskDefinition(TaskDefinition taskDefinition,String processInstanceId);
+//	public List<? extends IBaseEntity> getUserByTaskDefinition(TaskDefinition taskDefinition,String processInstanceId);
 	
     /**
      * 获取指定节点定义的全部候选人
@@ -67,7 +67,7 @@ public interface IBpmRuntimeTaskService {
      * @param taskDefinition 节点定义对象
      * @return 指定节点定义的全部候选人
      */
-	public List<IBaseEntity> getUserByTaskDefinition2(TaskDefinition taskDefinition,String processInstanceId);
+//	public List<IBaseEntity> getUserByTaskDefinition2(TaskDefinition taskDefinition,String processInstanceId);
 
     /**
      * 获取指定节点定义的候选角色
@@ -76,7 +76,7 @@ public interface IBpmRuntimeTaskService {
      * @param taskDefinition 节点定义对象
      * @return 指定节点定义的候选角色
      */
-	public List<String> getRoleByTaskDefinition(TaskDefinition taskDefinition,String processInstanceId);
+//	public List<String> getRoleByTaskDefinition(TaskDefinition taskDefinition,String processInstanceId);
 	
 	/**
 	 * 为指定节点设置参数

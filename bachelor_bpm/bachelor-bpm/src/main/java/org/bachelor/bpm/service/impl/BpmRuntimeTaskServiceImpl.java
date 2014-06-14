@@ -260,67 +260,67 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 		return userList;
 	}
 
-	@Override
-	public List<? extends IBaseEntity> getUsersByTaskId(String taskId) {
-		BaseBpDataEx bpDataEx = bpmRuntimeService.getBpDataExByTaskId(taskId, null);
-		List<IBaseEntity> userList = new ArrayList<IBaseEntity>();
-		// 判断是会审节点
-		if (bpDataEx.getTaskEx().getTaskType() != null
-				&& TaskType.会审.equals(bpDataEx.getTaskEx().getTaskType())) {
-			try {
-				List<TaskEx> taskExList = getAllActiveTask(bpDataEx.getTaskEx()
-						.getTask().getProcessInstanceId());
-				for (TaskEx taskEx : taskExList) {
-					userList=this.getUserFormJointTask(taskEx);
-				}
-			} catch (Exception e) {
-				log.error(e.getMessage(), e);
-			}
-
-			return userList;
-		}
-
-		List<IdentityLink> ientityLinkList = taskService
-				.getIdentityLinksForTask(taskId);
-		Set<IBaseEntity> roleSet = new HashSet<IBaseEntity>();
-		Set<IBaseEntity> userSet = new HashSet<IBaseEntity>();
-		List<String> roleList = new ArrayList<String>();
-		for (IdentityLink iLink : ientityLinkList) {
-			if (iLink.getGroupId() != null) {
-				if (BpmUtils.isCandidateGroup(iLink)) {
-					if (BpmUtils.haveOrgInfo(iLink.getGroupId())) {
-						String groupId = groupExpResolveService
-								.resolveGroupExp(iLink.getGroupId(), bpDataEx);
-						if (!StringUtils.isEmpty(groupId)) {
-							roleList.add(groupId);
-						}
-					} else {
-						roleList.add(iLink.getGroupId());
-					}
-
-				}
-			}
-			if (iLink.getUserId() != null) {
-				userSet.add(authService.resolveUserByUserExp(iLink.getUserId()));
-			}
-		}
-
-		if (roleList != null) {
-			roleSet.addAll(authService
-					.resolveUsersByGroupExp(roleList
-							.toArray(new String[0])));
-		}
-
-		roleSet.addAll(userSet);
-		Map<String, IBaseEntity> userMap = new HashMap<String, IBaseEntity>();
-		for (IBaseEntity user : roleSet) {
-			userMap.put(user.getId(), user);
-		}
-		for (String string : userMap.keySet()) {
-			userList.add(userMap.get(string));
-		}
-		return userList;
-	}
+//	@Override
+//	public List<? extends IBaseEntity> getUsersByTaskId(String taskId) {
+//		BaseBpDataEx bpDataEx = bpmRuntimeService.getBpDataExByTaskId(taskId, null);
+//		List<IBaseEntity> userList = new ArrayList<IBaseEntity>();
+//		// 判断是会审节点
+//		if (bpDataEx.getTaskEx().getTaskType() != null
+//				&& TaskType.会审.equals(bpDataEx.getTaskEx().getTaskType())) {
+//			try {
+//				List<TaskEx> taskExList = getAllActiveTask(bpDataEx.getTaskEx()
+//						.getTask().getProcessInstanceId());
+//				for (TaskEx taskEx : taskExList) {
+//					userList=this.getUserFormJointTask(taskEx);
+//				}
+//			} catch (Exception e) {
+//				log.error(e.getMessage(), e);
+//			}
+//
+//			return userList;
+//		}
+//
+//		List<IdentityLink> ientityLinkList = taskService
+//				.getIdentityLinksForTask(taskId);
+//		Set<IBaseEntity> roleSet = new HashSet<IBaseEntity>();
+//		Set<IBaseEntity> userSet = new HashSet<IBaseEntity>();
+//		List<String> roleList = new ArrayList<String>();
+//		for (IdentityLink iLink : ientityLinkList) {
+//			if (iLink.getGroupId() != null) {
+//				if (BpmUtils.isCandidateGroup(iLink)) {
+//					if (BpmUtils.haveOrgInfo(iLink.getGroupId())) {
+//						String groupId = groupExpResolveService
+//								.resolveGroupExp(iLink.getGroupId(), bpDataEx);
+//						if (!StringUtils.isEmpty(groupId)) {
+//							roleList.add(groupId);
+//						}
+//					} else {
+//						roleList.add(iLink.getGroupId());
+//					}
+//
+//				}
+//			}
+//			if (iLink.getUserId() != null) {
+//				userSet.add(authService.resolveUserByUserExp(iLink.getUserId()));
+//			}
+//		}
+//
+//		if (roleList != null) {
+//			roleSet.addAll(authService
+//					.resolveUsersByGroupExp(roleList
+//							.toArray(new String[0])));
+//		}
+//
+//		roleSet.addAll(userSet);
+//		Map<String, IBaseEntity> userMap = new HashMap<String, IBaseEntity>();
+//		for (IBaseEntity user : roleSet) {
+//			userMap.put(user.getId(), user);
+//		}
+//		for (String string : userMap.keySet()) {
+//			userList.add(userMap.get(string));
+//		}
+//		return userList;
+//	}
 
 	@Override
 	public TaskDefinition getTaskDefition(String pdId, String taskDefKey) {
@@ -357,101 +357,101 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 		return url;
 	}
 
-	@Override
-	public List<? extends IBaseEntity> getUserByTaskDefinition(TaskDefinition taskDefinition,
-			String piId) {
-		List<IBaseEntity> userList = new ArrayList<IBaseEntity>();
-		List<String> roleList = new ArrayList<String>();
-		// 获取权限和组织机构表达形式
-		Set<Expression> gruopExpressionSet = taskDefinition
-				.getCandidateGroupIdExpressions();
-		for (Expression expression : gruopExpressionSet) {
-			String gruop = expression.getExpressionText();
-			// 判断表达式是否符合约定的公司或组织机构
-			if (BpmUtils.haveOrgInfo(gruop)) {
-				String groupId = groupExpResolveService.resolveGroupExp(gruop,
-						piId);
-				if (!StringUtils.isEmpty(groupId)) {
-					roleList.add(groupId);
-				}
-			} else {
-				roleList.add(gruop);
-			}
-		}
-		Set<Expression> userExpressionSet = taskDefinition
-				.getCandidateUserIdExpressions();
-		for (Expression expression : userExpressionSet) {
-			String user = expression.getExpressionText();
-			if (user != null) {
-				userList.add(authService.resolveUserByUserExp(user));
-			}
-		}
-		// 根据groupExpression（公司和角色）的配置取得代办人
-		userList.addAll(authService
-				.resolveUsersByGroupExp(roleList
-						.toArray(new String[roleList.size()])));
+//	@Override
+//	public List<? extends IBaseEntity> getUserByTaskDefinition(TaskDefinition taskDefinition,
+//			String piId) {
+//		List<IBaseEntity> userList = new ArrayList<IBaseEntity>();
+//		List<String> roleList = new ArrayList<String>();
+//		// 获取权限和组织机构表达形式
+//		Set<Expression> gruopExpressionSet = taskDefinition
+//				.getCandidateGroupIdExpressions();
+//		for (Expression expression : gruopExpressionSet) {
+//			String gruop = expression.getExpressionText();
+//			// 判断表达式是否符合约定的公司或组织机构
+//			if (BpmUtils.haveOrgInfo(gruop)) {
+//				String groupId = groupExpResolveService.resolveGroupExp(gruop,
+//						piId);
+//				if (!StringUtils.isEmpty(groupId)) {
+//					roleList.add(groupId);
+//				}
+//			} else {
+//				roleList.add(gruop);
+//			}
+//		}
+//		Set<Expression> userExpressionSet = taskDefinition
+//				.getCandidateUserIdExpressions();
+//		for (Expression expression : userExpressionSet) {
+//			String user = expression.getExpressionText();
+//			if (user != null) {
+//				userList.add(authService.resolveUserByUserExp(user));
+//			}
+//		}
+//		// 根据groupExpression（公司和角色）的配置取得代办人
+//		userList.addAll(authService
+//				.resolveUsersByGroupExp(roleList
+//						.toArray(new String[roleList.size()])));
+//
+//		Map<String, IBaseEntity> userMap = new HashMap<String, IBaseEntity>();
+//		for (IBaseEntity user : userList) {
+//			userMap.put(user.getId(), user);
+//		}
+//
+//		return new ArrayList<IBaseEntity>(userMap.values());
+//	}
 
-		Map<String, IBaseEntity> userMap = new HashMap<String, IBaseEntity>();
-		for (IBaseEntity user : userList) {
-			userMap.put(user.getId(), user);
-		}
-
-		return new ArrayList<IBaseEntity>(userMap.values());
-	}
-
-	@Override
-	public List<IBaseEntity> getUserByTaskDefinition2(TaskDefinition taskDefinition,
-			String piId) {
-		Set<IBaseEntity> roleSet = new HashSet<IBaseEntity>();
-		Set<IBaseEntity> userSet = new HashSet<IBaseEntity>();
-		List<String> roleList = new ArrayList<String>();
-		List<IBaseEntity> userList = new ArrayList<IBaseEntity>();
-
-		Set<Expression> gruopExpressionSet = taskDefinition
-				.getCandidateGroupIdExpressions();
-		for (Expression expression : gruopExpressionSet) {
-			String gruop = expression.getExpressionText();
-			if (BpmUtils.haveOrgInfo(gruop)) {
-				String groupId = groupExpResolveService.resolveGroupExp(gruop,
-						piId);
-				if (!StringUtils.isEmpty(groupId)) {
-					roleList.add(groupId);
-				}
-			} else {
-				roleList.add(gruop);
-			}
-		}
-		Set<Expression> userExpressionSet = taskDefinition
-				.getCandidateUserIdExpressions();
-		for (Expression expression : userExpressionSet) {
-			String user = expression.getExpressionText();
-			if (user != null) {
-				userSet.add(authService.resolveUserByUserExp(user));
-			}
-		}
-		// 增加对activit参数的解析
-		for (String roleStr : roleList) {
-			if (!StringUtils.contains(roleStr, "#")
-					&& StringUtils.contains(roleStr, "$")) {
-				String variableExp = StringUtils.substringBeforeLast(
-						StringUtils.substringAfterLast(roleStr, "{"), "}");
-				roleSet.addAll(authService
-						.resolveUsersByGroupExp(bpmRuntimeService
-								.getPiVariable(piId, variableExp).toString()));
-			}
-		}
-		roleSet.addAll(authService.resolveUsersByGroupExp(roleList
-				.toArray(new String[roleList.size()])));
-		roleSet.addAll(userSet);
-		Map<String, IBaseEntity> userMap = new HashMap<String, IBaseEntity>();
-		for (IBaseEntity user : roleSet) {
-			userMap.put(user.getId(), user);
-		}
-		for (String string : userMap.keySet()) {
-			userList.add(userMap.get(string));
-		}
-		return userList;
-	}
+//	@Override
+//	public List<IBaseEntity> getUserByTaskDefinition2(TaskDefinition taskDefinition,
+//			String piId) {
+//		Set<IBaseEntity> roleSet = new HashSet<IBaseEntity>();
+//		Set<IBaseEntity> userSet = new HashSet<IBaseEntity>();
+//		List<String> roleList = new ArrayList<String>();
+//		List<IBaseEntity> userList = new ArrayList<IBaseEntity>();
+//
+//		Set<Expression> gruopExpressionSet = taskDefinition
+//				.getCandidateGroupIdExpressions();
+//		for (Expression expression : gruopExpressionSet) {
+//			String gruop = expression.getExpressionText();
+//			if (BpmUtils.haveOrgInfo(gruop)) {
+//				String groupId = groupExpResolveService.resolveGroupExp(gruop,
+//						piId);
+//				if (!StringUtils.isEmpty(groupId)) {
+//					roleList.add(groupId);
+//				}
+//			} else {
+//				roleList.add(gruop);
+//			}
+//		}
+//		Set<Expression> userExpressionSet = taskDefinition
+//				.getCandidateUserIdExpressions();
+//		for (Expression expression : userExpressionSet) {
+//			String user = expression.getExpressionText();
+//			if (user != null) {
+//				userSet.add(authService.resolveUserByUserExp(user));
+//			}
+//		}
+//		// 增加对activit参数的解析
+//		for (String roleStr : roleList) {
+//			if (!StringUtils.contains(roleStr, "#")
+//					&& StringUtils.contains(roleStr, "$")) {
+//				String variableExp = StringUtils.substringBeforeLast(
+//						StringUtils.substringAfterLast(roleStr, "{"), "}");
+//				roleSet.addAll(authService
+//						.resolveUsersByGroupExp(bpmRuntimeService
+//								.getPiVariable(piId, variableExp).toString()));
+//			}
+//		}
+//		roleSet.addAll(authService.resolveUsersByGroupExp(roleList
+//				.toArray(new String[roleList.size()])));
+//		roleSet.addAll(userSet);
+//		Map<String, IBaseEntity> userMap = new HashMap<String, IBaseEntity>();
+//		for (IBaseEntity user : roleSet) {
+//			userMap.put(user.getId(), user);
+//		}
+//		for (String string : userMap.keySet()) {
+//			userList.add(userMap.get(string));
+//		}
+//		return userList;
+//	}
 
 	@Override
 	public void setTaskVariable(String executionId, String variableName,
@@ -510,34 +510,34 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 		return taskEx;
 	}
 
-	@Override
-	public List<String> getRoleByTaskDefinition(TaskDefinition taskDefinition,
-			String piId) {
-		BaseBpDataEx bpDataEx = bpmRuntimeService.getBpDataEx(piId, null);
-		List<String> roleNameList = new ArrayList<String>();
-
-		Set<Expression> gruopExpressionSet = taskDefinition
-				.getCandidateGroupIdExpressions();
-		for (Expression expression : gruopExpressionSet) {
-			String gruop = expression.getExpressionText();
-			if (BpmUtils.haveOrgInfo(gruop)) {
-				String groupId = groupExpResolveService.resolveGroupExp(gruop,
-						bpDataEx);
-				if (!StringUtils.isEmpty(groupId)) {
-					roleNameList.add(groupId);
-				}
-			} else {
-				roleNameList.add(gruop);
-			}
-		}
-
-		List<String> roleDescList = new ArrayList<String>();
-		for (String roleNameStr : roleNameList) {
-			String roleName = toRoleDesc(roleNameStr);
-			roleDescList.add(roleName);
-		}
-		return roleNameList;
-	}
+//	@Override
+//	public List<String> getRoleByTaskDefinition(TaskDefinition taskDefinition,
+//			String piId) {
+//		BaseBpDataEx bpDataEx = bpmRuntimeService.getBpDataEx(piId, null);
+//		List<String> roleNameList = new ArrayList<String>();
+//
+//		Set<Expression> gruopExpressionSet = taskDefinition
+//				.getCandidateGroupIdExpressions();
+//		for (Expression expression : gruopExpressionSet) {
+//			String gruop = expression.getExpressionText();
+//			if (BpmUtils.haveOrgInfo(gruop)) {
+//				String groupId = groupExpResolveService.resolveGroupExp(gruop,
+//						bpDataEx);
+//				if (!StringUtils.isEmpty(groupId)) {
+//					roleNameList.add(groupId);
+//				}
+//			} else {
+//				roleNameList.add(gruop);
+//			}
+//		}
+//
+//		List<String> roleDescList = new ArrayList<String>();
+//		for (String roleNameStr : roleNameList) {
+//			String roleName = toRoleDesc(roleNameStr);
+//			roleDescList.add(roleName);
+//		}
+//		return roleNameList;
+//	}
 
 	private String toRoleDesc(String roleIdStr) {
 		String roleDesc = "";

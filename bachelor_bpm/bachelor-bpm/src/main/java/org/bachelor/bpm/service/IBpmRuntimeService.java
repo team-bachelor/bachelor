@@ -41,7 +41,7 @@ public interface IBpmRuntimeService {
 	 * 
 	 * @return 当前人工节点的待选人列表
 	 */
-	public List<? extends IBaseEntity> getTaskCandidateUser();
+//	public List<? extends IBaseEntity> getTaskCandidateUser();
 
 	/**
 	 * 取得指定人工节点的待选人列表
@@ -52,8 +52,8 @@ public interface IBpmRuntimeService {
 	 *            人工节点定义Key
 	 * @return 待选人列表
 	 */
-	public List<? extends IBaseEntity> getTaskCandidateUserByDefKey(String piId,
-			String taskDefKey);
+//	public List<? extends IBaseEntity> getTaskCandidateUserByDefKey(String piId,
+//			String taskDefKey);
 
 	/**
 	 * 取得指定人工节点的待选人列表 此方法从流程变量中解析，而不再使用BaseBpDataEx
@@ -64,8 +64,8 @@ public interface IBpmRuntimeService {
 	 *            人工节点定义Key
 	 * @return 待选人列表
 	 */
-	public List<? extends IBaseEntity> getTaskCandidateUserByDefKey2(String piId,
-			String taskDefKey);
+//	public List<? extends IBaseEntity> getTaskCandidateUserByDefKey2(String piId,
+//			String taskDefKey);
 
 	/*
 	 * 
@@ -73,8 +73,8 @@ public interface IBpmRuntimeService {
 	 * 
 	 * pdid 流程定义ID piId 流程实例ID taskDefKey 节点定义ID
 	 */
-	public List<? extends IBaseEntity> getHisTaskCandidateUserByDefKey(String pdid, String PiId,
-			String taskDefKey);
+//	public List<? extends IBaseEntity> getHisTaskCandidateUserByDefKey(String pdid, String PiId,
+//			String taskDefKey);
 
 	/**
 	 * 完成节点并进行流程流转
@@ -176,7 +176,7 @@ public interface IBpmRuntimeService {
 	 * @param bizKey
 	 * @return 候选人用户集合
 	 */
-	public List<? extends IBaseEntity> getTaskCandidateUserByBizKey(String bizKey, String userId);
+//	public List<? extends IBaseEntity> getTaskCandidateUserByBizKey(String bizKey, String userId);
 
 	/**
 	 * 获取指定流程和指定节点的注释信息
@@ -343,7 +343,7 @@ public interface IBpmRuntimeService {
 	 * @param bizKey
 	 * @return 所有出线节点的代办人集合
 	 */
-	public List<? extends IBaseEntity> getNextTaskCandidateUser(String bizKey);
+//	public List<? extends IBaseEntity> getNextTaskCandidateUser(String bizKey);
 
 
 
@@ -353,8 +353,8 @@ public interface IBpmRuntimeService {
 	 * @param taskDef
 	 * @return 节点的代办人集合
 	 */
-	public List<? extends IBaseEntity> getNextTaskCandidateUser(String bizKey,
-			String outGoingTransValue, BaseBpDataEx bpDataEx);
+//	public List<? extends IBaseEntity> getNextTaskCandidateUser(String bizKey,
+//			String outGoingTransValue, BaseBpDataEx bpDataEx);
 
 	/**
 	 * 根据业务key，获取流程当前活动节点的全部出线节点定义
@@ -372,5 +372,9 @@ public interface IBpmRuntimeService {
 	 * @return 流程变量的Map
 	 */
 	public Map<String, Object> mergeProcessVaribleMap(BaseBpDataEx bpDataEx);
+
+	public List<BpmTaskReview> getWaitingTasks(String id);
+
+	public List<BpmTaskReview> getFinishedTasks(String id);
 	
 }

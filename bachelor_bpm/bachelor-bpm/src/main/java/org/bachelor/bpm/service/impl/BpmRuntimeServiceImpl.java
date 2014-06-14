@@ -1,5 +1,6 @@
 package org.bachelor.bpm.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -149,11 +150,20 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		BpStartedEvent event = new BpStartedEvent(bpDataEx);
 		this.publisher.publishEvent(event);
 		// 重新获取流程数据
-		bpDataEx = this.getBpDataEx(pi.getId(), null);
+		BaseBpDataEx pbTemp = null;
+		try {
+			pbTemp = this.getBpDataEx(pi.getId(), null);
+			TaskEx tex = pbTemp.getTaskEx();
+			BeanUtils.copyProperties(pbTemp, bpDataEx);
+			bpDataEx = pbTemp;
+			bpDataEx.setTaskEx(tex);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		// 保存流程审核数据
 		this.saveTaskReview(bpDataEx.getTaskEx().getTask(), bpDataEx
 				.getTaskEx().getTaskType(), bpDataEx.getDomainId(), starter
-				.getId(), "0");
+				.getId(), starter.getId(), "0");
 		return pi;
 	}
 
@@ -250,15 +260,15 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		}
 	}
 
-	@Override
-	public List<? extends IBaseEntity> getTaskCandidateUser() {
-		BaseBpDataEx bpinfoEx = (BaseBpDataEx) vlService
-				.getRequestAttribute(BpmConstant.BPM_BP_DATA_EX_KEY);
-
-		List<? extends IBaseEntity> userList = bpmTaskService
-				.getUsersByTaskId(bpinfoEx.getTaskEx().getTask().getId());
-		return userList;
-	}
+//	@Override
+//	public List<? extends IBaseEntity> getTaskCandidateUser() {
+//		BaseBpDataEx bpinfoEx = (BaseBpDataEx) vlService
+//				.getRequestAttribute(BpmConstant.BPM_BP_DATA_EX_KEY);
+//
+//		List<? extends IBaseEntity> userList = bpmTaskService
+//				.getUsersByTaskId(bpinfoEx.getTaskEx().getTask().getId());
+//		return userList;
+//	}
 
 	@Override
 	public <T extends BaseBpDataEx> void complete(String taskId, String userId,
@@ -453,16 +463,16 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		return bpDataEx;
 	}
 
-	public List<? extends IBaseEntity> getTaskCandidateUserByBizKey(
-			String bizKey, String userId) {
-		BaseBpDataEx bpDataEx = this.getBpDataExByBizKey(bizKey, userId);
-		if (bpDataEx != null) {
-			return bpmTaskService.getUsersByTaskId(bpDataEx.getTaskEx()
-					.getTask().getId());
-		} else {
-			return null;
-		}
-	}
+//	public List<? extends IBaseEntity> getTaskCandidateUserByBizKey(
+//			String bizKey, String userId) {
+//		BaseBpDataEx bpDataEx = this.getBpDataExByBizKey(bizKey, userId);
+//		if (bpDataEx != null) {
+//			return bpmTaskService.getUsersByTaskId(bpDataEx.getTaskEx()
+//					.getTask().getId());
+//		} else {
+//			return null;
+//		}
+//	}
 
 	@Override
 	public void setApplicationEventPublisher(
@@ -500,31 +510,31 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		return bpDataEx;
 	}
 
-	@Override
-	public List<? extends IBaseEntity> getTaskCandidateUserByDefKey(
-			String piId, String taskDefKey) {
-		String pdId = runtimeService.createProcessInstanceQuery()
-				.processInstanceId(piId).singleResult()
-				.getProcessDefinitionId();
-		TaskDefinition taskDef = bpmTaskService.getTaskDefition(pdId,
-				taskDefKey);
-		List<? extends IBaseEntity> userList = bpmTaskService
-				.getUserByTaskDefinition(taskDef, piId);
-		return userList;
-	}
+//	@Override
+//	public List<? extends IBaseEntity> getTaskCandidateUserByDefKey(
+//			String piId, String taskDefKey) {
+//		String pdId = runtimeService.createProcessInstanceQuery()
+//				.processInstanceId(piId).singleResult()
+//				.getProcessDefinitionId();
+//		TaskDefinition taskDef = bpmTaskService.getTaskDefition(pdId,
+//				taskDefKey);
+//		List<? extends IBaseEntity> userList = bpmTaskService
+//				.getUserByTaskDefinition(taskDef, piId);
+//		return userList;
+//	}
 
-	@Override
-	public List<? extends IBaseEntity> getTaskCandidateUserByDefKey2(
-			String piId, String taskDefKey) {
-		String pdId = runtimeService.createProcessInstanceQuery()
-				.processInstanceId(piId).singleResult()
-				.getProcessDefinitionId();
-		TaskDefinition taskDef = bpmTaskService.getTaskDefition(pdId,
-				taskDefKey);
-		List<? extends IBaseEntity> userList = bpmTaskService
-				.getUserByTaskDefinition2(taskDef, piId);
-		return userList;
-	}
+//	@Override
+//	public List<? extends IBaseEntity> getTaskCandidateUserByDefKey2(
+//			String piId, String taskDefKey) {
+//		String pdId = runtimeService.createProcessInstanceQuery()
+//				.processInstanceId(piId).singleResult()
+//				.getProcessDefinitionId();
+//		TaskDefinition taskDef = bpmTaskService.getTaskDefition(pdId,
+//				taskDefKey);
+//		List<? extends IBaseEntity> userList = bpmTaskService
+//				.getUserByTaskDefinition2(taskDef, piId);
+//		return userList;
+//	}
 
 	@Override
 	public BpmTaskReview completeReviewForce(ProcessInstance pi, String userId,
@@ -626,10 +636,10 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		String nextTaskId = "";
 		// 如果有活动task
 		if (!tl.isEmpty()) {
-			// 设置下一步代办人
-			setAsignee(taskCandidate, tl, bpDataEx);
+			// 解析下一步代办人
+			List<String> candidateUsers = setAsignee(taskCandidate, tl, result, bpDataEx);
 			// 保存流程审核对象
-			saveTaskReview4Next(curTaskDefKey, tl, bpDataEx);
+			saveTaskReview4Next(curTaskDefKey, userId, tl, candidateUsers, bpDataEx);
 		}
 
 		// 更新当前任务的TaskReview对象
@@ -639,57 +649,90 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		return bpTaskReview;
 	}
 
-	private void setAsignee(String[] taskCandidate, List<TaskEx> tl, ReviewResult rr, BaseBpDataEx bpData){
+	/**
+	 * 得到下一个任务的代办人
+	 * @param forceCandidate
+	 * @param tl
+	 * @param rr
+	 * @param bpData
+	 * @return
+	 */
+	private List<String> setAsignee(String[] forceCandidate, List<TaskEx> tl, ReviewResult rr, BaseBpDataEx bpData){
 		if(tl==null || tl.isEmpty()){
-			return;
+			return null;
 		}
 		
-		
-		
-		List<String> forceCnddt = null;
+		//FIXME 尚未考虑并发流程的情况
+		Task t = tl.get(0).getTask();
+		boolean iscounter = isCountersign(t.getId());
+		List<String> cnddtList = null;
 		if(rr == ReviewResult.reject){
-			forceCnddt = new ArrayList<String>();
-			
+			cnddtList = new ArrayList<String>();
+			if(iscounter){
+				//FIXME 会签情况
+			}else{
+//				for()
+				List<BpmTaskReview> reviewList = bpmTaskReviewDao.findByTaskDefinitionKey(t.getTaskDefinitionKey());
+				if(reviewList != null  && !reviewList.isEmpty()){
+					cnddtList.add(reviewList.get(0).getReviewUserId());
+				}
+			}
 		}
 		else{
 			// 去掉空的字符串数据，得到有值的强制代办人列表
-			forceCnddt = transformTaskCandidate(taskCandidate);
+			cnddtList = transformTaskCandidate(forceCandidate);
 		}
 		// 从所有活动task的列表中找到当前处理的
-		//FIXME 尚未考虑并发流程的情况
-		Task t = tl.get(0).getTask();
-		if(forceCnddt != null && !forceCnddt.isEmpty()){
-			boolean iscounter = isCountersign(t.getId());
+		
+		if(cnddtList != null && !cnddtList.isEmpty()){
 			if(iscounter){
-				//TODO 删除或创建任务直至用户数量与示例一般
-//				int i = 0;
-//				for (; i < forceCnddt.size(); i++) {
-//					if(i >= tl.size()){
-////						runtimeService.
-//					}
-//					taskService.addCandidateUser(t.getId(), forceCnddt.get(i));
-//				}
+				//FIXME 会签的情况
 			} else{
 				List<IdentityLink> candidateUserLink = taskService
 						.getIdentityLinksForTask(t.getId());
 				for (IdentityLink idLink : candidateUserLink) {
+					List<? extends IBaseEntity> users = groupExpResolveService
+							.resolve(idLink.getGroupId(), bpData);
 					if (idLink.getUserId() == null
 							&& idLink.getGroupId() != null) {
-						taskService.deleteCandidateGroup(t.getId(), idLink.getGroupId());
+//						taskService.deleteCandidateGroup(t.getId(), idLink.getGroupId());
 						continue;
 					}
-					if (forceCnddt.contains(idLink.getUserId())) {
-						forceCnddt.remove(idLink.getUserId());
+					if (cnddtList.contains(idLink.getUserId())) {
+						cnddtList.remove(idLink.getUserId());
 						continue;
 					} else {
 						taskService.deleteCandidateUser(t.getId(), idLink.getUserId());
 					}
 				}
-				for (String userId : forceCnddt) {
+				for (String userId : cnddtList) {
 					taskService.addCandidateUser(t.getId(), userId);
 				}
 			}
+		}else{
+			if (iscounter) {
+				//FIXME 会签的情况
+			} else {
+				cnddtList = new ArrayList<String>();
+				// 获取流程本身的代办人信息
+				// 记录代办人需要用到candidateUserLink
+				List<IdentityLink> candidateUserLink = taskService
+						.getIdentityLinksForTask(t.getId());
+				for (IdentityLink idLink : candidateUserLink) {
+					if (idLink.getGroupId() != null) {
+						List<? extends IBaseEntity> users = groupExpResolveService
+								.resolve(idLink.getGroupId(), bpData);
+						for (IBaseEntity user : users)
+							cnddtList.add(user.getId());
+					}
+					if (idLink.getUserId() != null) {
+						cnddtList.add(idLink.getUserId());
+					}
+				}
+			}
 		}
+		return cnddtList;
+		
 	}
 
 	// private List<TaskEx> findTasksByDefKey(String taskDefKey, List<TaskEx>
@@ -717,16 +760,14 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 	 * 
 	 * @param nextTask
 	 */
-	private void saveTaskReview4Next(String curTaskDefKey,
-			List<TaskEx> nextTasks, BaseBpDataEx bpDataEx) {
+	private void saveTaskReview4Next(String curTaskDefKey,String reviewUserId,
+			List<TaskEx> nextTasks, List<String> candidateUsers, BaseBpDataEx bpDataEx) {
 
 		String candidate = null;
 		for (TaskEx nextTask : nextTasks) {
 			Task t = nextTask.getTask();
 			String nextTaskId = t.getId();
 			boolean isCounterSignTask = isCountersign(nextTaskId);
-			// 为了生成会签的taskReview，将使用 assigneerList
-			List<String> assigneerList = new ArrayList<String>();
 			if (isCounterSignTask) {
 				// 循环所有活动task
 				// 如果当前提交的task与提交后的下一步task的定义key相同则当前为会签节点
@@ -734,34 +775,18 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 					candidate = t.getAssignee();
 				}
 			} else {
-				// 获取流程本身的代办人信息
-				// 记录代办人需要用到candidateUserLink
-				List<IdentityLink> candidateUserLink = taskService
-						.getIdentityLinksForTask(nextTaskId);
-				for (IdentityLink idLink : candidateUserLink) {
-					if (idLink.getGroupId() != null) {
-						List<? extends IBaseEntity> users = groupExpResolveService
-								.resolve(idLink.getGroupId(), bpDataEx);
-						for (IBaseEntity user : users) {
-							assigneerList.add(user.getId());
-						}
-					}
-					if (idLink.getUserId() != null) {
-						assigneerList.add(idLink.getGroupId());
-					}
-				}
 				// 如果target节点是单签节点，则为target节点生成代办查询用的taskReview数据
-				if (assigneerList.size() > 1) {
-					candidate = StringUtils.join(assigneerList, '|');
+				if (candidateUsers.size() > 1) {
+					candidate = StringUtils.join(candidateUsers, '|');
 					candidate.replaceAll("||", "|");
 				} else {
-					candidate = StringUtils.join(assigneerList, "");
+					candidate = StringUtils.join(candidateUsers, "");
 				}
 			}
 			if (candidate != null) {
 				TaskEx tex = this.bpmTaskService.getTask(t.getId());
 				saveTaskReview(t, tex.getTaskType(), bpDataEx.getDomainId(),
-						candidate, "0");
+						reviewUserId, candidate, "0");
 			}
 		}
 
@@ -833,7 +858,7 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 	}
 
 	private BpmTaskReview saveTaskReview(Task task, TaskType taskType,
-			String domainId, String candUserId, String isTaskFinish) {
+			String domainId, String reviewUserId, String candUserId, String isTaskFinish) {
 		BpmTaskReview review = new BpmTaskReview();
 		ProcessDefinition pd = bpmRepositoryService.getPdById(task
 				.getProcessDefinitionId());
@@ -855,6 +880,8 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		// 流程实例id
 		review.setPiId(task.getProcessInstanceId());
 		// 审核相关数据
+		review.setReviewUserId(reviewUserId);
+		review.setReviewTaskId(task.getId());
 		review.setReviewDate(new Date());
 		review.setReviewTaskDefKey(task.getTaskDefinitionKey());
 		review.setReviewTaskId(task.getId());
@@ -868,13 +895,13 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		return review;
 	}
 
-	@Deprecated
-	private BpmTaskReview saveTaskReview(BaseBpDataEx bpDataEx,
-			String candUserId, String isTaskFinish) {
-		return saveTaskReview(bpDataEx.getTaskEx().getTask(), bpDataEx
-				.getTaskEx().getTaskType(), bpDataEx.getDomainId(), candUserId,
-				isTaskFinish);
-	}
+//	@Deprecated
+//	private BpmTaskReview saveTaskReview(BaseBpDataEx bpDataEx,
+//			String candUserId, String isTaskFinish) {
+//		return saveTaskReview(bpDataEx.getTaskEx().getTask(), bpDataEx
+//				.getTaskEx().getTaskType(), bpDataEx.getDomainId(), candUserId,
+//				isTaskFinish);
+//	}
 
 	@Override
 	public List<BpmTaskReview> getTaskReviewsByTaskId(String taskId) {
@@ -959,15 +986,15 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		return pi;
 	}
 
-	@Override
-	public List<? extends IBaseEntity> getHisTaskCandidateUserByDefKey(
-			String pdid, String PiId, String taskDefKey) {
-		TaskDefinition taskDef = bpmTaskService.getTaskDefition(pdid,
-				taskDefKey);
-		List<? extends IBaseEntity> userList = bpmTaskService
-				.getUserByTaskDefinition2(taskDef, PiId);
-		return userList;
-	}
+//	@Override
+//	public List<? extends IBaseEntity> getHisTaskCandidateUserByDefKey(
+//			String pdid, String PiId, String taskDefKey) {
+//		TaskDefinition taskDef = bpmTaskService.getTaskDefition(pdid,
+//				taskDefKey);
+//		List<? extends IBaseEntity> userList = bpmTaskService
+//				.getUserByTaskDefinition2(taskDef, PiId);
+//		return userList;
+//	}
 
 	@Override
 	public <T extends BaseBpDataEx> void signal(String taskId, String userId,
@@ -1005,74 +1032,74 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		bpmEngineService.restoreOutTransition(sourceActivity, outTrans);
 	}
 
-	@Override
-	public List<IBaseEntity> getNextTaskCandidateUser(String bizKey) {
-		ProcessInstance pi = findByBizKey(bizKey);
-		Map<PvmTransition, ActivityImpl> actImplMap = bpmEngineService
-				.getNextActivityImpl(bizKey);
-		Map<PvmTransition, TaskDefinition> taskDefMap = new HashMap<PvmTransition, TaskDefinition>();
-		bpmEngineService.warpTaskDefMap(actImplMap, taskDefMap);
-		List<IBaseEntity> userList = new ArrayList<IBaseEntity>();
-		if (taskDefMap != null) {
-			// List<TaskDefinition> lastTaskDefList = bpmTaskService
-			// .getLastTaskDef(bizKey);
-			// boolean isLastTask = Boolean.FALSE;
-			// 返回每个transition对应的task中定义的候选人
-			for (TaskDefinition taskDef : taskDefMap.values()) {
-				userList.addAll(bpmTaskService.getUserByTaskDefinition2(
-						taskDef, pi.getProcessInstanceId()));
-			}
-		}
-		return userList;
-	}
+//	@Override
+//	public List<IBaseEntity> getNextTaskCandidateUser(String bizKey) {
+//		ProcessInstance pi = findByBizKey(bizKey);
+//		Map<PvmTransition, ActivityImpl> actImplMap = bpmEngineService
+//				.getNextActivityImpl(bizKey);
+//		Map<PvmTransition, TaskDefinition> taskDefMap = new HashMap<PvmTransition, TaskDefinition>();
+//		bpmEngineService.warpTaskDefMap(actImplMap, taskDefMap);
+//		List<IBaseEntity> userList = new ArrayList<IBaseEntity>();
+//		if (taskDefMap != null) {
+//			// List<TaskDefinition> lastTaskDefList = bpmTaskService
+//			// .getLastTaskDef(bizKey);
+//			// boolean isLastTask = Boolean.FALSE;
+//			// 返回每个transition对应的task中定义的候选人
+//			for (TaskDefinition taskDef : taskDefMap.values()) {
+//				userList.addAll(bpmTaskService.getUserByTaskDefinition2(
+//						taskDef, pi.getProcessInstanceId()));
+//			}
+//		}
+//		return userList;
+//	}
 
-	@Override
-	public List<IBaseEntity> getNextTaskCandidateUser(String bizKey,
-			String outGoingTransValue, BaseBpDataEx bpDataEx) {
-		// 判断节点是否是会签节点，是会签节点，则将该节点的流程变量中的
-		// 获取流程的流程变量
-		ProcessInstance pi = findByBizKey(bizKey);
-		if (outGoingTransValue == null || outGoingTransValue.isEmpty())
-			return getNextTaskCandidateUser(bizKey);
-		// 获取符合条件的出线终点对象
-		ActivityImpl outGoingActivityImpl = bpmEngineService
-				.getOutGoingActivityImpl(bizKey, outGoingTransValue);
-		TaskDefinition outGoingTask = null;
-		if (outGoingActivityImpl == null)
-			return null;
-		outGoingTask = (TaskDefinition) outGoingActivityImpl
-				.getProperty("taskDefinition");
-		// 判断节点是否是会签节点
-		Boolean jointTask = false;
-		Boolean autoSetAssigneer = false;
-		List<IBaseEntity> userList = new ArrayList<IBaseEntity>();
-		List<String> tempUserList = new ArrayList<String>();
-		try {
-			jointTask = bpmEngineService.isJointTask(outGoingTask);
-			autoSetAssigneer = bpmEngineService
-					.isAutoSetAssignments(outGoingTask);
-			if (autoSetAssigneer)
-				return null;
-			if (jointTask) {
-				String MIAssigneeListName = bpmEngineService
-						.getMIAssigneeListName(outGoingActivityImpl);
-				if (!StringUtils.isEmpty(MIAssigneeListName))
-					tempUserList = (List<String>) bpDataEx.getBusinessExtMap()
-							.get(MIAssigneeListName);
-				if (tempUserList != null && tempUserList.size() > 0) {
-					for (String userId : tempUserList) {
-						userList.add(authService.resolveUserByUserExp(userId));
-					}
-				}
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
-		if (userList != null && userList.size() == 0)
-			userList = bpmTaskService.getUserByTaskDefinition2(outGoingTask,
-					pi.getProcessInstanceId());
-		return userList;
-	}
+//	@Override
+//	public List<IBaseEntity> getNextTaskCandidateUser(String bizKey,
+//			String outGoingTransValue, BaseBpDataEx bpDataEx) {
+//		// 判断节点是否是会签节点，是会签节点，则将该节点的流程变量中的
+//		// 获取流程的流程变量
+//		ProcessInstance pi = findByBizKey(bizKey);
+//		if (outGoingTransValue == null || outGoingTransValue.isEmpty())
+//			return getNextTaskCandidateUser(bizKey);
+//		// 获取符合条件的出线终点对象
+//		ActivityImpl outGoingActivityImpl = bpmEngineService
+//				.getOutGoingActivityImpl(bizKey, outGoingTransValue);
+//		TaskDefinition outGoingTask = null;
+//		if (outGoingActivityImpl == null)
+//			return null;
+//		outGoingTask = (TaskDefinition) outGoingActivityImpl
+//				.getProperty("taskDefinition");
+//		// 判断节点是否是会签节点
+//		Boolean jointTask = false;
+//		Boolean autoSetAssigneer = false;
+//		List<IBaseEntity> userList = new ArrayList<IBaseEntity>();
+//		List<String> tempUserList = new ArrayList<String>();
+//		try {
+//			jointTask = bpmEngineService.isJointTask(outGoingTask);
+//			autoSetAssigneer = bpmEngineService
+//					.isAutoSetAssignments(outGoingTask);
+//			if (autoSetAssigneer)
+//				return null;
+//			if (jointTask) {
+//				String MIAssigneeListName = bpmEngineService
+//						.getMIAssigneeListName(outGoingActivityImpl);
+//				if (!StringUtils.isEmpty(MIAssigneeListName))
+//					tempUserList = (List<String>) bpDataEx.getBusinessExtMap()
+//							.get(MIAssigneeListName);
+//				if (tempUserList != null && tempUserList.size() > 0) {
+//					for (String userId : tempUserList) {
+//						userList.add(authService.resolveUserByUserExp(userId));
+//					}
+//				}
+//			}
+//		} catch (Exception e) {
+//			log.error(e.getMessage(), e);
+//		}
+//		if (userList != null && userList.size() == 0)
+//			userList = bpmTaskService.getUserByTaskDefinition2(outGoingTask,
+//					pi.getProcessInstanceId());
+//		return userList;
+//	}
 
 	/**
 	 * 得到每个transition和对应的下一个task
@@ -1087,20 +1114,14 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		return taskDefMap;
 	}
 
-	/**
-	 * 私有方法:该方法负责更新CurrentOperator流程参与者数据 开发者：张涛 开发时间：2013-11-29
-	 * 
-	 */
-	// private List<String> refreshCurrentOperator(String userId, List copList)
-	// {
-	// List<String> roleList = bpmCandidateService.getGroupIdByUser(userId);
-	// if (roleList != null && copList != null) {
-	// for (int i = copList.size() - 1; i > 0; i--) {
-	// if (roleList.contains(copList.get(i)))
-	// copList.remove(i);
-	// }
-	// }
-	// return roleList;
-	// }
+	@Override
+	public List<BpmTaskReview> getWaitingTasks(String id) {
+		return bpmTaskReviewDao.getWaitingTasks(id);
+	}
+
+	@Override
+	public List<BpmTaskReview> getFinishedTasks(String id) {
+		return bpmTaskReviewDao.getFinishedTasks(id);
+	}
 
 }

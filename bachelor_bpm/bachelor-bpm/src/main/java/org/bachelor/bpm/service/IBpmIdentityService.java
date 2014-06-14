@@ -18,7 +18,7 @@ public interface IBpmIdentityService {
 	 * @param bizKey
 	 * @return 所有出线节点的代办人集合
 	 */
-	public List<? extends IBaseEntity> getNextTaskCandidateUser(String bizKey);
+//	public List<? extends IBaseEntity> getNextTaskCandidateUser(String bizKey);
 	
 	/**
 	 * 

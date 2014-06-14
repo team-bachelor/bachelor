@@ -9,7 +9,7 @@ public interface IGroupExpResolveService {
 
 	public List<? extends IBaseEntity> resolve(String groupOrgExp, BaseBpDataEx bpDataEx);
 	
-	public String resolveGroupExp(String groupExp, BaseBpDataEx bpDataEx);
-	
-	public String resolveGroupExp(String groupExp, String piId);
+//	public String resolveGroupExp(String groupExp, BaseBpDataEx bpDataEx);
+//	
+//	public String resolveGroupExp(String groupExp, String piId);
 }
