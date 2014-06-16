@@ -603,24 +603,16 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		/** 为下一个节点设置待办人 **/
 		// 当前是否为会签节点
 		Boolean isCounterSignTask = isCountersign(taskId);
-		if (ReviewResult.reject == result) {
+		if (ReviewResult.reject == result && isCounterSignTask) {
 			// TODO 1.找到退回的目标节点
 			// TODO 2.为目标节点设置原办理人为待办人
 			// TODO 3.如果是会签则终止其他任务
-			if (isCounterSignTask) {
-				rejectService.reject(taskId, userId, bpDataEx);
-			}
-		} else {
-			// 解析强制代办人，传递了taskCandidate参数后，其他与代办人相关的设置均无效
-			// FIXME 要改一下
-			if (taskCandidate != null) {
-				Set<String> forceCandidate = new HashSet<String>(
-						Arrays.asList(taskCandidate));
-			}
+			
 		}
 		// 至此，会签节点的代办人信息已经全部存入assigneerList
 		// 获取该节点的前进终点对象
 		bpDataEx.setLastOpt(result.toString());
+		bpDataEx.setLastOptUserId(userId);
 		// 获取当前要提交的task对象的定义id
 		String curTaskDefKey = taskService.createTaskQuery().taskId(taskId)
 				.singleResult().getTaskDefinitionKey();
