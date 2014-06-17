@@ -138,4 +138,11 @@ public interface IBpmEngineService {
 	 * @return
 	 */
 	public Boolean isCallActivityElement(ActivityImpl activityImpl);
+	
+	/**
+	 * 根据节点id判断节点是否是会签节点
+	 * @param taskId 
+	 * @return
+	 */
+	public Boolean isCountersign(String taskId);
 }

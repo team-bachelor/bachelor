@@ -6,9 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.activiti.engine.FormService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.form.FormProperty;
+import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
 import org.activiti.engine.impl.form.FormPropertyHandler;
 import org.activiti.engine.impl.javax.el.Expression;
@@ -28,6 +31,7 @@ import org.springframework.stereotype.Service;
 
 import org.bachelor.bpm.domain.BaseBpDataEx;
 import org.bachelor.bpm.domain.TaskEx;
+import org.bachelor.bpm.domain.TaskType;
 import org.bachelor.bpm.service.IBpmEngineService;
 
 @Service
@@ -39,6 +43,8 @@ public class BpmEngineServiceImpl implements IBpmEngineService {
 	private RuntimeService runtimeService;
 	@Autowired
 	private TaskService taskService;
+	@Autowired
+	private FormService formService;
 
 	@Override
 	public void warpTaskDefMap(Map<PvmTransition, ActivityImpl> actImplMap,
@@ -267,5 +273,19 @@ public class BpmEngineServiceImpl implements IBpmEngineService {
 		return null;
 	}
 
+	public Boolean isCountersign(String taskId) {
+		TaskFormData fd = formService.getTaskFormData(taskId);
+		List<FormProperty> fps = fd.getFormProperties();
+		for (FormProperty fp : fps) {
+			if ("taskType".equals(fp.getId())) {
+				if (TaskType.会审.toString().equals(fp.getName())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	
 
 }

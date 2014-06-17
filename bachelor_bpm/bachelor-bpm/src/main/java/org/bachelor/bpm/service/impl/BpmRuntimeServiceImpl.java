@@ -1,14 +1,10 @@
 package org.bachelor.bpm.service.impl;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.activiti.engine.FormService;
 import org.activiti.engine.HistoryService;
@@ -16,8 +12,6 @@ import org.activiti.engine.IdentityService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.form.FormProperty;
-import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -341,6 +335,7 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 	public BaseBpDataEx getBpDataEx(String piId, String userId) {
 		BaseBpDataEx bpDataEx = (BaseBpDataEx) vlService
 				.getRequestAttribute(BpmConstant.BPM_BP_DATA_EX_KEY);
+//		BaseBpDataEx bpDataEx = null;
 		if (bpDataEx != null && bpDataEx.getTaskEx() != null
 				&& bpDataEx.getPiId().equals(piId)) {
 			return bpDataEx;
@@ -349,11 +344,11 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		if (bpDataEx == null) {
 			bpDataEx = new BaseBpDataEx();
 		}
-		long count = runtimeService.createProcessInstanceQuery()
-				.processInstanceId(piId).count();
+//		long count = runtimeService.createProcessInstanceQuery()
+//				.processInstanceId(piId).count();
 
 		Map<String, Object> gvMap = new HashMap<String, Object>();
-		if (count == 0) {
+//		if (count == 0) {
 			// 将GvMap取出，并为BaseBpDataEx对象填充对应的数据
 			List<HistoricVariableInstance> variableList = historyService
 					.createHistoricVariableInstanceQuery()
@@ -365,14 +360,14 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 				if (hvi.getValue() != null)
 					gvMap.put(hvi.getVariableName(), hvi.getValue());
 			}
-		} else {
+//		} else {
 			// 当前版本BpDataEx不在序列化到数据库中。将通过下面方式返回BpDataEx。
 			List<TaskEx> tl = bpmTaskService.getActiveTask(piId, userId);
 			TaskEx taskEx = null;
 			if (!tl.isEmpty())
 				taskEx = tl.get(0);
 			bpDataEx.setTaskEx(taskEx);
-		}
+//		}
 		try {
 			BeanUtils.copyProperties(bpDataEx, gvMap);
 		} catch (Exception e) {
@@ -438,8 +433,9 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 
 	@Override
 	public BaseBpDataEx getBpDataExByBizKey(String bizKey, String userId) {
-		BaseBpDataEx bpDataEx = (BaseBpDataEx) vlService
-				.getRequestAttribute(BpmConstant.BPM_BP_DATA_EX_KEY);
+//		BaseBpDataEx bpDataEx = (BaseBpDataEx) vlService
+//				.getRequestAttribute(BpmConstant.BPM_BP_DATA_EX_KEY);
+		BaseBpDataEx bpDataEx = null;
 		if (bpDataEx != null && bpDataEx.getDomainId().equals(bizKey)) {
 			return bpDataEx;
 		}
@@ -602,13 +598,8 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		}
 		/** 为下一个节点设置待办人 **/
 		// 当前是否为会签节点
-		Boolean isCounterSignTask = isCountersign(taskId);
-		if (ReviewResult.reject == result && isCounterSignTask) {
-			// TODO 1.找到退回的目标节点
-			// TODO 2.为目标节点设置原办理人为待办人
-			// TODO 3.如果是会签则终止其他任务
-			
-		}
+		Boolean isCounterSignTask = bpmEngineService.isCountersign(taskId);
+		
 		// 至此，会签节点的代办人信息已经全部存入assigneerList
 		// 获取该节点的前进终点对象
 		bpDataEx.setLastOpt(result.toString());
@@ -616,6 +607,16 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		// 获取当前要提交的task对象的定义id
 		String curTaskDefKey = taskService.createTaskQuery().taskId(taskId)
 				.singleResult().getTaskDefinitionKey();
+		if (ReviewResult.reject == result && isCounterSignTask) {
+//			List<TaskEx> tasks = bpmTaskService.getActiveTask(piid);
+			List<BpmTaskReview> reviews = bpmTaskReviewDao.findByTaskDefinitionKey(curTaskDefKey);
+			for(BpmTaskReview review : reviews){
+				if(!review.getReviewTaskId().equals(taskId) && review.getIsTaskFinish().equals("0")){
+					updateTaskReview(review, title, content, comment, fallBackReason,
+							result.toString(), "", userId, "3");
+				}
+			}
+		}
 		// 流转节点
 		complete(taskId, userId, bpDataEx);
 
@@ -649,14 +650,14 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 	 * @param bpData
 	 * @return
 	 */
-	private List<String> setAsignee(String[] forceCandidate, List<TaskEx> tl, ReviewResult rr, BaseBpDataEx bpData){
+	public List<String> setAsignee(String[] forceCandidate, List<TaskEx> tl, ReviewResult rr, BaseBpDataEx bpData){
 		if(tl==null || tl.isEmpty()){
 			return null;
 		}
 		
 		//FIXME 尚未考虑并发流程的情况
 		Task t = tl.get(0).getTask();
-		boolean iscounter = isCountersign(t.getId());
+		boolean iscounter = bpmEngineService.isCountersign(t.getId());
 		List<String> cnddtList = null;
 		if(rr == ReviewResult.reject){
 			cnddtList = new ArrayList<String>();
@@ -759,7 +760,7 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		for (TaskEx nextTask : nextTasks) {
 			Task t = nextTask.getTask();
 			String nextTaskId = t.getId();
-			boolean isCounterSignTask = isCountersign(nextTaskId);
+			boolean isCounterSignTask = bpmEngineService.isCountersign(nextTaskId);
 			if (isCounterSignTask) {
 				// 循环所有活动task
 				// 如果当前提交的task与提交后的下一步task的定义key相同则当前为会签节点
@@ -793,18 +794,7 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		return result;
 	}
 
-	private Boolean isCountersign(String nextTaskId) {
-		TaskFormData fd = formService.getTaskFormData(nextTaskId);
-		List<FormProperty> fps = fd.getFormProperties();
-		for (FormProperty fp : fps) {
-			if ("taskType".equals(fp.getId())) {
-				if (TaskType.会审.toString().equals(fp.getName())) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+
 
 	private BpmTaskReview findTaskReview(String taskId, String userId,
 			boolean force) {

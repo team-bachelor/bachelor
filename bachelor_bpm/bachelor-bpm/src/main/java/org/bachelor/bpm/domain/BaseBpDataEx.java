@@ -29,6 +29,8 @@ public class BaseBpDataEx implements Serializable {
 
 	/** 发起单位简称 **/
 	private String startCompanyShortName;
+	
+	private String[] forceAsignee;
 
 	public String getStartCompanyShortName() {
 		return startCompanyShortName;
@@ -131,6 +133,14 @@ public class BaseBpDataEx implements Serializable {
 
 	public void setLastOpt(String lastOpt) {
 		this.lastOpt = lastOpt;
+	}
+
+	public String[] getForceAsignee() {
+		return forceAsignee;
+	}
+
+	public void setForceAsignee(String[] forceAsignee) {
+		this.forceAsignee = forceAsignee;
 	}
 
 }
