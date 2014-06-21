@@ -40,14 +40,12 @@ import org.bachelor.bpm.domain.ReviewResult;
 import org.bachelor.bpm.domain.TaskCompletedEvent;
 import org.bachelor.bpm.domain.TaskEx;
 import org.bachelor.bpm.domain.TaskType;
-import org.bachelor.bpm.service.IBpmCandidateService;
 import org.bachelor.bpm.service.IBpmEngineService;
-import org.bachelor.bpm.service.IBpmRejectService;
 import org.bachelor.bpm.service.IBpmRepositoryService;
 import org.bachelor.bpm.service.IBpmRuntimeService;
 import org.bachelor.bpm.service.IBpmRuntimeTaskService;
 import org.bachelor.bpm.service.IExpressionResolver;
-import org.bachelor.bpm.service.IGroupExpResolveService;
+//import org.bachelor.bpm.service.IGroupExpResolveService;
 import org.bachelor.bpm.vo.PiStatus;
 import org.bachelor.context.service.IVLService;
 import org.bachelor.core.entity.IBaseEntity;
@@ -95,18 +93,18 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 	@Autowired
 	private RepositoryService repositoryService;
 
+//	@Autowired
+//	private IBpmRejectService rejectService;
 	@Autowired
-	private IBpmRejectService rejectService;
-	@Autowired
-	private IExpressionResolver authService;
-	@Autowired
-	private IBpmCandidateService bpmCandidateService;
+	private IExpressionResolver expResolever;
+//	@Autowired
+//	private IBpmCandidateService bpmCandidateService;
 
-	@Autowired
-	private IGroupExpResolveService groupExpResolveService;
+//	@Autowired
+//	private IGroupExpResolveService groupExpResolveService;
 
-	@Autowired
-	private FormService formService;
+//	@Autowired
+//	private FormService formService;
 	private Log log = LogFactory.getLog(this.getClass());
 
 	/**
@@ -417,7 +415,7 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 	}
 
 	@Override
-	public void addCandidateUser(String taskId, List userId, List groupId) {
+	public void addCandidateUser(String taskId, List<String> userId, List<String> groupId) {
 		if (userId != null && userId.size() > 0) {
 			for (Object object : userId) {
 				taskService.addCandidateUser(taskId, (String) object);
@@ -436,9 +434,9 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 //		BaseBpDataEx bpDataEx = (BaseBpDataEx) vlService
 //				.getRequestAttribute(BpmConstant.BPM_BP_DATA_EX_KEY);
 		BaseBpDataEx bpDataEx = null;
-		if (bpDataEx != null && bpDataEx.getDomainId().equals(bizKey)) {
-			return bpDataEx;
-		}
+//		if (bpDataEx != null && bpDataEx.getDomainId().equals(bizKey)) {
+//			return bpDataEx;
+//		}
 		String piId = null;
 		ProcessInstance pi = runtimeService.createProcessInstanceQuery()
 				.processInstanceBusinessKey(bizKey).singleResult();
@@ -608,7 +606,6 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		String curTaskDefKey = taskService.createTaskQuery().taskId(taskId)
 				.singleResult().getTaskDefinitionKey();
 		if (ReviewResult.reject == result && isCounterSignTask) {
-//			List<TaskEx> tasks = bpmTaskService.getActiveTask(piid);
 			List<BpmTaskReview> reviews = bpmTaskReviewDao.findByTaskDefinitionKey(curTaskDefKey);
 			for(BpmTaskReview review : reviews){
 				if(!review.getReviewTaskId().equals(taskId) && review.getIsTaskFinish().equals("0")){
@@ -619,7 +616,22 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		}
 		// 流转节点
 		complete(taskId, userId, bpDataEx);
-
+		//TODO 将会签节点剩余的未办实例全部流转
+		if(isCounterSignTask && ReviewResult.reject == result){
+			BaseBpDataEx tempDataEx=new BaseBpDataEx();
+			try {
+				BeanUtils.copyProperties(tempDataEx, bpDataEx);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			List<TaskEx> tasks=bpmTaskService.getAllActiveTask(curTaskDefKey);
+			if(tasks!=null && tasks.size()>0){
+				for (TaskEx taskEx : tasks) {
+					tempDataEx.setTaskEx(taskEx);
+					complete(taskEx.getTask().getId(), "reject", tempDataEx);
+				}
+			}
+		}
 		bpDataEx = (T) getBpDataEx(bpDataEx.getPiId(), userId);
 
 		// 取得当前活动task
@@ -658,11 +670,10 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		//FIXME 尚未考虑并发流程的情况
 		Task t = tl.get(0).getTask();
 		boolean iscounter = bpmEngineService.isCountersign(t.getId());
-		List<String> cnddtList = null;
+		List<String> cnddtList = new ArrayList<String>();
 		if(rr == ReviewResult.reject){
-			cnddtList = new ArrayList<String>();
 			if(iscounter){
-				//FIXME 会签情况
+				//TODO 会签情况
 			}else{
 //				for()
 				List<BpmTaskReview> reviewList = bpmTaskReviewDao.findByTaskDefinitionKey(t.getTaskDefinitionKey());
@@ -677,15 +688,15 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 		}
 		// 从所有活动task的列表中找到当前处理的
 		
-		if(cnddtList != null && !cnddtList.isEmpty()){
+		if(!cnddtList.isEmpty()){
 			if(iscounter){
-				//FIXME 会签的情况
+				//TODO 会签的情况
 			} else{
 				List<IdentityLink> candidateUserLink = taskService
 						.getIdentityLinksForTask(t.getId());
 				for (IdentityLink idLink : candidateUserLink) {
-					List<? extends IBaseEntity> users = groupExpResolveService
-							.resolve(idLink.getGroupId(), bpData);
+//					List<? extends IBaseEntity> users = expResolever
+//							.resolveUsersByGroupExp(idLink.getGroupId());
 					if (idLink.getUserId() == null
 							&& idLink.getGroupId() != null) {
 //						taskService.deleteCandidateGroup(t.getId(), idLink.getGroupId());
@@ -704,22 +715,26 @@ public class BpmRuntimeServiceImpl implements IBpmRuntimeService,
 			}
 		}else{
 			if (iscounter) {
-				//FIXME 会签的情况
+				//TODO 会签的情况
 			} else {
-				cnddtList = new ArrayList<String>();
 				// 获取流程本身的代办人信息
 				// 记录代办人需要用到candidateUserLink
 				List<IdentityLink> candidateUserLink = taskService
 						.getIdentityLinksForTask(t.getId());
 				for (IdentityLink idLink : candidateUserLink) {
 					if (idLink.getGroupId() != null) {
-						List<? extends IBaseEntity> users = groupExpResolveService
-								.resolve(idLink.getGroupId(), bpData);
-						for (IBaseEntity user : users)
-							cnddtList.add(user.getId());
+						List<? extends IBaseEntity> users = expResolever
+								.resolveUsersByGroupExp(idLink.getGroupId());
+						for (IBaseEntity user : users){
+							if(!cnddtList.contains(user.getId())){
+								cnddtList.add(user.getId());
+							}
+						}
 					}
 					if (idLink.getUserId() != null) {
-						cnddtList.add(idLink.getUserId());
+						if(!cnddtList.contains(idLink.getUserId())){
+							cnddtList.add(idLink.getUserId());
+						}
 					}
 				}
 			}

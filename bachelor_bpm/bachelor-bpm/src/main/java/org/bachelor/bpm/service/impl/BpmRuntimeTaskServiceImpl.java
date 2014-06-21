@@ -488,10 +488,10 @@ public class BpmRuntimeTaskServiceImpl implements IBpmRuntimeTaskService {
 		return getActiveTask(piId, userId);
 	}
 
-	public List<TaskEx> getAllActiveTask(String piId) {
+	public List<TaskEx> getAllActiveTask(String taskDefKey) {
 		List<TaskEx> taskExList = new ArrayList<TaskEx>();
 		TaskQuery query = taskService.createTaskQuery();
-		List<Task> taskList = query.processInstanceId(piId).active().list();
+		List<Task> taskList = query.taskDefinitionKey(taskDefKey).active().list();
 		if (taskList != null && !taskList.isEmpty()) {
 			for (Task task : taskList) {
 				taskExList.add(warpTask(task));

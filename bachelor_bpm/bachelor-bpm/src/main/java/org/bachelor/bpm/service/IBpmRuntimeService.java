@@ -160,7 +160,7 @@ public interface IBpmRuntimeService {
 	 * @param userId
 	 *            用户 组id
 	 */
-	public void addCandidateUser(String taskId, List userId, List groupId);
+	public void addCandidateUser(String taskId, List<String> userId, List<String> groupId);
 
 	/**
 	 * 根据业务数据对象id,取得BpInfoEx对象

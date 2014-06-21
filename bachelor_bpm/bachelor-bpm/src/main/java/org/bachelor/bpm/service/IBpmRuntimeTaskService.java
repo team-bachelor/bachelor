@@ -18,6 +18,7 @@ import org.bachelor.core.entity.IBaseEntity;
  * 
  */
 public interface IBpmRuntimeTaskService {
+	public List<TaskEx> getAllActiveTask(String taskDefKey);
 
 	public List<TaskEx> getTaskByCandidateUser(String userId);
 
