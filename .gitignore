@@ -73,3 +73,9 @@
 /bachelor_ip/bachelor-sysvar/target
 /bachelor_ip/bachelor-sysvar/.classpath
 /bachelor_build/reflib/*.jar
+/bachelor-fw/.project
+/bachelor-fw/.settings
+target
+.project
+.settings
+.classpath
