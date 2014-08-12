@@ -11,6 +11,7 @@
   <artifactId>bachelor-web</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>bachelor-web</name>
+  <packaging>jar</packaging>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

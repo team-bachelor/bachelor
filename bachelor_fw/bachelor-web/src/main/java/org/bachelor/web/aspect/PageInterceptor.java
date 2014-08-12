@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2013, Team Bachelor. All rights reserved.
  */
-package org.bachelor.sys.interceptor;
+package org.bachelor.web.aspect;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,30 +11,28 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
-import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
-
 import org.bachelor.context.interceptor.AllManagedIntercepter;
 import org.bachelor.context.service.IVLService;
 import org.bachelor.dao.DaoConstant;
 import org.bachelor.dao.vo.PageVo;
-import org.bachelor.gv.domain.GlobalVariable;
-import org.bachelor.gv.service.IGVService;
+import org.bachelor.web.service.IPageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 分页拦截器
  * @author Team Bachelor
  *
  */
-@Service
-public class PageInterceptorServiceImpl extends AllManagedIntercepter{
+@Component
+public class PageInterceptor extends AllManagedIntercepter{
 	@Autowired
 	private IVLService vlService;
 	
-	@Autowired
-	private IGVService gvService;
+	@Autowired(required=false)
+	private IPageService pService;
 	
 	private Log log = LogFactory.getLog(this.getClass());
 	
@@ -67,7 +65,9 @@ public class PageInterceptorServiceImpl extends AllManagedIntercepter{
 			}
 			//取得每页记录数
 			int pageNum = 10;
-
+			if(pService != null){
+				pageNum = pService.getPageRowNum();
+			}
 			int startIndex = 0;
 			int endIndex = 0;
 			int page = 0;
@@ -75,10 +75,6 @@ public class PageInterceptorServiceImpl extends AllManagedIntercepter{
 				page = Integer.parseInt(StringUtils.isEmpty(pageStr)?"0":pageStr);
 				startIndex = page*pageNum;
 				endIndex = (page+1)*pageNum;
-				GlobalVariable gvPageNum = gvService.findByName("pageRowNum");
-				if(gvPageNum != null && StringUtils.isEmpty(gvPageNum.getValue())){
-					pageNum = Integer.parseInt(gvPageNum.getValue());
-				}
 			}else{
 				startIndex = Integer.parseInt(StringUtils.isEmpty(startIndexStr)?"0":startIndexStr);
 				pageNum = Integer.parseInt(StringUtils.isEmpty(limitStr)?"0":limitStr);

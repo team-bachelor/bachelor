@@ -73,3 +73,7 @@
 /bachelor_ip/bachelor-sysvar/target
 /bachelor_ip/bachelor-sysvar/.classpath
 /bachelor_build/reflib/*.jar
+/bachelor_ip/bachelor-sysvar/build/classes/org/bachelor/gv/dao/*.class
+/bachelor_bpm/bachelor-bpm/build/classes/META-INF/MANIFEST.MF
+*.class
+MANIFEST.MF
