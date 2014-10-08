@@ -11,6 +11,10 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bachelor.context.service.IVLService;
+import org.bachelor.dao.DaoConstant;
+import org.bachelor.dao.IGenericDao;
+import org.bachelor.dao.vo.PageVo;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -18,13 +22,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-
-import org.bachelor.context.service.IVLService;
-import org.bachelor.dao.DaoConstant;
-import org.bachelor.dao.IGenericDao;
-import org.bachelor.dao.vo.PageVo;
 
 /**
  * @author
@@ -191,14 +191,22 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 	}
 	
 	protected List<T> findByCriteriaNoPage(DetachedCriteria dc) {
+		return findByCriteriaNoPage(dc, Criteria.ROOT_ENTITY);
+	}
+	
+	protected List<T> findByCriteriaNoPage(DetachedCriteria dc, ResultTransformer transformer) {
 		Criteria  criteria = dc.getExecutableCriteria(getSession());
-		criteria.setResultTransformer(Criteria.ROOT_ENTITY);
+		criteria.setResultTransformer(transformer);
 		return criteria.list();	
 	}
 	
 	protected List<T> findByCriteria(DetachedCriteria dc) {
+		return findByCriteria(dc, Criteria.ROOT_ENTITY);
+	}
+	
+	protected List<T> findByCriteria(DetachedCriteria dc, ResultTransformer transformer) {
 		Criteria  criteria = dc.getExecutableCriteria(getSession());
-		criteria.setResultTransformer(Criteria.ROOT_ENTITY);
+		criteria.setResultTransformer(transformer);
 		PageVo pageVo = (PageVo)vlService.getRequestAttribute(DaoConstant.PAGE_INFO);
 		if(pageVo == null){
 			log.info("没有分页信息，查询全部记录。");
@@ -207,7 +215,6 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 		//取得全部记录数
 		long count = ((Long) criteria.setProjection(Projections.rowCount()).uniqueResult());
 		criteria.setProjection(null);
-        criteria.setResultTransformer(Criteria.ROOT_ENTITY);
 		pageVo.setCount(count);
 		//计算全部页数
 		long pageCount = count/pageVo.getPageRowNum();
