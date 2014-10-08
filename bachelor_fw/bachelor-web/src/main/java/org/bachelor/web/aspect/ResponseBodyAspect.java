@@ -28,12 +28,14 @@ public class ResponseBodyAspect {
 		Object retVal = null;
 		ResponseStatus status = null;
 		String msg = null;
+		String[] args = null;
 		try {
 			retVal = pjp.proceed();
 			status = ResponseStatus.OK;
 		} catch (Throwable e) {
 			if (e instanceof BusinessException) {
 				status = ResponseStatus.BIZ_ERR;
+				args = ((BusinessException) e).getArgs();
 			} else if (e instanceof SystemException) {
 				status = ResponseStatus.SYS_ERR;
 			} else {
@@ -51,7 +53,7 @@ public class ResponseBodyAspect {
 		ret.setStatus(status);
 		if (ret.getMsg() != null)
 			ret.setMsg(ApplicationContextHolder.getApplicationContext()
-					.getMessage(ret.getMsg(), null, Locale.CHINA));
+					.getMessage(ret.getMsg(), args, Locale.CHINA));
 		return ret;
 	}
 }
