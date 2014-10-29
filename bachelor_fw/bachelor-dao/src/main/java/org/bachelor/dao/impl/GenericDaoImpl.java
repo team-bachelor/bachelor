@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.bachelor.context.service.IVLService;
 import org.bachelor.dao.DaoConstant;
 import org.bachelor.dao.IGenericDao;
+import org.bachelor.dao.QueryParamSetter;
 import org.bachelor.dao.vo.PageVo;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -116,9 +117,14 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 	public void delete(T entity) {
 		sessionFactory.getCurrentSession().delete(entity);
 	}
-
 	protected List<T> findByHQL(String hql) {
+		return findByHQL(hql, null);
+	}
+	protected List<T> findByHQL(String hql, QueryParamSetter setter) {
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		if(setter != null){
+			setter.set(query);
+		}
 		PageVo pageVo = (PageVo)vlService.getRequestAttribute(DaoConstant.PAGE_INFO);
 		if(pageVo == null){
 			log.info("没有分页信息，查询全部记录。");
@@ -155,7 +161,14 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 	}
 	
 	protected List<T> findNoPageByHQL(String hql){
+		return findNoPageByHQL(hql, null);
+	}
+	
+	protected List<T> findNoPageByHQL(String hql, QueryParamSetter setter){
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		if(setter != null){
+			setter.set(query);
+		}
 		return query.list();
 	}
 	
@@ -215,6 +228,7 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 		//取得全部记录数
 		long count = ((Long) criteria.setProjection(Projections.rowCount()).uniqueResult());
 		criteria.setProjection(null);
+		criteria.setResultTransformer(transformer);
 		pageVo.setCount(count);
 		//计算全部页数
 		long pageCount = count/pageVo.getPageRowNum();
