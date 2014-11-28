@@ -16,7 +16,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="T_UFP_EXT_USER")
+@Table(name="T_BCHLR_EXT_USER")
 public class UserExt implements Serializable{
 
 	/**

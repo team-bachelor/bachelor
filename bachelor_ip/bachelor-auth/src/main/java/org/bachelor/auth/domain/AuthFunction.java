@@ -15,7 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.bachelor.ps.domain.Function;
 
 @Entity
-@Table(name="T_UFP_AUTH_FUNCTION")
+@Table(name="T_bchlr_AUTH_FUNCTION")
 public class AuthFunction implements Serializable{
 	
 	/**

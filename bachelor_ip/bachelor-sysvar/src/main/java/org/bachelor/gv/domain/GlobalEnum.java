@@ -20,7 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
  *
  */
 @Entity
-@Table(name="T_UFP_GV_ENUM")
+@Table(name="T_bchlr_GV_ENUM")
 public class GlobalEnum {
 	 
 	@Id

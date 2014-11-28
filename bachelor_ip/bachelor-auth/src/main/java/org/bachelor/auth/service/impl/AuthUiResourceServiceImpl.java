@@ -121,7 +121,7 @@ public class AuthUiResourceServiceImpl implements IAuthUiResourceService {
 		String dSQL[] = new String[dInfo.length];
 		int index = 0;
 		for(String tempInfo:dInfo){
-			dSQL[index] = "delete from T_UFP_AUTH_UI_RESOURCE where id='"+tempInfo+"'";
+			dSQL[index] = "delete from T_bchlr_AUTH_UI_RESOURCE where id='"+tempInfo+"'";
 			index ++;
 		}
 		uiDao.batchDelete(dSQL);

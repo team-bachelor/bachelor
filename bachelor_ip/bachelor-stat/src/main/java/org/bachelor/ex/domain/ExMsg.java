@@ -24,7 +24,7 @@ import org.hibernate.annotations.GenericGenerator;
  *
  */
 @Entity
-@Table(name="T_UFP_EXCEPTION_MSG")
+@Table(name="T_bchlr_EXCEPTION_MSG")
 public class ExMsg {
 
 	@Id

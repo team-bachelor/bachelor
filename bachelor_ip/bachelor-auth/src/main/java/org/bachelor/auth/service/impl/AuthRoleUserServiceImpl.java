@@ -124,7 +124,7 @@ public class AuthRoleUserServiceImpl implements IAuthRoleUserService {
 		String dSQL[] = new String[deleteInfo.length];
 		int index = 0;
 		for (String dInfo : deleteInfo) {
-			dSQL[index] = "delete from T_UFP_AUTH_ROLE_USER where id='" + dInfo
+			dSQL[index] = "delete from T_bchlr_AUTH_ROLE_USER where id='" + dInfo
 					+ "'";
 			index++;
 		}
@@ -327,7 +327,7 @@ public class AuthRoleUserServiceImpl implements IAuthRoleUserService {
 		for (int i = startVal; i < endVal; i++) {
 			AuthRoleUser aru = arus.get(i);
 			sql = new StringBuilder();
-			sql.append("insert into T_UFP_AUTH_ROLE_USER(ID,ROLE_ID,USER_ID)");
+			sql.append("insert into T_bchlr_AUTH_ROLE_USER(ID,ROLE_ID,USER_ID)");
 			sql.append(" values(sys_guid(),'").append(aru.getRole().getId());
 			sql.append("','").append(aru.getUser().getId()).append("')");
 			iSQL[index] = sql.toString();

@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="t_ufp_stat_user_track")
+@Table(name="t_bchlr_stat_user_track")
 public class StatUserTrack implements Serializable {
 
 	/**

@@ -13,13 +13,13 @@ package org.bachelor.auth.common;
 public class AuthConstant {
 
 	/** 登录用户保存在Session的Key **/
-	public static final String LOGIN_USER = "ufp_login_user";
+	public static final String LOGIN_USER = "bchlr_login_user";
 	
 	/** 登录用户角色保存在Session的Key **/
-	public static final String LOGIN_USER_ROLE = "ufp_login_user_role";
+	public static final String LOGIN_USER_ROLE = "bchlr_login_user_role";
 	
 	/** 登录客户端信息保存在Session的Key **/
-	public static final String LOGIN_USER_CLIENT = "ufp_login_user_client";
+	public static final String LOGIN_USER_CLIENT = "bchlr_login_user_client";
 	
 	/** 登录用户浏览器类型_IE **/
 	public static final String CLIENT_IE = "ie";

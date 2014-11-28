@@ -32,7 +32,7 @@ import org.springframework.core.annotation.Order;
  *
  */
 @Entity
-@Table(name="T_UFP_PS_MODULE")
+@Table(name="T_bchlr_PS_MODULE")
 public class ProjectModule implements Serializable{
 
 	/**

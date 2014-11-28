@@ -33,7 +33,7 @@ import org.bachelor.ps.domain.Function;
  *
  */
 @Entity
-@Table(name="T_UFP_MENU_INFO")
+@Table(name="T_bchlr_MENU_INFO")
 public class Menu implements Serializable{
 	/**
 	 * 

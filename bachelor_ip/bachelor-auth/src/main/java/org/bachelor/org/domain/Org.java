@@ -32,7 +32,7 @@ import org.bachelor.ext.org.domain.OrgExt;
  *
  */
 @Entity
-@Table(name="T_UFP_ORG")
+@Table(name="T_bchlr_ORG")
 public class Org implements Serializable{
 	
 	/**

@@ -23,7 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
  *
  */
 @Entity
-@Table(name="T_UFP_PS_PROPERTY")
+@Table(name="T_bchlr_PS_PROPERTY")
 public class ProjectProperty {
 	
 	/** 项目ID **/

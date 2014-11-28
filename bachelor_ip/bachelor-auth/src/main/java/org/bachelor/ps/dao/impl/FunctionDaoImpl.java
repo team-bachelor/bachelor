@@ -66,7 +66,7 @@ public class FunctionDaoImpl extends GenericDaoImpl<Function, String>   implemen
 			String iSQL[] = new String[authFunctions.size()];
 			int index = 0;
 			for(AuthFunction authFunction : authFunctions){
-				iSQL[index] = "delete from t_ufp_auth_function where FUNCTION_ID = '"+authFunction.getFunc().getId()+"'";
+				iSQL[index] = "delete from t_bchlr_auth_function where FUNCTION_ID = '"+authFunction.getFunc().getId()+"'";
 				index++;
 			}
 			getJdbcTemplate().batchUpdate(iSQL);
@@ -79,7 +79,7 @@ public class FunctionDaoImpl extends GenericDaoImpl<Function, String>   implemen
 			String uSQL[] = new String[menus.size()];
 			int index = 0;
 			for(Menu menu : menus){
-				uSQL[index] = "delete from T_UFP_MENU_INFO where FUNCTION_ID = '"+menu.getFunc().getId()+"'";
+				uSQL[index] = "delete from T_bchlr_MENU_INFO where FUNCTION_ID = '"+menu.getFunc().getId()+"'";
 				index++;
 			}
 			getJdbcTemplate().batchUpdate(uSQL);
@@ -101,7 +101,7 @@ public class FunctionDaoImpl extends GenericDaoImpl<Function, String>   implemen
 							} 
 						}
 						/**删除功能相关的菜单节点**/
-						String dSQL = "delete from T_UFP_MENU_INFO where ID = '"+menu.getId()+"'";
+						String dSQL = "delete from T_bchlr_MENU_INFO where ID = '"+menu.getId()+"'";
 						getJdbcTemplate().update(dSQL);
 					}
 					/** 删除菜单父节点 **/
@@ -110,14 +110,14 @@ public class FunctionDaoImpl extends GenericDaoImpl<Function, String>   implemen
 						int index = 0;
 						for(String delMenuId:delMenuIds){
 								
-								dSQL[index] = "delete from T_UFP_MENU_INFO where id = '"+delMenuId+"'";
+								dSQL[index] = "delete from T_bchlr_MENU_INFO where id = '"+delMenuId+"'";
 								index++;
 						}
 						getJdbcTemplate().batchUpdate(dSQL);
 					}
 		}
 		
-		StringBuilder dSQL = new StringBuilder("delete from T_UFP_PS_FUNCTION where id='");
+		StringBuilder dSQL = new StringBuilder("delete from T_bchlr_PS_FUNCTION where id='");
 		dSQL.append(id).append("'");
 		getJdbcTemplate().update(dSQL.toString());
 	}

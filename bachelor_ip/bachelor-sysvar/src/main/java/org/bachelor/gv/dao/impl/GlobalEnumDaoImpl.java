@@ -67,7 +67,7 @@ public class GlobalEnumDaoImpl extends GenericDaoImpl<GlobalEnum, String>  imple
 	@Override
 	public List<GlobalEnumTvVo> findByEnumNameTV(String enumName) {
 		StringBuilder qSQL = new StringBuilder();
-		qSQL.append("select field_desc as text , field_value as value from t_ufp_gv_enum");
+		qSQL.append("select field_desc as text , field_value as value from t_bchlr_gv_enum");
 		qSQL.append(" where ENUM_NAME='").append(enumName).append("'");
 		List<GlobalEnumTvVo> tv_list = getJdbcTemplate().query(qSQL.toString(), new RowMapper(){
 

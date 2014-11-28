@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="T_UFP_STATISTIC_EFFICIENCY")
+@Table(name="T_bchlr_STATISTIC_EFFICIENCY")
 public class StatisticController {
 	
 	@Id

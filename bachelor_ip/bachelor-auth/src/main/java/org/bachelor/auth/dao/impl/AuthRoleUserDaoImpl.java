@@ -33,11 +33,11 @@ public class AuthRoleUserDaoImpl  extends GenericDaoImpl<AuthRoleUser, String>  
 		StringBuilder qSQL = new StringBuilder();
 		List<AuthRoleUserVo> vo_list = new ArrayList<AuthRoleUserVo>();
 		qSQL.append("select ru.id,ru.user_id,ru.role_id,uu.username||'/'||ru.user_id as AuthUserName,uu.username as username,");
-		qSQL.append(" (select uar.name from T_UFP_AUTH_ROLE uar where uar.id = ru.role_id) as rolename,");
+		qSQL.append(" (select uar.name from T_BCHLR_AUTH_ROLE uar where uar.id = ru.role_id) as rolename,");
 		qSQL.append(" uo.nm as orgname,ar.memo RoleMemo");
-		qSQL.append(" from T_UFP_AUTH_ROLE_USER ru,T_UFP_AUTH_ROLE ar,T_UFP_USER uu,org_vw uo");
+		qSQL.append(" from T_BCHLR_AUTH_ROLE_USER ru,T_BCHLR_AUTH_ROLE ar,T_BCHLR_USER uu,org_vw uo");
 		qSQL.append(" where uo.id = uu.owner_org_id and ");
-		qSQL.append(" ru.user_id in (select tuu.id from t_Ufp_Org uo,T_UFP_USER tuu ");
+		qSQL.append(" ru.user_id in (select tuu.id from t_bchlr_org uo,T_BCHLR_USER tuu ");
 		qSQL.append(" where tuu.owner_org_id = uo.id and uo.parentid like (substr(");
 		if(aruVo!=null){
 			/** 单位查询 (二级单位)**/
@@ -55,10 +55,10 @@ public class AuthRoleUserDaoImpl  extends GenericDaoImpl<AuthRoleUser, String>  
 			}
 			/** 用户名称或者OA名称**/
 			if(aruVo.getUserId()!=null && !aruVo.getUserId().equals("")){
-				qSQL.append("  and uu.id = ru.user_id  and ru.user_id  in (select suu.id from t_ufp_user suu where suu.id like  '%").append(aruVo.getUserId().trim()).append("%')");
+				qSQL.append("  and uu.id = ru.user_id  and ru.user_id  in (select suu.id from t_bchlr_user suu where suu.id like  '%").append(aruVo.getUserId().trim()).append("%')");
 			} else {
 				if(aruVo.getUserName()!=null && !aruVo.getUserName().equals("")){
-					qSQL.append("  and uu.id = ru.user_id  and ru.user_id  in (select suu.id from t_ufp_user suu where suu.username like  '%").append(aruVo.getUserName().trim()).append("%')");
+					qSQL.append("  and uu.id = ru.user_id  and ru.user_id  in (select suu.id from t_bchlr_user suu where suu.username like  '%").append(aruVo.getUserName().trim()).append("%')");
 				} else {
 					qSQL.append(" and uu.id = ru.user_id ");
 				}
@@ -89,7 +89,7 @@ public class AuthRoleUserDaoImpl  extends GenericDaoImpl<AuthRoleUser, String>  
 	@Override
 	public List<Role> findByUserId(String userId) {
 		/*StringBuilder qSQL =new StringBuilder();
-		qSQL.append("select * from T_UFP_AUTH_ROLE r where r.id in (select ru.role_id from T_UFP_AUTH_ROLE_USER ru where ru.user_id = '").append(userId).append("')");
+		qSQL.append("select * from T_BCHLR_AUTH_ROLE r where r.id in (select ru.role_id from T_BCHLR_AUTH_ROLE_USER ru where ru.user_id = '").append(userId).append("')");
 		List<Role> roles = getJdbcTemplate().query(qSQL.toString(), new RowMapper(){
 
 			@Override
@@ -147,7 +147,7 @@ public class AuthRoleUserDaoImpl  extends GenericDaoImpl<AuthRoleUser, String>  
 	@Override
 	public List<User> findUsersByRoleIds(String roleTerm) {
 		StringBuffer qSQL = new StringBuffer();
-		qSQL.append("select distinct * from t_ufp_user u , (select t.user_id from T_UFP_AUTH_ROLE_USER t where ");
+		qSQL.append("select distinct * from t_bchlr_user u , (select t.user_id from T_BCHLR_AUTH_ROLE_USER t where ");
 		qSQL.append("t.role_id in (").append(roleTerm).append(")) ua");
 		qSQL.append(" where u.id = ua.user_id");
 		List<User> users = getJdbcTemplate().query(qSQL.toString(), new RowMapper(){
@@ -170,15 +170,15 @@ public class AuthRoleUserDaoImpl  extends GenericDaoImpl<AuthRoleUser, String>  
 				qSQL.append("select distinct t.*,");
 				qSQL.append("v.orgId company_id,v.ejdw company_name,v.bm dept_name,v.bmId dept_id,");
 				qSQL.append("(select ov.nm from org_vw ov where ov.id = t.owner_org_id) org_path,");
-				qSQL.append("(select uo.name from t_ufp_org uo where uo.id = t.owner_org_id) owner_org_name");
-				qSQL.append(" from t_ufp_user t, org_user_vw v");
+				qSQL.append("(select uo.name from t_bchlr_org uo where uo.id = t.owner_org_id) owner_org_name");
+				qSQL.append(" from t_bchlr_user t, org_user_vw v");
 				qSQL.append(" where t.id = v.id ");
 				/** 机构条件是否为空 **/
 				if(orgs.length>0 && i<orgs.length &&
 						orgs[i]!=null && !"".equals(orgs[i])){
 					qSQL.append("  and v.orgId = ").append(orgs[i]);
 				}
-				qSQL.append(" and v.id in (select distinct u.user_id from t_ufp_auth_role_user u, t_ufp_auth_role ar ");
+				qSQL.append(" and v.id in (select distinct u.user_id from t_bchlr_auth_role_user u, t_bchlr_auth_role ar ");
 				qSQL.append(" where u.role_id = ar.id and ar.id in (").append(roleIds).append("))");
 				if(i<roles.length-1){
 					qSQL.append(" union ");
@@ -209,14 +209,14 @@ public class AuthRoleUserDaoImpl  extends GenericDaoImpl<AuthRoleUser, String>  
 				qSQL.append("select distinct t.*,");
 				qSQL.append("v.orgId company_id,v.ejdw company_name,v.bm dept_name,v.bmId dept_id,");
 				qSQL.append("(select ov.nm from org_vw ov where ov.id = t.owner_org_id) org_path,");
-				qSQL.append("(select uo.name from t_ufp_org uo where uo.id = t.owner_org_id) owner_org_name");
-				qSQL.append(" from t_ufp_user t, org_user_vw v");
+				qSQL.append("(select uo.name from t_bchlr_org uo where uo.id = t.owner_org_id) owner_org_name");
+				qSQL.append(" from t_bchlr_user t, org_user_vw v");
 				qSQL.append(" where t.id = v.id ");
 				if(orgs.length>0 && i<orgs.length &&
 						orgs[i]!=null && !"".equals(orgs[i])){
 					qSQL.append("  and v.orgId = ").append(orgs[i]);
 				}
-				qSQL.append(" and v.id in (select distinct u.user_id from t_ufp_auth_role_user u, t_ufp_auth_role ar ");
+				qSQL.append(" and v.id in (select distinct u.user_id from t_bchlr_auth_role_user u, t_bchlr_auth_role ar ");
 				qSQL.append(" where u.role_id = ar.id and ar.name in (").append(roleNames).append("))");
 				if(i<roles.length-1){
 					qSQL.append(" union ");
@@ -286,7 +286,7 @@ public class AuthRoleUserDaoImpl  extends GenericDaoImpl<AuthRoleUser, String>  
 	public List<User> findUserByOrgIdOrRoleName(String orgId, String roleName) {
 		StringBuffer qSQL = new StringBuffer();
 		qSQL.append("select tu.id,tu.username,tu.pwd,tu.type,tu.login_flag,tu.status_flag,(select v.nm from org_vw v where v.id = tu.owner_org_id) orgPath ");
-		qSQL.append("  from t_ufp_user tu where ");
+		qSQL.append("  from t_bchlr_user tu where ");
 		if(orgId!=null && !"".equals(orgId)){
 			qSQL.append("  tu.id in  (select ov.id from org_user_vw ov where orgid = '"+orgId+"') ");
 		}
@@ -296,7 +296,7 @@ public class AuthRoleUserDaoImpl  extends GenericDaoImpl<AuthRoleUser, String>  
 		}
 		if(roleName!=null && !"".equals(roleName)){
 			qSQL.append("   tu.id in ");
-			qSQL.append(" (select ru.user_id   from t_ufp_auth_role_user ru where role_id = (select ur.id from t_ufp_auth_role ur where ur.name =  '"+roleName+"')) ");
+			qSQL.append(" (select ru.user_id   from t_bchlr_auth_role_user ru where role_id = (select ur.id from t_bchlr_auth_role ur where ur.name =  '"+roleName+"')) ");
 		}
 		try{
 				List<User> users = getJdbcTemplate().query(qSQL.toString(), new RowMapper(){
@@ -329,7 +329,7 @@ public class AuthRoleUserDaoImpl  extends GenericDaoImpl<AuthRoleUser, String>  
 	@Override
 	public void updateByAuthRoleUser(AuthRoleUser aru) {
 		StringBuilder iSQL = new StringBuilder();
-		iSQL.append("update t_ufp_auth_role_user set");
+		iSQL.append("update t_bchlr_auth_role_user set");
 		iSQL.append(" USER_ID = '").append(aru.getUser().getId()).append("',");
 		iSQL.append(" ROLE_ID='").append(aru.getRole().getId()).append("'");
 		iSQL.append(" where id='").append(aru.getId()).append("'");

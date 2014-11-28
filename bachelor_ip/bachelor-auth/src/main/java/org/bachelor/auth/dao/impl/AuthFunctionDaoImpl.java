@@ -23,7 +23,7 @@ public class AuthFunctionDaoImpl  extends GenericDaoImpl<AuthFunction, String> i
 	public void deleteAuthFunctionInfo(AuthFunction af) {
 		if(af!=null){
 			StringBuilder dSQL = new StringBuilder();
-			dSQL.append("delete from t_ufp_auth_function where 1=1 ");
+			dSQL.append("delete from t_bchlr_auth_function where 1=1 ");
 			if(af.getId()!=null && !af.getId().equals("")){
 				dSQL.append(" and  id='").append(af.getId()).append("'");
 			}
@@ -43,7 +43,7 @@ public class AuthFunctionDaoImpl  extends GenericDaoImpl<AuthFunction, String> i
 	public List<AuthFunction> findAllAuthFuncByFuncId(AuthFunction af) {
 		List<AuthFunction> af_list = null;
 		StringBuilder dSQL = new StringBuilder();
-		dSQL.append("select ID,ROLE_ID,FUNCTION_ID,VISIBLE,USAGE from t_ufp_auth_function where 1=1 ");
+		dSQL.append("select ID,ROLE_ID,FUNCTION_ID,VISIBLE,USAGE from t_bchlr_auth_function where 1=1 ");
 		if(af!=null){
 			if(af.getId()!=null && !af.getId().equals("")){
 				dSQL.append(" and  id='").append(af.getId()).append("'");
@@ -81,7 +81,7 @@ public class AuthFunctionDaoImpl  extends GenericDaoImpl<AuthFunction, String> i
 	public List<GlobalEnumTvVo> findTvInfo(String funcId) {
 		List<GlobalEnumTvVo> af_list = null;
 		StringBuilder qSQL = new StringBuilder();
-		qSQL.append("select  (select t.name from t_ufp_auth_role t where  t.id = ROLE_ID) as text,ROLE_ID value from t_ufp_auth_function where FUNCTION_ID='");
+		qSQL.append("select  (select t.name from t_bchlr_auth_role t where  t.id = ROLE_ID) as text,ROLE_ID value from t_bchlr_auth_function where FUNCTION_ID='");
 		qSQL.append(funcId).append("'");
 		 
 		af_list = getJdbcTemplate().query(qSQL.toString(), new RowMapper(){
@@ -116,7 +116,7 @@ public class AuthFunctionDaoImpl  extends GenericDaoImpl<AuthFunction, String> i
 		
 		List<AuthFunction> af_list = null;
 		StringBuilder dSQL = new StringBuilder();
-		dSQL.append("select ID,ROLE_ID,FUNCTION_ID,VISIBLE,USAGE from t_ufp_auth_function where 1=1 ");
+		dSQL.append("select ID,ROLE_ID,FUNCTION_ID,VISIBLE,USAGE from t_bchlr_auth_function where 1=1 ");
 		if(!StringUtils.isEmpty(ids)){
 			dSQL.append(" and function_id in (").append(ids).append(") ");
 		}

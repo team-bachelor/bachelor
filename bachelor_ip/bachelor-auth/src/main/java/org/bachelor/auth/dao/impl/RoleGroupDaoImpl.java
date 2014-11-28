@@ -28,7 +28,7 @@ public class RoleGroupDaoImpl extends GenericDaoImpl<RoleGroup, String>  impleme
 	@Override
 	public List<RoleGroup> findAllRoleInfo() {
 		StringBuilder qSQL = new StringBuilder();
-		qSQL.append("select t.ID,t.NAME,t.DESCRIPTION,t.DEL_FLAG,t.PARENT_ID from T_UFP_AUTH_ROLE t");
+		qSQL.append("select t.ID,t.NAME,t.DESCRIPTION,t.DEL_FLAG,t.PARENT_ID from T_bchlr_AUTH_ROLE t");
 		List<RoleGroup> role_list = getJdbcTemplate().query(qSQL.toString(), new RowMapper(){
 
 			@Override

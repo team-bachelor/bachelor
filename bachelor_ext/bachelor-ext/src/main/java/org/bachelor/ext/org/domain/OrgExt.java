@@ -16,7 +16,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="T_UFP_EXT_ORG")
+@Table(name="T_BCHLR_EXT_ORG")
 public class OrgExt implements Serializable{
 
 	/**

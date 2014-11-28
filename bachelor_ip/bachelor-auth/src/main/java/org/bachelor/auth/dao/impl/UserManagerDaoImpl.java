@@ -29,8 +29,8 @@ public class UserManagerDaoImpl extends GenericDaoImpl<User, String> implements
 
 		qSQL.append("select ID,OWNER_ORG_ID,USERNAME,MEMO,TYPE,DUTY,PWD,IDENTIFY_CODE,");
 		qSQL.append("GENDER,LOGIN_FLAG,STATUS_FLAG,CREATE_TIME,UPDATE_TIME,SYNC_TIME,");
-		qSQL.append("(select o.name from t_ufp_org o where o.id = OWNER_ORG_ID) as orgname ");
-		qSQL.append(" from T_UFP_USER where STATUS_FLAG = '1'");
+		qSQL.append("(select o.name from t_bchlr_org o where o.id = OWNER_ORG_ID) as orgname ");
+		qSQL.append(" from T_bchlr_USER where STATUS_FLAG = '1'");
 		if(user!=null){
 			if(user.getOwnerOrg()!=null && user.getOwnerOrg().getId()!=null && !user.getOwnerOrg().getId().equals("")){
 				qSQL.append(" and OWNER_ORG_ID='").append(user.getOwnerOrg().getId()).append("'");
@@ -74,7 +74,7 @@ public class UserManagerDaoImpl extends GenericDaoImpl<User, String> implements
 	@Override
 	public void delete(User user) {
 		StringBuilder qSQL = new StringBuilder();
-		qSQL.append(" update T_UFP_USER STATUS_FLAG = '2'  where id='").append(user.getId()).append("'");
+		qSQL.append(" update T_bchlr_USER STATUS_FLAG = '2'  where id='").append(user.getId()).append("'");
 		getJdbcTemplate().update(qSQL.toString());
 	}
 
@@ -90,12 +90,12 @@ public class UserManagerDaoImpl extends GenericDaoImpl<User, String> implements
 	@Override
 	public void update(User user){
 		StringBuilder qSQL = new StringBuilder();
-		qSQL.append("update T_UFP_USER set  ID=''");
+		qSQL.append("update T_bchlr_USER set  ID=''");
 		qSQL.append(",OWNER_ORG_ID=''");
 		qSQL.append(",USERNAME=''");
 		qSQL.append(",MEMO=''");
 		qSQL.append(",TYPE,DUTY,PWD,IDENTIFY_CODE,");
 		qSQL.append("GENDER,LOGIN_FLAG,STATUS_FLAG,CREATE_TIME,UPDATE_TIME,SYNC_TIME,");
-		qSQL.append(" from T_UFP_USER where STATUS_FLAG = '1'");
+		qSQL.append(" from T_bchlr_USER where STATUS_FLAG = '1'");
 	}
 }

@@ -54,7 +54,7 @@ public class AuthFunctionServiceImpl   implements IAuthFunctionService {
 					int index = 0;
 					for(String info : addInfos){
 						String infos[] = info.split(",");
-						addSQL[index] = " insert into t_ufp_auth_function(ID,ROLE_ID,FUNCTION_ID,VISIBLE,USAGE) values('"+UUID.randomUUID().toString().replace("-", "").replace("-", "")+
+						addSQL[index] = " insert into t_bchlr_auth_function(ID,ROLE_ID,FUNCTION_ID,VISIBLE,USAGE) values('"+UUID.randomUUID().toString().replace("-", "").replace("-", "")+
 								"','"+infos[1]+"','"+infos[0]+"','"+infos[2]+"','"+infos[3]+"')";
 						index++;
 					}
@@ -104,7 +104,7 @@ public class AuthFunctionServiceImpl   implements IAuthFunctionService {
 			int index = 0;
 			for(AuthFunction af : afs){
 				sql = new StringBuilder();
-				sql.append("insert into t_ufp_auth_function(ID,ROLE_ID,FUNCTION_ID,VISIBLE,USAGE)");
+				sql.append("insert into t_bchlr_auth_function(ID,ROLE_ID,FUNCTION_ID,VISIBLE,USAGE)");
 				sql.append(" values(sys_guid(),'").append(af.getRole().getId());
 				sql.append("','").append(af.getFunc().getId()).append("',");
 				sql.append("'1',").append("'1')");
@@ -124,7 +124,7 @@ public class AuthFunctionServiceImpl   implements IAuthFunctionService {
 			int index = 0;
 			for(String delInfo : batchInfos){
 				String delInfos[] = delInfo.split(",");
-				dSQL[index] = " delete from t_ufp_auth_function where ROLE_ID='"+delInfos[1]+"' and FUNCTION_ID='"+delInfos[0]+"'";
+				dSQL[index] = " delete from t_bchlr_auth_function where ROLE_ID='"+delInfos[1]+"' and FUNCTION_ID='"+delInfos[0]+"'";
 				index++;
 			} 
 			authFunctionDao.batchSaveAuthFunction(dSQL);

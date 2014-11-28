@@ -163,7 +163,7 @@ public class GlobalEnumServiceImpl implements IGlobalEnumService {
 		String dSQL[] = new String[dInfo.length];
 		int index = 0;
 		for(String tempInfo:dInfo){
-			dSQL[index] = "delete from T_UFP_GV_ENUM where id='"+tempInfo+"'";
+			dSQL[index] = "delete from T_bchlr_GV_ENUM where id='"+tempInfo+"'";
 			index++;
 		}
 		globalEnumdao.batchDelete(dSQL);

@@ -15,7 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.bachelor.org.domain.User;
 
 @Entity
-@Table(name = "T_UFP_AUTH_ROLE_USER")
+@Table(name = "T_bchlr_AUTH_ROLE_USER")
 public class AuthRoleUser {
 	
 	@Id

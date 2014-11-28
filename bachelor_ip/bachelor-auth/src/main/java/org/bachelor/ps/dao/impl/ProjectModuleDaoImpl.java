@@ -141,7 +141,7 @@ public class ProjectModuleDaoImpl extends GenericDaoImpl<ProjectModule, String> 
 					}
 					
 					/** 删除功能关联的菜单信息 **/
-					String dSQL = "delete from T_UFP_MENU_INFO where FUNCTION_ID = '"+pfunc.getId()+"'";
+					String dSQL = "delete from T_bchlr_MENU_INFO where FUNCTION_ID = '"+pfunc.getId()+"'";
 					getJdbcTemplate().update(dSQL);
 				}
 				
@@ -151,7 +151,7 @@ public class ProjectModuleDaoImpl extends GenericDaoImpl<ProjectModule, String> 
 					int index = 0;
 					for(String delMenuId:delMenuIds){
 							
-							dSQL[index] = "delete from T_UFP_MENU_INFO where id = '"+delMenuId+"'";
+							dSQL[index] = "delete from T_bchlr_MENU_INFO where id = '"+delMenuId+"'";
 							index++;
 					}
 					getJdbcTemplate().batchUpdate(dSQL);
@@ -187,7 +187,7 @@ public class ProjectModuleDaoImpl extends GenericDaoImpl<ProjectModule, String> 
 			StringBuilder printSQL = new StringBuilder();
 			int index = 0;
 			for(AuthFunction authFunction : authFunctions){
-				iSQL[index] = "delete from t_ufp_auth_function where FUNCTION_ID = '"+authFunction.getFunc().getId()+"'";
+				iSQL[index] = "delete from t_bchlr_auth_function where FUNCTION_ID = '"+authFunction.getFunc().getId()+"'";
 				printSQL.append(iSQL[index]+"\n");
 				index++;
 			}
@@ -202,7 +202,7 @@ public class ProjectModuleDaoImpl extends GenericDaoImpl<ProjectModule, String> 
 			StringBuilder printSQL = new StringBuilder();
 			int index = 0;
 			for(Menu menu : menus){
-				uSQL[index] = "delete from T_UFP_MENU_INFO where FUNCTION_ID = '"+menu.getFunc().getId()+"'";
+				uSQL[index] = "delete from T_bchlr_MENU_INFO where FUNCTION_ID = '"+menu.getFunc().getId()+"'";
 				printSQL.append(uSQL[index]+"\n");
 				index++;
 			}
@@ -215,7 +215,7 @@ public class ProjectModuleDaoImpl extends GenericDaoImpl<ProjectModule, String> 
 		StringBuilder printSQL = new StringBuilder();
 		int index = 0;
 		for(Function func:funcs){
-			dSQL[index] =  "delete from T_UFP_PS_FUNCTION where id='" + func.getId()+"'";
+			dSQL[index] =  "delete from T_bchlr_PS_FUNCTION where id='" + func.getId()+"'";
 			printSQL.append(dSQL[index]+"\n");
 			index++;
 		}
@@ -233,7 +233,7 @@ public class ProjectModuleDaoImpl extends GenericDaoImpl<ProjectModule, String> 
 		String dSQL[] = new String[moduleIds.size()];
 		int index = 0;
 		for(String moduleId:moduleIds){
-			dSQL[index] =  "delete from T_UFP_PS_MODULE where id='" + moduleId +"'";
+			dSQL[index] =  "delete from T_bchlr_PS_MODULE where id='" + moduleId +"'";
 			index++;
 		}
 		getJdbcTemplate().batchUpdate(dSQL);

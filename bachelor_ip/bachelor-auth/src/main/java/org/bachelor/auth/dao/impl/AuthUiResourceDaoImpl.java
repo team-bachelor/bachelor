@@ -21,7 +21,7 @@ public class AuthUiResourceDaoImpl  extends GenericDaoImpl<AuthUiResource, Strin
 	@Override
 	public void deleteById(String id) {
 		StringBuilder dSQL = new StringBuilder();
-		dSQL.append("delete from T_UFP_AUTH_UI_RESOURCE where id='").append(id).append("'");
+		dSQL.append("delete from T_BCHLR_AUTH_UI_RESOURCE where id='").append(id).append("'");
 		getJdbcTemplate().update(dSQL.toString());
 	}
   
@@ -61,11 +61,11 @@ public class AuthUiResourceDaoImpl  extends GenericDaoImpl<AuthUiResource, Strin
 			StringBuilder qSQL = new StringBuilder();
 			if(type.equals("findByExample")){
 				qSQL.append("select FLOW_NAME,JOIN_NAME,FLOW_ID,JOIN_ID,VERSION_NAME,u.ID,UI_TYPE_SELECTOR,UI_TYPE_ID,UI_RESOURCE_ID,UI_RESOURCE_DESC,UI_RESOURCE_PERMISSION,FUNCTION_ID,ROLE_ID,");
-				qSQL.append(" (select e.field_desc from t_ufp_gv_enum e where e.field_value = UI_TYPE_ID and e.enum_name = 'UFP_AUTH_UI_TYPE') UiTypeName,");
-				qSQL.append(" (select e.field_desc from t_ufp_gv_enum e where e.field_value = ui_resource_permission and e.enum_name = 'UFP_AUTH_UI_PERMISSION') PermissionName,");
+				qSQL.append(" (select e.field_desc from t_bchlr_gv_enum e where e.field_value = UI_TYPE_ID and e.enum_name = 'bchlr_AUTH_UI_TYPE') UiTypeName,");
+				qSQL.append(" (select e.field_desc from t_bchlr_gv_enum e where e.field_value = ui_resource_permission and e.enum_name = 'bchlr_AUTH_UI_PERMISSION') PermissionName,");
 				qSQL.append(" r.name  RoleName, r.memo  RoleMemo,");
-				qSQL.append(" (select f.name from T_UFP_PS_FUNCTION f where f.id = FUNCTION_ID) FuncName ");
-				qSQL.append("  from T_UFP_AUTH_UI_RESOURCE u ,t_ufp_auth_role r");
+				qSQL.append(" (select f.name from T_BCHLR_PS_FUNCTION f where f.id = FUNCTION_ID) FuncName ");
+				qSQL.append("  from T_BCHLR_AUTH_UI_RESOURCE u ,t_bchlr_auth_role r");
 				if(aur!=null){
 					qSQL.append(" where r.id = u.role_id ");
 					if(aur.getRoleId()!=null && !StringUtils.isEmpty(aur.getRoleId())){
@@ -101,11 +101,11 @@ public class AuthUiResourceDaoImpl  extends GenericDaoImpl<AuthUiResource, Strin
 				}
 				temp_roles = temp_roles.substring(0, temp_roles.length()-1);
 				qSQL.append("select FLOW_NAME,JOIN_NAME,FLOW_ID,JOIN_ID,VERSION_NAME,u.ID,UI_TYPE_SELECTOR,UI_TYPE_ID,UI_RESOURCE_ID,UI_RESOURCE_DESC,UI_RESOURCE_PERMISSION,FUNCTION_ID,ROLE_ID,");
-				qSQL.append(" (select e.field_desc from t_ufp_gv_enum e where e.field_value = UI_TYPE_ID and e.enum_name = 'UFP_AUTH_UI_TYPE') UiTypeName,");
-				qSQL.append(" (select e.field_desc from t_ufp_gv_enum e where e.field_value = ui_resource_permission and e.enum_name = 'UFP_AUTH_UI_PERMISSION') PermissionName,");
+				qSQL.append(" (select e.field_desc from t_bchlr_gv_enum e where e.field_value = UI_TYPE_ID and e.enum_name = 'bchlr_AUTH_UI_TYPE') UiTypeName,");
+				qSQL.append(" (select e.field_desc from t_bchlr_gv_enum e where e.field_value = ui_resource_permission and e.enum_name = 'bchlr_AUTH_UI_PERMISSION') PermissionName,");
 				qSQL.append(" r.name  RoleName, r.memo  RoleMemo,");
-				qSQL.append(" (select f.name from T_UFP_PS_FUNCTION f where f.id = FUNCTION_ID) FuncName ");
-				qSQL.append("  from T_UFP_AUTH_UI_RESOURCE u ,t_ufp_auth_role r");
+				qSQL.append(" (select f.name from T_bchlr_PS_FUNCTION f where f.id = FUNCTION_ID) FuncName ");
+				qSQL.append("  from T_bchlr_AUTH_UI_RESOURCE u ,t_bchlr_auth_role r");
 				qSQL.append(" where  r.id = u.role_id  and u.flow_id is null  and FUNCTION_ID =  '").append(funcId).append("' ");
 				qSQL.append(" and ROLE_ID in (").append(temp_roles).append(")"); 
 			}  else if(type.equals("findByFuncUrlAndRoleIds")){
@@ -117,28 +117,28 @@ public class AuthUiResourceDaoImpl  extends GenericDaoImpl<AuthUiResource, Strin
 				}
 				temp_roles = temp_roles.substring(0, temp_roles.length()-1);
 				qSQL.append("select FLOW_NAME,JOIN_NAME,FLOW_ID,JOIN_ID,VERSION_NAME,u.ID,UI_TYPE_SELECTOR,UI_TYPE_ID,UI_RESOURCE_ID,UI_RESOURCE_DESC,UI_RESOURCE_PERMISSION,FUNCTION_ID,ROLE_ID,");
-				qSQL.append(" (select e.field_desc from t_ufp_gv_enum e where e.field_value = UI_TYPE_ID and e.enum_name = 'UFP_AUTH_UI_TYPE') UiTypeName,");
-				qSQL.append(" (select e.field_desc from t_ufp_gv_enum e where e.field_value = ui_resource_permission and e.enum_name = 'UFP_AUTH_UI_PERMISSION') PermissionName,");
+				qSQL.append(" (select e.field_desc from t_bchlr_gv_enum e where e.field_value = UI_TYPE_ID and e.enum_name = 'bchlr_AUTH_UI_TYPE') UiTypeName,");
+				qSQL.append(" (select e.field_desc from t_bchlr_gv_enum e where e.field_value = ui_resource_permission and e.enum_name = 'bchlr_AUTH_UI_PERMISSION') PermissionName,");
 				qSQL.append(" r.name  RoleName, r.memo  RoleMemo,");
-				qSQL.append(" (select f.name from T_UFP_PS_FUNCTION f where f.id = FUNCTION_ID) FuncName ");
-				qSQL.append("  from T_UFP_AUTH_UI_RESOURCE u , T_UFP_PS_FUNCTION f,t_ufp_auth_role r ");
+				qSQL.append(" (select f.name from T_bchlr_PS_FUNCTION f where f.id = FUNCTION_ID) FuncName ");
+				qSQL.append("  from T_bchlr_AUTH_UI_RESOURCE u , T_bchlr_PS_FUNCTION f,t_bchlr_auth_role r ");
 				qSQL.append(" where  r.id = u.role_id  and FUNCTION_ID = f.id and f.entry_path = '").append(funcUrl).append("' ");
 				qSQL.append(" and ROLE_ID in (").append(temp_roles).append(")"); 
 			} else if(type.equals("findById")){
 				qSQL.append("select FLOW_NAME,JOIN_NAME,FLOW_ID,JOIN_ID,VERSION_NAME,u.ID,UI_TYPE_ID,UI_RESOURCE_ID,UI_RESOURCE_DESC,UI_RESOURCE_PERMISSION,FUNCTION_ID,ROLE_ID,");
-				qSQL.append(" (select e.field_desc from t_ufp_gv_enum e where e.field_value = UI_TYPE_ID and e.enum_name = 'UFP_AUTH_UI_TYPE') UiTypeName,");
-				qSQL.append(" (select e.field_desc from t_ufp_gv_enum e where e.field_value = ui_resource_permission and e.enum_name = 'UFP_AUTH_UI_PERMISSION') PermissionName,");
+				qSQL.append(" (select e.field_desc from t_bchlr_gv_enum e where e.field_value = UI_TYPE_ID and e.enum_name = 'bchlr_AUTH_UI_TYPE') UiTypeName,");
+				qSQL.append(" (select e.field_desc from t_bchlr_gv_enum e where e.field_value = ui_resource_permission and e.enum_name = 'bchlr_AUTH_UI_PERMISSION') PermissionName,");
 				qSQL.append(" r.name  RoleName, r.memo  RoleMemo,");
-				qSQL.append(" (select f.name from T_UFP_PS_FUNCTION f where f.id = FUNCTION_ID) FuncName ");
-				qSQL.append("  from    T_UFP_AUTH_UI_RESOURCE u ,t_ufp_auth_role r ");
+				qSQL.append(" (select f.name from T_bchlr_PS_FUNCTION f where f.id = FUNCTION_ID) FuncName ");
+				qSQL.append("  from    T_bchlr_AUTH_UI_RESOURCE u ,t_bchlr_auth_role r ");
 				qSQL.append(" where r.id = u.role_id  and ID='").append(id).append("'");
 			} else if(type.equals("findByFuncId")){
 				qSQL.append("select FLOW_NAME,JOIN_NAME,FLOW_ID,JOIN_ID,VERSION_NAME,u.ID,UI_TYPE_SELECTOR,UI_TYPE_ID,UI_RESOURCE_ID,UI_RESOURCE_DESC,UI_RESOURCE_PERMISSION,FUNCTION_ID,ROLE_ID,FLOW_ID,VERSION_NAME,JOIN_ID,");
-				qSQL.append(" (select e.field_desc from t_ufp_gv_enum e where e.field_value = UI_TYPE_ID and e.enum_name = 'UFP_AUTH_UI_TYPE') UiTypeName,");
-				qSQL.append(" (select e.field_desc from t_ufp_gv_enum e where e.field_value = ui_resource_permission and e.enum_name = 'UFP_AUTH_UI_PERMISSION') PermissionName,");
+				qSQL.append(" (select e.field_desc from t_bchlr_gv_enum e where e.field_value = UI_TYPE_ID and e.enum_name = 'bchlr_AUTH_UI_TYPE') UiTypeName,");
+				qSQL.append(" (select e.field_desc from t_bchlr_gv_enum e where e.field_value = ui_resource_permission and e.enum_name = 'bchlr_AUTH_UI_PERMISSION') PermissionName,");
 				qSQL.append(" r.name  RoleName, r.memo  RoleMemo,");
-				qSQL.append(" (select f.name from T_UFP_PS_FUNCTION f where f.id = FUNCTION_ID) FuncName ");
-				qSQL.append("  from     T_UFP_AUTH_UI_RESOURCE u,t_ufp_auth_role r ");
+				qSQL.append(" (select f.name from T_bchlr_PS_FUNCTION f where f.id = FUNCTION_ID) FuncName ");
+				qSQL.append("  from     T_bchlr_AUTH_UI_RESOURCE u,t_bchlr_auth_role r ");
 				qSQL.append(" where r.id = u.role_id and FUNCTION_ID='").append(funcId).append("'");
 			} else if(type.equals("findUiAuthByFuncIdAndRoleIdsAndFlowInfo")){
 				String temp_roles = "";
@@ -149,11 +149,11 @@ public class AuthUiResourceDaoImpl  extends GenericDaoImpl<AuthUiResource, Strin
 				}
 				temp_roles = temp_roles.substring(0, temp_roles.length()-1);
 				qSQL.append("select FLOW_NAME,JOIN_NAME,FLOW_ID,JOIN_ID,VERSION_NAME,u.ID,UI_TYPE_SELECTOR,UI_TYPE_ID,UI_RESOURCE_ID,UI_RESOURCE_DESC,UI_RESOURCE_PERMISSION,FUNCTION_ID,ROLE_ID,");
-				qSQL.append(" (select e.field_desc from t_ufp_gv_enum e where e.field_value = UI_TYPE_ID and e.enum_name = 'UFP_AUTH_UI_TYPE') UiTypeName,");
-				qSQL.append(" (select e.field_desc from t_ufp_gv_enum e where e.field_value = ui_resource_permission and e.enum_name = 'UFP_AUTH_UI_PERMISSION') PermissionName,");
+				qSQL.append(" (select e.field_desc from t_bchlr_gv_enum e where e.field_value = UI_TYPE_ID and e.enum_name = 'bchlr_AUTH_UI_TYPE') UiTypeName,");
+				qSQL.append(" (select e.field_desc from t_bchlr_gv_enum e where e.field_value = ui_resource_permission and e.enum_name = 'bchlr_AUTH_UI_PERMISSION') PermissionName,");
 				qSQL.append(" r.name  RoleName, r.memo  RoleMemo, ");
-				qSQL.append(" (select f.name from T_UFP_PS_FUNCTION f where f.id = FUNCTION_ID) FuncName ");
-				qSQL.append("  from T_UFP_AUTH_UI_RESOURCE u,t_ufp_auth_role r ");
+				qSQL.append(" (select f.name from T_bchlr_PS_FUNCTION f where f.id = FUNCTION_ID) FuncName ");
+				qSQL.append("  from T_bchlr_AUTH_UI_RESOURCE u,t_bchlr_auth_role r ");
 				qSQL.append(" where   r.id = u.role_id  and FUNCTION_ID =  '").append(funcId).append("' ");
 				qSQL.append(" and ROLE_ID in (").append(temp_roles).append(")");;
 				qSQL.append(" and flow_id like '").append(pid).append("%' ");

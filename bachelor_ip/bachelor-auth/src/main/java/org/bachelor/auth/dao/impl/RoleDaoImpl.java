@@ -30,7 +30,7 @@ public class RoleDaoImpl extends GenericDaoImpl<Role, String>  implements IRoleD
 	@Override
 	public List<Role> findAllRoleInfo() {
 		StringBuilder qSQL = new StringBuilder();
-		qSQL.append("select t.ID,t.NAME,t.MEMO,t.DESCRIPTION,t.DEL_FLAG from T_UFP_AUTH_ROLE t order by t.memo ");
+		qSQL.append("select t.ID,t.NAME,t.MEMO,t.DESCRIPTION,t.DEL_FLAG from T_bchlr_AUTH_ROLE t order by t.memo ");
 		List<Role> role_list = getJdbcTemplate().query(qSQL.toString(), new RowMapper(){
 
 			@Override
@@ -55,7 +55,7 @@ public class RoleDaoImpl extends GenericDaoImpl<Role, String>  implements IRoleD
 	@Override
 	public Role findByName(String roleName) {
 		StringBuilder qSQL = new StringBuilder();
-		qSQL.append("select t.ID,t.NAME,t.MEMO,t.DESCRIPTION,t.DEL_FLAG from T_UFP_AUTH_ROLE t");
+		qSQL.append("select t.ID,t.NAME,t.MEMO,t.DESCRIPTION,t.DEL_FLAG from T_bchlr_AUTH_ROLE t");
 		qSQL.append(" where name='").append(roleName).append("'");
 		Role role = getJdbcTemplate().query(qSQL.toString(), new ResultSetExtractor<Role>(){
 

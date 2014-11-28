@@ -48,7 +48,7 @@ public class OrgDaoImpl extends GenericDaoImpl<Org, String> implements IOrgDao {
 		qSQL.append("select t.id,t.shortname,t.show_order,t.flag,t.parentid,t.name,");
 		qSQL.append("t.create_time,t.update_time,t.sync_time,t.category,t.type,t.status_flag,");
 		qSQL.append("v.bm idpath,v.nm namepath");
-		qSQL.append(" from t_ufp_org t, org_vw v where v.id = t.id and t.status_Flag='1' ");// and
+		qSQL.append(" from t_bchlr_org t, org_vw v where v.id = t.id and t.status_Flag='1' ");// and
 																							// t.flag='1'
 		qSQL.append(" and t.id = '").append(id).append("'");
 		qSQL.append(" order by show_order desc");
@@ -107,7 +107,7 @@ public class OrgDaoImpl extends GenericDaoImpl<Org, String> implements IOrgDao {
 		qSQL.append("select t.id,t.shortname,t.show_order,t.flag,t.parentid,t.name,");
 		qSQL.append("t.create_time,t.update_time,t.sync_time,t.category,t.type,t.status_flag,");
 		qSQL.append("v.bm idpath,v.nm namepath");
-		qSQL.append(" from t_ufp_org t, org_vw v where v.id = t.id and t.status_Flag='1' ");
+		qSQL.append(" from t_bchlr_org t, org_vw v where v.id = t.id and t.status_Flag='1' ");
 
 		qSQL.append(" and t.id = '").append(id).append("'");
 		qSQL.append(" order by show_order desc");
@@ -183,7 +183,7 @@ public class OrgDaoImpl extends GenericDaoImpl<Org, String> implements IOrgDao {
 		StringBuilder qSQL = new StringBuilder();
 		qSQL.append("select t.id,t.parentid,t.name,t.shortname,t.show_order,");
 		qSQL.append("t.flag,t.create_time,t.update_time,");
-		qSQL.append("t.sync_time,t.category,t.type,t.status_flag from t_ufp_org t");
+		qSQL.append("t.sync_time,t.category,t.type,t.status_flag from t_bchlr_org t");
 		qSQL.append(" where t.parentid = '").append(id).append("'");
 		qSQL.append(" and flag='1' and status_Flag='1' order by t.show_order asc");
 		List<Org> org_list = getJdbcTemplate().query(qSQL.toString(),
@@ -222,7 +222,7 @@ public class OrgDaoImpl extends GenericDaoImpl<Org, String> implements IOrgDao {
 	public List<OrgVo> findAllSecondUnitInfo(OrgVo orgVo) {
 		StringBuilder qSQL = new StringBuilder();
 		List<OrgVo> vo_list = new ArrayList<OrgVo>();
-		qSQL.append("select t.id,t.parentid,t.name,t.flag,t.shortname from t_ufp_org t where flag='1' and statusFlag='1' ");
+		qSQL.append("select t.id,t.parentid,t.name,t.flag,t.shortname from t_bchlr_org t where flag='1' and statusFlag='1' ");
 		if (orgVo != null) {
 			if (orgVo.getId() != null && !orgVo.getId().equals("")) {
 				qSQL.append(" and t.parentid = '").append(orgVo.getId())
@@ -252,7 +252,7 @@ public class OrgDaoImpl extends GenericDaoImpl<Org, String> implements IOrgDao {
 		int index = 0;
 		for (String orgId : orgIds) {
 			if (orgId != null && !orgId.equals("")) {
-				String sql = "update T_UFP_ORG set FLAG='2' where id='" + orgId
+				String sql = "update T_bchlr_ORG set FLAG='2' where id='" + orgId
 						+ "'";
 				dSQL[index] = sql;
 				index++;
@@ -268,7 +268,7 @@ public class OrgDaoImpl extends GenericDaoImpl<Org, String> implements IOrgDao {
 		int index = 0;
 		for (String orgId : orgIds) {
 			if (orgId != null && !orgId.equals("")) {
-				String sql = "update T_UFP_ORG set STATUS_FLAG='2' where id='"
+				String sql = "update T_bchlr_ORG set STATUS_FLAG='2' where id='"
 						+ orgId + "'";
 				dSQL[index] = sql;
 				index++;
@@ -334,13 +334,13 @@ public class OrgDaoImpl extends GenericDaoImpl<Org, String> implements IOrgDao {
 		/** 统计是否有子项 **/
 		qSQL.append("select count(*) from (");
 		qSQL.append("select f.id parent_id,f.name parent_name,o.id my_id,o.name my_name,c.id child_id,c.name child_name ");
-		qSQL.append("from t_ufp_org f,t_ufp_org o,t_ufp_org c where o.parentid = f.id (+) and o.id = c.parentid (+)  ");
+		qSQL.append("from t_bchlr_org f,t_bchlr_org o,t_bchlr_org c where o.parentid = f.id (+) and o.id = c.parentid (+)  ");
 		if (!StringUtils.isEmpty(flag) && "1".equals(flag)) {
 			qSQL.append(" and o.flag = '1'");
 		}
 		qSQL.append(" ) org where org.parent_id = o.id) is_children ");
 		/** 统计是否有子项 **/
-		qSQL.append("from t_ufp_org o where o.parentid = '").append(id)
+		qSQL.append("from t_bchlr_org o where o.parentid = '").append(id)
 				.append("'");
 		if (!StringUtils.isEmpty(flag) && "1".equals(flag)) {
 			qSQL.append(" and o.flag = '1'");

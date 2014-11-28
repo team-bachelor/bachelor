@@ -77,7 +77,7 @@ public class UserManageServiceImpl implements IUserManageService {
 		String[] dSQL = new String[dInfo.length];
 		int index = 0;
 		for(String tempInfo:dInfo){
-			dSQL[index] = "delete from T_UFP_USER where id='"+tempInfo+"'";
+			dSQL[index] = "delete from T_bchlr_USER where id='"+tempInfo+"'";
 			index++;
 		}
 		userManageDao.batchDelete(dSQL);

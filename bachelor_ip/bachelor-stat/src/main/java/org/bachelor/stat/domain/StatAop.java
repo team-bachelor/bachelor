@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="T_UFP_STAT_AOP")
+@Table(name="T_bchlr_STAT_AOP")
 public class StatAop implements Serializable {
 
 	/**

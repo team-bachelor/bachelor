@@ -17,7 +17,7 @@ public class StatAopDaoImpl extends GenericDaoImpl<StatAop,String> implements IS
 			int index = 0;
 			for(String dInfo:delInfo){
 				if(dInfo!=null && !"".equals(dInfo)){
-					dSQL[index] = "delete from T_UFP_STAT_AOP where class_name='"+dInfo+"'";
+					dSQL[index] = "delete from T_bchlr_STAT_AOP where class_name='"+dInfo+"'";
 					index++;
 				}
 			}

@@ -12,7 +12,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="t_ufp_stat_server_ss")
+@Table(name="t_bchlr_stat_server_ss")
 public class StatServer {
 	 
 	@Id

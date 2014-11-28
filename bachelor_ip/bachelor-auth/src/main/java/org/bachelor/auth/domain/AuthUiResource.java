@@ -15,7 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.bachelor.ps.domain.Function;
 
 @Entity
-@Table(name = "T_UFP_AUTH_UI_RESOURCE")
+@Table(name = "T_bchlr_AUTH_UI_RESOURCE")
 public class AuthUiResource {
 
 	@Id

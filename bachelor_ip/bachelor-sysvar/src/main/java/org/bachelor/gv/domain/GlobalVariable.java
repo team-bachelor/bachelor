@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="T_UFP_GV")
+@Table(name="T_bchlr_GV")
 public class GlobalVariable implements Serializable {
 	/**
 	 * 

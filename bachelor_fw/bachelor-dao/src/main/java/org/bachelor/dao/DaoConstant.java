@@ -11,5 +11,5 @@ package org.bachelor.dao;
  */
 public class DaoConstant {
 
-	public static String PAGE_INFO = "ufp_dao_page_info";
+	public static String PAGE_INFO = "bchlr_dao_page_info";
 }

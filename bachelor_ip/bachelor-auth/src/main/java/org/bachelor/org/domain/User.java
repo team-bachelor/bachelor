@@ -26,7 +26,7 @@ import org.bachelor.ext.org.domain.UserExt;
  *
  */
 @Entity
-@Table(name="T_UFP_USER")
+@Table(name="T_bchlr_USER")
 public class User implements Serializable, IBaseEntity{
 	
 	/**

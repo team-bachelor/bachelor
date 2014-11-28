@@ -218,9 +218,29 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 	}
 	
 	protected List<T> findByCriteria(DetachedCriteria dc, ResultTransformer transformer) {
+		PageVo pageVo = (PageVo)vlService.getRequestAttribute(DaoConstant.PAGE_INFO);
+		return findByCriteria(dc, transformer, pageVo);
+	}
+	
+	protected T findFirstByCriteria(DetachedCriteria dc) {
+		return findFirstByCriteria(dc, Criteria.ROOT_ENTITY);
+	}
+	
+	protected T findFirstByCriteria(DetachedCriteria dc, ResultTransformer transformer) {
+		PageVo pageVo = new PageVo();
+		pageVo.setStartIndex(0);
+		pageVo.setEndIndex(1);
+		List<T> list = findByCriteria(dc, transformer, pageVo);
+		if(list.size() > 0){
+			return list.get(0);
+		}else{
+			return null;
+		}
+	}
+	
+	private List<T> findByCriteria(DetachedCriteria dc, ResultTransformer transformer, PageVo pageVo) {
 		Criteria  criteria = dc.getExecutableCriteria(getSession());
 		criteria.setResultTransformer(transformer);
-		PageVo pageVo = (PageVo)vlService.getRequestAttribute(DaoConstant.PAGE_INFO);
 		if(pageVo == null){
 			log.info("没有分页信息，查询全部记录。");
 			return criteria.list();	
@@ -256,7 +276,6 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 		List<T> list = criteria.setFirstResult(pageVo.getStartIndex()).setMaxResults(pageVo.getPageRowNum()).list();
 		return list;
 	}
-
 	/* (non-Javadoc)
 	 * @see org.bachelor.dao.IGenericDao#findByProperty(java.lang.String, java.lang.String)
 	 */

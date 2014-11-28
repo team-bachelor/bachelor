@@ -45,7 +45,7 @@ public class MenuDaoImpl extends GenericDaoImpl<Menu, String> implements IMenuDa
 	@Override
 	public void saveMenu(Menu menu) {
 		StringBuilder iSQL = new StringBuilder();
-		iSQL.append("insert into T_UFP_MENU_INFO(id,NAME,DESCRIPTION,SHOW_ORDER,FLAG,PARENT_ID,FUNCTION_ID,OPEN_TYPE) values(");
+		iSQL.append("insert into T_bchlr_MENU_INFO(id,NAME,DESCRIPTION,SHOW_ORDER,FLAG,PARENT_ID,FUNCTION_ID,OPEN_TYPE) values(");
 		iSQL.append("'").append(menu.getId()).append("',");
 		iSQL.append("'").append(menu.getName()).append("',");
 		iSQL.append("'").append(menu.getDescription()).append("',");

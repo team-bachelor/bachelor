@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="T_UFP_AUTH_LOGIN")
+@Table(name="T_bchlr_AUTH_LOGIN")
 public class AuthLogin {
 
 	@Id

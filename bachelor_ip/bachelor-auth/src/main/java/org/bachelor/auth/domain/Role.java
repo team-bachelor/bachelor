@@ -29,7 +29,7 @@ import org.hibernate.annotations.OrderBy;
  *
  */
 @Entity
-@Table(name="T_UFP_AUTH_ROLE")
+@Table(name="T_bchlr_AUTH_ROLE")
 public class Role implements Serializable{
 	/**
 	 * 

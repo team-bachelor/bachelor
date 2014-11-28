@@ -15,7 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
  *
  */
 @Entity
-@Table(name = "T_UFP_PS_MODULE_EXT")
+@Table(name = "T_bchlr_PS_MODULE_EXT")
 public class ProjectModuleExt {
 
 	@Id

@@ -29,7 +29,7 @@ import org.hibernate.annotations.GenericGenerator;
  *
  */
 @Entity
-@Table(name="T_UFP_PS_FUNCTION")
+@Table(name="T_bchlr_PS_FUNCTION")
 public class Function implements Serializable{
 
 	/**

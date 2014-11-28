@@ -93,7 +93,7 @@ public class GVServiceImpl implements IGVService{
 		String dSQL[] = new String[delInfo.length];
 		for(int i=0;i<delInfo.length;i++){
 			if(delInfo[i]!=null && !"".equals(delInfo[i])){
-				dSQL[i] = "delete from t_ufp_gv where id='"+delInfo[i]+"'";
+				dSQL[i] = "delete from t_bchlr_gv where id='"+delInfo[i]+"'";
 			}
 		}
 		if(dSQL!=null && dSQL.length>0){

@@ -89,7 +89,7 @@ public class RoleServiceImpl implements IRoleService {
 		String delSQL[] = new String[delArray.length];
 		int index = 0;
 		for(String info:delArray){
-			delSQL[index] = "delete from T_UFP_AUTH_ROLE where id='"+info+"'";
+			delSQL[index] = "delete from T_bchlr_AUTH_ROLE where id='"+info+"'";
 			index++;
 		}
 		dao.batchDelete(delSQL);
