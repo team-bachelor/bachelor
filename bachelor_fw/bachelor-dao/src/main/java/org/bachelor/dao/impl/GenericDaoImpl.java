@@ -35,7 +35,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T, ID> {
 
 	private Log log = LogFactory.getLog(this.getClass());
-
+	
 	private Class<T> persistentClass;
 	
 	@Autowired(required=false)
@@ -71,7 +71,7 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 	 */
 	@Override
 	public T findById(ID id) {
-		Object obj = sessionFactory.getCurrentSession().get(getPersistentClass(), id);
+		Object obj = getSession().get(getPersistentClass(), id);
 		T t = (T)obj;
 		return t;
 	}
@@ -91,7 +91,7 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 	 */
 	@Override
 	public void save(T entity) {
-		sessionFactory.getCurrentSession().persist(entity);
+		getSession().persist(entity);
 	}
 
 	/* (non-Javadoc)
@@ -99,7 +99,7 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 	 */
 	@Override
 	public void update(T entity) {
-		sessionFactory.getCurrentSession().update(entity);
+		getSession().update(entity);
 	}
 
 	/* (non-Javadoc)
@@ -107,7 +107,7 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 	 */
 	@Override
 	public void saveOrUpdate(T entity) {
-		sessionFactory.getCurrentSession().saveOrUpdate(entity);
+		getSession().saveOrUpdate(entity);
 	}
 
 	/* (non-Javadoc)
@@ -115,19 +115,19 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 	 */
 	@Override
 	public void delete(T entity) {
-		sessionFactory.getCurrentSession().delete(entity);
+		getSession().delete(entity);
 	}
 	protected List<T> findByHQL(String hql) {
 		return findByHQL(hql, null);
 	}
 	protected List<T> findByHQL(String hql, QueryParamSetter setter) {
-		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		Query query = getSession().createQuery(hql);
 		if(setter != null){
 			setter.set(query);
 		}
 		PageVo pageVo = (PageVo)vlService.getRequestAttribute(DaoConstant.PAGE_INFO);
 		if(pageVo == null){
-			log.info("没有分页信息，查询全部记录。");
+			log.debug("没有分页信息，查询全部记录。");
 			return query.list();	
 		}
 		//取得全部记录数
@@ -141,8 +141,8 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 		
 		int startIndex = pageVo.getStartIndex();
 		int endIndex = pageVo.getEndIndex();
-		log.info("分页开始位置：" + startIndex);
-		log.info("分页结束位置：" + endIndex);
+		log.debug("分页开始位置：" + startIndex);
+		log.debug("分页结束位置：" + endIndex);
 		if(endIndex <= startIndex || endIndex <= 0){
 			return query.list();
 		}
@@ -165,7 +165,7 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 	}
 	
 	protected List<T> findNoPageByHQL(String hql, QueryParamSetter setter){
-		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		Query query = getSession().createQuery(hql);
 		if(setter != null){
 			setter.set(query);
 		}
@@ -230,6 +230,7 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 		PageVo pageVo = new PageVo();
 		pageVo.setStartIndex(0);
 		pageVo.setEndIndex(1);
+		pageVo.setPageRowNum(1);
 		List<T> list = findByCriteria(dc, transformer, pageVo);
 		if(list.size() > 0){
 			return list.get(0);
@@ -240,13 +241,21 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 	
 	private List<T> findByCriteria(DetachedCriteria dc, ResultTransformer transformer, PageVo pageVo) {
 		Criteria  criteria = dc.getExecutableCriteria(getSession());
+		criteria.setCacheable(true);
 		criteria.setResultTransformer(transformer);
 		if(pageVo == null){
-			log.info("没有分页信息，查询全部记录。");
+			log.debug("没有分页信息，查询全部记录。");
 			return criteria.list();	
 		}
 		//取得全部记录数
-		long count = ((Long) criteria.setProjection(Projections.rowCount()).uniqueResult());
+		/**
+		 * 为了应对横向切分的情况，修改为将所有结果相加。by 刘卓
+		 */
+		List counts = criteria.setProjection(Projections.rowCount()).list();
+		long count = 0;
+		for(Object obj : counts){
+			count = count +((Long)obj);
+		}
 		criteria.setProjection(null);
 		criteria.setResultTransformer(transformer);
 		pageVo.setCount(count);
@@ -258,9 +267,9 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 		
 		int startIndex = pageVo.getStartIndex();
 		int limitIndex = pageVo.getEndIndex();
-		log.info("分页开始位置：" + startIndex);
-		log.info("分页结束位置：" + limitIndex);
-		log.info("分页参数不正确，查询全部记录。");
+		log.debug("分页开始位置：" + startIndex);
+		log.debug("分页结束位置：" + limitIndex);
+		log.debug("分页参数不正确，查询全部记录。");
 		if(limitIndex <= startIndex || limitIndex <= 0){
 			return criteria.list();
 		}
@@ -287,14 +296,14 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 	}
 	
 	protected int executeHql(String hql){
-		int num = sessionFactory.getCurrentSession().createQuery(hql).executeUpdate();
+		int num = getSession().createQuery(hql).executeUpdate();
 		return num;
 	}
 	
 	protected String pageSql(String sql){
 		PageVo pageVo = (PageVo)vlService.getRequestAttribute(DaoConstant.PAGE_INFO);
 		if(pageVo == null){
-			log.info("没有分页信息，查询全部记录。");
+			log.debug("没有分页信息，查询全部记录。");
 			return sql;	
 		}
 		//取得全部记录数
@@ -309,8 +318,8 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 		
 		int startIndex = pageVo.getStartIndex();
 		int endIndex = pageVo.getEndIndex();
-		log.info("分页开始位置：" + startIndex);
-		log.info("分页结束位置：" + endIndex);
+		log.debug("分页开始位置：" + startIndex);
+		log.debug("分页结束位置：" + endIndex);
 		if(endIndex <= startIndex || endIndex <= 0){
 			return sql;
 		}
