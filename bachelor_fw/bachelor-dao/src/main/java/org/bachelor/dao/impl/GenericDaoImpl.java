@@ -8,6 +8,7 @@ package org.bachelor.dao.impl;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -307,8 +308,13 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 			return sql;	
 		}
 		//取得全部记录数
-		String countSql = "select count(*) from (" + sql + ")";
-		long count = getJdbcTemplate().queryForLong(countSql);
+		String countSql = "select count(*) count from (" + sql + ")";
+		List<Map<String, Object>> counts = getJdbcTemplate().queryForList(countSql);
+		long count = 0;
+		for(Object obj : counts){
+			Map<String, Object> map = (Map<String, Object>) obj;
+			count = count +((Long)map.get("count"));
+		}
 		pageVo.setCount(count);
 		//计算全部页数
 		long pageCount = count/pageVo.getPageRowNum();
