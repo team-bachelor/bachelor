@@ -48,7 +48,7 @@
       
       
       /*Tab页右上角关闭按钮样式 */
-      .ufp-ui-icon-close{
+      .bchlr-ui-icon-close{
       	float:right;cursor:pointer;margin-top:-38px;margin-right:2px;
       }
     </style>
@@ -215,7 +215,7 @@
 			if($('#myTabs a[href="#' + tabId + '"]').length > 0){
 				$('#myTabs a[href="#' + tabId + '"]').tab('show');
 			}else{
-				$('#myTabs').append('<li id="' + tabId + '1"><a href="#' + tabId + '" data-toggle="tab">' + tabName + '</a><button class="close ufp-ui-icon-close" onclick="closeWin(\''+tabId+'\')">&times;</button></li>');
+				$('#myTabs').append('<li id="' + tabId + '1"><a href="#' + tabId + '" data-toggle="tab">' + tabName + '</a><button class="close bchlr-ui-icon-close" onclick="closeWin(\''+tabId+'\')">&times;</button></li>');
 				var tabContextHtml = '<div id="' + tabId + '" class="tab-pane fade">' 
 					+ '<iframe id="main" border=0 frameBorder="no" src="<%=path %>' + url + '" width="100%" height="600"></iframe>' 
 					+ '</div>';

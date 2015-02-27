@@ -18,6 +18,7 @@ import org.bachelor.dao.IGenericDao;
 import org.bachelor.dao.QueryParamSetter;
 import org.bachelor.dao.vo.PageVo;
 import org.hibernate.Criteria;
+import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -211,6 +212,7 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 	protected List<T> findByCriteriaNoPage(DetachedCriteria dc, ResultTransformer transformer) {
 		Criteria  criteria = dc.getExecutableCriteria(getSession());
 		criteria.setResultTransformer(transformer);
+		criteria.setLockMode(LockMode.NONE);
 		return criteria.list();	
 	}
 	
@@ -244,10 +246,12 @@ public class GenericDaoImpl<T, ID extends Serializable> implements IGenericDao<T
 		Criteria  criteria = dc.getExecutableCriteria(getSession());
 		criteria.setCacheable(true);
 		criteria.setResultTransformer(transformer);
+		criteria.setLockMode(LockMode.NONE);
 		if(pageVo == null){
 			log.debug("没有分页信息，查询全部记录。");
 			return criteria.list();	
 		}
+		
 		//取得全部记录数
 		/**
 		 * 为了应对横向切分的情况，修改为将所有结果相加。by 刘卓

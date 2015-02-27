@@ -84,16 +84,16 @@
 	</tx:advice>
 	
 	<aop:config>
-		<aop:pointcut expression="execution(public * org.bachelor.**.service..*Service*.*(..))" id="ufpServicePointcut"/>
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="ufpServicePointcut"/>
+		<aop:pointcut expression="execution(public * org.bachelor.**.service..*Service*.*(..))" id="bchlrServicePointcut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="bchlrServicePointcut"/>
 	</aop:config>
 	
 	<aop:config>
-		<aop:pointcut expression="execution(public * org.bachelor.**.dao..*Dao*.*(..))" id="ufpDaoPointcut"/>
+		<aop:pointcut expression="execution(public * org.bachelor.**.dao..*Dao*.*(..))" id="bchlrDaoPointcut"/>
 	</aop:config>
 	
 	<aop:config>
-		<aop:pointcut expression="execution(public * org.bachelor.**.web..*Controller*.*(..))" id="ufpControllerPointcut"/>
+		<aop:pointcut expression="execution(public * org.bachelor.**.web..*Controller*.*(..))" id="bchlrControllerPointcut"/>
 	</aop:config>
 	
 	<!-- 异常 -->

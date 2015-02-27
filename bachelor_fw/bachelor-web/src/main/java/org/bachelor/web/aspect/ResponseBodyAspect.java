@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class ResponseBodyAspect {
 
 	private Log log = LogFactory.getLog(this.getClass());
-	
+
 	// 标注该方法体为后置通知，当目标方法执行成功后执行该方法体
 	@Around("@annotation(org.springframework.web.bind.annotation.ResponseBody) && execution(public org.bachelor.web.json.JsonResponseData *..*(..))")
 	public Object jsonDataProceed(ProceedingJoinPoint pjp) {
@@ -28,6 +28,7 @@ public class ResponseBodyAspect {
 		Object retVal = null;
 		ResponseStatus status = null;
 		String msg = null;
+		boolean hasErr = false;
 		String[] args = null;
 		try {
 			retVal = pjp.proceed();
@@ -41,19 +42,29 @@ public class ResponseBodyAspect {
 			} else {
 				status = ResponseStatus.SYS_ERR;
 			}
+			hasErr = true;
 			msg = e.getMessage();
 			log.error(pjp, e);
 		}
-		if(retVal != null) {
+		if (retVal != null) {
 			ret = (JsonResponseData) retVal;
-		}else{
+		} else {
 			ret = new JsonResponseData();
 		}
-		ret.setMsg(msg);
+		if (msg != null){
+			ret.setMsg(msg);
+		}else if(ret.getMsg() != null){
+			msg = ret.getMsg();
+		}
 		ret.setStatus(status);
-		if (ret.getMsg() != null)
-			ret.setMsg(ApplicationContextHolder.getApplicationContext()
-					.getMessage(ret.getMsg(), args, Locale.CHINA));
+		if (msg != null) {
+			String transMsg = ApplicationContextHolder.getApplicationContext()
+					.getMessage(ret.getMsg(), args, Locale.CHINA);
+			if (hasErr && !transMsg.equals(ret.getMsg())) {
+				ret.setErrCode(msg);
+			}
+			ret.setMsg(transMsg);
+		}
 		return ret;
 	}
 }

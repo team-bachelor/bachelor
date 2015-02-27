@@ -304,7 +304,7 @@
         //** 加载选择器数据 **//
          function initSelectorData(){
         	$.ajax({
-	    	 		url:"<%=path %>/gv/enum/findByEnumNameTV.htm?enumName=UFP_AUTH_UI_SELECTOR",
+	    	 		url:"<%=path %>/gv/enum/findByEnumNameTV.htm?enumName=bchlr_AUTH_UI_SELECTOR",
 	    	 		contentType:"application/json",
 	    	 		type:"get",
 	    	 		dataType:"json", 
@@ -316,7 +316,7 @@
         
         function initUiAuthData(){
         	$.ajax({
-	    	 		url:"<%=path %>/gv/enum/findByEnumNameTV.htm?enumName=UFP_AUTH_UI_PERMISSION",
+	    	 		url:"<%=path %>/gv/enum/findByEnumNameTV.htm?enumName=bchlr_AUTH_UI_PERMISSION",
 	    	 		contentType:"application/json",
 	    	 		type:"get",
 	    	 		dataType:"json", 
@@ -329,7 +329,7 @@
         
         function initUiElementData(){
         	$.ajax({
-	    	 		url:"<%=path %>/gv/enum/findByEnumNameTV.htm?enumName=UFP_AUTH_UI_TYPE",
+	    	 		url:"<%=path %>/gv/enum/findByEnumNameTV.htm?enumName=bchlr_AUTH_UI_TYPE",
 	    	 		contentType:"application/json",
 	    	 		type:"get",
 	    	 		dataType:"json", 

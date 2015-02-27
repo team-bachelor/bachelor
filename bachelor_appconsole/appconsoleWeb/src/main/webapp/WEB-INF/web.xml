@@ -63,7 +63,7 @@
 <!-- JSP自定义标签 -->
  	 <jsp-config>
 		  	<taglib>
-			  		<taglib-uri>ufp</taglib-uri>
+			  		<taglib-uri>bchlr</taglib-uri>
 			  		<taglib-location>/WEB-INF/AuthExpression.tld</taglib-location>
 		  	</taglib>
 	  </jsp-config>

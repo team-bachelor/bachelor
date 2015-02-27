@@ -5,6 +5,7 @@ import java.util.Date;
 public class JsonResponseData {
 	
 	private ResponseStatus status;
+	private String errCode;
 	private String msg;
 	private Object data;
 	private Long time;
@@ -50,5 +51,13 @@ public class JsonResponseData {
 	
 	public Long getTime() {
 		return time;
+	}
+
+	public String getErrCode() {
+		return errCode;
+	}
+
+	public void setErrCode(String errCode) {
+		this.errCode = errCode;
 	}
 }

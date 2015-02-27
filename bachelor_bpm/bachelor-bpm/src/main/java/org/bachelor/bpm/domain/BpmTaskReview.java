@@ -17,7 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
  * 
  */
 @Entity
-@Table(name = "t_ufp_bpm_task_review")
+@Table(name = "t_bchlr_bpm_task_review")
 public class BpmTaskReview {
 
 	/** 主键 **/
@@ -598,7 +598,7 @@ public class BpmTaskReview {
 	/**
 	 * 取得审核结果.0：通过，1：驳回
 	 * 
-	 * @see cn.com.bpsc.ufp.bpm.common.Constant
+	 * @see cn.com.bpsc.bchlr.bpm.common.Constant
 	 * @return 审核结果.0：通过，1：驳回
 	 */
 	public String getReviewResult() {
@@ -608,7 +608,7 @@ public class BpmTaskReview {
 	/**
 	 * 设置审核结果.0：通过，1：驳回
 	 * 
-	 * @see cn.com.bpsc.ufp.bpm.common.Constant
+	 * @see cn.com.bpsc.bchlr.bpm.common.Constant
 	 * 
 	 * @param reviewResult
 	 *            审核结果.0：通过，1：驳回

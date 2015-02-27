@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../inc/header.jsp" %>
-<%@ taglib uri="ufp"  prefix="ufp"%>
+<%@ taglib uri="bchlr"  prefix="bchlr"%>
 <!DOCTYPE html >
 <html>
 <head>
@@ -382,11 +382,11 @@
 		</div>
 		<div style="padding-top: 20px;height: 40px;">
 			<div style="float: left;">
-			<ufp:auth notCompany="a" notHasRoles="aa,22">
+			<bchlr:auth notCompany="a" notHasRoles="aa,22">
 					<button id="search" type="button" class="btn btn-info">查询</button>		
 					<button id="add" type="button" class="btn btn-primary">增加</button>
 					<button id="del" type="button" class="btn btn-danger">删除</button>
-			</ufp:auth>
+			</bchlr:auth>
 			</div>
 			<div  style="float: right;display: none;" id="messageBoxAlertId" >
 				<div class="alert" style="width:280px;" >

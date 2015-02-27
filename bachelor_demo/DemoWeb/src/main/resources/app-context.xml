@@ -83,13 +83,13 @@
 	</tx:advice>
 	
 	<aop:config>
-		<aop:pointcut expression="execution(public * org.bachelor.**.biz..*Biz*.*(..))" id="ufpBizPointcut"/>
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="ufpBizPointcut"/>
+		<aop:pointcut expression="execution(public * org.bachelor.**.biz..*Biz*.*(..))" id="bchlrBizPointcut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="bchlrBizPointcut"/>
 	</aop:config>
 
 	<aop:config>
-		<aop:pointcut expression="execution(public * org.bachelor.**.service..*Service*.*(..))" id="ufpServicePointcut"/>
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="ufpServicePointcut"/>
+		<aop:pointcut expression="execution(public * org.bachelor.**.service..*Service*.*(..))" id="bchlrServicePointcut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="bchlrServicePointcut"/>
 	</aop:config>
 	
 	<aop:config>

@@ -8,6 +8,6 @@
 </head>
 <body>
 平台控制台<br/>
-当前登录用户：<%=session.getAttribute("ufp_login_user").toString() %>
+当前登录用户：<%=session.getAttribute("bchlr_login_user").toString() %>
 </body>
 </html>
