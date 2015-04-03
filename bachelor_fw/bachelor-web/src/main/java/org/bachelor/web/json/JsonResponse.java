@@ -1,25 +1,26 @@
 package org.bachelor.web.json;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class JsonResponseData {
+public class JsonResponse<T extends Serializable> {
 	
 	private ResponseStatus status;
-	private String errCode;
+	private String code;
 	private String msg;
-	private Object data;
+	private T data;
 	private Long time;
 	
-	public JsonResponseData(){
+	public JsonResponse(){
 		time = new Date().getTime();
 	}
 	
-	public JsonResponseData(Object data){
+	public JsonResponse(T data){
 		this.time = new Date().getTime();
 		this.data = data;
 	}
 	
-	public JsonResponseData(Object data, String msg){
+	public JsonResponse(T data, String msg){
 		this.time = new Date().getTime();
 		this.data = data;
 		this.msg = msg;
@@ -41,11 +42,11 @@ public class JsonResponseData {
 		this.msg = msg;
 	}
 	
-	public Object getData() {
+	public T getData() {
 		return data;
 	}
 	
-	public void setData(Object data) {
+	public void setData(T data) {
 		this.data = data;
 	}
 	
@@ -53,11 +54,11 @@ public class JsonResponseData {
 		return time;
 	}
 
-	public String getErrCode() {
-		return errCode;
+	public String getCode() {
+		return code;
 	}
 
-	public void setErrCode(String errCode) {
-		this.errCode = errCode;
+	public void setCode(String code) {
+		this.code = code;
 	}
 }
