@@ -12,4 +12,7 @@ package org.bachelor.dao;
 public class DaoConstant {
 
 	public static String PAGE_INFO = "bchlr_dao_page_info";
+	public static void main(String[] args){
+		System.out.println(3L/4L);
+	}
 }

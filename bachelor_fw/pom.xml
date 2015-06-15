@@ -13,12 +13,12 @@
 		<repository>
 			<id>pdmi-releases</id>
 			<name>PDMI Releases</name>
-			<url>http://192.168.11.230:9090/nexus/content/repositories/pdmi-releases</url>
+			<url>http://192.168.190.55:9090/nexus/content/repositories/pdmi-releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>pdmi-snapshots</id>
 			<name>PDMI snapshots</name>
-			<url>http://192.168.11.230:9090/nexus/content/repositories/pdmi-snapshots</url>
+			<url>http://192.168.190.55:9090/nexus/content/repositories/pdmi-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<build>

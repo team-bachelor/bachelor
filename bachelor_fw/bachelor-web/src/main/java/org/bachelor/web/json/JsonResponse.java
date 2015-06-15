@@ -1,15 +1,17 @@
 package org.bachelor.web.json;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class JsonResponse<T extends Serializable> {
+import org.bachelor.dao.vo.PageVo;
+
+public class JsonResponse<T> {
 	
 	private ResponseStatus status;
 	private String code;
 	private String msg;
 	private T data;
 	private Long time;
+	private PageVo page;
 	
 	public JsonResponse(){
 		time = new Date().getTime();
@@ -60,5 +62,13 @@ public class JsonResponse<T extends Serializable> {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public PageVo getPage() {
+		return page;
+	}
+
+	public void setPage(PageVo page) {
+		this.page = page;
 	}
 }
