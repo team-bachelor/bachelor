@@ -26,6 +26,11 @@ public class BusinessException extends BaseException{
 	public BusinessException(Throwable cause) {
 		super(cause);
 	}
+	
+	public BusinessException(String message, Throwable cause, String... args) {
+		super(message, cause);
+		this.args = args;
+	}
 
 	public BusinessException(String message, String... args) {
 		super(message);
