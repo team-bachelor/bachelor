@@ -43,13 +43,15 @@ public class ResponseBodyAspect {
 			if (e instanceof BusinessException) {
 				status = ResponseStatus.BIZ_ERR;
 				args = ((BusinessException) e).getArgs();
+				msg = e.getMessage();
 			} else if (e instanceof SystemException) {
 				status = ResponseStatus.SYS_ERR;
+				msg = e.getMessage();
 			} else {
 				status = ResponseStatus.SYS_ERR;
+				msg = "System error!";
 			}
 			hasErr = true;
-			msg = e.getMessage();
 			log.error(pjp, e);
 		}
 		if (retVal != null) {
