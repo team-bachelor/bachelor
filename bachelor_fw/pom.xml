@@ -13,12 +13,12 @@
 		<repository>
 			<id>pdmi-releases</id>
 			<name>PDMI Releases</name>
-			<url>http://192.168.190.55:9090/nexus/content/repositories/pdmi-releases</url>
+			<url>http://10.100.13.25:9090/nexus/content/repositories/pdmi-releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>pdmi-snapshots</id>
 			<name>PDMI snapshots</name>
-			<url>http://192.168.190.55:9090/nexus/content/repositories/pdmi-snapshots</url>
+			<url>http://10.100.13.25:9090/nexus/content/repositories/pdmi-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<build>
@@ -56,8 +56,8 @@
 		<antlr.version>2.7.7</antlr.version>
 		<aspectjweaver.version>1.7.2</aspectjweaver.version>
 		<!-- hibernate -->
-		<hibernate.version>4.3.5.Final</hibernate.version>
-		<hibernate.jpa.version>1.0.1.Final</hibernate.jpa.version>
+		<hibernate.version>4.3.10.Final</hibernate.version>
+		<hibernate.jpa.version>1.0.0.Final</hibernate.jpa.version>
 		<hibernate.annotation.version>4.0.2.Final</hibernate.annotation.version>
 		<!-- 基础工具 -->
 		<common.lang.version>3.1</common.lang.version>
@@ -66,13 +66,8 @@
 		<!-- 日志 -->
 		<common.logging.version>4.0.2.Final</common.logging.version>
 		<log4j.version>4.0.2.Final</log4j.version>
-
-		<c3p0.version>0.9.1.2</c3p0.version>
-		<ojdbc.version>11.1.0.7.0</ojdbc.version>
-
 		<servlet.version>2.5</servlet.version>
 		<jstl.version>1.2</jstl.version>
-
 		<cxf.version>2.7.6</cxf.version>
 
 	</properties>
@@ -84,61 +79,60 @@
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- <dependency> <groupId>javax.servlet</groupId> <artifactId>servlet-api</artifactId> 
-			<version>${servlet.version}</version> <scope>provided</scope> </dependency> -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-			<version>${jstl.version}</version>
-			<scope>provided</scope>
-		</dependency>
-
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 			<version>${spring.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jpa</artifactId>
 			<version>2.0.8</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
+			<artifactId>hibernate-jpa-2.1-api</artifactId>
 			<version>${hibernate.jpa.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>antlr</groupId>
 			<artifactId>antlr</artifactId>
 			<version>${antlr.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>aopalliance</groupId>
 			<artifactId>aopalliance</artifactId>
 			<version>${aopalliance.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
 			<version>${aspectjweaver.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<!-- <dependency> <groupId>org.springframework.flex</groupId> <artifactId>spring-flex-core</artifactId> 
 			<version>${spring.flex.version}</version> </dependency> -->
@@ -147,24 +141,21 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>${common.lang.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>${common.beanutils.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>c3p0</groupId>
-			<artifactId>c3p0</artifactId>
-			<version>${c3p0.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>2.2.1</version>
+			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>
