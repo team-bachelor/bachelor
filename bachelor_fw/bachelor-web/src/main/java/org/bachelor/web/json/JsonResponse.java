@@ -1,8 +1,11 @@
 package org.bachelor.web.json;
 
-import java.util.Date;
-
 import org.bachelor.dao.vo.PageVo;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Date;
 
 public class JsonResponse<T> {
 	
@@ -70,5 +73,25 @@ public class JsonResponse<T> {
 
 	public void setPage(PageVo page) {
 		this.page = page;
+	}
+
+	public static <K> HttpEntity<JsonResponse> createHttpEntity(K data){
+		return new HttpEntity<JsonResponse>(new JsonResponse<K>(data));
+	}
+
+	public static <K> HttpEntity<JsonResponse> createHttpEntity(K data, String msg){
+		return new HttpEntity<JsonResponse>(new JsonResponse<K>(data, msg));
+	}
+
+	public static <K> ResponseEntity<JsonResponse> createHttpEntity(K data, HttpStatus status){
+		return new ResponseEntity<JsonResponse>(new JsonResponse<K>(data), status);
+	}
+
+	public static <K> ResponseEntity<JsonResponse> createHttpEntity(K data, String msg, HttpStatus status){
+		return new ResponseEntity<JsonResponse>(new JsonResponse<K>(data, msg), status);
+	}
+
+	public static ResponseEntity<JsonResponse> createHttpEntity(HttpStatus status){
+		return new ResponseEntity<JsonResponse>(new JsonResponse(), status);
 	}
 }

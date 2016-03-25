@@ -60,7 +60,7 @@ public class PageInterceptor extends AllManagedIntercepter{
 			String limitStr = request.getParameter("limit");
 			String pageStr = request.getParameter("page");
 			if(StringUtils.isEmpty(startIndexStr) && StringUtils.isEmpty(limitStr) && StringUtils.isEmpty(pageStr)){
-				log.info("找不到分页标志，不开始分页处理。");
+				log.debug("找不到分页标志，不开始分页处理。");
 				return true;
 			}
 			//取得每页记录数
@@ -82,11 +82,11 @@ public class PageInterceptor extends AllManagedIntercepter{
 			}
 			
 			if(startIndex ==-1 || endIndex == -1){
-				log.info("分页参数不对，不做分页处理。");
+				log.debug("分页参数不对，不做分页处理。");
 				return true;
 			}
 			
-			log.info("找到分页标志，开始分页处理。");
+			log.debug("找到分页标志，开始分页处理。");
 			//创建分页信息，保存在Request中
 			PageVo pageVo = new PageVo();
 			pageVo.setStartIndex(startIndex);

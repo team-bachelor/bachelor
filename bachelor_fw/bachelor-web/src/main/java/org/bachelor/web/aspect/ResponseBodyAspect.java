@@ -1,7 +1,5 @@
 package org.bachelor.web.aspect;
 
-import java.util.Locale;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -16,7 +14,10 @@ import org.bachelor.util.ApplicationContextHolder;
 import org.bachelor.web.json.JsonResponse;
 import org.bachelor.web.json.ResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.Locale;
 
 @Aspect
 @Component
@@ -30,7 +31,7 @@ public class ResponseBodyAspect {
 	@Around("@annotation(org.springframework.web.bind.annotation.ResponseBody) && execution(public org.bachelor.web.json.JsonResponse *..*(..))")
 	public Object jsonDataProceed(ProceedingJoinPoint pjp) {
 		// 继续执行接下来的代码
-		JsonResponse<?> ret = null;
+		HttpEntity<JsonResponse> ret = null;
 		Object retVal = null;
 		ResponseStatus status = null;
 		String msg = null;
@@ -40,6 +41,7 @@ public class ResponseBodyAspect {
 			retVal = pjp.proceed();
 			status = ResponseStatus.OK;
 		} catch (Throwable e) {
+			//TODO 根据新情况做错误处理
 			if (e instanceof BusinessException) {
 				status = ResponseStatus.BIZ_ERR;
 				args = ((BusinessException) e).getArgs();
@@ -55,27 +57,27 @@ public class ResponseBodyAspect {
 			log.error(pjp, e);
 		}
 		if (retVal != null) {
-			ret = (JsonResponse<?>) retVal;
+			ret = (HttpEntity<JsonResponse>) retVal;
 		} else {
-			ret = new JsonResponse<String>();
+			ret = new HttpEntity<JsonResponse>(new JsonResponse<String>());
 		}
 		if (msg != null) {
-			ret.setMsg(msg);
-		} else if (ret.getMsg() != null) {
-			msg = ret.getMsg();
+			ret.getBody().setMsg(msg);
+		} else if (ret.getBody().getMsg() != null) {
+			msg = ret.getBody().getMsg();
 		}
-		ret.setStatus(status);
+		ret.getBody().setStatus(status);
 		if (msg != null) {
 			String transMsg = ApplicationContextHolder.getApplicationContext()
-					.getMessage(ret.getMsg(), args, Locale.CHINA);
-			if (hasErr && !transMsg.equals(ret.getMsg())) {
-				ret.setCode(msg);
+					.getMessage(ret.getBody().getMsg(), args, Locale.CHINA);
+			if (hasErr && !transMsg.equals(ret.getBody().getMsg())) {
+				ret.getBody().setCode(msg);
 			}
-			ret.setMsg(transMsg);
+			ret.getBody().setMsg(transMsg);
 		}
 		PageVo pageVo = (PageVo) vlService
 				.getRequestAttribute(DaoConstant.PAGE_INFO);
-		ret.setPage(pageVo);
+		ret.getBody().setPage(pageVo);
 		return ret;
 	}
 }

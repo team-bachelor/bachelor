@@ -9,18 +9,6 @@
 	<packaging>pom</packaging>
 	<name>bachelor_fw</name>
 	<url>http://maven.apache.org</url>
-	<distributionManagement>
-		<repository>
-			<id>pdmi-releases</id>
-			<name>PDMI Releases</name>
-			<url>http://10.100.13.25:9090/nexus/content/repositories/pdmi-releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>pdmi-snapshots</id>
-			<name>PDMI snapshots</name>
-			<url>http://10.100.13.25:9090/nexus/content/repositories/pdmi-snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
 	<build>
 		<plugins>
 			<plugin>
@@ -48,7 +36,7 @@
 		<!-- junit -->
 		<junit.version>4.11</junit.version>
 		<!-- spring -->
-		<spring.version>3.2.7.RELEASE</spring.version>
+		<spring.version>4.1.6.RELEASE</spring.version>
 		<!-- spring-flex -->
 		<spring.flex.version>1.5.2.RELEASE</spring.flex.version>
 		<!-- aop -->

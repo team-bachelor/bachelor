@@ -46,8 +46,8 @@ public class PageVo {
 	/**
 	 * @param pageRowNum the pageRowNum to set
 	 */
-	public void setPageRowNum(int pageNum) {
-		this.pageRowNum = pageNum;
+	public void setPageRowNum(int pageRowNum) {
+		this.pageRowNum = pageRowNum;
 	}
 	/**
 	 * @return the startIndex

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class ApplicationContextHolder implements ApplicationContextAware{
 	private static ApplicationContext applicationContext;
 	public ApplicationContextHolder(){}
-	@Override
+
 	public void setApplicationContext(ApplicationContext ac)
 			throws BeansException {
 		applicationContext = ac;
