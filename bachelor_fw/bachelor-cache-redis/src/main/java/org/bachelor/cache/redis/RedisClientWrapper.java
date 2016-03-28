@@ -355,14 +355,6 @@ public class RedisClientWrapper {
         return ttl;
     }
 
-    private JedisPool getJedisPool() {
-        return jedisPoolMap.get(cacheName);
-    }
-
-    private JedisCluster getJedisCluster() {
-        return jedisClusterMap.get(cacheName);
-    }
-
     /**
 	 * 获取Redis服务的主机名
      *

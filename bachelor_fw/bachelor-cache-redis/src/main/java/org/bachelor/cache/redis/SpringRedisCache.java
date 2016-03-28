@@ -53,8 +53,8 @@ public class SpringRedisCache implements Cache {
      * @return 缓存中与指定key对应的值,如果key不存在返回null.
      */
     public ValueWrapper get(Object key) {
-        Object element = this.cache.get(getByteKey(key));
-        return element != null ? new SimpleValueWrapper(element) : null;
+        byte[] element = this.cache.get(getByteKey(key));
+        return element != null ? new SimpleValueWrapper(SerializeUtils.deserialize(element)) : null;
     }
 
     /**
@@ -66,7 +66,7 @@ public class SpringRedisCache implements Cache {
      * @return 缓存中指定key对应的值.
      */
     public <T> T get(Object key, Class<T> type) {
-        T element = (T) this.cache.get(getByteKey(key));
+        T element = (T) SerializeUtils.deserialize(this.cache.get(getByteKey(key)));
         if (type != null && !type.isInstance(element)) {
             throw new IllegalStateException("Cached value is not of required type [" + type.getName() + "]: " + element);
         } else {
