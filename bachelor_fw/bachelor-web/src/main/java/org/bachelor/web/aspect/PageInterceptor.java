@@ -5,21 +5,21 @@
  */
 package org.bachelor.web.aspect;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bachelor.context.common.ContextConstant;
 import org.bachelor.context.interceptor.AllManagedIntercepter;
 import org.bachelor.context.service.IVLService;
-import org.bachelor.dao.DaoConstant;
-import org.bachelor.dao.vo.PageVo;
+import org.bachelor.context.vo.PageVo;
 import org.bachelor.web.service.IPageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 分页拦截器
@@ -95,7 +95,7 @@ public class PageInterceptor extends AllManagedIntercepter{
 			if(page>=0){
 				pageVo.setPage(page);
 			}
-			vlService.setRequestAttribute(DaoConstant.PAGE_INFO, pageVo);
+			vlService.setRequestAttribute(ContextConstant.VL_PAGE_INFO_KEY, pageVo);
 		}catch(Exception e){
 			log.error(e);
 		}

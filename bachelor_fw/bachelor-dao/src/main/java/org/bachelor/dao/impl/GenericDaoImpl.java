@@ -12,11 +12,11 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bachelor.context.common.ContextConstant;
 import org.bachelor.context.service.IVLService;
-import org.bachelor.dao.DaoConstant;
 import org.bachelor.dao.IGenericDao;
 import org.bachelor.dao.QueryParamSetter;
-import org.bachelor.dao.vo.PageVo;
+import org.bachelor.context.vo.PageVo;
 import org.hibernate.Criteria;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
@@ -144,7 +144,7 @@ public class GenericDaoImpl<T, ID extends Serializable> implements
 			setter.set(query);
 		}
 		PageVo pageVo = (PageVo) vlService
-				.getRequestAttribute(DaoConstant.PAGE_INFO);
+				.getRequestAttribute(ContextConstant.VL_PAGE_INFO_KEY);
 		if (pageVo == null) {
 			log.debug("没有分页信息，查询全部记录。");
 			return query.list();
@@ -242,7 +242,7 @@ public class GenericDaoImpl<T, ID extends Serializable> implements
 	protected List<T> findByCriteria(DetachedCriteria dc,
 			ResultTransformer transformer) {
 		PageVo pageVo = (PageVo) vlService
-				.getRequestAttribute(DaoConstant.PAGE_INFO);
+				.getRequestAttribute(ContextConstant.VL_PAGE_INFO_KEY);
 		return findByCriteria(dc, transformer, pageVo);
 	}
 
@@ -335,7 +335,7 @@ public class GenericDaoImpl<T, ID extends Serializable> implements
 
 	protected String pageSql(String sql) {
 		PageVo pageVo = (PageVo) vlService
-				.getRequestAttribute(DaoConstant.PAGE_INFO);
+				.getRequestAttribute(ContextConstant.VL_PAGE_INFO_KEY);
 		if (pageVo == null) {
 			log.debug("没有分页信息，查询全部记录。");
 			return sql;

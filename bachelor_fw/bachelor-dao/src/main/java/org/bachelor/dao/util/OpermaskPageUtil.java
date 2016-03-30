@@ -5,19 +5,18 @@
  */
 package org.bachelor.dao.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import org.bachelor.context.common.ContextConstant;
+import org.bachelor.context.service.IVLService;
+import org.bachelor.context.vo.PageVo;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
-import org.bachelor.context.service.IVLService;
-import org.bachelor.dao.DaoConstant;
-import org.bachelor.dao.vo.PageVo;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -25,7 +24,6 @@ import org.bachelor.dao.vo.PageVo;
  * 此类不再维护
  * 
  * @author user
- * @see org.bachelor.facade.util.OperamaskUtil
  */
 @Service
 @Deprecated
@@ -33,7 +31,7 @@ public class OpermaskPageUtil implements ApplicationContextAware{
 	private static IVLService vlService;
 	
 	public static Map page(List list){
-		PageVo pageVo = (PageVo)vlService.getRequestAttribute(DaoConstant.PAGE_INFO);
+		PageVo pageVo = (PageVo)vlService.getRequestAttribute(ContextConstant.VL_PAGE_INFO_KEY);
 		if(pageVo == null){
 			pageVo = new PageVo();
 			pageVo.setCount(list.size());

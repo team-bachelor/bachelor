@@ -1,6 +1,6 @@
 package org.bachelor.web.json;
 
-import org.bachelor.dao.vo.PageVo;
+import org.bachelor.context.vo.PageVo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

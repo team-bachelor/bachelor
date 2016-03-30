@@ -5,11 +5,11 @@ import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.bachelor.context.common.ContextConstant;
 import org.bachelor.context.service.IVLService;
+import org.bachelor.context.vo.PageVo;
 import org.bachelor.core.exception.BusinessException;
 import org.bachelor.core.exception.SystemException;
-import org.bachelor.dao.DaoConstant;
-import org.bachelor.dao.vo.PageVo;
 import org.bachelor.util.ApplicationContextHolder;
 import org.bachelor.web.json.JsonResponse;
 import org.bachelor.web.json.ResponseStatus;
@@ -76,7 +76,7 @@ public class ResponseBodyAspect {
 			ret.getBody().setMsg(transMsg);
 		}
 		PageVo pageVo = (PageVo) vlService
-				.getRequestAttribute(DaoConstant.PAGE_INFO);
+				.getRequestAttribute(ContextConstant.VL_PAGE_INFO_KEY);
 		ret.getBody().setPage(pageVo);
 		return ret;
 	}
