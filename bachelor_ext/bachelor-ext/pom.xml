@@ -37,7 +37,6 @@
 		<common.logging.version>4.0.2.Final</common.logging.version>
 		<log4j.version>4.0.2.Final</log4j.version>
 
-		<c3p0.version>0.9.1.2</c3p0.version>
 		<ojdbc.version>11.1.0.7.0</ojdbc.version>
 
 		<servlet.version>2.5</servlet.version>
@@ -122,12 +121,6 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>${common.beanutils.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>c3p0</groupId>
-			<artifactId>c3p0</artifactId>
-			<version>${c3p0.version}</version>
 		</dependency>
 
 		<dependency>

@@ -38,9 +38,6 @@
     <common.logging.version>4.0.2.Final</common.logging.version>
     <log4j.version>4.0.2.Final</log4j.version>
 
-    <c3p0.version>0.9.1.2</c3p0.version>
-    <ojdbc.version>11.1.0.7.0</ojdbc.version>
-
     <servlet.version>2.5</servlet.version>
     <jstl.version>1.2</jstl.version>
 	
@@ -56,20 +53,6 @@
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>${servlet.version}</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>jstl</artifactId>
-      <version>${jstl.version}</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -128,17 +111,6 @@
       <version>${common.beanutils.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>c3p0</groupId>
-      <artifactId>c3p0</artifactId>
-      <version>${c3p0.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.oracle</groupId>
-      <artifactId>ojdbc6</artifactId>
-      <version>${ojdbc.version}</version>
-    </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
