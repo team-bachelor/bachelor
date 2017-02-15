@@ -154,7 +154,7 @@ public class GenericDaoImpl<T, ID extends Serializable> implements
 		pageVo.setCount(count);
 		// 计算全部页数
 		int pageCount = count / pageVo.getPageRowNum();
-		if (pageCount * pageVo.getPageRowNum() <= count) {
+		if (pageCount * pageVo.getPageRowNum() < count) {
 			pageCount++;
 		}
 
@@ -352,7 +352,7 @@ public class GenericDaoImpl<T, ID extends Serializable> implements
 		pageVo.setCount(count);
 		// 计算全部页数
 		long pageCount = count / pageVo.getPageRowNum();
-		if (pageCount * pageVo.getPageRowNum() <= count) {
+		if (pageCount * pageVo.getPageRowNum() < count) {
 			pageCount++;
 		}
 
