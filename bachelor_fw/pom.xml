@@ -69,7 +69,7 @@
         <!-- 基础工具 -->
         <common.lang.version>3.8.1</common.lang.version>
         <!--<common.collection.version>4.0.2.Final</common.collection.version>-->
-        <common.beanutils.version>1.9.3</common.beanutils.version>
+        <common.beanutils.version>1.9.4</common.beanutils.version>
         <!-- 日志 -->
         <!--<common.logging.version>4.0.2.Final</common.logging.version>-->
         <log4j.version>2.11.0</log4j.version>
