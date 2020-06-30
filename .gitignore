@@ -78,3 +78,9 @@
 *.class
 MANIFEST.MF
 /*.rar
+/bachelor_fw/.idea
+/bachelor_fw/bachelor-cache-redis/*.iml
+/bachelor_fw/bachelor-context/*.iml
+/bachelor_fw/*.iml
+/bachelor_fw/bachelor-web/*.iml
+/bachelor_fw/bachelor-core/*.iml
