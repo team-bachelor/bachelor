@@ -5,21 +5,18 @@
  */
 package org.bachelor.web.aspect;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bachelor.context.common.ContextConstant;
 import org.bachelor.context.interceptor.AllManagedIntercepter;
-import org.bachelor.context.service.IVLService;
-import org.bachelor.context.vo.PageVo;
-import org.bachelor.web.service.IPageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.github.pagehelper.PageHelper;
 
 /**
  * 分页拦截器
@@ -28,14 +25,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Component
 public class PageInterceptor extends AllManagedIntercepter{
-	@Autowired
-	private IVLService vlService;
-	
-	@Autowired(required=false)
-	private IPageService pService;
 	
 	private Log log = LogFactory.getLog(this.getClass());
-	
+
 	/* (non-Javadoc)
 	 * @see org.springframework.core.Ordered#getOrder()
 	 */
@@ -49,53 +41,32 @@ public class PageInterceptor extends AllManagedIntercepter{
 		return 100;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.bachelor.core.interceptor.ControllerInterceptor#doPreHandle(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object)
+	/**
+	 * 添加分页处理的拦截器
+	 * 从请求中解析start, page 参数，如果这些参数有值，就设置PageHelper;没有值就跳过
+	 * @param request
+	 * @param response
+	 * @param obj
+	 * @return
 	 */
 	@Override
 	protected boolean doPreHandle(HttpServletRequest request,
 			HttpServletResponse response, Object obj) {
 		try{
-			String startIndexStr = request.getParameter("start");
-			String limitStr = request.getParameter("limit");
-			String pageStr = request.getParameter("page");
-			if(StringUtils.isEmpty(startIndexStr) && StringUtils.isEmpty(limitStr) && StringUtils.isEmpty(pageStr)){
-				log.debug("找不到分页标志，不开始分页处理。");
-				return true;
-			}
-			//取得每页记录数
-			int pageNum = 10;
-			if(pService != null){
-				pageNum = pService.getPageRowNum();
-			}
-			int startIndex = 0;
-			int endIndex = 0;
-			int page = 0;
-			if(!StringUtils.isEmpty(pageStr)){
-				page = Integer.parseInt(StringUtils.isEmpty(pageStr)?"0":pageStr);
-				startIndex = page*pageNum;
-				endIndex = (page+1)*pageNum;
-			}else{
-				startIndex = Integer.parseInt(StringUtils.isEmpty(startIndexStr)?"0":startIndexStr);
-				pageNum = Integer.parseInt(StringUtils.isEmpty(limitStr)?"0":limitStr);
-				endIndex = startIndex + pageNum;
-			}
-			
-			if(startIndex ==-1 || endIndex == -1){
-				log.debug("分页参数不对，不做分页处理。");
-				return true;
-			}
+
+            String startIndexStr = request.getParameter("start");
+            String pageStr = request.getParameter("page");
+            if(StringUtils.isEmpty(startIndexStr) && StringUtils.isEmpty(pageStr)){
+                log.debug("找不到分页标志，不开始分页处理。");
+                return true;
+            }
+
+            Integer startIndex = Integer.parseInt(startIndexStr);
+            Integer pageNum = Integer.parseInt(pageStr);
 			
 			log.debug("找到分页标志，开始分页处理。");
-			//创建分页信息，保存在Request中
-			PageVo pageVo = new PageVo();
-			pageVo.setStartIndex(startIndex);
-			pageVo.setEndIndex(endIndex);
-			pageVo.setPageRowNum(pageNum);
-			if(page>=0){
-				pageVo.setPage(page);
-			}
-			vlService.setRequestAttribute(ContextConstant.VL_PAGE_INFO_KEY, pageVo);
+
+            PageHelper.startPage(startIndex, pageNum);
 		}catch(Exception e){
 			log.error(e);
 		}

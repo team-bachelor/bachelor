@@ -5,8 +5,10 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.support.SimpleValueWrapper;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 /**
  * Spring Cache接口的Redis实现。
@@ -66,12 +68,22 @@ public class SpringRedisCache implements Cache {
      * @return 缓存中指定key对应的值.
      */
     public <T> T get(Object key, Class<T> type) {
-        T element = (T) SerializeUtils.deserialize(this.cache.get(getByteKey(key)));
-        if (type != null && !type.isInstance(element)) {
-            throw new IllegalStateException("Cached value is not of required type [" + type.getName() + "]: " + element);
-        } else {
-            return element;
+        byte[] data = this.cache.get(getByteKey(key));
+        if(data == null) {
+            return null;
         }
+
+        Object element =  SerializeUtils.deserialize(data);
+        if(type != null && !type.isInstance(element)) {
+            throw new IllegalStateException("Cached value is not of required type [" + type.getName() + "]: " + element);
+        }
+        else {
+            return (T)element;
+        }
+    }
+
+    public <T> T get(Object key, Callable<T> callable) {
+        return null;
     }
 
     /**
@@ -129,8 +141,13 @@ public class SpringRedisCache implements Cache {
      */
     private byte[] getByteKey(Object key){
         if(key instanceof String){
-            String preKey = this.getName() + key;
-            return preKey.getBytes();
+            String realKey = null;
+            if(! StringUtils.isEmpty(this.getName())) {
+                realKey = this.getName() + "_" + (String)key;
+            } else {
+                realKey = (String)key;
+            }
+            return realKey.getBytes();
         }else{
             return SerializeUtils.serialize(key);
         }

@@ -1,15 +1,16 @@
 package org.bachelor.context.listener;
 
-import javax.persistence.criteria.Order;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 @Service
-public abstract class BaseContainerStopListener implements ApplicationListener<ContextClosedEvent>,Order {
+public abstract class BaseContainerStopListener implements
+		ApplicationListener<ContextClosedEvent>, Order {
  
 	private Log log = LogFactory.getLog(BaseContainerStopListener.class);
 	

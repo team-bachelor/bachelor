@@ -9,7 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-public class DefaultDateSerialize extends JsonSerializer<Date>{
+public class DefaultDateSerializer extends JsonSerializer<Date>{
 
 	@Override
 	public void serialize(Date value, JsonGenerator jgen,

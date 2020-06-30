@@ -9,8 +9,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * @author user
  *
@@ -60,8 +58,7 @@ public class DateUtil {
 	}
 
 	public static Date Str2Date(SimpleDateFormat sdf,String date) throws ParseException{
-		if(!StringUtils.isEmpty(date)){
-			
+		if(date != null && !"".equals(date)){
 			return sdf.parse(date);
 		}
 		return null;
