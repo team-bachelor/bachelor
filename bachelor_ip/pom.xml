@@ -33,7 +33,7 @@
     <!-- 基础工具 -->
     <common.lang.version>3.1</common.lang.version>
     <common.collection.version>4.0.2.Final</common.collection.version>
-    <common.beanutils.version>1.8.3</common.beanutils.version>
+    <common.beanutils.version>1.9.4</common.beanutils.version>
     <!-- 日志 -->
     <common.logging.version>4.0.2.Final</common.logging.version>
     <log4j.version>4.0.2.Final</log4j.version>
