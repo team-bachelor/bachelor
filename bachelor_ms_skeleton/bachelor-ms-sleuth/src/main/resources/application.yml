@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: cloud-dashboard-zipkin
+  zipkin:
+    enabled: false
+server:
+  port: 8766
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://10.30.13.114:8740/eureka/
+    registry-fetch-interval-seconds: 5
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    health-check-url-path: /actuator/health
+    lease-expiration-duration-in-seconds: 5
+    lease-renewal-interval-in-seconds: 2
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # yml中*添加双引号
+  metrics:
+    web:
+      server:
+        auto-time-requests: false

@@ -1,0 +1,33 @@
+
+	<div class="spacer"></div>
+
+	<div class="rate">
+		<a href="javascript://" title="Total Execution Rate per Second per Reporting Host" class="tooltip rate"><span class="smaller">主机: </span><span class="ratePerSecondPerHost"><%= addCommas(ratePerSecondPerHost) %></span>/s</a>
+	</div>
+	<div class="rate">	
+		<a href="javascript://" title="Total Execution Rate per Second for Cluster" class="tooltip rate"><span class="smaller">集群: </span><span class="ratePerSecond"><%= addCommas(ratePerSecond) %></span>/s</a>
+	</div>
+	
+	<div class="spacer"></div>
+	
+		<div class="tableRow">
+			<div class="cell header left">活跃</div>
+			<div class="cell data left"><%= currentActiveCount%></div>
+			
+			<div class="cell header right">最大活跃</div>
+			<div class="cell data right"><%= addCommas(rollingMaxActiveThreads)%></div>
+		</div>
+
+		<div class="tableRow">
+			<div class="cell header left">排队中</div>
+			<div class="cell data left"><%= currentQueueSize %></div>
+			<div class="cell header right">执行中</div>
+			<div class="cell data right"><%= addCommas(rollingCountThreadsExecuted)%></div>
+		</div>
+		<div class="tableRow">
+			<div class="cell header left">线程池大小</div>
+			<div class="cell data left"><%= currentPoolSize %></div>
+			<div class="cell header right">队列大小</div>
+			<div class="cell data right"><%= propertyValue_queueSizeRejectionThreshold %></div>
+		</div>
+	

@@ -1,0 +1,109 @@
+spring:
+  cloud:
+    refresh:
+      refreshable: none
+    config:
+      name: user-login-ss
+      profile: dev
+      label: master
+      discovery:
+        enabled: true
+        service-id: config-service
+  application:
+    name: console
+    id: f9cc8231aec746e88c5c144b81ecbbb5
+    workbench-code: workbench-manage
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/ms_console?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    #password: pdmi1234
+    password: Aa!123456
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        max-active: 20
+        max-idle: 10
+        max-wait: 1000ms
+        min-idle: 5
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  zipkin:
+    enabled: true
+    base-url: http://cloud-dashboard-zipkin/
+  sleuth:
+    sampler:
+      probability: 1
+  #  resources:
+  #    static-locations: classpath:/resources/
+  mvc:
+    static-path-pattern: /**
+server:
+  port: 8765
+
+
+logging:
+  #  pattern:
+  #    console: "%d  -  %msg%n"
+  #file: D:\tmp\loginfo.log
+  level:
+    org.bachelor.common.auth : debug
+pagehelper:
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.1.5:8740/eureka,http://localhost:8740/eureka
+    #      defaultZone: http://10.30.13.114:8740/eureka
+    registry-fetch-interval-seconds: 5
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    health-check-url-path: /actuator/health
+    lease-expiration-duration-in-seconds: 5
+    lease-renewal-interval-in-seconds: 2
+    metadata-map:
+      api-url: swagger-ui.html
+feign:
+  hystrix:
+    enabled: true
+info:
+  app:
+    name: '服务共享平台'
+    version: '1.0-SNAPSHOT'
+swagger:
+  base-package: "org.bachelor.architecture.ms.console.controller"
+  title: "服务共享平台工程的Restful API"
+  version: "1.0"
+  description: "服务共享平台 API 描述"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+bachelor:
+  auth:
+    excludePathPatterns: "/discovery/serviceCount"
+    up:
+      client_filter_enable: false
+      path:
+        base: "http://221.2.140.133:8600/user"
+        #base: "http://localhost:8882/user/"
+config:
+  git:
+    repository: git@43.250.238.158:framework/config-repo.git
+    filePath: /usr/local/projects/repository/config-repo
+    strictHostKeyChecking: false
