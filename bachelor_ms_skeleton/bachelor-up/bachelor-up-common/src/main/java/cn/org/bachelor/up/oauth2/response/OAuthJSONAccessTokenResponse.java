@@ -1,13 +1,10 @@
 package cn.org.bachelor.up.oauth2.response;
 
 
-import cn.org.bachelor.up.oauth2.common.error.OAuthError;
 import cn.org.bachelor.up.oauth2.common.token.BasicOAuthToken;
 import cn.org.bachelor.up.oauth2.common.token.OAuthToken;
 import cn.org.bachelor.up.oauth2.common.utils.JSONUtils;
 import cn.org.bachelor.up.oauth2.common.OAuth;
-import cn.org.bachelor.up.oauth2.common.exception.OAuthProblemException;
-import org.codehaus.jettison.json.JSONException;
 
 /**
  * Created by team bachelor on 15/5/20.
