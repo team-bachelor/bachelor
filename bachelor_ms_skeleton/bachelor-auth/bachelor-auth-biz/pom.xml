@@ -11,7 +11,7 @@
     <description></description>
 
     <parent>
-        <groupId>org.bachelor</groupId>
+        <groupId>cn.org.bachelor</groupId>
         <artifactId>bachelor-auth</artifactId>
         <version>1.1-SNAPSHOT</version>
         <!-- <relativePath/> lookup parent from repository -->
@@ -54,20 +54,20 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.bachelor</groupId>
+            <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-core</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.bachelor</groupId>
+            <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-context</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.bachelor</groupId>
+            <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-auth-common</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>
@@ -101,7 +101,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.bachelor</groupId>
+            <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-up-client</artifactId>
             <version>0.0.1</version>
             <scope>compile</scope>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.bachelor.common.auth.dao.CmnAuthRoleMapper">
-  <resultMap id="BaseResultMap" type="org.bachelor.common.auth.domain.Role">
+<mapper namespace="cn.org.bachelor.common.auth.dao.CmnAuthRoleMapper">
+  <resultMap id="BaseResultMap" type="Role">
     <!--
       WARNING - @mbg.generated
     -->

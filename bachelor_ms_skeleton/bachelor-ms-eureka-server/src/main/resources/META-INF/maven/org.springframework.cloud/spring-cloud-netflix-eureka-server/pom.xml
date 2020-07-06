@@ -138,7 +138,7 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
 					<execution>
-						<!-- Serves *only* to org.bachelor.architecture.gateway.filter the wro.xml so it can get an absolute
+						<!-- Serves *only* to cn.org.bachelor.architecture.gateway.filter the wro.xml so it can get an absolute
 							path for the project -->
 						<id>copy-resources</id>
 						<phase>validate</phase>

@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.bachelor</groupId>
+    <groupId>cn.org.bachelor</groupId>
     <artifactId>bachelor-login</artifactId>
     <packaging>jar</packaging>
 
@@ -11,7 +11,7 @@
     <description>集成用户登录功能</description>
 
     <parent>
-        <groupId>org.bachelor</groupId>
+        <groupId>cn.org.bachelor</groupId>
         <artifactId>bachelor-auth</artifactId>
         <version>1.1-SNAPSHOT</version>
         <!-- <relativePath/> lookup parent from repository -->
@@ -70,7 +70,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.bachelor</groupId>
+            <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-up-client</artifactId>
             <version>0.0.1</version>
             <exclusions>
@@ -114,11 +114,11 @@
 
         <!--bachelor引用-->
         <dependency>
-            <groupId>org.bachelor</groupId>
+            <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.bachelor</groupId>
+            <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-auth-common</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>

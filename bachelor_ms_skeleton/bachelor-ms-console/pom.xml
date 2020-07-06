@@ -10,7 +10,7 @@
 
     <parent>
         <artifactId>architectrue</artifactId>
-        <groupId>org.bachelor</groupId>
+        <groupId>cn.org.bachelor</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
@@ -111,28 +111,28 @@
         <!--bachelor引用-->
 
         <dependency>
-            <groupId>org.bachelor</groupId>
+            <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-context</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.bachelor</groupId>
+            <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-web</artifactId>
         </dependency>
         <!--工程依赖-->
         <!--<dependency>-->
-        <!--<groupId>org.bachelor</groupId>-->
+        <!--<groupId>cn.org.bachelor</groupId>-->
         <!--<artifactId>base-service-mapping</artifactId>-->
         <!--<version>0.0.1</version>-->
         <!--</dependency>-->
 
         <dependency>
-            <groupId>org.bachelor</groupId>
+            <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-auth-web</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.bachelor</groupId>
+            <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-login</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>
@@ -142,7 +142,7 @@
             <version>5.2.0.201812061821-r</version>
         </dependency>
         <dependency>
-            <groupId>org.bachelor</groupId>
+            <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-login</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>

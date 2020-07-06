@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>architectrue</artifactId>
-        <groupId>org.bachelor</groupId>
+        <groupId>cn.org.bachelor</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
@@ -12,7 +12,7 @@
     <artifactId>bachelor-ms-feign</artifactId>
     <packaging>jar</packaging>
     <properties>
-        <start-class>org.bachelor.architecture.feign.ConsumerApplication</start-class>
+        <start-class>cn.org.bachelor.architecture.feign.ConsumerApplication</start-class>
     </properties>
     <dependencies>
         <!--eureka client-->

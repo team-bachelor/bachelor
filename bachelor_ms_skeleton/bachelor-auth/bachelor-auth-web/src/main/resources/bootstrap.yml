@@ -46,7 +46,7 @@ logging:
 #    console: "%d  -  %msg%n"
   #file: D:\tmp\loginfo.log
   level:
-    org.bachelor.common.auth : debug
+    cn.org.bachelor.common.auth : debug
 pagehelper:
   reasonable: true
   support-methods-arguments: true
@@ -79,7 +79,7 @@ info:
     name: '权限管理'
     version: '@project.version@'
 swagger:
-  base-package: "org.bachelor.common.auth.controller"
+  base-package: "cn.org.bachelor.common.auth.controller"
   title: "Auth-Web工程的Restful API"
   version: "1.0"
   description: "嵌入Swagger API 描述"
