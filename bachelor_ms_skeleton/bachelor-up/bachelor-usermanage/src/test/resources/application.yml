@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: manager
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  zipkin:
+    enabled: true
+    base-url: http://cloud-dashboard-zipkin/
+  sleuth:
+    sampler:
+      probability: 1
+server:
+  port: 9005
+
+logging:
+  level:
+    cn.org.bachelor.usermanage : info
+
+eureka:
+  client:
+    service-url:
+#      defaultZone: http://10.30.13.114:8740/eureka
+      defaultZone: http://localhost:8740/eureka
+    registry-fetch-interval-seconds: 5
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    health-check-url-path: /actuator/health
+    lease-expiration-duration-in-seconds: 5
+    lease-renewal-interval-in-seconds: 2
+    metadata-map:
+      api-url: swagger-ui.html
+
+feign:
+  hystrix:
+    enabled: true
+info:
+  app:
+    name: '用户系统相关API'
+    version: '@project.version@'
+swagger:
+  base-package: "cn.org.bachelor.usermanager.controller"
+  title: "用户系统相关API"
+  version: "1.0"
+  description: "用户系统相关API"
