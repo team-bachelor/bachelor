@@ -28,7 +28,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-            <version>2.1.1.RELEASE</version>
         </dependency>
         <!--eureka client-->
         <dependency>
@@ -58,17 +57,14 @@
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-context</artifactId>
-            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-core</artifactId>
-            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-auth-common</artifactId>
-            <version>1.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>

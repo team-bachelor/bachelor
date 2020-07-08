@@ -2,10 +2,10 @@ package cn.org.bachelor.architecture.ms.gateway.ratelimit;
 
 import io.github.bucket4j.*;
 import org.springframework.cloud.gateway.filter.ratelimit.AbstractRateLimiter;
+import org.springframework.cloud.gateway.support.ConfigurationService;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.Min;
 import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,11 +24,11 @@ public class InMemoryRateLimiter extends AbstractRateLimiter<InMemoryRateLimiter
     private final Map<String, Bucket> ipBucketMap = new ConcurrentHashMap<>();
 
     public InMemoryRateLimiter() {
-        super(InMemoryRateLimiter.Config.class, CONFIGURATION_PROPERTY_NAME, null);
+        super(InMemoryRateLimiter.Config.class, CONFIGURATION_PROPERTY_NAME, new ConfigurationService());
     }
 
     public InMemoryRateLimiter(int defaultReplenishRate, int defaultBurstCapacity) {
-        super(Config.class, CONFIGURATION_PROPERTY_NAME, null);
+        super(Config.class, CONFIGURATION_PROPERTY_NAME, new ConfigurationService());
         this.defaultConfig = new InMemoryRateLimiter.Config()
                 .setReplenishRate(defaultReplenishRate)
                 .setBurstCapacity(defaultBurstCapacity);
@@ -72,10 +72,8 @@ public class InMemoryRateLimiter extends AbstractRateLimiter<InMemoryRateLimiter
 
     @Validated
     public static class Config {
-        @Min(1)
-        private int replenishRate;
+        private int replenishRate = 2;
 
-        @Min(0)
         private int burstCapacity = 0;
 
         public int getReplenishRate() {
