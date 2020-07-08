@@ -24,17 +24,18 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.5.RELEASE</version>
+        <version>2.3.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
+        <spring-cloud.version>Hoxton.RELEASE</spring-cloud.version>
         <starter-eureka.version>1.4.4.RELEASE</starter-eureka.version>
         <starter-web.version>2.0.5.RELEASE</starter-web.version>
         <openfeign.version>2.0.1.RELEASE</openfeign.version>
+        <sleuth.version>2.0.2.BUILD-SNAPSHOT</sleuth.version>
         <spring-boot-admin.version>2.0.2</spring-boot-admin.version>
     </properties>
     <repositories>
@@ -71,7 +72,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-sleuth</artifactId>
-                <version>2.0.2.BUILD-SNAPSHOT</version>
+                <version>${sleuth.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -92,7 +93,6 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-beans</artifactId>
-                <version>5.0.5.RELEASE</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
@@ -142,28 +142,12 @@
                 <artifactId>mapper-generator</artifactId>
                 <version>1.0.5</version>
             </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.12</version>
-                <scope>test</scope>
-            </dependency>
 
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-feign</artifactId>
-                <version>1.4.4.RELEASE</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-beanutils</groupId>
-                <artifactId>commons-beanutils</artifactId>
-                <version>1.9.3</version>
-            </dependency>
             <!-- https://mvnrepository.com/artifact/com.github.vladimir-bukhtoyarov/bucket4j-core -->
             <dependency>
                 <groupId>com.github.vladimir-bukhtoyarov</groupId>
                 <artifactId>bucket4j-core</artifactId>
-                <version>4.3.0</version>
+                <version>4.10.0</version>
             </dependency>
 
             <dependency>
@@ -171,11 +155,21 @@
                 <artifactId>bachelor-context</artifactId>
                 <version>1.0</version>
             </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-core</artifactId>
+                <version>1.0</version>
+            </dependency>
 
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
                 <artifactId>bachelor-web</artifactId>
                 <version>1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-auth-common</artifactId>
+                <version>1.1-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
