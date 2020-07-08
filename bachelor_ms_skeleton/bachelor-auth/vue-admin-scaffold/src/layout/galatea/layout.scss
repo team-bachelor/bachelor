@@ -1,0 +1,217 @@
+@import '../../assets/styles/variable.scss';
+
+$header-bg-color: #F6F6F6;
+$header-height: 52px;
+$aside-bg-color: #F6F6F6;
+$menu-text-color: #676767;
+$menu-text-color-active: $--color-primary;
+
+.lx-container{
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  flex-basis: auto;
+  box-sizing: border-box;
+  min-width: 0;
+}
+.lx-container.lx-vertical{
+  flex-direction: column;
+}
+.lx-container.lx-full{
+  height: 100vh;
+}
+.theme-galatea{
+  .lx-header{
+    background-color: $header-bg-color;
+    padding: 15px;
+    height: $header-height;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    // box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.44);
+    z-index: 60;
+    display: flex;
+    justify-content: space-between;
+    a{
+      text-decoration: none;
+      color: #333;
+    }
+  }
+  .lx-main{
+    overflow: auto;
+    box-sizing: border-box;
+  }
+  .lx-aside{
+    background-color: $aside-bg-color;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    position: relative;
+    .el-scrollbar__bar.is-vertical{
+      right: 0px;
+    }
+    position: relative;
+    .lx-aside-shadow{
+      height: 100vh;
+      width: 1px;
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: $aside-bg-color;
+      box-shadow: inset -1px 0 1px rgba(0, 0, 0, 0.2);
+    }
+  }
+  .lx-user-card{
+    height: 52px;
+    display: flex;
+    padding: 10px;
+    background: rgba(255,255,255,0.6);
+    .image{
+      width: 32px;
+      height: 32px;
+      background: #eee;
+    }
+    .handle{
+      flex: 1;
+      padding-left: 10px;
+      padding-top: 4px;
+      text-align: right;
+      a{
+        color: #333;
+        text-decoration: none;
+      }
+    }
+  }
+  .lx-menu{
+    flex: 1;
+    width: 200px;
+    transition: width 0.4s;
+    overflow-x: hidden!important;
+    .el-scrollbar__view {
+      height: 100%;
+    }
+    .el-scrollbar__bar.is-vertical{
+      right: 0px;
+    }
+    .horizontal-collapse-transition {
+      transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
+    }
+    .el-menu{
+      border-right: none;
+      background: $aside-bg-color;
+    }
+    .el-menu-item,
+    .el-submenu__title{
+      color: $menu-text-color;
+    }
+    .el-submenu__title i{
+      color: $menu-text-color;
+    }
+    .el-menu-item.is-active{
+      color: $menu-text-color-active;
+    }
+
+    .el-menu-item i{
+      margin-right: 5px;
+      width: 24px;
+      text-align: center;
+      font-size: 18px;
+      color: inherit;
+      vertical-align: middle;
+    }
+  }
+  .collapsed {
+    .lx-user-card{
+      .image{
+        display: none;
+      }
+      .handle{
+        text-align: center;
+        padding-left: 0;
+      }
+    }
+    .lx-menu{
+      width: 44px;
+    
+      .el-tooltip {
+        padding: 10px !important;
+        line-height: 2.5;
+      }
+      .el-submenu {
+        overflow: hidden;
+        &>.el-submenu__title {
+          padding-left: 10px !important;
+          .el-submenu__icon-arrow {
+            display: none;
+          }
+        }
+      }
+      .el-menu--collapse {
+        width: 44px;
+        .el-submenu {
+          &>.el-submenu__title {
+            &>span {
+              height: 0;
+              width: 0;
+              overflow: hidden;
+              visibility: hidden;
+              display: inline-block;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .lx-status{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #e2e5e8;
+    padding: 5px 10px;
+    color: #aaa;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    .fa{
+      font-size: 15px;
+    }
+  }
+  .lx-breadcrumb{
+    padding: 10px 15px;
+    height: 45px;
+    line-height: 15px;
+    box-sizing: border-box;
+    line-height: 16px;
+  }
+  .lx-menu-ctrl{
+    display: block;
+    float: left;
+    color: #555;
+    position: relative;
+    top: -1px;
+    margin-right: 10px;
+    text-decoration: none;
+  }
+  .lx-main{
+    flex: 1;
+    flex-basis: auto;
+    box-sizing: border-box;
+    padding: 20px;
+    position: relative;
+  }
+  .lx-common-view{
+    position: absolute;
+    z-index: 51;
+    top: $header-height;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(238, 238, 238, 0.96);
+  }
+}
