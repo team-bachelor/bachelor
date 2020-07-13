@@ -9,8 +9,8 @@ spring:
     #url: jdbc:mysql://127.0.0.1:3306/auth_test?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     username: root
     #password: root
-    password: pdmi1234
-    url: jdbc:mysql://localhost:3306/ms_console?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    password: Pdmi1234
+    url: jdbc:mysql://10.30.5.177:3306/gov?useUnicode=true&characterEncoding=UTF-8&useSSL=false
   messages:
     basename: i18n/messages
     encoding: UTF-8
@@ -61,7 +61,7 @@ mybatis:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8740/eureka #http://10.30.13.114:8740/eureka #http://localhost:8740/eureka
+      defaultZone: http://192.168.0.37:8000/server/eureka/ #http://10.30.13.114:8740/eureka #http://localhost:8740/eureka
     registry-fetch-interval-seconds: 5
   instance:
     prefer-ip-address: true

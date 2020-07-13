@@ -80,8 +80,8 @@ export const LOGOUT_URL = 'http://221.2.140.133:8600/user-asserver/logout?redire
 /**
  * PUP登录基本URL
  */
-// export const LOGIN_URL = '/login'; // 本地模拟测试
-export const LOGIN_URL = 'http://221.2.140.133:8600/user-asserver/authorize';
+export const LOGIN_URL = '/login'; // 本地模拟测试
+// export const LOGIN_URL = 'http://221.2.140.133:8600/user-asserver/authorize';
 /**
  * (子)系统PUP登录标识，跳转至登录时附带
  */

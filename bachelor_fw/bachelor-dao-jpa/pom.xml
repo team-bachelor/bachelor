@@ -11,7 +11,7 @@
     <groupId>cn.org.bachelor</groupId>
     <artifactId>bachelor-dao-jpa</artifactId>
     <version>${artifactId.version}</version>
-    <name>bachelor-dao-hibernate</name>
+    <name>bachelor-dao-jpa</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -38,12 +38,12 @@
         <scope>provided</scope>
         </dependency>
 
-        <dependency>
+      <!--  <dependency>
         <groupId>org.hibernate.javax.persistence</groupId>
         <artifactId>hibernate-jpa-2.1-api</artifactId>
         <version>${hibernate.jpa.version}</version>
         <scope>provided</scope>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>org.springframework</groupId>
