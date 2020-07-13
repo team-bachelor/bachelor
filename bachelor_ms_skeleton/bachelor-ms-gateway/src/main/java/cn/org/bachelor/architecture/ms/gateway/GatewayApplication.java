@@ -45,7 +45,7 @@ public class GatewayApplication {
         return new IpAddressKeyResolver();
     }
 
-    @Bean(name = TokenKeyResolver.BEAN_NAME)
+//    @Bean(name = TokenKeyResolver.BEAN_NAME)
     public KeyResolver tokenKeyResolver() {
         return new TokenKeyResolver();
     }

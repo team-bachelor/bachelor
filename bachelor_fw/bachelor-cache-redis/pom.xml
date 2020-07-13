@@ -19,15 +19,15 @@
             <artifactId>jedis</artifactId>
             <version>3.0.1</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <version>${spring.version}</version>
+<!--            <version>${spring.version}</version>-->
         </dependency>
         <!-- slf4j -->
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->

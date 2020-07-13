@@ -21,11 +21,11 @@
     </properties>
     <dependencies>
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
@@ -37,19 +37,19 @@
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-core</artifactId>
-            <version>1.0</version>
+<!--            <version>1.0</version>-->
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-context</artifactId>
-            <version>1.0</version>
+<!--            <version>1.0</version>-->
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-jwt</artifactId>
-            <version>1.0.9.RELEASE</version>
+<!--            <version>1.0.9.RELEASE</version>-->
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -59,38 +59,38 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+<!--            <version>4.12</version>-->
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>4.4.9</version>
+<!--            <version>4.4.9</version>-->
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.5</version>
+<!--            <version>4.5.5</version>-->
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-up-client</artifactId>
-            <version>0.0.1</version>
+<!--            <version>0.0.1</version>-->
             <scope>compile</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>5.0.9.RELEASE</version>
+&lt;!&ndash;            <version>5.2.7.RELEASE</version>&ndash;&gt;
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>4.3.14.RELEASE</version>
+&lt;!&ndash;            <version>5.2.7.RELEASE</version>&ndash;&gt;
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>

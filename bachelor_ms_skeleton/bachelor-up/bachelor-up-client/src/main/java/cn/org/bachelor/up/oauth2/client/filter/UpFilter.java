@@ -58,7 +58,7 @@ import org.springframework.stereotype.Component;
  * @author team bachelor
  *
  */
-@Component
+//@Component
 @ServletComponentScan
 @WebFilter(urlPatterns = "/*", filterName = "upFilter")
 public class UpFilter implements Filter {

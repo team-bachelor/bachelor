@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.1.RELEASE</version>
+        <version>2.2.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>cn.org.bachelor</groupId>
@@ -55,7 +55,7 @@
         <!-- junit -->
         <junit.version>4.11</junit.version>
         <!-- spring -->
-        <spring.version>5.1.9.RELEASE</spring.version>
+<!--        <spring.version>5.1.9.RELEASE</spring.version>-->
         <spring-jpa.version>2.0.8</spring-jpa.version>
         <!-- spring-flex -->
         <!--<spring.flex.version>1.5.2.RELEASE</spring.flex.version>-->
@@ -64,7 +64,7 @@
         <antlr.version>2.7.7</antlr.version>
         <aspectjweaver.version>1.9.1</aspectjweaver.version>
         <swagger-ui.version>2.9.2</swagger-ui.version>
-        <jackson-databind.version>2.9.10.5</jackson-databind.version>
+<!--        <jackson-databind.version>2.9.10.5</jackson-databind.version>-->
         <!-- hibernate -->
         <!--<hibernate.version>5.3.0.Final</hibernate.version>-->
         <!--<hibernate.jpa.version>1.0.2.Final</hibernate.jpa.version>-->
@@ -81,38 +81,38 @@
         <!--<jstl.version>1.2</jstl.version>-->
         <!--<cxf.version>2.7.6</cxf.version>-->
         <pagehelper.version>5.1.6</pagehelper.version>
-        <spring-boot.version>2.1.0.RELEASE</spring-boot.version>
+<!--        <spring-boot.version>2.1.0.RELEASE</spring-boot.version>-->
         <!--srping cloud-->
-        <spring-boot-admin.version>2.0.3</spring-boot-admin.version>
+        <spring-boot-admin.version>2.2.3</spring-boot-admin.version>
         <spring-cloud.version>Hoxton.RELEASE</spring-cloud.version>
     </properties>
     <dependencyManagement>
         <dependencies>
             <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
-            <dependency>
+           <!-- <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjrt</artifactId>
                 <version>1.7.3</version>
-            </dependency>
+            </dependency>-->
 
-            <dependency>
+            <!--<dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet.version}</version>
                 <scope>provided</scope>
-            </dependency>
+            </dependency>-->
 
-            <dependency>
+            <!--<dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper</artifactId>
                 <version>${pagehelper.version}</version>
-            </dependency>
-            <dependency>
+            </dependency>-->
+            <!--<dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
-            </dependency>
+            </dependency>-->
             <!--<dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
@@ -212,11 +212,11 @@
                 <scope>provided</scope>
             </dependency>
 
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson-databind.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.fasterxml.jackson.core</groupId>-->
+<!--                <artifactId>jackson-databind</artifactId>-->
+<!--                <version>${jackson-databind.version}</version>-->
+<!--            </dependency>-->
 
             <!--tk.mybatis-->
             <dependency>
@@ -260,21 +260,21 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
+            <!--<dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-freemarker</artifactId>
-<!--                <version>2.0.5.RELEASE</version>-->
+                <version>2.0.5.RELEASE</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-feign</artifactId>
-<!--                <version>1.4.4.RELEASE</version>-->
+                <version>1.4.4.RELEASE</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-<!--                <version>2.0.1.RELEASE</version>-->
-            </dependency>
+                <version>2.0.1.RELEASE</version>
+            </dependency>-->
             <!--DataBase-->
             <!--<dependency>-->
             <!--<groupId>mysql</groupId>-->

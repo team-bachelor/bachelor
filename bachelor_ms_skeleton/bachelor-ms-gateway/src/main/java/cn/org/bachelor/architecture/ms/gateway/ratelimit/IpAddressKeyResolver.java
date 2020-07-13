@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
  * @创建人: liuzhuo
  * @创建时间: 2019/1/4
  */
-@Component
+//@Component
 public class IpAddressKeyResolver implements KeyResolver {
 
     public static final String BEAN_NAME = "ipAddressKeyResolver";
