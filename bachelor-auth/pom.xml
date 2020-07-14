@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>cn.org.bachelor</groupId>
+        <artifactId>bachelor-dependencies</artifactId>
+        <version>1.0</version>
+    </parent>
+    <groupId>cn.org.bachelor</groupId>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>bachelor-auth</artifactId>
+    <version>1.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>bachelor-auth</name>
+    <modules>
+        <module>bachelor-auth-common</module>
+        <module>bachelor-auth-biz</module>
+        <module>bachelor-auth-web</module>
+        <module>bachelor-login</module>
+    </modules>
+    <distributionManagement>
+        <repository>
+            <id>pdmi-nexus</id>
+            <name>snapshot</name>
+            <url>http://43.250.238.158:8081/nexus/content/repositories/snapshots</url>
+        </repository>
+    </distributionManagement>
+    <properties>
+        <artifact.version>1.1-SNAPSHOT</artifact.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-up-client</artifactId>
+                <version>${bachelor-up.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-core</artifactId>
+                <version>${bachelor-fw.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-web</artifactId>
+                <version>${bachelor-fw.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-context</artifactId>
+                <version>${bachelor-fw.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
