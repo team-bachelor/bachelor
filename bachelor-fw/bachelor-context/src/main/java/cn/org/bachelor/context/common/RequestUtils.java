@@ -27,7 +27,7 @@ public class RequestUtils {
 		if(ra == null){
 			return null;
 		}
-		
+
 		HttpServletRequest request = ra.getRequest();
 		return request;
 	}

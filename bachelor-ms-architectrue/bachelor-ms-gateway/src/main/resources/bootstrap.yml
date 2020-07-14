@@ -11,7 +11,7 @@ spring:
           statuses: BAD_GATEWAY
       - name: RequestRateLimiter
         args:
-          keyResolver: '#{@tokenKeyResolver}'
+#          keyResolver: '#{@tokenKeyResolver}'
           in-memory-rate-limiter:
             replenish-rate: 100
             burst-capacity: 2000
