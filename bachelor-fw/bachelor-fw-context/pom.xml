@@ -9,9 +9,9 @@
         <version>1.0</version>
     </parent>
     <groupId>cn.org.bachelor</groupId>
-    <artifactId>bachelor-context</artifactId>
+    <artifactId>bachelor-fw-context</artifactId>
     <version>${artifact.version}</version>
-    <name>bachelor-context</name>
+    <name>bachelor-fw-context</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -38,6 +38,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

@@ -36,6 +36,7 @@
         <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
         <mybatis-generator-core.version>1.4.0</mybatis-generator-core.version>
         <bucket4j-core.version>4.9.0</bucket4j-core.version>
+        <spring-boot-plugin.version>2.3.1.RELEASE</spring-boot-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -153,6 +154,7 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

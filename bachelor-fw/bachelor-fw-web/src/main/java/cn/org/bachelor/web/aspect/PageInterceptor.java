@@ -8,6 +8,7 @@ package cn.org.bachelor.web.aspect;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.org.bachelor.context.interceptor.AllManagedIntercepter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,21 +24,17 @@ import com.github.pagehelper.PageHelper;
  *
  */
 @Component
-public class PageInterceptor extends AllManagedIntercepter{
+public class PageInterceptor extends AllManagedIntercepter {
 	
 	private Log log = LogFactory.getLog(this.getClass());
 
 	/* (non-Javadoc)
 	 * @see org.springframework.core.Ordered#getOrder()
 	 */
-	@Override
-	public int getOrder() {
-		return Ordered.LOWEST_PRECEDENCE;
-	}
 	
 	@Override
 	protected int initOrder() {
-		return 100;
+		return Ordered.LOWEST_PRECEDENCE;
 	}
 
 	/**
@@ -71,15 +68,6 @@ public class PageInterceptor extends AllManagedIntercepter{
 		}
 		return true;
 	}
-
-	/* (non-Javadoc)
-	 * @see cn.org.bachelor.core.interceptor.ControllerInterceptor#doPostHandle(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object, org.springframework.web.servlet.ModelAndView)
-	 */
-	@Override
-	protected void doPostHandle(HttpServletRequest request,
-			HttpServletResponse response, Object obj, ModelAndView mav) {
-
-	}
 	
 	/* (non-Javadoc)
 	 * @see cn.org.bachelor.core.interceptor.ControllerInterceptor#doAfterCompletion(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object, java.lang.Exception)
@@ -87,6 +75,11 @@ public class PageInterceptor extends AllManagedIntercepter{
 	@Override
 	protected void doAfterCompletion(HttpServletRequest request,
 			HttpServletResponse response, Object obj, Exception e) {
+
+	}
+
+	@Override
+	protected void doPostHandle(HttpServletRequest request, HttpServletResponse response, Object obj, ModelAndView mav) {
 
 	}
 }

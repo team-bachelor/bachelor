@@ -17,9 +17,9 @@
         <artifact.version>1.0</artifact.version>
     </properties>
     <modules>
-        <module>bachelor-core</module>
-        <module>bachelor-context</module>
-        <module>bachelor-web</module>
-        <module>bachelor-cache-redis</module>
+        <module>bachelor-fw-core</module>
+        <module>bachelor-fw-context</module>
+        <module>bachelor-fw-web</module>
+        <module>bachelor-fw-cache-redis</module>
     </modules>
 </project>

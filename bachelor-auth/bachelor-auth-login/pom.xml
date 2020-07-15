@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.org.bachelor</groupId>
-    <artifactId>bachelor-login</artifactId>
+    <artifactId>bachelor-auth-login</artifactId>
     <packaging>jar</packaging>
 
     <name>bachelor-login</name>

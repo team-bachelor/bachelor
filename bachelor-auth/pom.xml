@@ -17,7 +17,7 @@
         <module>bachelor-auth-common</module>
         <module>bachelor-auth-biz</module>
         <module>bachelor-auth-web</module>
-        <module>bachelor-login</module>
+        <module>bachelor-auth-login</module>
     </modules>
     <distributionManagement>
         <repository>

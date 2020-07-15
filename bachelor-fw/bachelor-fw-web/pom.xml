@@ -11,7 +11,7 @@
     <groupId>cn.org.bachelor</groupId>
     <artifactId>bachelor-web</artifactId>
     <version>${artifact.version}</version>
-    <name>bachelor-web</name>
+    <name>bachelor-fw-web</name>
     <packaging>jar</packaging>
     <url>http://maven.apache.org</url>
     <properties>
@@ -63,6 +63,12 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.org.bachelor</groupId>
+            <artifactId>bachelor-fw-context</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
