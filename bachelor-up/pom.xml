@@ -27,7 +27,7 @@
         <dependencies>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
-                <artifactId>bachelor-web</artifactId>
+                <artifactId>bachelor-fw-web</artifactId>
                 <version>1.0</version>
             </dependency>
         </dependencies>

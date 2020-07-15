@@ -9,7 +9,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://10.30.13.114:8740/eureka/
+      defaultZone: http://localhost:8740/eureka/
     registry-fetch-interval-seconds: 5
   instance:
     prefer-ip-address: true

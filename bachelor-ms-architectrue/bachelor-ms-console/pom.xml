@@ -100,12 +100,15 @@
 
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-context</artifactId>
+            <artifactId>bachelor-fw-context</artifactId>
         </dependency>
-
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-web</artifactId>
+            <artifactId>bachelor-fw-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.org.bachelor</groupId>
+            <artifactId>bachelor-fw-web</artifactId>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
@@ -113,7 +116,7 @@
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-login</artifactId>
+            <artifactId>bachelor-auth-login</artifactId>
         </dependency>
     </dependencies>
 

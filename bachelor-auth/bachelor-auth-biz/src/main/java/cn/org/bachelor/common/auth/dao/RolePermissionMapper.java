@@ -4,10 +4,11 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import cn.org.bachelor.common.auth.domain.RolePermission;
+import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
-
+@Repository
 @org.apache.ibatis.annotations.Mapper
 public interface RolePermissionMapper extends Mapper<RolePermission> {
 

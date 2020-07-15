@@ -62,18 +62,18 @@
         <dependencies>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
-                <artifactId>bachelor-context</artifactId>
+                <artifactId>bachelor-fw-context</artifactId>
                 <version>${bachelor-fw.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
-                <artifactId>bachelor-core</artifactId>
+                <artifactId>bachelor-fw-core</artifactId>
                 <version>${bachelor-fw.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
-                <artifactId>bachelor-web</artifactId>
+                <artifactId>bachelor-fw-web</artifactId>
                 <version>${bachelor-fw.version}</version>
             </dependency>
             <dependency>
@@ -83,7 +83,7 @@
             </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
-                <artifactId>bachelor-login</artifactId>
+                <artifactId>bachelor-auth-login</artifactId>
                 <version>${bachelor-auth.version}</version>
             </dependency>
             <dependency>

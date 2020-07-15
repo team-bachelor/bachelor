@@ -39,17 +39,17 @@
             </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
-                <artifactId>bachelor-core</artifactId>
+                <artifactId>bachelor-fw-core</artifactId>
                 <version>${bachelor-fw.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
-                <artifactId>bachelor-web</artifactId>
+                <artifactId>bachelor-fw-web</artifactId>
                 <version>${bachelor-fw.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
-                <artifactId>bachelor-context</artifactId>
+                <artifactId>bachelor-fw-context</artifactId>
                 <version>${bachelor-fw.version}</version>
             </dependency>
         </dependencies>

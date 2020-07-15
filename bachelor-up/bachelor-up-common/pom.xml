@@ -30,7 +30,7 @@
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-core</artifactId>
+            <artifactId>bachelor-fw-core</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>

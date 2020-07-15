@@ -117,11 +117,11 @@
 
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-context</artifactId>
+            <artifactId>bachelor-fw-context</artifactId>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-web</artifactId>
+            <artifactId>bachelor-fw-web</artifactId>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>

@@ -49,11 +49,11 @@
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-context</artifactId>
+            <artifactId>bachelor-fw-context</artifactId>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-core</artifactId>
+            <artifactId>bachelor-fw-core</artifactId>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>

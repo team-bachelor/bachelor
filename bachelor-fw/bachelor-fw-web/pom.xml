@@ -9,10 +9,10 @@
         <version>1.0</version>
     </parent>
     <groupId>cn.org.bachelor</groupId>
-    <artifactId>bachelor-web</artifactId>
+    <artifactId>bachelor-fw-web</artifactId>
     <version>${artifact.version}</version>
     <name>bachelor-fw-web</name>
-    <packaging>jar</packaging>
+    <!--<packaging>jar</packaging>-->
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,12 +24,12 @@
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-core</artifactId>
+            <artifactId>bachelor-fw-core</artifactId>
             <version>${artifact.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-context</artifactId>
+            <artifactId>bachelor-fw-context</artifactId>
             <version>${artifact.version}</version>
         </dependency>
         <dependency>

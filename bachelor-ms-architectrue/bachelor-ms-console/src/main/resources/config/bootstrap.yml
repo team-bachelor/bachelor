@@ -1,33 +1,34 @@
 spring:
-  cloud:
-    refresh:
-      refreshable: none
-    config:
-      name: user-login-ss
-      profile: dev
-      label: master
-      discovery:
-        enabled: true
-        service-id: config-service
+#  cloud:
+#    refresh:
+#      refreshable: none
+#    config:
+#      name: user-login-ss
+#      profile: dev
+#      label: master
+#      discovery:
+#        enabled: true
+#        service-id: config-service
   application:
     name: console
     id: f9cc8231aec746e88c5c144b81ecbbb5
     workbench-code: workbench-manage
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/ms_console?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.30.5.177:3306/bcms?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     username: root
-    #password: pdmi1234
-    password: Aa!123456
+    password: Pdmi1234
+#    password: Aa!123456
   redis:
-    host: 127.0.0.1
+    host: 10.30.5.177
     port: 6379
+    password: pdmi1234
     jedis:
       pool:
-        max-active: 20
-        max-idle: 10
-        max-wait: 1000ms
-        min-idle: 5
+      max-active: 20
+      max-idle: 10
+      max-wait: 1000ms
+      min-idle: 5
   messages:
     basename: i18n/messages
     encoding: UTF-8
@@ -66,7 +67,7 @@ mybatis:
 eureka:
   client:
     service-url:
-      defaultZone: http://192.168.1.5:8740/eureka,http://localhost:8740/eureka
+      defaultZone: http://localhost:8740/eureka/
     #      defaultZone: http://10.30.13.114:8740/eureka
     registry-fetch-interval-seconds: 5
   instance:

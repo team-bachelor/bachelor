@@ -92,7 +92,7 @@
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-web</artifactId>
+            <artifactId>bachelor-fw-web</artifactId>
             <!--<exclusions>
                 <exclusion>
                     <groupId>com.github.pagehelper</groupId>

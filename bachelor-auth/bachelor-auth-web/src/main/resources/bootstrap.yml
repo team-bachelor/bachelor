@@ -5,12 +5,12 @@ spring:
     #id: 66df4415d5ef40ffbf80abbd36b459c1
     workbench-code: workbench-manage
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     #url: jdbc:mysql://127.0.0.1:3306/auth_test?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     username: root
     #password: root
     password: Pdmi1234
-    url: jdbc:mysql://10.30.5.177:3306/gov?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    url: jdbc:mysql://10.30.5.177:3306/bcms?useUnicode=true&characterEncoding=UTF-8&useSSL=false
   messages:
     basename: i18n/messages
     encoding: UTF-8
@@ -61,7 +61,7 @@ mybatis:
 eureka:
   client:
     service-url:
-      defaultZone: http://192.168.0.37:8000/server/eureka/ #http://10.30.13.114:8740/eureka #http://localhost:8740/eureka
+      defaultZone: http://localhost:8740/eureka/ #http://10.30.13.114:8740/eureka #http://localhost:8740/eureka
     registry-fetch-interval-seconds: 5
   instance:
     prefer-ip-address: true

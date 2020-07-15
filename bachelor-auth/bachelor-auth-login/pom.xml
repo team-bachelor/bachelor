@@ -7,7 +7,7 @@
     <artifactId>bachelor-auth-login</artifactId>
     <packaging>jar</packaging>
 
-    <name>bachelor-login</name>
+    <name>bachelor-auth-login</name>
     <description>集成用户登录功能</description>
 
     <parent>
@@ -113,7 +113,7 @@
         <!--bachelor引用-->
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-web</artifactId>
+            <artifactId>bachelor-fw-web</artifactId>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
