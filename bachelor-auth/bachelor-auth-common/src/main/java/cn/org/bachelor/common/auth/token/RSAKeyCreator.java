@@ -1,7 +1,6 @@
 package cn.org.bachelor.common.auth.token;
 
 import org.springframework.security.jwt.codec.Codecs;
-import sun.misc.BASE64Decoder;
 
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -10,6 +9,7 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+
 /**
  * @描述:
  * @创建人: liuzhuo
@@ -35,29 +35,32 @@ public class RSAKeyCreator {
 
     //解码返回byte
     private static byte[] decryptBASE64(String key) throws Exception {
-        return Codecs.b64Decode(Codecs.utf8Encode(key));
+        return Base64.decode(key);
     }
 
     //编码返回字符串
     private static String encryptBASE64(byte[] key) throws Exception {
         return Codecs.utf8Decode(Codecs.b64Encode(key));
     }
+
     public static RSAPublicKey getPublicKey(String key) throws Exception {
         byte[] keyBytes;
-        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+        keyBytes = Base64.decode(key);
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
         RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(keySpec);
         return publicKey;
     }
+
     public static RSAPrivateKey getPrivateKey(String key) throws Exception {
         byte[] keyBytes;
-        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+        keyBytes = Base64.decode(key);
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
         RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
         return privateKey;
     }
+
     //map对象中存放公私钥
     public static RSAKeyPair initKey() throws Exception {
         //获得对象 KeyPairGenerator 参数 RSA 1024个字节

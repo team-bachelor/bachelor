@@ -139,6 +139,7 @@ public class Menu {
     public void setUri(String uri) {
         this.uri = uri;
     }
+
     /**
      * 获取父级ID
      *

@@ -85,6 +85,7 @@ public class UserSysServiceTest {
         param.setDeptId("6e218c1547b249ceba528a1b9fb04c33");
         List l = userSysService.findUserByClientID(param);
     }
+
     @Test
     public void getUserRoles() {
         //"68a99ef178e34d10a53b66e7a98316c9","07d2a7ded91d466aa7ded2b33c2a197b",true,-1,"07d2a7ded91d466aa7ded2b33c2a197b"
@@ -94,6 +95,7 @@ public class UserSysServiceTest {
                 "68a99ef178e34d10a53b66e7a98316c9",
                 "b6Vun3JYuUjZXMxSl1SpSA8aKRBcRT1D3hbr1ToWWNhswljgy2AolOFqfsVB2B/BvDgcaPZM2Be9qiPldqofLXMhqkFCB2BFqLTMMBVUArf4zdw8FXROLookwgRxCiM4ptkkXSLYSZEoFZVr/vyf/Xs1apL91j94h35V3yYX54aPgk=");
     }
+
     @Test
     public void getRoleDepts() {
         //"68a99ef178e34d10a53b66e7a98316c9","07d2a7ded91d466aa7ded2b33c2a197b",true,-1,"07d2a7ded91d466aa7ded2b33c2a197b"
@@ -104,9 +106,10 @@ public class UserSysServiceTest {
                 depts,
                 true);
     }
-//
+
+    //
     @Test
-    public void getDataprm(){
+    public void getDataprm() {
         Set<String> s = new HashSet<>();
 //        s.add("68a99ef178e34d10a53b66e7a98316c9");
 //        s.add("3523a03fe73446f68edd1293de6affa1");

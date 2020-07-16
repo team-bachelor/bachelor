@@ -43,8 +43,8 @@ public class MenuService {
      * @return 用户菜单
      */
     public List<MenuVo> calUserMenu(String userCode) {
-        if(userCode.equals(valueHolder.getCurrentUser().getCode())
-                && valueHolder.getCurrentUser().isAdministrator()){
+        if (userCode.equals(valueHolder.getCurrentUser().getCode())
+                && valueHolder.getCurrentUser().isAdministrator()) {
             userCode = null;
         }
         if (StringUtils.isEmpty(userCode)) {

@@ -39,9 +39,9 @@ public class UserSysService {
     @Autowired
     private AuthValueHolderService valueHolder;
 
-//    private String base = "http://sso.lgd.com:9960/user";
+    //    private String base = "http://sso.lgd.com:9960/user";
     private String base = "http://localhost:8881/user";
-//    private String base = "http://221.2.140.133:8600/user";
+    //    private String base = "http://221.2.140.133:8600/user";
     private String users = "/api/users";
     private String depts = "/api/depts";
     private String orgs = "/api/orgs";
@@ -56,7 +56,8 @@ public class UserSysService {
     public UserSysService(AuthValueHolderService valueHolder) {
         this.valueHolder = valueHolder;
     }
-    private class AdminCache{
+
+    private class AdminCache {
         private boolean isAdmin;
         private long time;
 
@@ -65,7 +66,9 @@ public class UserSysService {
             this.time = time;
         }
     }
+
     private static Map<String, AdminCache> adminCahce = new HashMap<>();
+
     public boolean checkUserIsAdmin(UserVo user) {
         logger.info("用户：[" + user.getName() + "]获取管理员标志");
         boolean isadmin = false;
@@ -74,11 +77,11 @@ public class UserSysService {
             //2020.1.1 新加了一段缓存，2分钟之内同一用户不重复取用户系统。 lz
             if (StringUtils.isNotEmpty(user.getId()) && StringUtils.isNotEmpty(user.getOrgId())) {
                 long now = new Date().getTime();
-                if(!adminCahce.containsKey(user.getId()) && adminCahce.get(user.getId()).time < (now - 120000)){
+                if (!adminCahce.containsKey(user.getId()) && adminCahce.get(user.getId()).time < (now - 120000)) {
                     isadmin = isAdministrator(user);
                     adminCahce.remove(user.getId());
                     adminCahce.put(user.getId(), new AdminCache(isadmin, now));
-                }else{
+                } else {
                     isadmin = adminCahce.get(user.getId()).isAdmin;
                 }
 

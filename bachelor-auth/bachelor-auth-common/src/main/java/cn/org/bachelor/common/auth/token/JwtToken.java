@@ -52,10 +52,12 @@ public class JwtToken {
         Jwt jwt = JwtHelper.encode(payload, new RsaSigner(privateKey));
         return jwt.getEncoded();
     }
+
     public static String create(String payload, String privateKey) {
         Jwt jwt = JwtHelper.encode(payload, new RsaSigner(privateKey));
         return jwt.getEncoded();
     }
+
     /**
      * 解析和验证
      *

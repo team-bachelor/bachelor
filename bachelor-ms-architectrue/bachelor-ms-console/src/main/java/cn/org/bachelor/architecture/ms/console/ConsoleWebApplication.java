@@ -15,8 +15,10 @@ import tk.mybatis.spring.annotation.MapperScan;
 @EnableCircuitBreaker //开启断路器功能
 @EnableDiscoveryClient
 @EnableFeignClients
-@MapperScan(basePackages = {"cn.org.bachelor.architecture.ms.console.cache"})
-@SpringBootApplication(scanBasePackages = {"cn.org.bachelor"},scanBasePackageClasses={cn.org.bachelor.common.auth.interceptor.AuthInterceptorConfig.class},exclude = {DataSourceAutoConfiguration.class, ConfigurationPropertiesRebinderAutoConfiguration.class})
+@MapperScan(basePackages = {"cn.org.bachelor.**.dao.*"})
+@SpringBootApplication(scanBasePackages = {"cn.org.bachelor.**.*"},
+        scanBasePackageClasses={cn.org.bachelor.common.auth.interceptor.AuthInterceptorConfig.class},
+        exclude = { DataSourceAutoConfiguration.class, ConfigurationPropertiesRebinderAutoConfiguration.class})
 @EnableHystrix
 @Configuration
 @EnableHystrixDashboard

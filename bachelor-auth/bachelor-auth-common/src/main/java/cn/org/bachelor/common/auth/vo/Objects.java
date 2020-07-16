@@ -261,6 +261,7 @@ public class Objects {
 
     /**
      * 获取域名称
+     *
      * @return DOMAIN_NAME - 域名称
      */
     public String getDomainName() {
@@ -269,6 +270,7 @@ public class Objects {
 
     /**
      * 设置域名称
+     *
      * @param domainName 域名称
      */
     public void setDomainName(String domainName) {

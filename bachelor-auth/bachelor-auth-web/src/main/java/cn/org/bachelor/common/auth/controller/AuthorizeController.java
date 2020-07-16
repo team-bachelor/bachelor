@@ -56,6 +56,7 @@ public class AuthorizeController {
         List permg = authorizeService.getRolePermission(role);
         return JsonResponse.createHttpEntity(permg);
     }
+
     /**
      * 设置机构的权限
      *
@@ -86,6 +87,7 @@ public class AuthorizeController {
         List permg = authorizeService.getOrgPermission(org);
         return JsonResponse.createHttpEntity(permg);
     }
+
     /**
      * 获得所有权限
      *
@@ -95,7 +97,7 @@ public class AuthorizeController {
     @ApiOperation(value = "获得全部权限")
     @ApiImplicitParam(name = "orgID", value = "角色的编码", paramType = "query", required = true)
     @RequestMapping(value = "/permissions", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getPermissions( String orgID) {
+    public HttpEntity<JsonResponse> getPermissions(String orgID) {
         return JsonResponse.createHttpEntity(authorizeService.getPermissionGroupList(orgID));
     }
 
@@ -111,7 +113,7 @@ public class AuthorizeController {
     public HttpEntity<JsonResponse> getUserPermission(@PathVariable String user) {
         Map permg = authorizeService.calUserPermission(user);
 
-        if(permg != null){
+        if (permg != null) {
             return JsonResponse.createHttpEntity(new ArrayList<>(permg.values()));
         }
         return JsonResponse.createHttpEntity(HttpStatus.NOT_FOUND);

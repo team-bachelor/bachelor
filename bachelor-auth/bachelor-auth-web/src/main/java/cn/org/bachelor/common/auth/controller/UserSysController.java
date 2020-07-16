@@ -57,7 +57,7 @@ public class UserSysController {
         UserSysResult<List<UserVo>> result = userSysService.findUsers(param);
         JsonResponse jr = new JsonResponse(result.getRows());
         jr.setStatus(ResponseStatus.OK);
-        HttpHeaders headers= new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
         headers.add("total", String.valueOf(result.getTotal()));
 
         //ResponseEntity response = JsonResponse.createHttpEntity(result.getRows());

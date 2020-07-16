@@ -20,8 +20,7 @@ public class RSAKeyPair implements Serializable {
      * and private key components in the generated key pair. This is safe,
      * because {@code Key} objects are immutable.
      *
-     * @param publicKey the public key.
-     *
+     * @param publicKey  the public key.
      * @param privateKey the private key.
      */
     public RSAKeyPair(RSAPublicKey publicKey, RSAPrivateKey privateKey) {

@@ -18,6 +18,7 @@
         <module>bachelor-auth-biz</module>
         <module>bachelor-auth-web</module>
         <module>bachelor-auth-login</module>
+        <module>test</module>
     </modules>
     <distributionManagement>
         <repository>

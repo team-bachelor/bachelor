@@ -29,9 +29,9 @@ public class AuthExceptionHandler {
     @ExceptionHandler(value = UserSysException.class)
     public ResponseEntity handleUserSysException(HttpServletRequest request, Exception e) {
         logger.info(e);
-        if("ACCESS_TOKEN_EXPIRED".equals(e.getMessage())){
+        if ("ACCESS_TOKEN_EXPIRED".equals(e.getMessage())) {
             return GlobalExceptionHandler.createExceptionResponseEntity(e.getMessage(), null, BIZ_ERR, LOCKED);
-        }else {
+        } else {
             return GlobalExceptionHandler.createExceptionResponseEntity(e.getMessage(), null, BIZ_ERR, UNAUTHORIZED);
         }
     }

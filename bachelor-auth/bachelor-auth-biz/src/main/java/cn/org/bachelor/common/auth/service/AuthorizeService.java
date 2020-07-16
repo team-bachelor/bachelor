@@ -27,6 +27,7 @@ import java.util.*;
 @Service
 public class AuthorizeService {
     private static final Logger logger = LoggerFactory.getLogger(AuthorizeService.class);
+
     @Autowired
     private RolePermissionMapper rolePermissionMapper;
 

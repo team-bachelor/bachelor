@@ -19,9 +19,10 @@ import java.util.List;
  **/
 public class TKGenerator {
 
-    public static InputStream getResourceAsStream(String path){
+    public static InputStream getResourceAsStream(String path) {
         return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
     }
+
     public static void main(String[] args) throws Exception {
         List<String> warnings = new ArrayList<String>();
         boolean overwrite = true;

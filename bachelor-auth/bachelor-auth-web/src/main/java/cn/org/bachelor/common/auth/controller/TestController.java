@@ -50,7 +50,7 @@ public class TestController {
                     //@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "30000"),
                     //@HystrixProperty(name = "execution.isolation.strategy", value = "SEMAPHORE"),
                     @HystrixProperty(name = "execution.isolation.semaphore.maxConcurrentRequests", value = "10")
-    })
+            })
     @RequestMapping(value = "/user_permission", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUserPermission(String user) {
 //        try {

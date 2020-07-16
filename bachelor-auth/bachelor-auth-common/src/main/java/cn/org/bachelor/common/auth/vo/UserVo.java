@@ -122,7 +122,7 @@ public class UserVo {
      */
     private boolean isAdministrator = false;
 
-    @JsonProperty(value = "access_backend", access= JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(value = "access_backend", access = JsonProperty.Access.WRITE_ONLY)
     private boolean accessBackend = true;
 
     public boolean isAdministrator() {

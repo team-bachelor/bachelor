@@ -1,13 +1,15 @@
 package cn.org.bachelor.common.auth.dao;
 
+import cn.org.bachelor.common.auth.domain.Objects;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
-import cn.org.bachelor.common.auth.domain.Objects;
+import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
+@Repository
 public interface ObjectsMapper extends Mapper<Objects> {
     @Select("SELECT\n" +
             "o.ID,\n" +
@@ -27,13 +29,13 @@ public interface ObjectsMapper extends Mapper<Objects> {
             "ORDER BY d.SEQ_ORDER, o.SEQ_ORDER")
     @Results(value = {
             @Result(id = true, property = "id", column = "ID"),
-            @Result (property="name", column="NAME"),
-            @Result (property="permCode", column="CODE"),
-            @Result (property="objUri", column="URI"),
-            @Result (property="objOperate", column="OPERATE"),
-            @Result (property="type", column="TYPE"),
-            @Result (property="domainCode", column="DOMAIN_CODE"),
-            @Result (property="domainName", column="DOMAIN_NAME")
+            @Result(property = "name", column = "NAME"),
+            @Result(property = "permCode", column = "CODE"),
+            @Result(property = "objUri", column = "URI"),
+            @Result(property = "objOperate", column = "OPERATE"),
+            @Result(property = "type", column = "TYPE"),
+            @Result(property = "domainCode", column = "DOMAIN_CODE"),
+            @Result(property = "domainName", column = "DOMAIN_NAME")
     })
     List<cn.org.bachelor.common.auth.vo.Objects> findAllForType(String type);
 

@@ -6,8 +6,9 @@ package cn.org.bachelor.common.auth.vo;
  * @创建时间: 2018/10/30
  */
 public enum PermissionType {
-    USER("USER"),ROLE("ROLE"),ORG("ORG");
+    USER("USER"), ROLE("ROLE"), ORG("ORG");
     private final String key;
+
     PermissionType(String key) {
         this.key = key;
     }

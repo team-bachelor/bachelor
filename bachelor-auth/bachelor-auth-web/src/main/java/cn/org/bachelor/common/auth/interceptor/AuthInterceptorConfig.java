@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @创建时间: 2018/11/5
  */
 @Configuration
-@ConfigurationProperties(prefix="bachelor.auth")
+@ConfigurationProperties(prefix = "bachelor.auth")
 public class AuthInterceptorConfig implements WebMvcConfigurer {
 
     private String[] excludePathPatterns;
@@ -22,6 +22,7 @@ public class AuthInterceptorConfig implements WebMvcConfigurer {
     public AuthInterceptor authInterceptor() {
         return new AuthInterceptor();
     }
+
     @Bean
     public UserInterceptor userInterceptor() {
         return new UserInterceptor();
@@ -35,6 +36,7 @@ public class AuthInterceptorConfig implements WebMvcConfigurer {
             "/user/accesstoken",
             "/user/logout"
     };
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(userInterceptor()).order(-2)

@@ -53,6 +53,7 @@ public class MenuController {
     public HttpEntity<JsonResponse> getRoleMenu(@PathVariable String role) {
         return JsonResponse.createHttpEntity(menuService.getRoleMenu(role));
     }
+
     /**
      * 设置机构的菜单
      *
@@ -82,6 +83,7 @@ public class MenuController {
     public HttpEntity<JsonResponse> getOrgMenu(@PathVariable String org) {
         return JsonResponse.createHttpEntity(menuService.getOrgMenu(org));
     }
+
     /**
      * 获得全部菜单
      *
@@ -91,7 +93,7 @@ public class MenuController {
     @ApiOperation(value = "获得全部菜单")
     @ApiImplicitParam(name = "orgID", value = "组织机构的编码", paramType = "query", required = false)
     @RequestMapping(value = "/menus", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getMenus( String orgID) {
+    public HttpEntity<JsonResponse> getMenus(String orgID) {
         return JsonResponse.createHttpEntity(menuService.getMenuList());
     }
 

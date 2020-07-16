@@ -87,7 +87,7 @@ public class UserSysParam {
         this.userName = userName;
     }
 
-    public Map<String, String> toParamMap(){
+    public Map<String, String> toParamMap() {
         Map<String, String> param = new HashMap<String, String>();
         if (StringUtils.isNotEmpty(orgId)) {
             param.put("orgId", orgId);

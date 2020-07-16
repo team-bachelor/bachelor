@@ -2,6 +2,8 @@ package cn.org.bachelor.common.auth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
@@ -12,7 +14,9 @@ import tk.mybatis.spring.annotation.MapperScan;
 @EnableDiscoveryClient
 @EnableFeignClients
 @MapperScan(basePackages = {"cn.org.bachelor.common.auth.dao"})
-@SpringBootApplication(scanBasePackages = {"cn.org.bachelor"})
+@SpringBootApplication(scanBasePackages = {"cn.org.bachelor.**.*"},
+//        scanBasePackageClasses={cn.org.bachelor.common.auth.interceptor.AuthInterceptorConfig.class},
+        exclude = {ConfigurationPropertiesRebinderAutoConfiguration.class})
 @EnableHystrix
 public class AuthWebApplication {
 
