@@ -15,7 +15,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @EnableFeignClients
 @MapperScan(basePackages = {"cn.org.bachelor.common.auth.dao"})
 @SpringBootApplication(scanBasePackages = {"cn.org.bachelor.**.*"},
-//        scanBasePackageClasses={cn.org.bachelor.common.auth.interceptor.AuthInterceptorConfig.class},
+        scanBasePackageClasses={cn.org.bachelor.common.auth.interceptor.AuthInterceptorConfig.class},
         exclude = {ConfigurationPropertiesRebinderAutoConfiguration.class})
 @EnableHystrix
 public class AuthWebApplication {

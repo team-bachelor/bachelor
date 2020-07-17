@@ -61,11 +61,11 @@ eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
-#    health-check-url-path: /actuator/health
-#    lease-expiration-duration-in-seconds: 5
-#    lease-renewal-interval-in-seconds: 2
-#    metadata-map:
-#      api-url: swagger-ui.html
+    health-check-url-path: /actuator/health
+    lease-expiration-duration-in-seconds: 5
+    lease-renewal-interval-in-seconds: 2
+    metadata-map:
+      api-url: swagger-ui.html
 feign:
   hystrix:
     enabled: true
