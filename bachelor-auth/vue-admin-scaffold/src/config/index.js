@@ -43,7 +43,7 @@ export const API_HOST = 'http://localhost:8889';
 /**
  * API基本URL
  */
-export const API_BASE_URL = ENV === 'production' ? '/gateway/AUTH-WEB/' : '/AUTH-WEB/';
+export const API_BASE_URL = ENV === 'production' ? '/gateway/CONSOLE/' : '/gateway/CONSOLE/';
 /**
  * 请求限时
  */
