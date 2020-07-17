@@ -43,7 +43,7 @@ export const API_HOST = 'http://localhost:8889';
 /**
  * API基本URL
  */
-export const API_BASE_URL = ENV === 'production' ? '/gateway/CONSOLE/' : '/gateway/CONSOLE/';
+export const API_BASE_URL = ENV === 'production' ? '/gateway/CONSOLE/' : '/AUTH-WEB/';
 /**
  * 请求限时
  */
@@ -77,7 +77,7 @@ export const LOGOUT_URL_API = '/user/logout';
  * PUP退出登录URL
  */
 // export const LOGOUT_URL = '/logout'; // 本地模拟测试
-export const LOGOUT_URL = 'http://221.2.140.133:8600/user-asserver/logout?redirectUrl=';
+export const LOGOUT_URL = 'http://fuxian.sxbctv.com/pup-asserver/logout?redirectUrl=';
 /**
  * PUP登录基本URL
  */
