@@ -18,7 +18,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @MapperScan(basePackages = {"cn.org.bachelor.**.dao.*"})
 @SpringBootApplication(scanBasePackages = {"cn.org.bachelor.**.*"},
         scanBasePackageClasses={cn.org.bachelor.common.auth.interceptor.AuthInterceptorConfig.class},
-        exclude = { DataSourceAutoConfiguration.class, ConfigurationPropertiesRebinderAutoConfiguration.class})
+        exclude = { ConfigurationPropertiesRebinderAutoConfiguration.class})
 @EnableHystrix
 @Configuration
 @EnableHystrixDashboard
