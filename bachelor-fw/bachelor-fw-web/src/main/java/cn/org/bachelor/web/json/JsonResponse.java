@@ -14,7 +14,7 @@ public class JsonResponse<T> {
     private Long time;
 
     public JsonResponse() {
-        time = new Date().getTime();
+        time = System.currentTimeMillis();
     }
 
     public JsonResponse(T data) {

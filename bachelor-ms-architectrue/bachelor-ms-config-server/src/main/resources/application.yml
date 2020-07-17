@@ -6,7 +6,7 @@ spring:
       label: master
       server:
         git:
-          uri: D:\work\pdmi\02.projects\tmp\config-repo
+          uri: D:\github\bachelor
           clone-on-start: true
           strict-host-key-checking: false
 

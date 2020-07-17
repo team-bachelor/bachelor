@@ -1,6 +1,7 @@
 package cn.org.bachelor.userlogin.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import cn.org.bachelor.up.oauth2.client.model.OAuth2Config;
 
@@ -10,6 +11,9 @@ import cn.org.bachelor.up.oauth2.client.model.OAuth2Config;
  * @author Alexhendar
  */
 @Component
+@PropertySource(value = {
+        "classpath:OAuth2-config.properties",
+}, encoding = "utf-8")
 public class UserSysConfig extends OAuth2Config {
     @Value("${client_id}")
     private String clientId;

@@ -38,11 +38,12 @@ export const MENU_GET_MODE = 'remote';
 /**
  * API域名
  */
-export const API_HOST = window.location.origin;
+// export const API_HOST = window.location.origin;
+export const API_HOST = 'http://localhost:8889';
 /**
  * API基本URL
  */
-export const API_BASE_URL = ENV === 'production' ? '/gateway/CONSOLE/' : '/gateway/CONSOLE/';
+export const API_BASE_URL = ENV === 'production' ? '/gateway/AUTH-WEB/' : '/AUTH-WEB/';
 /**
  * 请求限时
  */
@@ -67,11 +68,11 @@ export const AUTH_PATH = `${BASE_URL}auth`;
  * Token获取接口地址
  * code query
  */
-export const AUTH_URL = `/user/accesstoken`;
+export const AUTH_URL = '/user/accesstoken';
 /**
  * 退出登录接口
  */
-export const LOGOUT_URL_API = `/user/logout`;
+export const LOGOUT_URL_API = '/user/logout';
 /**
  * PUP退出登录URL
  */
