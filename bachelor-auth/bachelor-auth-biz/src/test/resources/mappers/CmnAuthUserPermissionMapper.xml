@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.bachelor.common.auth.dao.CmnAuthUserPermissionMapper">
+    <resultMap id="BaseResultMap" type="UserPermission">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="USER_CODE" jdbcType="VARCHAR" property="userCode"/>
+        <result column="PERM_CODE" jdbcType="VARCHAR" property="permCode"/>
+        <result column="OBJ_CODE" jdbcType="VARCHAR" property="objCode"/>
+        <result column="OBJ_URI" jdbcType="VARCHAR" property="objUri"/>
+        <result column="OBJ_OPERATE" jdbcType="VARCHAR" property="objOperate"/>
+        <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="UPDATE_USER" jdbcType="VARCHAR" property="updateUser"/>
+    </resultMap>
+</mapper>

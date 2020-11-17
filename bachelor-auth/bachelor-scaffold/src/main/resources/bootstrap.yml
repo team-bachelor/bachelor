@@ -1,0 +1,99 @@
+spring:
+  application:
+    name: auth-web
+    id: 3ce0cab2277d428eb17caf7d1bd196a2
+    #id: 66df4415d5ef40ffbf80abbd36b459c1
+    workbench-code: workbench-manage
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    #url: jdbc:mysql://127.0.0.1:3306/auth_test?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    #password: root
+    password: Pdmi1234
+    url: jdbc:mysql://10.30.5.177:3306/bcms?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  zipkin:
+    enabled: true
+    base-url: http://cloud-dashboard-zipkin/
+  sleuth:
+    sampler:
+      probability: 1
+  resources:
+    chain:
+      cache: false
+  #    static-locations: classpath:/resources/
+  mvc:
+    static-path-pattern: /**
+server:
+  port: 9002
+  undertow:
+    # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+    io-threads: 4
+    # 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载
+    worker-threads: 20
+    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+    # 每块buffer的空间大小,越小的空间被利用越充分
+    buffer-size: 1024
+    # 是否分配的直接内存
+    direct-buffers: true
+logging:
+#  pattern:
+#    console: "%d  -  %msg%n"
+  #file: D:\tmp\loginfo.log
+  level:
+    cn.org.bachelor.common.auth : debug
+pagehelper:
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.0.37:8000/server/eureka/ #http://10.30.13.114:8740/eureka #http://localhost:8740/eureka
+    registry-fetch-interval-seconds: 5
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    health-check-url-path: /actuator/health
+    lease-expiration-duration-in-seconds: 5
+    lease-renewal-interval-in-seconds: 2
+    metadata-map:
+      api-url: swagger-ui.html
+feign:
+  hystrix:
+    enabled: true
+info:
+  app:
+    name: '权限管理'
+    version: '@project.version@'
+swagger:
+  base-package: "cn.org.bachelor.common.auth.controller"
+  title: "Auth-Web工程的Restful API"
+  version: "1.0"
+  description: "嵌入Swagger API 描述"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+bachelor:
+  auth:
+#    excludePathPatterns: {"/**/*", "2"}
+    up:
+      client_filter_enable: false
+      path:
+        #base: http://221.2.140.133:8600/user
+        base: http://localhost:8882/user

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MenuMapper">
+    <resultMap id="BaseResultMap" type="Menu">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="CODE" jdbcType="VARCHAR" property="code"/>
+        <result column="URI" jdbcType="VARCHAR" property="uri"/>
+        <result column="OPERATE" jdbcType="VARCHAR" property="operate"/>
+        <result column="TYPE" jdbcType="VARCHAR" property="type"/>
+        <result column="PARENT_ID" jdbcType="VARCHAR" property="parentId"/>
+        <result column="COMMENT" jdbcType="VARCHAR" property="comment"/>
+        <result column="SEQ_ORDER" jdbcType="DECIMAL" property="seqOrder"/>
+        <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="UPDATE_USER" jdbcType="VARCHAR" property="updateUser"/>
+    </resultMap>
+</mapper>

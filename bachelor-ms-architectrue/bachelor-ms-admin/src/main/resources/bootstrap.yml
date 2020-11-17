@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: spring-boot-admin
+  cloud:
+    config:
+      name: spring-boot-admin
+      profile: dev
+      label: master
+      discovery:
+        enabled: true
+        service-id: config-service
+  security:
+    user:
+      name: zjy
+      password: zjy
+server:
+  port: 8788
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8740/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    health-check-url-path: /actuator/health
