@@ -8,7 +8,7 @@ export const ENV = process.env.NODE_ENV;
 /**
  * 当前域名
  */
-export const HOST = ENV === 'development' ? '' : '';
+export const HOST = ENV === 'development' ? 'development' : 'production';
 /**
  * 默认Title
  */
@@ -76,13 +76,13 @@ export const LOGOUT_URL_API = '/user/logout';
 /**
  * PUP退出登录URL
  */
-// export const LOGOUT_URL = '/logout'; // 本地模拟测试
-export const LOGOUT_URL = 'http://fuxian.sxbctv.com/pup-asserver/logout?redirectUrl=';
+export const LOGOUT_URL = '/logout'; // 本地模拟测试
+// export const LOGOUT_URL = 'http://fuxian.sxbctv.com/pup-asserver/logout?redirectUrl=';
 /**
  * PUP登录基本URL
  */
-// export const LOGIN_URL = '/login'; // 本地模拟测试
-export const LOGIN_URL = 'http://fuxian.sxbctv.com/pup-asserver/authorize';
+export const LOGIN_URL = '/login'; // 本地模拟测试
+// export const LOGIN_URL = 'http://fuxian.sxbctv.com/pup-asserver/authorize';
 /**
  * (子)系统PUP登录标识，跳转至登录时附带
  */

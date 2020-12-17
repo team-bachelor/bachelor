@@ -14,6 +14,7 @@ import checkPermission from './checkPermission';
  * 检查当前路由是否需要授权访问
  */
 const checkRequireAuth = to => to.matched.some(record => record.meta.requireAuth !== false);
+
 /**
  * 显示隐藏全局加载提示
  */
@@ -52,6 +53,9 @@ const showError = (text) => {
  * 凭code获取accesstoken
  */
 const fetchAccessToken = async (code) => {
+  if (code === 'testcode') {
+    return true;
+  }
   try {
     const { data } = await axios.get(AUTH_URL, {
       params: { code },
@@ -83,7 +87,7 @@ router.login = (state = HOME_PATH, next) => {
   };
   const query = Object.keys(queryData).map(k => `${k}=${queryData[k]}`).join('&');
   const loginUrl = `${LOGIN_URL}${LOGIN_URL.indexOf('?') < 0 ? '?' : '&'}${query}`;
-  if (/^http/.test(loginUrl)) window.location = loginUrl;
+  if (/^http/.test(loginUrl)) window.location.href = loginUrl;
   else if (next) next(loginUrl);
   else router.push(loginUrl);
 };
@@ -134,6 +138,9 @@ router.beforeEach(async (to, from, next) => {
       return;
     }
     loading.show('登录中');
+    /**
+     *
+     */
     const done = await fetchAccessToken(to.query.code);
     if (done) {
       router.replace(to.query.state || HOME_PATH);

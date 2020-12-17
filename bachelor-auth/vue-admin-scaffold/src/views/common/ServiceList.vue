@@ -44,8 +44,7 @@ beforeDestroy()
 }
 ,
 methods: {
-    async
-    fetch()
+    async fetch()
     {
         this.loading = true;
         try {
