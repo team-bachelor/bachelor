@@ -120,6 +120,74 @@
                 <artifactId>bucket4j-core</artifactId>
                 <version>${bucket4j-core.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-core</artifactId>
+                <version>${bachelor-fw.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-context</artifactId>
+                <version>${bachelor-fw.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-web</artifactId>
+                <version>${bachelor-fw.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-cache-redis</artifactId>
+                <version>${bachelor-fw.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-usermanage</artifactId>
+                <version>${bachelor-up.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-up-client</artifactId>
+                <version>${bachelor-up.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-up-common</artifactId>
+                <version>${bachelor-up.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-up-key</artifactId>
+                <version>${bachelor-up.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-up-rsclient</artifactId>
+                <version>${bachelor-up.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-auth-common</artifactId>
+                <version>${bachelor-auth.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-auth-biz</artifactId>
+                <version>${bachelor-auth.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-auth-web</artifactId>
+                <version>${bachelor-auth.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-auth-login</artifactId>
+                <version>${bachelor-auth.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <repositories>
