@@ -1,0 +1,49 @@
+/* 水平垂直居中(绝对定位)
+--------------------------*/
+@mixin center($width: null, $height: null) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  @if not $width and not $height {
+      transform: translate(-50%, -50%);
+  } @else if $width and $height {
+      width: $width;
+      height: $height;
+      margin: -($width / 2) #{0 0} -($height / 2);
+  } @else if not $height {
+      width: $width;
+      margin-left: -($width / 2);
+      transform: translateY(-50%);
+  } @else {
+      height: $height;
+      margin-top: -($height / 2);
+      transform: translateX(-50%);
+  }
+}
+/* 子元素水平垂直居中
+--------------------------*/
+@mixin center-children {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* 清除浮云
+--------------------------*/
+@mixin clearfix() {
+  &:before,
+  &:after {
+      content: "";
+      display: table;
+  }
+  &:after {
+      clear: both;
+  }
+}
+/* 文字溢出
+--------------------------*/
+@mixin text-ellipsis () {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
