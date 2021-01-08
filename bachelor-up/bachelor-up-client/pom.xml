@@ -5,7 +5,7 @@
     <parent>
         <groupId>cn.org.bachelor</groupId>
         <artifactId>bachelor-up</artifactId>
-        <version>0.0.1</version>
+        <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bachelor-up-client</artifactId>
@@ -17,7 +17,6 @@
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-up-key</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
