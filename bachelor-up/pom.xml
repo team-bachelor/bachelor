@@ -6,7 +6,7 @@
 
     <groupId>cn.org.bachelor</groupId>
     <artifactId>bachelor-up</artifactId>
-    <version>0.0.1</version>
+    <version>1.0</version>
     <modules>
         <module>bachelor-usermanage</module>
         <module>bachelor-up-client</module>

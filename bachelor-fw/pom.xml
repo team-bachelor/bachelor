@@ -9,16 +9,17 @@
     </parent>
     <groupId>cn.org.bachelor</groupId>
     <artifactId>bachelor-fw</artifactId>
-    <version>${bachelor-fw.version}</version>
+    <version>1.0</version>
     <packaging>pom</packaging>
     <name>bachelor-fw</name>
     <url>http://maven.apache.org</url>
     <properties>
-        <artifact.version>${bachelor-fw.version}</artifact.version>
+        <artifact.version>1.0</artifact.version>
     </properties>
     <modules>
         <module>bachelor-fw-core</module>
         <module>bachelor-fw-context</module>
         <module>bachelor-fw-web</module>
+        <module>bachelor-fw-cache-redis</module>
     </modules>
 </project>

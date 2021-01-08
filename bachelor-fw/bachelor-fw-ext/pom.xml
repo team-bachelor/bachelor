@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.org.bachelor</groupId>
-        <artifactId>bachelor-dependencies</artifactId>
+        <artifactId>bachelor-fw</artifactId>
         <version>1.0</version>
     </parent>
     <groupId>cn.org.bachelor</groupId>
