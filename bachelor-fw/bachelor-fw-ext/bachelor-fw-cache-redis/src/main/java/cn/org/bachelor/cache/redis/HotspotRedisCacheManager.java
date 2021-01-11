@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 
 /**
- * 可读取pdmi热点数据的缓存管理器.
+ * 可读取热点数据的缓存管理器.
  * @author 刘卓
  * @since 2015/8/25
  */
