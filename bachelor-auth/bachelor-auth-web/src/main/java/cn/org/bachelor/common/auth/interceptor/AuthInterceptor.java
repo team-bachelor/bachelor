@@ -48,7 +48,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
         RequestMapping requestAnno = handlerMethod.getMethodAnnotation(RequestMapping.class);
         String requestPath = (requestAnno.value())[0];
-        RequestMapping[] classRMs = handlerMethod.getBean().getClass().getAnnotationsByType(RequestMapping.class);
+        RequestMapping[] classRMs = handlerMethod.getBeanType().getAnnotationsByType(RequestMapping.class);
         if (classRMs.length > 0) {
             requestPath = (classRMs[0].value())[0] + requestPath;
         }
