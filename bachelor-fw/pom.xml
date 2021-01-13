@@ -20,6 +20,6 @@
         <module>bachelor-fw-core</module>
         <module>bachelor-fw-context</module>
         <module>bachelor-fw-web</module>
-        <module>bachelor-fw-cache-redis</module>
+        <module>bachelor-fw-ext</module>
     </modules>
 </project>
