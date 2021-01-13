@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,23 +37,29 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
     //private Set<String> urlCache;
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        logger.info("进入权限拦截器：" + request.getServletPath());
+        String requestMethod = request.getMethod().toLowerCase();
+        String requestPath = request.getServletPath();
+        String permCode = requestMethod + ":" + requestPath;
+        logger.info("进入权限拦截器：" + permCode);
 //        return true;
         /** 判断请求方式是否符合规范 **/
-        String requestMethodName = request.getMethod();
+
         // 获取访问方法
-        if (!(handler instanceof HandlerMethod)) {
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            RequestMapping requestAnno = handlerMethod.getMethodAnnotation(RequestMapping.class);
+            requestPath = (requestAnno.value())[0];
+            RequestMapping[] classRMs = handlerMethod.getBeanType().getAnnotationsByType(RequestMapping.class);
+            if (classRMs.length > 0) {
+                requestPath = (classRMs[0].value())[0] + requestPath;
+            }
+            permCode = requestMethod + ":" + requestPath;
+        } else if (handler instanceof ResourceHttpRequestHandler) {
+
+        } else {
             return true;
         }
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
 
-        RequestMapping requestAnno = handlerMethod.getMethodAnnotation(RequestMapping.class);
-        String requestPath = (requestAnno.value())[0];
-        RequestMapping[] classRMs = handlerMethod.getBeanType().getAnnotationsByType(RequestMapping.class);
-        if (classRMs.length > 0) {
-            requestPath = (classRMs[0].value())[0] + requestPath;
-        }
-        String permCode = requestMethodName.toLowerCase() + ":" + requestPath;
         UserVo user = valueHolder.getCurrentUser();
         boolean pass = user.isAdministrator() ? true : authorizeService.isAuthorized(permCode, user.getCode());
         logger.info("access path=[" + requestPath + "], from=[" + valueHolder.getRemoteIP() + "]user=[" + user.getCode() + "], is authorized=[" + pass + "]");
