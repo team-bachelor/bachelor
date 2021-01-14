@@ -197,14 +197,6 @@
             <name>aliyun maven</name>
             <url>https://maven.aliyun.com/repository/public</url>
         </repository>
-        <!--部门第三方库-->
-        <repository>
-            <id>3rd-party</id>
-            <name>3rd-party</name>
-            <url>
-                http://43.250.238.158:8081/nexus/content/groups/public
-            </url>
-        </repository>
     </repositories>
 
     <build>
