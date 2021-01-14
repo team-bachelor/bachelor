@@ -1,7 +1,7 @@
 package cn.org.bachelor.web.cofig;
 
 import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
-import cn.org.bachelor.web.aspect.PageInterceptor;
+import cn.org.bachelor.web.paging.PageInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;

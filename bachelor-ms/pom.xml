@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.org.bachelor</groupId>
+    <artifactId>bachelor-ms</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>bachelor-ms-eureka-server</module>
+        <module>bachelor-ms-eureka-client</module>
+        <module>bachelor-ms-feign</module>
+        <module>bachelor-ms-config-server</module>
+        <module>bachelor-ms-gateway</module>
+        <module>bachelor-ms-admin</module>
+        <module>bachelor-ms-hystrix-dashboard</module>
+        <module>bachelor-ms-sleuth</module>
+        <module>bachelor-ms-console</module>
+        <module>bachelor-ms-turbine</module>
+    </modules>
+    <packaging>pom</packaging>
+    <name>bachelor-ms</name>
+    <parent>
+        <groupId>cn.org.bachelor</groupId>
+        <artifactId>bachelor-dependencies</artifactId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
+    <properties>
+
+    </properties>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>libs-release</name>
+            <url>https://repo.spring.io/libs-release</url>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/libs-snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-releases</id>
+            <url>https://repo.spring.io/libs-release</url>
+        </pluginRepository>
+    </pluginRepositories>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-fw-web</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-auth-common</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-auth-login</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-auth-web</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jgit</groupId>
+                <artifactId>org.eclipse.jgit</artifactId>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

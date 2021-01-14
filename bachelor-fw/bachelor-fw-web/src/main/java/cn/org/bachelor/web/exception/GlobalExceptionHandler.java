@@ -7,7 +7,7 @@ import cn.org.bachelor.core.exception.RemoteException;
 import cn.org.bachelor.core.exception.SystemException;
 import cn.org.bachelor.web.json.JsonResponse;
 import cn.org.bachelor.web.json.ResponseStatus;
-import cn.org.bachelor.web.message.MessageUtil;
+import cn.org.bachelor.web.util.MessageUtil;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -76,7 +76,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String msg = code;
         try {
             if (code != null && !"".equals(code)) {
-                msg = MessageUtil.getMessage(code, Locale.CHINA, args);
+                msg = MessageUtil.getMessage(code, args);
             }
         } catch (NoSuchMessageException e) {
             logger.debug(e.getMessage());

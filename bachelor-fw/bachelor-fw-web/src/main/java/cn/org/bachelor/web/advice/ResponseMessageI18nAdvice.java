@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
@@ -38,7 +39,7 @@ public class ResponseMessageI18nAdvice implements ResponseBodyAdvice {
           return body;
         }
         try{
-          jsonResponse.setMsg(messageSource.getMessage(jsonResponse.getCode(),null, Locale.CHINA));
+          jsonResponse.setMsg(messageSource.getMessage(jsonResponse.getCode(),null, LocaleContextHolder.getLocale()));
         }catch(NoSuchMessageException nsme){
           logger.warn(nsme.getMessage());
         }
