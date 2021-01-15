@@ -82,7 +82,7 @@ public class JedisUtil {
 	 */
 	public static void freeResource(final Jedis jedis){
 		if(jedis!=null){
-			jedisPool.returnResourceObject(jedis);
+			jedis.close();
 		}
 	}
 	

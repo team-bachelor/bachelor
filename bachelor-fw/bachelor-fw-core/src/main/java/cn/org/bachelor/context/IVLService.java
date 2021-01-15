@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2013, Team Bachelor. All rights reserved.
  */
-package cn.org.bachelor.web.context;
+package cn.org.bachelor.context;
 
 /**
  * 变量生命周期管理服务

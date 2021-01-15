@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2013, Team Bachelor. All rights reserved.
  */
-package cn.org.bachelor.web.context.impl;
+package cn.org.bachelor.web.context;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,14 +14,14 @@ import javax.servlet.http.HttpServletRequest;
 import cn.org.bachelor.web.util.RequestUtils;
 import org.springframework.stereotype.Service;
 
-import cn.org.bachelor.web.context.IVLService;
+import cn.org.bachelor.context.IVLService;
 
 /**
  * @author Team Bachelor
  *
  */
 @Service
-public class VLServiceImpl implements IVLService {
+public class WebVLService implements IVLService {
 	
 	private static ThreadLocal<Map<String,Object>> tls = new ThreadLocal<Map<String, Object>>();
 

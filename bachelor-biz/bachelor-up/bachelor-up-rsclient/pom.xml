@@ -30,10 +30,6 @@
             <artifactId>gson</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-httpclient</groupId>
-            <artifactId>commons-httpclient</artifactId>
-        </dependency>
-        <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <scope>provided</scope>
@@ -53,24 +49,4 @@
             <artifactId>spring-web</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-      <plugins>
-        <plugin>
-          <artifactId>maven-source-plugin</artifactId>
-          <configuration>
-            <attach>true</attach>
-          </configuration>
-          <executions>
-            <execution>
-              <phase>compile</phase>
-              <goals>
-                <goal>jar</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-    </build>
-
 </project>

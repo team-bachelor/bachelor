@@ -5,11 +5,8 @@
  */
 package cn.org.bachelor.web.paging;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import cn.org.bachelor.context.interceptor.AllManagedIntercepter;
-import cn.org.bachelor.context.interceptor.ManagedInterceptor;
+import cn.org.bachelor.web.context.interceptor.ManagedInterceptor;
+import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,7 +14,8 @@ import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.github.pagehelper.PageHelper;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 分页拦截器

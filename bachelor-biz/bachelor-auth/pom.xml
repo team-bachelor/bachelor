@@ -28,14 +28,17 @@
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
                 <artifactId>bachelor-up-client</artifactId>
+                <version>${artifact.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
                 <artifactId>bachelor-fw-core</artifactId>
+                <version>${artifact.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
                 <artifactId>bachelor-fw-web</artifactId>
+                <version>${artifact.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

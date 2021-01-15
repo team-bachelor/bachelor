@@ -6,7 +6,7 @@
 package cn.org.bachelor.common.auth;
 
 import cn.org.bachelor.common.auth.vo.UserVo;
-import cn.org.bachelor.web.context.IVLService;
+import cn.org.bachelor.context.IVLService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
