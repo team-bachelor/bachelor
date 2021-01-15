@@ -53,7 +53,7 @@ info:
     name: '服务网关'
     version: '@project.version@'
 swagger:
-  base-package: ["cn.org.bachelor.architecture.ms.gateway.controller","cn.org.bachelor.architecture.ms.gateway.filter"]
+  base-package: ["cn.org.bachelor.ms.gateway.controller","cn.org.bachelor.ms.gateway.filter"]
   title: "服务网关的Restful API"
   version: "1.0"
   description: "服务网关API 描述"

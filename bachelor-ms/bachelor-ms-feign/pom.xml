@@ -12,7 +12,7 @@
     <artifactId>bachelor-ms-feign</artifactId>
     <packaging>jar</packaging>
     <properties>
-        <start-class>cn.org.bachelor.architecture.feign.ConsumerApplication</start-class>
+        <start-class>cn.org.bachelor.ms.feign.ConsumerApplication</start-class>
     </properties>
     <dependencies>
         <dependency>

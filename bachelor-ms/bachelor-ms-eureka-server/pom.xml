@@ -11,7 +11,7 @@
     <artifactId>bachelor-ms-eureka-server</artifactId>
     <packaging>jar</packaging>
     <properties>
-        <start-class>cn.org.bachelor.architecture.eureka.EurekaServerApplication</start-class>
+        <start-class>cn.org.bachelor.ms.eureka.EurekaServerApplication</start-class>
     </properties>
     <dependencies>
         <dependency>

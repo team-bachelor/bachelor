@@ -11,7 +11,7 @@
     <artifactId>bachelor-ms-eureka-client</artifactId>
     <packaging>jar</packaging>
     <properties>
-        <start-class>cn.org.bachelor.architecture.eureka.SimpleApplication</start-class>
+        <start-class>cn.org.bachelor.ms.eureka.SimpleApplication</start-class>
     </properties>
     <dependencies>
         <dependency>
