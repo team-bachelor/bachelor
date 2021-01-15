@@ -7,6 +7,7 @@ import cn.org.bachelor.common.auth.vo.UserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.method.HandlerMethod;
@@ -35,12 +36,19 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private AuthorizeService authorizeService;
 
+    @Value("${bachelor.auth.enable_authenticate:true}")
+    private boolean enable;
+
     //private Set<String> urlCache;
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String requestMethod = request.getMethod().toLowerCase();
         String requestPath = request.getServletPath();
         String permCode = requestMethod + ":" + requestPath;
         logger.info("进入权限拦截器：" + permCode);
+        if(!enable){
+            logger.info("权限拦截已禁用");
+            return true;
+        }
 //        return true;
         /** 判断请求方式是否符合规范 **/
 

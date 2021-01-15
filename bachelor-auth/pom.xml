@@ -19,13 +19,6 @@
         <module>bachelor-auth-web</module>
         <module>bachelor-auth-login</module>
     </modules>
-    <distributionManagement>
-        <repository>
-            <id>pdmi-nexus</id>
-            <name>snapshot</name>
-            <url>http://43.250.238.158:8081/nexus/content/repositories/snapshots</url>
-        </repository>
-    </distributionManagement>
     <properties>
         <artifact.version>1.1-SNAPSHOT</artifact.version>
     </properties>
