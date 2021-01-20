@@ -2,13 +2,13 @@
   <section class="">
     <h2>图标集合</h2>
     <el-row :gutter="10">
-      <el-col class="icon" :span="6" v-for="name in icons" :key="name">
+      <el-col class="icon" :span="6" v-for="name in icons" :cn.org.bachelor.up.oauth2.key="name">
   <i :class="'icon-i el-icon-' + name"></i> <span class="icon-name">{{'el-icon-' + name}}</span>
       </el-col>
     </el-row>
     <h2>font awesome 图标集合</h2>
     <el-row :gutter="10">
-      <el-col class="icon" :span="6" v-for="name in icons" :key="name">
+      <el-col class="icon" :span="6" v-for="name in icons" :cn.org.bachelor.up.oauth2.key="name">
   <i :class="'icon-i el-icon-' + name"></i> <span class="icon-name">{{'el-icon-' + name}}</span>
       </el-col>
     </el-row>

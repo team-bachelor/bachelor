@@ -19,7 +19,7 @@
           已选择:
         </div>
         <div class="selector-body">
-          <el-tag size="small" effect="dark" v-for="(row,index) in checkeds" :key="row.id" closable
+          <el-tag size="small" effect="dark" v-for="(row,index) in checkeds" :cn.org.bachelor.up.oauth2.key="row.id" closable
             @close="onDelete(index,row)">{{row.account}}</el-tag>
         </div>
       </div>

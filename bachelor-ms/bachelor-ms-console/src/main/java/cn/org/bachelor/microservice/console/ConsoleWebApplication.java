@@ -1,5 +1,6 @@
 package cn.org.bachelor.microservice.console;
 
+import cn.org.bachelor.iam.acm.config.AuthenticationConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration;
@@ -16,7 +17,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @EnableFeignClients
 @MapperScan(basePackages = {"cn.org.bachelor.**.dao.*"})
 @SpringBootApplication(scanBasePackages = {"cn.org.bachelor.**.*"},
-        scanBasePackageClasses={cn.org.bachelor.common.auth.interceptor.AuthInterceptorConfig.class},
+        scanBasePackageClasses={AuthenticationConfig.class},
         exclude = { ConfigurationPropertiesRebinderAutoConfiguration.class})
 @EnableHystrix
 @Configuration

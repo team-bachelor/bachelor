@@ -114,7 +114,7 @@ public class NettyRoutingFilter implements GlobalFilter, Ordered {
                         throw new IllegalStateException("Unable to set status code on response: " + res.status().code() + ", " + response.getClass());
                     }
 
-                    ((AbstractServerHttpResponse)response).setStatusCodeValue(res.status().code());
+                    ((AbstractServerHttpResponse)response).setStatusCode(HttpStatus.resolve(res.status().code()));
                 }
 
                 HttpHeaders filteredResponseHeaders = HttpHeadersFilter.filter(this.getHeadersFilters(), headers, exchange, Type.RESPONSE);

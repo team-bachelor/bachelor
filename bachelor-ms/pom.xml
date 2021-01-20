@@ -18,6 +18,7 @@
         <module>bachelor-ms-sleuth</module>
         <module>bachelor-ms-console</module>
         <module>bachelor-ms-turbine</module>
+        <module>bachelor-ms-up-usermanage-proxy</module>
     </modules>
     <packaging>pom</packaging>
     <name>bachelor-ms</name>

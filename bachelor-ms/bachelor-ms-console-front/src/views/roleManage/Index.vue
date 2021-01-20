@@ -11,7 +11,7 @@
         </el-col>
         <el-col :span="opened?12:8">
           <multilevel-dropdown :data="allOrganizations" @command="onCommand"
-            :props="{ label: 'name', key: 'code', children: 'subOrgs' }">
+            :props="{ label: 'name', cn.org.bachelor.up.oauth2.key: 'code', children: 'subOrgs' }">
             <el-button type="primary">
               {{filter.orgName ? `${filter.orgName}` : '所属机构'}}
                 <i class="el-icon-arrow-down el-icon--right"></i>

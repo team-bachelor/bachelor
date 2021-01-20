@@ -52,7 +52,7 @@
 
   <div style="margin-top: 100px;">
     <h2>富文本</h2>
-    <editor v-model="content" :api-key='editorApiKey' :init="editorConf"></editor>
+    <editor v-model="content" :api-cn.org.bachelor.up.oauth2.key='editorApiKey' :init="editorConf"></editor>
   </div>
 </el-form>
 </template>

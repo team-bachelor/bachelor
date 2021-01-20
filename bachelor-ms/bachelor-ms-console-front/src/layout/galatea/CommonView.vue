@@ -1,7 +1,7 @@
 <template>
 <transition name="slide-down">
-  <section class="lx-common-view" v-for="(view,key) in commonViews"
-  :key="key" v-if="commonView==key">
+  <section class="lx-common-view" v-for="(view,cn.org.bachelor.up.oauth2.key) in commonViews"
+  :cn.org.bachelor.up.oauth2.key="cn.org.bachelor.up.oauth2.key" v-if="commonView==cn.org.bachelor.up.oauth2.key">
     <component :is="view"/>
   </section>
 </transition>

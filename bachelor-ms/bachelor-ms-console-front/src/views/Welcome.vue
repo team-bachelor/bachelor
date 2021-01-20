@@ -18,8 +18,8 @@
     </dl>
     <h3>快捷入口</h3>
     <div class="list">
-      <span v-for="subitems in menus" :key="subitems.path">
-        <el-button type="text" v-for="item in subitems.children" :key="item.path" style="margin-right:15px;">{{item.title}}</el-button>
+      <span v-for="subitems in menus" :cn.org.bachelor.up.oauth2.key="subitems.path">
+        <el-button type="text" v-for="item in subitems.children" :cn.org.bachelor.up.oauth2.key="item.path" style="margin-right:15px;">{{item.title}}</el-button>
       </span>
     </div>
   </div>

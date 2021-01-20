@@ -10,7 +10,7 @@
       <el-menu :default-active="activeIndex" mode="horizontal" @select="onChangeMenu">
         <el-menu-item
         v-for='(item) in menus'
-        :key="item.path"
+        :cn.org.bachelor.up.oauth2.key="item.path"
         :index="item.path">{{ item.title }}</el-menu-item>
       </el-menu>
     </div>

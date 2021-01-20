@@ -53,7 +53,7 @@
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-auth-common</artifactId>
+            <artifactId>bachelor-acm-common</artifactId>
         </dependency>
 
         <dependency>

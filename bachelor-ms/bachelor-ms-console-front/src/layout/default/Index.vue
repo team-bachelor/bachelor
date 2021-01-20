@@ -21,10 +21,10 @@
       </div>
       <main class="lx-main" ref="lx-main">
         <transition name="fade-transform" mode="out-in">
-          <router-view :key="$route.fullPath"/>
+          <router-view :cn.org.bachelor.up.oauth2.key="$route.fullPath"/>
         </transition>
         <!-- <tabset-keep-alive>
-          <router-view :key="$route.fullPath"/>
+          <router-view :cn.org.bachelor.up.oauth2.key="$route.fullPath"/>
         </tabset-keep-alive> -->
       </main>
     </section>

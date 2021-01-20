@@ -18,6 +18,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Locale;
 
 import static cn.org.bachelor.web.json.ResponseStatus.BIZ_ERR;
@@ -76,7 +77,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String msg = code;
         try {
             if (code != null && !"".equals(code)) {
-                msg = MessageUtil.getMessage(code, args);
+                msg = MessageUtil.getMessage(code, Arrays.asList(args).toArray());
             }
         } catch (NoSuchMessageException e) {
             logger.debug(e.getMessage());

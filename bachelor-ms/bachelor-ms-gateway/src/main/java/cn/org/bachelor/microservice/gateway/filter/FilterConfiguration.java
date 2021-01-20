@@ -1,7 +1,7 @@
 package cn.org.bachelor.microservice.gateway.filter;
 
 import org.apache.commons.lang.StringUtils;
-import cn.org.bachelor.common.auth.AuthConstant;
+import cn.org.bachelor.iam.acm.AuthConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;

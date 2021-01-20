@@ -1,7 +1,7 @@
 <template>
 <el-collapse v-model="collapseActives" class="collapse" v-loading="loading">
   <el-collapse-item v-for="(permission, index) in permissions"
-    :key="permission.groupCode" :name="index">
+    :cn.org.bachelor.up.oauth2.key="permission.groupCode" :name="index">
     <template slot="title">
       <el-checkbox
         :indeterminate="permission.isIndeterminate"
@@ -12,7 +12,7 @@
       @change="onChecked($event, permission)">
       <el-checkbox v-for="item in permission.perms"
         :label="item.objCode"
-        :key="`${permission.groupCode}_${item.objCode}`">{{item.operateName}}</el-checkbox>
+        :cn.org.bachelor.up.oauth2.key="`${permission.groupCode}_${item.objCode}`">{{item.operateName}}</el-checkbox>
     </el-checkbox-group>
   </el-collapse-item>
 </el-collapse>

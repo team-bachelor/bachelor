@@ -5,7 +5,7 @@
         <i v-if="route.icon" :class="route.icon"></i>
         <span slot='title'>{{route.title}}</span>
       </template>
-      <lx-menu-item v-for="(item,index) in route.children" :key="item.path+index"
+      <lx-menu-item v-for="(item,index) in route.children" :cn.org.bachelor.up.oauth2.key="item.path+index"
         :route="item"></lx-menu-item>
     </el-submenu>
     <el-menu-item

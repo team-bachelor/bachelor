@@ -7,7 +7,7 @@
         :class="{active: index===currentIndex}"
         v-for="(item,index) in messages"
         @click="open(index)"
-        :key="index">
+        :cn.org.bachelor.up.oauth2.key="index">
         <h5 class="title">{{item.title}}</h5>
         <div class="text">{{item.content}}</div>
         <div class="date">{{item.datetime}}</div>

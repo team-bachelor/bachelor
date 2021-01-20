@@ -4,10 +4,10 @@
     <el-tabs v-model="activeName" type="border-card"
       v-if="Object.keys(eurekaList).length">
       <el-tab-pane :label="name" :name="name"
-        v-for="(ips, name) in eurekaList" :key="name">
+        v-for="(ips, name) in eurekaList" :cn.org.bachelor.up.oauth2.key="name">
         <ul>
           <li v-for="(ip,ipIndex) in ips"
-            :key="ipIndex">{{ip}} -
+            :cn.org.bachelor.up.oauth2.key="ipIndex">{{ip}} -
             <span v-if="eurekaInstanceList[ip]&&eurekaInstanceList[ip].status==STATUS.UP"
               class="health">启动中</span>
             <span v-else class="unhealth">停止中</span>
@@ -35,7 +35,7 @@
         <template slot-scope="scope">
           <div v-if="scope.row.instances&&scope.row.instances.length">
             <div v-for="(item,index) in scope.row.instances"
-              :key="index">
+              :cn.org.bachelor.up.oauth2.key="index">
               {{item.instanceId}}
               <span v-if="item.status==STATUS.UP" class="health">（启动中）</span>
               <span v-else class="unhealth">（停止中）</span>

@@ -3,7 +3,7 @@
  *
  * >> 配置
  * createRestful('user')
- * createRestful('user', {key: 'userid'})
+ * createRestful('user', {cn.org.bachelor.up.oauth2.key: 'userid'})
  *
  * >> 调用
  * GET     /creature           => Creature.all({pageNo: 2})

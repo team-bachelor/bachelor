@@ -11,7 +11,7 @@
     <li
       v-for="file in files"
       :class="['el-upload-list__item', 'is-' + file.status, focusing ? 'focusing' : '']"
-      :key="file.uid"
+      :cn.org.bachelor.up.oauth2.key="file.uid"
       tabindex="0"
       @keydown.delete="!disabled && $emit('remove', file)"
       @focus="focusing = true"

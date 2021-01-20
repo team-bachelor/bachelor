@@ -13,7 +13,7 @@
     empty-text="无数据"
     :props="{label: 'comment', children: 'subMenus'}"
     show-checkbox
-    node-key="code"
+    node-cn.org.bachelor.up.oauth2.key="code"
     default-expand-all
     :expand-on-click-node="false"
     :render-content="renderContent"

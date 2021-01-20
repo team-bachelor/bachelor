@@ -116,7 +116,7 @@ public class HashValueMapper<T> {
 
     public T mapRow(Map<String, String> map) {
         Assert.state(this.mappedClass != null, "Mapped class was not specified");
-        Object mappedObject = BeanUtils.instantiate(this.mappedClass);
+        Object mappedObject = BeanUtils.instantiateClass(this.mappedClass);
         BeanWrapper bw = PropertyAccessorFactory.forBeanPropertyAccess(mappedObject);
         this.initBeanWrapper(bw);
         HashSet populatedProperties = this.isCheckFullyPopulated() ? new HashSet() : null;

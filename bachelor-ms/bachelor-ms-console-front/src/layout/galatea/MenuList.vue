@@ -5,7 +5,7 @@
     :default-active="$route.path"
     :collapse="collapsed">
       <lx-menu-item v-for="(item,index) in menus"
-      :key="item.path+index"
+      :cn.org.bachelor.up.oauth2.key="item.path+index"
       :route="item"
       ></lx-menu-item>
   </el-menu>

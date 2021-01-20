@@ -126,12 +126,8 @@
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-auth-web</artifactId>
+            <artifactId>bachelor-acm-web</artifactId>
         </dependency>
-        <!--<dependency>
-            <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-auth-login</artifactId>
-        </dependency>-->
     </dependencies>
 
     <build>

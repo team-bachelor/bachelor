@@ -13,7 +13,7 @@
     </el-form-item>
     <el-form-item label="所属机构" prop="orgCode">
       <el-select v-model="formData.orgCode" placeholder="请选择所属机构" style="width:100%">
-        <el-option v-for="item in organizations" :key="item.code"
+        <el-option v-for="item in organizations" :cn.org.bachelor.up.oauth2.key="item.code"
           :label="item.name" :value="item.code"></el-option>
       </el-select>
     </el-form-item>

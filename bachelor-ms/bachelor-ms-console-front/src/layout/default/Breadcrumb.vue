@@ -1,7 +1,7 @@
 <template>
   <el-breadcrumb separator-class="el-icon-arrow-right">
     <transition-group name="breadcrumb">
-      <el-breadcrumb-item v-for="(item, index) in breadcrumb" :key="index+item.path"
+      <el-breadcrumb-item v-for="(item, index) in breadcrumb" :cn.org.bachelor.up.oauth2.key="index+item.path"
         :to="{ path: item.path }">
       {{item.title}}
       </el-breadcrumb-item>

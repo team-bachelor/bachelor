@@ -7,6 +7,8 @@ import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -62,11 +64,13 @@ public class InMemoryRateLimiter extends AbstractRateLimiter<InMemoryRateLimiter
         // tryConsume returns false immediately if no tokens available with the bucket
         ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
         if (probe.isConsumed()) {
-            // the limit is not exceeded
-            return Mono.just(new Response(true, probe.getRemainingTokens()));
+            // the limit is not exceeded "X-Rate-Limit-Remaining"
+            Map<String, String> header = new HashMap<>(1);
+            header.put("X-Rate-Limit-Remaining", String.valueOf(probe.getRemainingTokens()));
+            return Mono.just(new Response(true, header));
         } else {
             // limit is exceeded
-            return Mono.just(new Response(false, -1));
+            return Mono.just(new Response(false, Collections.emptyMap()));
         }
     }
 

@@ -2,7 +2,7 @@
 <div>
   <div class="filters">
     <div class="item"
-      v-for="(item,index) in items" :key="index"
+      v-for="(item,index) in items" :cn.org.bachelor.up.oauth2.key="index"
       @click="onItem(item)"
       :class="{active:currentItem.name === item.name}">
       <h4 class="label">{{item.label}}</h4>

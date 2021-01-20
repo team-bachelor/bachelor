@@ -2,13 +2,13 @@
   <section :class="$style.tabset" ref="tabList">
     <div :class="$style.list">
       <div
-        v-for="(tab, key) in items"
-        :class="[$style.item, key===active?$style.active:'']"
+        v-for="(tab, cn.org.bachelor.up.oauth2.key) in items"
+        :class="[$style.item, cn.org.bachelor.up.oauth2.key===active?$style.active:'']"
         @click="onClick(tab.fullPath)"
-        :key="key">
+        :cn.org.bachelor.up.oauth2.key="cn.org.bachelor.up.oauth2.key">
         <div :class="$style['item-inner']">
           <span>{{tab.title}}</span>
-          <a @click.stop="closeTab(key)" v-show="!isLastOne"><i class="el-icon-plus"></i></a>
+          <a @click.stop="closeTab(cn.org.bachelor.up.oauth2.key)" v-show="!isLastOne"><i class="el-icon-plus"></i></a>
         </div>
       </div>
     </div>
@@ -43,15 +43,15 @@ export default {
       return this.$store.state.tabset.items;
     },
     active() {
-      return this.$store.state.tabset.key;
+      return this.$store.state.tabset.cn.org.bachelor.up.oauth2.key;
     },
   },
   methods: {
     onClick(e) {
       this.$tabset.push(e);
     },
-    closeTab(key) {
-      this.$tabset.close(key);
+    closeTab(cn.org.bachelor.up.oauth2.key) {
+      this.$tabset.close(cn.org.bachelor.up.oauth2.key);
     },
     closeAll() {
       this.$tabset.closeAll();

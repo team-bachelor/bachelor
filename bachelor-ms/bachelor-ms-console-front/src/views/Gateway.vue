@@ -3,7 +3,7 @@
     <el-tabs
       v-if="gatewayList.length" v-model="activeName" @tab-click="handleClick" type="border-card">
       <el-tab-pane :label="gateway.instanceId" :name="gateway.homePageUrl"
-        v-for="(gateway, index) in gatewayList" :key="index">
+        v-for="(gateway, index) in gatewayList" :cn.org.bachelor.up.oauth2.key="index">
         <div class="limit-setting" v-if="rateLimit[activeName]">
           <h4>默认限流设置</h4>
           <div class="flex-row">
@@ -32,14 +32,14 @@
             label="匹配器">
             <template slot-scope="scope">
               <li v-for="(predicate,index) in scope.row.predicates"
-                :key="index">{{predicate.name}}{{predicate.args}}</li>
+                :cn.org.bachelor.up.oauth2.key="index">{{predicate.name}}{{predicate.args}}</li>
             </template>
           </el-table-column>
           <el-table-column
             label="过滤器">
             <template slot-scope="scope">
               <li v-for="(filter,index) in scope.row.filters"
-                :key="index">{{filter.name}}</li>
+                :cn.org.bachelor.up.oauth2.key="index">{{filter.name}}</li>
             </template>
           </el-table-column>
           <el-table-column

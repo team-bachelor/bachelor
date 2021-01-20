@@ -3,7 +3,7 @@
     <slot/>
     <el-dropdown-menu slot="dropdown">
       <multileve-dropdown-item v-for="(item,index) in data"
-        :item=item :key=index :props="props" />
+        :item=item :cn.org.bachelor.up.oauth2.key=index :props="props" />
     </el-dropdown-menu>
   </el-dropdown>
 </template>
@@ -18,11 +18,11 @@ const MultileveDropdownItem = {
   render() {
     const children = this.item[this.props.children];
     const eachSubItem = items => items.map((item, i) =>
-      <multileve-dropdown-item key={i} item={item} props={this.props}/>);
+      <multileve-dropdown-item cn.org.bachelor.up.oauth2.key={i} item={item} props={this.props}/>);
     const subItems = children && children.length ? eachSubItem(children) : [];
     return (
       <div class="multileve-dropdown-item">
-        <el-dropdown-item command={this.item[this.props.key]}>
+        <el-dropdown-item command={this.item[this.props.cn.org.bachelor.up.oauth2.key]}>
           <span>{this.item[this.props.label]}</span>
         </el-dropdown-item>
         <div class="children">{subItems}</div>
@@ -42,7 +42,7 @@ export default {
       default() {
         return {
           label: 'label',
-          key: 'key',
+          cn.org.bachelor.up.oauth2.key: 'cn.org.bachelor.up.oauth2.key',
           children: 'children',
         };
       },
@@ -54,7 +54,7 @@ export default {
       let matched = null;
       const eachItem = (items) => {
         items.some((item) => {
-          if (item[this.props.key] === e) {
+          if (item[this.props.cn.org.bachelor.up.oauth2.key] === e) {
             matched = item;
             return true;
           } else if (item[this.props.children]) {

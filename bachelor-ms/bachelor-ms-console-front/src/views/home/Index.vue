@@ -15,9 +15,9 @@ export default {
       default: () => import('./Default.vue'),
       admin: () => import('./Admin.vue'),
     };
-    let key = this.$store.state.userinfo.role;
-    key = map[key] ? key : 'default';
-    this.view = map[key];
+    let cn.org.bachelor.up.oauth2.key = this.$store.state.userinfo.role;
+    cn.org.bachelor.up.oauth2.key = map[cn.org.bachelor.up.oauth2.key] ? cn.org.bachelor.up.oauth2.key : 'default';
+    this.view = map[cn.org.bachelor.up.oauth2.key];
   },
 };
 </script>

@@ -10,7 +10,7 @@
     class="service-list">
       <a class="service-item" v-for="(item,index) in services"
         :href="item.url"
-        :key="index">
+        :cn.org.bachelor.up.oauth2.key="index">
         <h4>{{item.name}}</h4>
         <i></i>
       </a>

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.lang3.StringUtils;
-import cn.org.bachelor.common.auth.AuthConstant;
-import cn.org.bachelor.common.auth.token.JwtToken;
+import cn.org.bachelor.iam.acm.AuthConstant;
+import cn.org.bachelor.iam.acm.token.JwtToken;
 import cn.org.bachelor.core.exception.BusinessException;
 import cn.org.bachelor.web.json.JsonResponse;
 import org.slf4j.Logger;
@@ -189,6 +189,6 @@ public class CheckAuthPreFilter implements GlobalFilter {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String serverExceptionHandler(Exception ex) {
         logger.error(ex.getMessage(), ex);
-        return ex.getMessage() + "123";
+        return ex.getMessage();
     }
 }

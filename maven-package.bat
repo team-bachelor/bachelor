@@ -1,0 +1,1 @@
+mvn clean package -f bachelor-dependencies && mvn clean package -f bachelor-fw && mvn clean package -f bachelor-iam/bachelor-oauth2 && mvn clean package -f bachelor-iam/bachelor-acm
