@@ -14,7 +14,7 @@
 ##### &emsp;2) bachelor-fw-web
 &emsp;&emsp;核心框架WEB支持，包括国际化支持，web上下文处理机制，错误处理，json处理，翻页，面向用户的消息处理。
 
-#### &emsp;3. bachelor-fw-ext
+#### 3. bachelor-fw-ext
 &emsp;核心框架扩展，即技术类扩展。
 
 ##### &emsp;1) bachelor-fw-cache-redis
