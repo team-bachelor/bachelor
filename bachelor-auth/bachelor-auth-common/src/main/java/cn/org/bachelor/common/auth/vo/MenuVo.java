@@ -22,7 +22,7 @@ public class MenuVo {
     /**
      * 权限类型(与哪个实体关联)
      */
-    private PermissionType type;
+    private PermissionClass type;
 
     /**
      * 权限所有者
@@ -38,7 +38,7 @@ public class MenuVo {
                   String uri,
                   String icon,
                   String comment,
-                  PermissionType type,
+                  PermissionClass type,
                   MenuVo parent,
                   List<MenuVo> subMenus) {
         this.id = id;
@@ -118,11 +118,11 @@ public class MenuVo {
         this.has = has;
     }
 
-    public PermissionType getType() {
+    public PermissionClass getType() {
         return type;
     }
 
-    public void setType(PermissionType type) {
+    public void setType(PermissionClass type) {
         this.type = type;
     }
 

@@ -26,7 +26,7 @@
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-up-common</artifactId>
             <!--version>${project.version}</version-->
-            <version>0.0.1</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>

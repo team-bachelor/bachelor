@@ -72,7 +72,7 @@
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-up-client</artifactId>
-            <version>0.0.1</version>
+            <version>1.0</version>
             <exclusions>
                 <exclusion>
                     <artifactId>httpclient</artifactId>

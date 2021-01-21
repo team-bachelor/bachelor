@@ -8,7 +8,7 @@ import cn.org.bachelor.common.auth.domain.*;
 import cn.org.bachelor.common.auth.domain.Objects;
 import cn.org.bachelor.common.auth.vo.Permission;
 import cn.org.bachelor.common.auth.vo.PermissionGroup;
-import cn.org.bachelor.common.auth.vo.PermissionType;
+import cn.org.bachelor.common.auth.vo.PermissionClass;
 import cn.org.bachelor.common.auth.vo.UserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -171,7 +171,7 @@ public class AuthorizeService {
                 permList = new ArrayList<>(objects.size());
                 group.setPerms(permList);
                 for (Objects o : objects) {
-                    Permission p = forPermission(o, PermissionType.ROLE);
+                    Permission p = forPermission(o, PermissionClass.ROLE);
                     String op = p.getObjOperate();
                     p.setOperateName(opsMap.containsKey(op) ? opsMap.get(op) : op);
                     permList.add(p);
@@ -202,7 +202,7 @@ public class AuthorizeService {
         return rolePermCodes;
     }
 
-    private Permission forPermission(Objects o, PermissionType type) {
+    private Permission forPermission(Objects o, PermissionClass type) {
         Permission p = new Permission();
         p.setObjCode(o.getCode());
         p.setObjOperate(o.getOperate());

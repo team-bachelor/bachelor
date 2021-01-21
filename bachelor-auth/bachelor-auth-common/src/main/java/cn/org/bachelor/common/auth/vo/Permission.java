@@ -44,7 +44,7 @@ public class Permission {
     /**
      * 权限类型(与哪个实体关联)
      */
-    private PermissionType type;
+    private PermissionClass type;
 
     /**
      * 权限所有者
@@ -104,11 +104,11 @@ public class Permission {
         this.id = id;
     }
 
-    public PermissionType getType() {
+    public PermissionClass getType() {
         return type;
     }
 
-    public void setType(PermissionType type) {
+    public void setType(PermissionClass type) {
         this.type = type;
     }
 
