@@ -26,7 +26,7 @@
 
     <javaClientGenerator targetPackage="cn.org.bachelor.iam.acm.dao" targetProject="bachelor-acm/src/test/java" type="XMLMAPPER" />
     <table tableName="cmn_acm_obj_operation"></table>
-    <table tableName="cmn_acm_permission"></table>
+    <table tableName="cmn_acm_obj_permission"></table>
     <table tableName="cmn_acm_org_permission"></table>
     <table tableName="cmn_acm_role"></table>
     <table tableName="cmn_acm_role_permission"></table>

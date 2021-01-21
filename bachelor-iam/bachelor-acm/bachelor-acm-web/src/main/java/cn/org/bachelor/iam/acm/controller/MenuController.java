@@ -19,6 +19,7 @@ import java.util.List;
  * @创建时间: 2018/10/22
  */
 @RestController
+@RequestMapping("/acm")
 public class MenuController {
 
     @Autowired

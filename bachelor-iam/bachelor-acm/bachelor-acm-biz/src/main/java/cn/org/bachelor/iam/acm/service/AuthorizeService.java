@@ -4,7 +4,7 @@ package cn.org.bachelor.iam.acm.service;
 import cn.org.bachelor.iam.acm.AuthValueHolderService;
 import cn.org.bachelor.iam.acm.dao.*;
 import cn.org.bachelor.iam.acm.domain.*;
-import cn.org.bachelor.iam.acm.domain.Permission;
+import cn.org.bachelor.iam.acm.domain.ObjPermission;
 import cn.org.bachelor.iam.acm.vo.PermissionVo;
 import cn.org.bachelor.iam.acm.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
@@ -64,7 +64,7 @@ public class AuthorizeService {
         if (StringUtil.isEmpty(objCode)) {
             return false;
         }
-        Permission example = new Permission();
+        ObjPermission example = new ObjPermission();
         example.setCode(objCode);
         example = permissionMapper.selectOne(example);
         //不需要验证则通过
@@ -160,17 +160,17 @@ public class AuthorizeService {
             result.add(group);
             group.setGroupName(d.getName());
             group.setGroupCode(d.getCode());
-            example = new Example(Permission.class);
+            example = new Example(ObjPermission.class);
             example.setOrderByClause("SEQ_ORDER ASC");
             example.createCriteria().andEqualTo("domainCode", d.getCode())
                     .andEqualTo("defAuthOp", DEF_AUTH_OP_CHECK);
-            List<Permission> permissions = permissionMapper.selectByExample(example);
+            List<ObjPermission> objPermissions = permissionMapper.selectByExample(example);
             List<PermissionVo> permList = Collections.EMPTY_LIST;
             group.setPerms(permList);
-            if (permissions != null && permissions.size() != 0) {
-                permList = new ArrayList<>(permissions.size());
+            if (objPermissions != null && objPermissions.size() != 0) {
+                permList = new ArrayList<>(objPermissions.size());
                 group.setPerms(permList);
-                for (Permission o : permissions) {
+                for (ObjPermission o : objPermissions) {
                     PermissionVo p = forPermission(o, PermissionType.ROLE);
                     String op = p.getObjOperate();
                     p.setOperateName(opsMap.containsKey(op) ? opsMap.get(op) : op);
@@ -202,7 +202,7 @@ public class AuthorizeService {
         return rolePermCodes;
     }
 
-    private PermissionVo forPermission(Permission o, PermissionType type) {
+    private PermissionVo forPermission(ObjPermission o, PermissionType type) {
         PermissionVo p = new PermissionVo();
         p.setObjCode(o.getCode());
         p.setObjOperate(o.getOperate());

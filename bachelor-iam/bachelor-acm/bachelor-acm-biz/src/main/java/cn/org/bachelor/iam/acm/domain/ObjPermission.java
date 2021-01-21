@@ -3,8 +3,8 @@ package cn.org.bachelor.iam.acm.domain;
 import java.util.Date;
 import javax.persistence.*;
 
-@Table(name = "cmn_acm_permission")
-public class Permission {
+@Table(name = "cmn_acm_obj_permission")
+public class ObjPermission {
     /**
      * ID
      */

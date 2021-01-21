@@ -50,7 +50,7 @@ import java.util.*;
  * /user/refreshToken -> /user_sys/refreshToken
  * /user/logout       -> /user_sys/logout
  */
-@RequestMapping("/user_sys")
+@RequestMapping("/idm")
 public class UserSysController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserSysController.class);

@@ -99,10 +99,10 @@ INSERT INTO `cmn_acm_obj_operation` VALUES ('5', '获取注册服务', 'geteu', 
 INSERT INTO `cmn_acm_obj_operation` VALUES ('6', '获取注册服务实例', 'geteui', 'GET', b'0', '2019-03-05 14:24:10', 'system');
 
 -- ----------------------------
--- Table structure for cmn_acm_permission
+-- Table structure for cmn_acm_obj_permission
 -- ----------------------------
-DROP TABLE IF EXISTS `cmn_acm_permission`;
-CREATE TABLE `cmn_acm_permission`  (
+DROP TABLE IF EXISTS `cmn_acm_obj_permission`;
+CREATE TABLE `cmn_acm_obj_permission`  (
   `ID` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'ID',
   `NAME` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '对象名称',
   `CODE` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '对象编码',
@@ -122,45 +122,45 @@ CREATE TABLE `cmn_acm_permission`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of cmn_acm_permission
+-- Records of cmn_acm_obj_permission
 -- ----------------------------
-INSERT INTO `cmn_acm_permission` VALUES ('10', '错误测试', 'get:/exception/{type}/{msg}', '/exception/{type}/{msg}', 'query', 'i', 'role', 0, 'a', NULL, '2018-11-08 12:01:06', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('101', '获取用户角色', 'get:/roles/{userCode}', '/roles/{userCode}', 'get', 'i', 'role', 0, 'a', NULL, '2019-01-29 16:05:56', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('11', '获取组织机构', 'get:/orgs', '/orgs', 'query', 'i', 'sys', 0, 'a', NULL, '2018-11-14 18:14:46', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('12', '获取用户', 'get:/users', '/users', 'get', 'i', 'sys', 0, 'a', NULL, '2018-11-14 18:15:31', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('13', '获得全部权限', 'get:/permissions', '/permissions', 'get', 'i', 'sys', 1, 'a', NULL, '2018-11-15 18:15:00', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('15', '设置角色的权限', 'post:/role_permission/{role}', '/role_permission/{role}', 'post', 'i', 'sys', 3, 'a', NULL, '2018-11-17 18:15:00', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('16', '获得用户的权限', 'get:/user_permission/{user}', '/user_permission/{user}', 'get', 'i', 'sys', 4, 'a', NULL, '2018-11-18 18:15:00', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('17', '获得全部菜单', 'get:/menus', '/menus', 'get', 'i', 'sys', 5, 'a', NULL, '2018-11-19 18:15:00', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('18', '获得角色的菜单', 'get:/role_menu/{role}', '/role_menu/{role}', 'get', 'i', 'sys', 6, 'a', NULL, '2018-11-20 18:15:00', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('19', '设置角色的菜单', 'post:/role_menu/{role}', '/role_menu/{role}', 'post', 'i', 'sys', 7, 'a', NULL, '2018-11-21 18:15:00', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('20', '获得用户的菜单', 'get:/user_menu/{user}', '/user_menu/{user}', 'get', 'i', 'sys', 8, 'a', NULL, '2018-11-22 18:15:00', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('201', '指定提交的内容', 'get:/config/content/{commitId}', '/config/content/{commitId}', 'get', 'i', 'config', 201, 'a', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('202', '查看指定文件的提交日志记录', 'get:/config/log', '/config/log', 'get', 'i', 'config', 202, 'a', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('203', '根据文件名和所属阶段查找配置文件', 'get:/config/search', '/config/search', 'get', 'i', 'config', 203, 'a', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('204', '对比指定文件最新内容和指定提交的内容对比', 'get:/config/diff/{commitId}', '/config/diff/{commitId}', 'get', 'i', 'config', 204, 'a', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('205', '推送最新仓库到服务器', 'put:/config/push', '/config/push', 'put', 'i', 'config', 205, 'a', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('206', '显示目录下所有的配置文件', 'get:/config/all', '/config/all', 'get', 'i', 'config', 206, 'a', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('207', '获取所有服务的列表', 'get:/discovery/services', '/discovery/services', 'get', 'i', 'gateway', 207, 'a', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('208', '启动指定的服务实例', 'post:/discovery/service/{appID}/{instanceID}', '/discovery/service/{appID}/{instanceID}', 'post', 'i', 'gateway', 208, 'a', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('209', '启动指定的服务', 'post:/discovery/service/{appID}', '/discovery/service/{appID}', 'post', 'i', 'gateway', 209, 'a', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('21', '将用户从角色中删除', 'put:/role_user/{roleCode}', '/role_user/{roleCode}', 'update', 'i', 'sys', 9, 'a', NULL, '2018-11-23 18:15:00', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('210', '停止指定的服务实例', 'delete:/discovery/service/{appID}/{instanceID}', '/discovery/service/{appID}/{instanceID}', 'delete', 'i', 'gateway', 210, 'a', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('211', '停止指定的服务', 'delete:/discovery/service/{appID}', '/discovery/service/{appID}', 'delete', 'i', 'gateway', 211, 'a', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('212', '获取eureka服务的列表', 'get:/discovery/eureka', '/discovery/eureka', 'geteu', 'i', 'service', 212, 'c', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('213', '获取指定的eureka服务的实例信息', 'get:/discovery/eureka/info', '/discovery/eureka/info', 'geteui', 'i', 'service', 213, 'c', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('214', '获取指定全部的路由配置', 'get:/gateway/routes', '/gateway/routes', 'get', 'i', 'service', 214, 'l', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('215', '更新路由限流配置', 'put:/gateway/rate_limit', '/gateway/rate_limit', 'put', 'i', 'service', 215, 'a', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('216', '获取所有网关的实例信息', 'get:/gateway/list', '/gateway/list', 'get', 'i', 'service', 216, 'a', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('217', '获取指定网关的默认限流信息', 'get:/gateway/default_rate_limit', '/gateway/default_rate_limit', 'get', 'i', 'service', 217, 'a', NULL, '2008-11-01 12:00:01', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('22', '为角色增加用户', 'post:/role_user/{roleCode}', '/role_user/{roleCode}', 'post', 'i', 'sys', 10, 'a', NULL, '2018-11-24 18:15:00', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('23', '获取角色下的用户', 'get:/role_user/{roleCode}', '/role_user/{roleCode}', 'get', 'i', 'sys', 11, 'a', NULL, '2018-11-25 18:15:00', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('24', '修改角色', 'put:/role', '/role', 'update', 'i', 'sys', 12, 'a', NULL, '2018-11-26 18:15:00', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('25', '获得角色的权限', 'get:/role_permission/{role}', '/role_permission/{role}', 'get', 'i', 'role', 0, 'a', NULL, '2018-11-14 18:42:49', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('6', '删除角色', 'delete:/role/{roleID}', '/role/{roleID}', 'delete', 'i', 'role', 0, 'a', NULL, '2018-11-05 22:33:12', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('7', '角色查询', 'get:/roles', '/roles', 'get', 'i', 'role', 0, 'a', NULL, '2018-11-08 12:01:06', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('8', '获取单个角色', 'get:/role/{roleID}', '/role/{roleID}', 'get', 'i', 'role', 0, 'a', NULL, '2018-11-08 12:01:06', 'system');
-INSERT INTO `cmn_acm_permission` VALUES ('9', '创建角色', 'post:/role', '/role', 'create', 'i', 'role', 0, 'a', NULL, '2018-11-08 12:01:06', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('10', '错误测试', 'get:/exception/{type}/{msg}', '/exception/{type}/{msg}', 'query', 'i', 'role', 0, 'a', NULL, '2018-11-08 12:01:06', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('101', '获取用户角色', 'get:/roles/{userCode}', '/roles/{userCode}', 'get', 'i', 'role', 0, 'a', NULL, '2019-01-29 16:05:56', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('11', '获取组织机构', 'get:/orgs', '/orgs', 'query', 'i', 'sys', 0, 'a', NULL, '2018-11-14 18:14:46', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('12', '获取用户', 'get:/users', '/users', 'get', 'i', 'sys', 0, 'a', NULL, '2018-11-14 18:15:31', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('13', '获得全部权限', 'get:/objPermissions', '/objPermissions', 'get', 'i', 'sys', 1, 'a', NULL, '2018-11-15 18:15:00', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('15', '设置角色的权限', 'post:/role_permission/{role}', '/role_permission/{role}', 'post', 'i', 'sys', 3, 'a', NULL, '2018-11-17 18:15:00', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('16', '获得用户的权限', 'get:/user_permission/{user}', '/user_permission/{user}', 'get', 'i', 'sys', 4, 'a', NULL, '2018-11-18 18:15:00', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('17', '获得全部菜单', 'get:/menus', '/menus', 'get', 'i', 'sys', 5, 'a', NULL, '2018-11-19 18:15:00', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('18', '获得角色的菜单', 'get:/role_menu/{role}', '/role_menu/{role}', 'get', 'i', 'sys', 6, 'a', NULL, '2018-11-20 18:15:00', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('19', '设置角色的菜单', 'post:/role_menu/{role}', '/role_menu/{role}', 'post', 'i', 'sys', 7, 'a', NULL, '2018-11-21 18:15:00', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('20', '获得用户的菜单', 'get:/user_menu/{user}', '/user_menu/{user}', 'get', 'i', 'sys', 8, 'a', NULL, '2018-11-22 18:15:00', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('201', '指定提交的内容', 'get:/config/content/{commitId}', '/config/content/{commitId}', 'get', 'i', 'config', 201, 'a', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('202', '查看指定文件的提交日志记录', 'get:/config/log', '/config/log', 'get', 'i', 'config', 202, 'a', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('203', '根据文件名和所属阶段查找配置文件', 'get:/config/search', '/config/search', 'get', 'i', 'config', 203, 'a', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('204', '对比指定文件最新内容和指定提交的内容对比', 'get:/config/diff/{commitId}', '/config/diff/{commitId}', 'get', 'i', 'config', 204, 'a', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('205', '推送最新仓库到服务器', 'put:/config/push', '/config/push', 'put', 'i', 'config', 205, 'a', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('206', '显示目录下所有的配置文件', 'get:/config/all', '/config/all', 'get', 'i', 'config', 206, 'a', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('207', '获取所有服务的列表', 'get:/discovery/services', '/discovery/services', 'get', 'i', 'gateway', 207, 'a', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('208', '启动指定的服务实例', 'post:/discovery/service/{appID}/{instanceID}', '/discovery/service/{appID}/{instanceID}', 'post', 'i', 'gateway', 208, 'a', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('209', '启动指定的服务', 'post:/discovery/service/{appID}', '/discovery/service/{appID}', 'post', 'i', 'gateway', 209, 'a', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('21', '将用户从角色中删除', 'put:/role_user/{roleCode}', '/role_user/{roleCode}', 'update', 'i', 'sys', 9, 'a', NULL, '2018-11-23 18:15:00', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('210', '停止指定的服务实例', 'delete:/discovery/service/{appID}/{instanceID}', '/discovery/service/{appID}/{instanceID}', 'delete', 'i', 'gateway', 210, 'a', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('211', '停止指定的服务', 'delete:/discovery/service/{appID}', '/discovery/service/{appID}', 'delete', 'i', 'gateway', 211, 'a', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('212', '获取eureka服务的列表', 'get:/discovery/eureka', '/discovery/eureka', 'geteu', 'i', 'service', 212, 'c', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('213', '获取指定的eureka服务的实例信息', 'get:/discovery/eureka/info', '/discovery/eureka/info', 'geteui', 'i', 'service', 213, 'c', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('214', '获取指定全部的路由配置', 'get:/gateway/routes', '/gateway/routes', 'get', 'i', 'service', 214, 'l', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('215', '更新路由限流配置', 'put:/gateway/rate_limit', '/gateway/rate_limit', 'put', 'i', 'service', 215, 'a', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('216', '获取所有网关的实例信息', 'get:/gateway/list', '/gateway/list', 'get', 'i', 'service', 216, 'a', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('217', '获取指定网关的默认限流信息', 'get:/gateway/default_rate_limit', '/gateway/default_rate_limit', 'get', 'i', 'service', 217, 'a', NULL, '2008-11-01 12:00:01', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('22', '为角色增加用户', 'post:/role_user/{roleCode}', '/role_user/{roleCode}', 'post', 'i', 'sys', 10, 'a', NULL, '2018-11-24 18:15:00', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('23', '获取角色下的用户', 'get:/role_user/{roleCode}', '/role_user/{roleCode}', 'get', 'i', 'sys', 11, 'a', NULL, '2018-11-25 18:15:00', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('24', '修改角色', 'put:/role', '/role', 'update', 'i', 'sys', 12, 'a', NULL, '2018-11-26 18:15:00', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('25', '获得角色的权限', 'get:/role_permission/{role}', '/role_permission/{role}', 'get', 'i', 'role', 0, 'a', NULL, '2018-11-14 18:42:49', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('6', '删除角色', 'delete:/role/{roleID}', '/role/{roleID}', 'delete', 'i', 'role', 0, 'a', NULL, '2018-11-05 22:33:12', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('7', '角色查询', 'get:/roles', '/roles', 'get', 'i', 'role', 0, 'a', NULL, '2018-11-08 12:01:06', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('8', '获取单个角色', 'get:/role/{roleID}', '/role/{roleID}', 'get', 'i', 'role', 0, 'a', NULL, '2018-11-08 12:01:06', 'system');
+INSERT INTO `cmn_acm_obj_permission` VALUES ('9', '创建角色', 'post:/role', '/role', 'create', 'i', 'role', 0, 'a', NULL, '2018-11-08 12:01:06', 'system');
 
 -- ----------------------------
 -- Table structure for cmn_acm_org_menu
