@@ -1,1 +1,0 @@
-mvn clean install -f bachelor-dependencies && mvn clean install -f bachelor-fw && mvn clean install -f bachelor-oauth2 && mvn clean install -f bachelor-auth
