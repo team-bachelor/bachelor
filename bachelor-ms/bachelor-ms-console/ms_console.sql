@@ -302,48 +302,48 @@ INSERT INTO `cmn_acm_role_permission` VALUES ('129', 'post_jdzx', 'get:/baseTick
 INSERT INTO `cmn_acm_role_permission` VALUES ('131', 'certificate_unit_proposer', 'get:/user_menu/{user}', '/user_menu/{user}', 'get', '2019-01-16 15:43:44', 'system');
 INSERT INTO `cmn_acm_role_permission` VALUES ('132', 'certificate_unit_leader', 'get:/user_menu/{user}', '/user_menu/{user}', 'get', '2019-01-17 11:33:05', 'system');
 INSERT INTO `cmn_acm_role_permission` VALUES ('133', 'ticket_manager_leader', 'post:/takeTicketSecTrial', '/takeTicketSecTrial', 'post', '2019-01-17 13:56:15', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('134', 'certificate_unit_proposer', 'post:/addShipcertificateApply', '/addShipcertificateApply', 'post', '2018-12-08 16:04:06', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('135', 'certificate_unit_proposer', 'post:/updateShipcertificateApply', '/updateShipcertificateApply', 'post', '2018-12-08 16:08:26', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('136', 'certificate_unit_proposer', 'delete:/deleteShipcertificateApply', '/deleteShipcertificateApply', 'delete', '2018-12-08 16:08:50', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('137', 'certificate_unit_proposer', 'put:/revertShipcertificateApply', '/revertShipcertificateApply', 'put', '2018-12-08 16:09:10', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('138', 'certificate_unit_proposer', 'get:/shipcertificateApplyList', '/shipcertificateApplyList', 'get', '2018-12-08 16:09:28', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('139', 'certificate_unit_proposer', 'get:/shipcertificateApply/{serialNum}', '/shipcertificateApply/{serialNum}', 'get', '2018-12-08 16:09:50', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('140', 'certificate_unit_leader', 'get:/shipcertificateFirsttrialList', '/shipcertificateFirsttrialList', 'get', '2018-12-08 16:10:44', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('141', 'certificate_unit_leader', 'post:/shipcertificateFirsttrialApproval', '/shipcertificateFirsttrialApproval', 'post', '2018-12-08 16:11:13', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('142', 'certificate_unit_leader', 'post:/shipcertificateFirsttrialApprovalBatch', '/shipcertificateFirsttrialApprovalBatch', 'post', '2018-12-08 16:11:31', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('143', 'certificate_unit_leader', 'get:/shipcertificateFirsttrial/{serialNum}', '/shipcertificateFirsttrial/{serialNum}', 'get', '2018-12-08 16:11:55', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('144', 'certificate_manager_leader', 'get:/searchAllforSecTrial', '/searchAllforSecTrial', 'get', '2018-12-08 16:12:35', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('145', 'ticket_manager_leader', 'get:/getoneShipTicketSecTria/{serialNum}', '/getoneShipTicketSecTria/{serialNum}', 'get', '2018-12-14 21:40:31', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('146', 'certificate_manager_leader', 'post:/secTrialSingle', '/secTrialSingle', 'post', '2018-12-20 10:29:18', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('147', 'certificate_unit_proposer', 'get:/dictionary/getList/{diccode}', '/dictionary/getList/{diccode}', 'get', '2018-12-21 14:11:36', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('148', 'ticket_unit_proposer', 'get:/dictionary/getTicketList/{diccode}', '/dictionary/getTicketList/{diccode}', 'get', '2019-01-17 13:05:57', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('149', 'ticket_unit_proposer', 'get:/getTakeTicketApplyTable', '/getTakeTicketApplyTable', 'get', '2018-12-14 21:25:13', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('150', 'ticket_unit_proposer', 'post:/addTakeTicketApply', '/addTakeTicketApply', 'post', '2018-12-14 21:26:15', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('151', 'ticket_unit_proposer', 'delete:/deleteTakeTicketApply', '/deleteTakeTicketApply', 'delete', '2018-12-14 21:27:17', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('152', 'ticket_unit_proposer', 'put:/editTakeTicketApply', '/editTakeTicketApply', 'put', '2018-12-14 21:29:08', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('153', 'ticket_unit_proposer', 'get:/getTakeTicketApplyDetails/{serialNum}', '/getTakeTicketApplyDetails/{serialNum}', 'get', '2018-12-14 21:29:44', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('154', 'ticket_unit_proposer', 'put:/revertTakeTicketApply', '/revertTakeTicketApply', 'put', '2018-12-14 21:31:35', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('155', 'ticket_unit_leader', 'get:/taketicketFirtrialList', '/taketicketFirtrialList', 'get', '2018-12-14 21:32:30', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('156', 'ticket_unit_leader', 'post:/taketicketFirtrialApprovalAll', '/taketicketFirtrialApprovalAll', 'post', '2018-12-14 21:34:45', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('157', 'ticket_unit_leader', 'get:/takeTicketFirtrial/{serialNum}', '/takeTicketFirtrial/{serialNum}', 'get', '2018-12-14 21:35:26', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('158', 'ticket_unit_leader', 'post:/takeTicketFirtrialApproval', '/takeTicketFirtrialApproval', 'post', '2018-12-14 21:36:59', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('159', 'ticket_unit_leader', 'get:/getTakeTicketSecTrialTable', '/getTakeTicketSecTrialTable', 'get', '2018-12-14 21:37:35', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('160', 'ticket_manager_leader', 'get:/getTakeTicketSecTrialTable', '/getTakeTicketSecTrialTable', 'post', '2018-12-14 21:38:49', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('161', 'ticket_manager_leader', 'post:/shipTicketSecTrialApprovalAll', '/shipTicketSecTrialApprovalAll', 'post', '2018-12-14 21:39:20', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('162', 'certificate_manager_leader', 'get:/shipcertificateSectrial/{serialNum}', '/shipcertificateSectrial/{serialNum}', 'get', '2018-12-14 21:40:31', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('163', 'certificate_manager_leader', 'post:/secTrialBatch', '/secTrialBatch', 'post', '2018-12-21 16:52:57', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('164', 'certificate-cancel', 'get:/cancel', '/cancel', 'query', '2018-12-21 16:52:57', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('165', 'certificate-cancel', 'get:/findCancel', '/findCancel', 'query', '2018-12-21 16:52:57', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('166', 'certificate-cancel', 'put:/cancel', '/cancel', 'update', '2018-12-21 16:52:57', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('167', 'certificate-cancel', 'delete:/cancel', '/cancel', 'delete', '2018-12-21 16:52:57', 'system');
-INSERT INTO `cmn_auth_role_permission` VALUES ('34507b73-9cf7-4cfe-bc77-9558f3135f89', '2222', 'get:/discovery/eureka', '/discovery/eureka', 'geteu', '2019-03-10 20:23:44', 'liuxiujun');
-INSERT INTO `cmn_auth_role_permission` VALUES ('f97c2721-58b5-47fc-8ba7-65119de26524', 'normal_user', 'get:/discovery/eureka/info', '/discovery/eureka/info', 'geteui', '2019-03-05 21:17:36', 'liuxiujun');
+INSERT INTO `cmn_acm_role_permission` VALUES ('134', 'certificate_unit_proposer', 'post:/addShipcertificateApply', '/addShipcertificateApply', 'post', '2018-12-08 16:04:06', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('135', 'certificate_unit_proposer', 'post:/updateShipcertificateApply', '/updateShipcertificateApply', 'post', '2018-12-08 16:08:26', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('136', 'certificate_unit_proposer', 'delete:/deleteShipcertificateApply', '/deleteShipcertificateApply', 'delete', '2018-12-08 16:08:50', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('137', 'certificate_unit_proposer', 'put:/revertShipcertificateApply', '/revertShipcertificateApply', 'put', '2018-12-08 16:09:10', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('138', 'certificate_unit_proposer', 'get:/shipcertificateApplyList', '/shipcertificateApplyList', 'get', '2018-12-08 16:09:28', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('139', 'certificate_unit_proposer', 'get:/shipcertificateApply/{serialNum}', '/shipcertificateApply/{serialNum}', 'get', '2018-12-08 16:09:50', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('140', 'certificate_unit_leader', 'get:/shipcertificateFirsttrialList', '/shipcertificateFirsttrialList', 'get', '2018-12-08 16:10:44', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('141', 'certificate_unit_leader', 'post:/shipcertificateFirsttrialApproval', '/shipcertificateFirsttrialApproval', 'post', '2018-12-08 16:11:13', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('142', 'certificate_unit_leader', 'post:/shipcertificateFirsttrialApprovalBatch', '/shipcertificateFirsttrialApprovalBatch', 'post', '2018-12-08 16:11:31', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('143', 'certificate_unit_leader', 'get:/shipcertificateFirsttrial/{serialNum}', '/shipcertificateFirsttrial/{serialNum}', 'get', '2018-12-08 16:11:55', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('144', 'certificate_manager_leader', 'get:/searchAllforSecTrial', '/searchAllforSecTrial', 'get', '2018-12-08 16:12:35', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('145', 'ticket_manager_leader', 'get:/getoneShipTicketSecTria/{serialNum}', '/getoneShipTicketSecTria/{serialNum}', 'get', '2018-12-14 21:40:31', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('146', 'certificate_manager_leader', 'post:/secTrialSingle', '/secTrialSingle', 'post', '2018-12-20 10:29:18', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('147', 'certificate_unit_proposer', 'get:/dictionary/getList/{diccode}', '/dictionary/getList/{diccode}', 'get', '2018-12-21 14:11:36', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('148', 'ticket_unit_proposer', 'get:/dictionary/getTicketList/{diccode}', '/dictionary/getTicketList/{diccode}', 'get', '2019-01-17 13:05:57', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('149', 'ticket_unit_proposer', 'get:/getTakeTicketApplyTable', '/getTakeTicketApplyTable', 'get', '2018-12-14 21:25:13', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('150', 'ticket_unit_proposer', 'post:/addTakeTicketApply', '/addTakeTicketApply', 'post', '2018-12-14 21:26:15', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('151', 'ticket_unit_proposer', 'delete:/deleteTakeTicketApply', '/deleteTakeTicketApply', 'delete', '2018-12-14 21:27:17', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('152', 'ticket_unit_proposer', 'put:/editTakeTicketApply', '/editTakeTicketApply', 'put', '2018-12-14 21:29:08', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('153', 'ticket_unit_proposer', 'get:/getTakeTicketApplyDetails/{serialNum}', '/getTakeTicketApplyDetails/{serialNum}', 'get', '2018-12-14 21:29:44', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('154', 'ticket_unit_proposer', 'put:/revertTakeTicketApply', '/revertTakeTicketApply', 'put', '2018-12-14 21:31:35', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('155', 'ticket_unit_leader', 'get:/taketicketFirtrialList', '/taketicketFirtrialList', 'get', '2018-12-14 21:32:30', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('156', 'ticket_unit_leader', 'post:/taketicketFirtrialApprovalAll', '/taketicketFirtrialApprovalAll', 'post', '2018-12-14 21:34:45', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('157', 'ticket_unit_leader', 'get:/takeTicketFirtrial/{serialNum}', '/takeTicketFirtrial/{serialNum}', 'get', '2018-12-14 21:35:26', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('158', 'ticket_unit_leader', 'post:/takeTicketFirtrialApproval', '/takeTicketFirtrialApproval', 'post', '2018-12-14 21:36:59', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('159', 'ticket_unit_leader', 'get:/getTakeTicketSecTrialTable', '/getTakeTicketSecTrialTable', 'get', '2018-12-14 21:37:35', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('160', 'ticket_manager_leader', 'get:/getTakeTicketSecTrialTable', '/getTakeTicketSecTrialTable', 'post', '2018-12-14 21:38:49', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('161', 'ticket_manager_leader', 'post:/shipTicketSecTrialApprovalAll', '/shipTicketSecTrialApprovalAll', 'post', '2018-12-14 21:39:20', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('162', 'certificate_manager_leader', 'get:/shipcertificateSectrial/{serialNum}', '/shipcertificateSectrial/{serialNum}', 'get', '2018-12-14 21:40:31', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('163', 'certificate_manager_leader', 'post:/secTrialBatch', '/secTrialBatch', 'post', '2018-12-21 16:52:57', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('164', 'certificate-cancel', 'get:/cancel', '/cancel', 'query', '2018-12-21 16:52:57', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('165', 'certificate-cancel', 'get:/findCancel', '/findCancel', 'query', '2018-12-21 16:52:57', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('166', 'certificate-cancel', 'put:/cancel', '/cancel', 'update', '2018-12-21 16:52:57', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('167', 'certificate-cancel', 'delete:/cancel', '/cancel', 'delete', '2018-12-21 16:52:57', 'system');
+INSERT INTO `cmn_acm_role_permission` VALUES ('34507b73-9cf7-4cfe-bc77-9558f3135f89', '2222', 'get:/discovery/eureka', '/discovery/eureka', 'geteu', '2019-03-10 20:23:44', 'liuxiujun');
+INSERT INTO `cmn_acm_role_permission` VALUES ('f97c2721-58b5-47fc-8ba7-65119de26524', 'normal_user', 'get:/discovery/eureka/info', '/discovery/eureka/info', 'geteui', '2019-03-05 21:17:36', 'liuxiujun');
 
 -- ----------------------------
--- Table structure for cmn_auth_user_menu
+-- Table structure for cmn_acm_user_menu
 -- ----------------------------
-DROP TABLE IF EXISTS `cmn_auth_user_menu`;
-CREATE TABLE `cmn_auth_user_menu`  (
+DROP TABLE IF EXISTS `cmn_acm_user_menu`;
+CREATE TABLE `cmn_acm_user_menu`  (
   `ID` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'ID',
   `USER_CODE` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户编码',
   `MENU_CODE` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '菜单编码',
@@ -353,10 +353,10 @@ CREATE TABLE `cmn_auth_user_menu`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for cmn_auth_user_permission
+-- Table structure for cmn_acm_user_permission
 -- ----------------------------
-DROP TABLE IF EXISTS `cmn_auth_user_permission`;
-CREATE TABLE `cmn_auth_user_permission`  (
+DROP TABLE IF EXISTS `cmn_acm_user_permission`;
+CREATE TABLE `cmn_acm_user_permission`  (
   `ID` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'ID',
   `USER_CODE` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户编码',
   `OBJ_CODE` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '对象编码',
@@ -369,15 +369,15 @@ CREATE TABLE `cmn_auth_user_permission`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of cmn_auth_user_permission
+-- Records of cmn_acm_user_permission
 -- ----------------------------
-INSERT INTO `cmn_auth_user_permission` VALUES ('1', 'liuzhuo', 'put:/manage/user', 'manage/user', 'create', '2018-10-22 19:24:47', 'system');
+INSERT INTO `cmn_acm_user_permission` VALUES ('1', 'liuzhuo', 'put:/manage/user', 'manage/user', 'create', '2018-10-22 19:24:47', 'system');
 
 -- ----------------------------
--- Table structure for cmn_auth_user_role
+-- Table structure for cmn_acm_user_role
 -- ----------------------------
-DROP TABLE IF EXISTS `cmn_auth_user_role`;
-CREATE TABLE `cmn_auth_user_role`  (
+DROP TABLE IF EXISTS `cmn_acm_user_role`;
+CREATE TABLE `cmn_acm_user_role`  (
   `ID` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'ID',
   `USER_ID` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户系统ID',
   `USER_CODE` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户编码',
@@ -389,10 +389,10 @@ CREATE TABLE `cmn_auth_user_role`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of cmn_auth_user_role
+-- Records of cmn_acm_user_role
 -- ----------------------------
-INSERT INTO `cmn_auth_user_role` VALUES ('1854a30e-f0e5-4ada-8aa8-b7876350ea18', 'b164e961f4c3450bbbf2717cbb73a7b1', 'linmingxiong', 'bfds4', '2019-03-05 23:25:52', 'system');
-INSERT INTO `cmn_auth_user_role` VALUES ('62063125-75c0-4520-947b-e516cd5feb81', 'dadc2fa472e244a6bbf48b3308dad892', 'zhangsan02', 'bfds4', '2019-03-05 23:26:00', 'system');
-INSERT INTO `cmn_auth_user_role` VALUES ('cef5d55d-c558-41dc-8db3-781781ca37ff', '285ecf9e1a3a4843a1793b2397af082b', 'sunxiangyou', 'testRole', '2019-03-13 13:27:38', 'system');
+INSERT INTO `cmn_acm_user_role` VALUES ('1854a30e-f0e5-4ada-8aa8-b7876350ea18', 'b164e961f4c3450bbbf2717cbb73a7b1', 'linmingxiong', 'bfds4', '2019-03-05 23:25:52', 'system');
+INSERT INTO `cmn_acm_user_role` VALUES ('62063125-75c0-4520-947b-e516cd5feb81', 'dadc2fa472e244a6bbf48b3308dad892', 'zhangsan02', 'bfds4', '2019-03-05 23:26:00', 'system');
+INSERT INTO `cmn_acm_user_role` VALUES ('cef5d55d-c558-41dc-8db3-781781ca37ff', '285ecf9e1a3a4843a1793b2397af082b', 'sunxiangyou', 'testRole', '2019-03-13 13:27:38', 'system');
 
 SET FOREIGN_KEY_CHECKS = 1;

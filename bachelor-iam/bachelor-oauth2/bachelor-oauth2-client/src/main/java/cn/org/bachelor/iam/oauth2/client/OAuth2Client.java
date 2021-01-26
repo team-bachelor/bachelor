@@ -488,7 +488,7 @@ public class OAuth2Client {
         boolean flag = false;
         Object obj = request.getSession().getAttribute(ClientConstant.SESSIONAUTHENTICATIONKEY);
         logger.info("进入登录验证========> 登录后的令牌信息：=" + obj);
-        //logger.info("当前登录用户 userId:" + UpUtil.getCurrentUserId());
+        //logger.info("当前登录用户 userId:" + ClientUtil.getCurrentUserId());
         if (obj instanceof OAuth2ClientCertification) {
             OAuth2ClientCertification my = (OAuth2ClientCertification) obj;
             String userid = my.getUserid();

@@ -18,6 +18,8 @@ spring:
       discovery:
         locator:
           enabled: true
+  messages:
+    basename: i18n/messages
 
 #    config:
 #      name: gateway
@@ -31,7 +33,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 server:
-  port: 8889
+  port: 8888
 #  connection-timeout: 1000
 feign:
   hystrix:

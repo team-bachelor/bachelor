@@ -18,11 +18,11 @@
         <skipTests>true</skipTests>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>com.nimbusds</groupId>
-            <artifactId>nimbus-jose-jwt</artifactId>
-            <version>9.4.1</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.nimbusds</groupId>-->
+<!--            <artifactId>nimbus-jose-jwt</artifactId>-->
+<!--            <version>9.4.1</version>-->
+<!--        </dependency>-->
         <!-- Spring Boot Redis 依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

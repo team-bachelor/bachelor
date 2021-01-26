@@ -1,11 +1,11 @@
-package cn.org.bachelor.iam.acm.vo;
+package cn.org.bachelor.iam.acm.permission;
 
 /**
  * @描述: 权限的DTO
  * @创建人: liuzhuo
  * @创建时间: 2018/10/22
  */
-public class PermissionVo {
+public class PermissionPoint {
     /**
      * ID
      */
@@ -44,17 +44,17 @@ public class PermissionVo {
     /**
      * 权限类型(与哪个实体关联)
      */
-    private PermissionType type;
+    private PermissionModel type;
 
     /**
      * 权限所有者
      */
     private String owner;
 
-    public PermissionVo() {
+    public PermissionPoint() {
     }
 
-    public PermissionVo(
+    public PermissionPoint(
             String id, String permCode,
             String objCode,
             String objUri,
@@ -104,11 +104,11 @@ public class PermissionVo {
         this.id = id;
     }
 
-    public PermissionType getType() {
+    public PermissionModel getType() {
         return type;
     }
 
-    public void setType(PermissionType type) {
+    public void setType(PermissionModel type) {
         this.type = type;
     }
 

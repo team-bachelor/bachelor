@@ -5,11 +5,11 @@ import cn.org.bachelor.iam.acm.AuthValueHolderService;
 import cn.org.bachelor.iam.acm.dao.*;
 import cn.org.bachelor.iam.acm.domain.*;
 import cn.org.bachelor.iam.acm.domain.ObjPermission;
-import cn.org.bachelor.iam.acm.vo.PermissionVo;
+import cn.org.bachelor.iam.acm.permission.PermissionPoint;
 import cn.org.bachelor.iam.acm.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
-import cn.org.bachelor.iam.acm.vo.PermissionGroup;
-import cn.org.bachelor.iam.acm.vo.PermissionType;
+import cn.org.bachelor.iam.acm.permission.PermissionGroup;
+import cn.org.bachelor.iam.acm.permission.PermissionModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +82,7 @@ public class AuthorizeService {
             //需要验证则验证
             if (DEF_AUTH_OP_CHECK.equals(example.getDefAuthOp())) {
                 if (StringUtil.isNotEmpty(userCode)) {
-                    Map<String, PermissionVo> permMap = calUserPermission(userCode);
+                    Map<String, PermissionPoint> permMap = calUserPermission(userCode);
                     if (permMap.containsKey(objCode)) {
                         return true;
                     }
@@ -97,9 +97,9 @@ public class AuthorizeService {
      * @param userCode 用户编码
      * @return 用户权限
      */
-    public Map<String, PermissionVo> calUserPermission(String userCode) {
+    public Map<String, PermissionPoint> calUserPermission(String userCode) {
 
-        Map<String, PermissionVo> result = new HashMap<>();
+        Map<String, PermissionPoint> result = new HashMap<>();
         boolean isadmin = false;
         if (userCode.equals(valueHolder.getCurrentUser().getCode())
                 && valueHolder.getCurrentUser().isAdministrator()) {
@@ -109,7 +109,7 @@ public class AuthorizeService {
         if (isadmin) {
             List<PermissionGroup> pglist = getPermissionGroupList(null);
             for (PermissionGroup pg : pglist) {
-                for (PermissionVo p : pg.getPerms()) {
+                for (PermissionPoint p : pg.getPerms()) {
                     result.put(p.getObjCode(), p);
                 }
             }
@@ -122,7 +122,7 @@ public class AuthorizeService {
                 continue;
             }
             result.put(p.getObjCode(),
-                    new PermissionVo(p.getId(), p.getObjCode(), p.getObjCode(),
+                    new PermissionPoint(p.getId(), p.getObjCode(), p.getObjCode(),
                             p.getObjUri(), p.getObjOperate()));
         }
 
@@ -132,7 +132,7 @@ public class AuthorizeService {
                 continue;
             }
             result.put(p.getObjCode(),
-                    new PermissionVo(p.getId(), p.getObjCode(), p.getObjCode(),
+                    new PermissionPoint(p.getId(), p.getObjCode(), p.getObjCode(),
                             p.getObjUri(), p.getObjOperate()));
         }
         return result;
@@ -165,13 +165,13 @@ public class AuthorizeService {
             example.createCriteria().andEqualTo("domainCode", d.getCode())
                     .andEqualTo("defAuthOp", DEF_AUTH_OP_CHECK);
             List<ObjPermission> objPermissions = permissionMapper.selectByExample(example);
-            List<PermissionVo> permList = Collections.EMPTY_LIST;
+            List<PermissionPoint> permList = Collections.EMPTY_LIST;
             group.setPerms(permList);
             if (objPermissions != null && objPermissions.size() != 0) {
                 permList = new ArrayList<>(objPermissions.size());
                 group.setPerms(permList);
                 for (ObjPermission o : objPermissions) {
-                    PermissionVo p = forPermission(o, PermissionType.ROLE);
+                    PermissionPoint p = forPermission(o, PermissionModel.ROLE);
                     String op = p.getObjOperate();
                     p.setOperateName(opsMap.containsKey(op) ? opsMap.get(op) : op);
                     permList.add(p);
@@ -202,8 +202,8 @@ public class AuthorizeService {
         return rolePermCodes;
     }
 
-    private PermissionVo forPermission(ObjPermission o, PermissionType type) {
-        PermissionVo p = new PermissionVo();
+    private PermissionPoint forPermission(ObjPermission o, PermissionModel type) {
+        PermissionPoint p = new PermissionPoint();
         p.setObjCode(o.getCode());
         p.setObjOperate(o.getOperate());
         p.setObjUri(o.getUri());
@@ -216,7 +216,7 @@ public class AuthorizeService {
      * @param perms    当前角色拥有的所有权限列表
      * @author liuzhuo
      */
-    public void setRolePermission(String roleCode, List<PermissionVo> perms) {
+    public void setRolePermission(String roleCode, List<PermissionPoint> perms) {
         //设置查询的样例
         RolePermission rp = new RolePermission();
         rp.setRoleCode(roleCode);
@@ -228,7 +228,7 @@ public class AuthorizeService {
             rpDB.put(r.getObjCode(), r);
         }
         //获取需要插入数据库的权限
-        for (PermissionVo r : perms) {
+        for (PermissionPoint r : perms) {
             // rpParam.put(r.getObjCode(), r);
             //判断数据库中是否已经存在该权限
             if (rpDB.containsKey(r.getObjCode())) {
@@ -250,7 +250,7 @@ public class AuthorizeService {
         }
     }
 
-    private RolePermission forRolePermission(String operator, String roleCode, PermissionVo r) {
+    private RolePermission forRolePermission(String operator, String roleCode, PermissionPoint r) {
         RolePermission rp = new RolePermission();
         rp.setId(UUID.randomUUID().toString());
         rp.setRoleCode(roleCode);
@@ -288,7 +288,7 @@ public class AuthorizeService {
      * @param perms 当前机构拥有的所有权限列表
      * @author liuzhuo
      */
-    public void setOrgPermission(String orgId, List<PermissionVo> perms) {
+    public void setOrgPermission(String orgId, List<PermissionPoint> perms) {
         //设置查询的样例
         OrgPermission rp = new OrgPermission();
         rp.setOrgCode(orgId);
@@ -300,7 +300,7 @@ public class AuthorizeService {
             rpDB.put(r.getObjCode(), r);
         }
         //获取需要插入数据库的权限
-        for (PermissionVo r : perms) {
+        for (PermissionPoint r : perms) {
             // rpParam.put(r.getObjCode(), r);
             //判断数据库中是否已经存在该权限
             if (rpDB.containsKey(r.getObjCode())) {
@@ -322,7 +322,7 @@ public class AuthorizeService {
         }
     }
 
-    private OrgPermission forOrgPermission(String operator, String orgCode, PermissionVo r) {
+    private OrgPermission forOrgPermission(String operator, String orgCode, PermissionPoint r) {
         OrgPermission rp = new OrgPermission();
         rp.setId(UUID.randomUUID().toString());
         rp.setOrgCode(orgCode);

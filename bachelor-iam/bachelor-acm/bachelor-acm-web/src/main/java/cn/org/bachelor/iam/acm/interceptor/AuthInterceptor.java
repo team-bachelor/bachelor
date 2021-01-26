@@ -61,8 +61,13 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         }
 
         UserVo user = valueHolder.getCurrentUser();
-        boolean pass = user.isAdministrator() ? true : authorizeService.isAuthorized(permCode, user.getCode());
-        logger.info("access path=[" + requestPath + "], from=[" + valueHolder.getRemoteIP() + "]user=[" + user.getCode() + "], is authorized=[" + pass + "]");
+        boolean pass = user == null ? false : user.isAdministrator() ? true : authorizeService.isAuthorized(permCode, user.getCode());
+
+        String usercode = "";
+        if(user != null){
+            usercode = user.getCode();
+        }
+        logger.info("access path=[" + requestPath + "], from=[" + valueHolder.getRemoteIP() + "]user=[" + usercode + "], is authorized=[" + pass + "]");
         if (!pass) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             try {

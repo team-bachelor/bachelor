@@ -1,7 +1,9 @@
 package cn.org.bachelor.iam.acm.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "cmn_acm_obj_permission")
 public class ObjPermission {
@@ -47,8 +49,6 @@ public class ObjPermission {
      */
     @Column(name = "DOMAIN_CODE")
     private String domainCode;
-
-    private String domainName;
 
     /**
      * 是否系统默认
@@ -292,19 +292,11 @@ public class ObjPermission {
         this.comment = comment;
     }
 
-    public Boolean getSys() {
+    public Boolean isSys() {
         return isSys;
     }
 
-    public void setSys(Boolean sys) {
-        isSys = sys;
-    }
-
-    public String getDomainName() {
-        return domainName;
-    }
-
-    public void setDomainName(String domainName) {
-        this.domainName = domainName;
+    public void setIsSys(Boolean isSys) {
+        isSys = isSys;
     }
 }

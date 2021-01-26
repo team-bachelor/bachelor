@@ -9,7 +9,7 @@ import cn.org.bachelor.iam.acm.domain.Menu;
 import cn.org.bachelor.iam.acm.domain.OrgMenu;
 import cn.org.bachelor.iam.acm.domain.RoleMenu;
 import cn.org.bachelor.iam.acm.vo.MenuVo;
-import cn.org.bachelor.iam.acm.vo.PermissionType;
+import cn.org.bachelor.iam.acm.permission.PermissionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -48,15 +48,15 @@ public class MenuService {
             userCode = null;
         }
         if (StringUtils.isEmpty(userCode)) {
-            return getMenuVoList(userCode, PermissionType.USER, null);
+            return getMenuVoList(userCode, PermissionModel.USER, null);
         } else {
             List<RoleMenu> rmList = roleMenuMapper.selectViaUserCode(userCode);
-            return calRoleMenu(userCode, PermissionType.USER, rmList);
+            return calRoleMenu(userCode, PermissionModel.USER, rmList);
         }
 
     }
 
-    private List<MenuVo> calRoleMenu(String owner, PermissionType type, List<RoleMenu> rmList) {
+    private List<MenuVo> calRoleMenu(String owner, PermissionModel type, List<RoleMenu> rmList) {
         if (rmList.size() == 0) {
             return Collections.emptyList();
         }
@@ -67,7 +67,7 @@ public class MenuService {
         return getMenuVoList(owner, type, menuCodes);
     }
 
-    private List<MenuVo> getMenuVoList(String owner, PermissionType type, List<String> menuCodes) {
+    private List<MenuVo> getMenuVoList(String owner, PermissionModel type, List<String> menuCodes) {
         Example example = new Example(Menu.class);
         example.setOrderByClause("PARENT_ID, SEQ_ORDER ASC");
         if (menuCodes != null && menuCodes.size() != 0) {
@@ -77,7 +77,7 @@ public class MenuService {
         return getMenuVo(owner, type, menus);
     }
 
-    private List<MenuVo> getMenuVo(String owner, PermissionType type, List<Menu> menus) {
+    private List<MenuVo> getMenuVo(String owner, PermissionModel type, List<Menu> menus) {
         Map<String, MenuVo> menuMap = new LinkedHashMap<>(menus.size());
 
         for (Menu m : menus) {
@@ -99,7 +99,7 @@ public class MenuService {
         return result;
     }
 
-    private MenuVo toMenuVo(String owner, PermissionType type, boolean has, Menu m, MenuVo parent) {
+    private MenuVo toMenuVo(String owner, PermissionModel type, boolean has, Menu m, MenuVo parent) {
         MenuVo mv = new MenuVo(
                 m.getId(),
                 m.getCode(),
@@ -236,7 +236,7 @@ public class MenuService {
             if (menuVoMap.containsKey(m.getParentId())) {
                 parent = menuVoMap.get(m.getParentId());
             }
-            MenuVo mvo = toMenuVo(null, PermissionType.ROLE, false, m, parent);
+            MenuVo mvo = toMenuVo(null, PermissionModel.ROLE, false, m, parent);
             if (parent != null)
                 parent.getSubMenus().add(mvo);
             menuVoMap.put(m.getId(), mvo);

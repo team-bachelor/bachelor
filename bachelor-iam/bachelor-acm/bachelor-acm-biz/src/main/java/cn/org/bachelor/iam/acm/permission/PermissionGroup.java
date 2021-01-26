@@ -1,4 +1,4 @@
-package cn.org.bachelor.iam.acm.vo;
+package cn.org.bachelor.iam.acm.permission;
 
 import java.util.List;
 
@@ -29,13 +29,13 @@ public class PermissionGroup {
         this.groupName = groupName;
     }
 
-    public List<PermissionVo> getPerms() {
+    public List<PermissionPoint> getPerms() {
         return perms;
     }
 
-    public void setPerms(List<PermissionVo> perms) {
+    public void setPerms(List<PermissionPoint> perms) {
         this.perms = perms;
     }
 
-    private List<PermissionVo> perms;
+    private List<PermissionPoint> perms;
 }

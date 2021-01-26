@@ -1,5 +1,6 @@
 package cn.org.bachelor.iam.acm.vo;
 
+import cn.org.bachelor.iam.acm.permission.PermissionModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class MenuVo {
     /**
      * 权限类型(与哪个实体关联)
      */
-    private PermissionType type;
+    private PermissionModel type;
 
     /**
      * 权限所有者
@@ -38,7 +39,7 @@ public class MenuVo {
                   String uri,
                   String icon,
                   String comment,
-                  PermissionType type,
+                  PermissionModel type,
                   MenuVo parent,
                   List<MenuVo> subMenus) {
         this.id = id;
@@ -118,11 +119,11 @@ public class MenuVo {
         this.has = has;
     }
 
-    public PermissionType getType() {
+    public PermissionModel getType() {
         return type;
     }
 
-    public void setType(PermissionType type) {
+    public void setType(PermissionModel type) {
         this.type = type;
     }
 

@@ -1,6 +1,7 @@
 package cn.org.bachelor.iam.acm.dao;
 
 import cn.org.bachelor.iam.acm.domain.ObjPermission;
+import cn.org.bachelor.iam.acm.vo.ObjPermissionVo;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
@@ -39,6 +40,6 @@ public interface PermissionMapper extends Mapper<ObjPermission> {
             @Result(property = "domainCode", column = "DOMAIN_CODE"),
             @Result(property = "domainName", column = "DOMAIN_NAME")
     })
-    List<ObjPermission> findAllForType(String type);
+    List<ObjPermissionVo> findAllForType(String type);
 
 }

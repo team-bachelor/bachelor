@@ -14,6 +14,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Primary;
 
 /**
  * @ClassName GatewayApplication
@@ -36,6 +37,7 @@ public class GatewayApplication {
     }
 
     @Bean
+    @Primary
     public RateLimiter inMemoryRateLimiter(){
         return new InMemoryRateLimiter();
     }

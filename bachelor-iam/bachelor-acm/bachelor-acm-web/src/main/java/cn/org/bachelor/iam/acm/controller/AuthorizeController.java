@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.acm.controller;
 
-import cn.org.bachelor.iam.acm.vo.PermissionVo;
+import cn.org.bachelor.iam.acm.permission.PermissionPoint;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -39,7 +39,7 @@ public class AuthorizeController {
             @ApiImplicitParam(name = "perms", value = "要设置给角色的权限", paramType = "body", required = true)
     })
     @RequestMapping(value = "/role_permission/{role}", method = RequestMethod.POST)
-    public ResponseEntity setRolePermission(@PathVariable("role") String role, @RequestBody List<PermissionVo> perms) {
+    public ResponseEntity setRolePermission(@PathVariable("role") String role, @RequestBody List<PermissionPoint> perms) {
         authorizeService.setRolePermission(role, perms);
         return JsonResponse.createHttpEntity(HttpStatus.OK);
     }
@@ -70,7 +70,7 @@ public class AuthorizeController {
             @ApiImplicitParam(name = "perms", value = "要设置给机构的权限", paramType = "body", required = true)
     })
     @RequestMapping(value = "/org_permission/{org}", method = RequestMethod.POST)
-    public ResponseEntity setOrgPermission(@PathVariable("org") String org, @RequestBody List<PermissionVo> perms) {
+    public ResponseEntity setOrgPermission(@PathVariable("org") String org, @RequestBody List<PermissionPoint> perms) {
         authorizeService.setOrgPermission(org, perms);
         return JsonResponse.createHttpEntity(HttpStatus.OK);
     }

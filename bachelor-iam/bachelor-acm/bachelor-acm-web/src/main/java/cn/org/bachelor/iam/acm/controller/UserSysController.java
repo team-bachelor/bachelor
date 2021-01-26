@@ -166,13 +166,17 @@ public class UserSysController {
     }
 
 
-    @Value("${spring.application.portal-code}")
+    @Value("${spring.application.portal-code:''}")
     private String portalCode;
     @ApiOperation(value = "获取跳转会portal的地址")
     @RequestMapping(value = "/app/portal/url", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getPortalURL() {
-        AppVo app = userSysService.findAppsByCode(portalCode);
-        return JsonResponse.createHttpEntity(app == null ? "" : app.getUrl());
+        if(portalCode == null || "".equalsIgnoreCase(portalCode))
+            return JsonResponse.createHttpEntity(HttpStatus.NOT_FOUND);
+        else {
+            AppVo app = userSysService.findAppsByCode(portalCode);
+            return JsonResponse.createHttpEntity(app == null ? "" : app.getUrl());
+        }
     }
 
     @ApiOperation(value = "根据app的编码获取app详细信息")
