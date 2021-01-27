@@ -1,0 +1,176 @@
+$bg-color: #FFFFFF;
+$headerBgColor: #2265be;
+$headerHeight: 60px;
+$asideBgColor: #f9f9f9;
+$mainBgColor: #FFF;
+
+.lx-container{
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  flex-basis: auto;
+  box-sizing: border-box;
+  min-width: 0;
+  font-family: 'Microsoft YaHei';
+}
+
+.lx-container.lx-vertical{
+  flex-direction: column;
+}
+.lx-container.lx-full{
+  height: 100vh;
+}
+.lx-header, .lx-footer{
+  background-color: $headerBgColor;
+}
+.lx-header{
+  height: $headerHeight;
+  line-height: 60px;
+  box-sizing: border-box;
+  padding: 0 30px 0 0;
+  flex-shrink: 0;
+  color: #fff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.44);
+  z-index: 60;
+  display: flex;
+  justify-content: space-between;
+  a{
+    color: #555;
+    text-decoration: none;
+  }
+}
+.lx-header{
+  .logo{
+    padding: 0 35px;
+    background: #1b4aa6;
+    font-size: 22px;
+  }
+}
+.lx-main{
+  overflow: auto;
+  box-sizing: border-box;
+}
+.lx-aside{
+  background-color: $asideBgColor;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  position: relative;
+  .el-scrollbar__bar.is-vertical{
+    right: 0px;
+  }
+}
+.lx-menu{
+  flex: 1;
+  width: 205px;
+  transition: width 0.4s;
+  overflow-x: hidden!important;
+  .el-scrollbar__view {
+    height: 100%;
+    border-right: 1px solid #eee;
+  }
+  .horizontal-collapse-transition {
+    transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
+  }
+  .el-submenu__title:hover,
+  .el-menu-item:hover{
+    background: #ebf1fe!important;
+  }
+  .el-menu{
+    border-right: none;
+  }
+  .el-scrollbar__bar.is-vertical{
+    right: 0px;
+  }
+  .el-menu-item i{
+    margin-right: 5px;
+    width: 24px;
+    text-align: center;
+    font-size: 18px;
+    vertical-align: middle;
+  }
+  .el-menu-item.is-active{
+    color: #1b4aa6;
+  }
+  &.collapsed{
+    width: 44px;
+    .el-tooltip {
+      padding: 10px !important;
+    }
+    .el-submenu {
+      overflow: hidden;
+      &>.el-submenu__title {
+        padding-left: 10px !important;
+        .el-submenu__icon-arrow {
+          display: none;
+        }
+      }
+    }
+    .el-menu--collapse {
+      width: 44px;
+      .el-submenu {
+        &>.el-submenu__title {
+          &>span {
+            height: 0;
+            width: 0;
+            overflow: hidden;
+            visibility: hidden;
+            display: inline-block;
+          }
+        }
+      }
+    }
+  }
+}
+.el-submenu__title i{
+  color: #333;
+}
+.lx-status{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #e2e5e8;
+  padding: 5px 10px;
+  color: #aaa;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  .fa{
+    font-size: 15px;
+  }
+}
+.lx-breadcrumb{
+  padding: 15px;
+  height: 16px;
+  line-height: 16px;
+}
+.lx-menu-ctrl{
+  display: block;
+  float: left;
+  color: #555;
+  position: relative;
+  top: -1px;
+  margin-right: 10px;
+  text-decoration: none;
+}
+.lx-main{
+  background-color: $mainBgColor;
+  flex: 1;
+  flex-basis: auto;
+  box-sizing: border-box;
+  padding: 20px;
+}
+.lx-common-view{
+  position: fixed;
+  z-index: 51;
+  top: $headerHeight;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-color: rgba(238, 238, 238, 0.96);
+}

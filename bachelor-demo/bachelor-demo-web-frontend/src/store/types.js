@@ -1,0 +1,14 @@
+export const SET_ATTR = 'SET_ATTR';
+export const CLEAR_TOKEN = 'CLEAR_TOKEN';
+export const SET_TOKEN = 'SET_TOKEN';
+export const TOGGLE_COMMON_VIEW = 'TOGGLE_COMMON_VIEW';
+export const INIT = 'INIT';
+export const FETCH_USERINFO = 'FETCH_USERINFO';
+export const FETCH_PERMISSION = 'FETCH_PERMISSION';
+export const FETCH_USERROLE = 'FETCH_USERROLE';
+export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
+export const FETCH_MENU = 'FETCH_MENU';
+export const SETTING_MENU = 'SET_MENU';
+export const ROUTER_LIST = 'ROUTER_LIST';
+export const DEFAULT_LIST = 'DEFAULT_LIST';
+export const CLEAR_ROUTER_LIST = 'CLEAR_ROUTER_LIST';
