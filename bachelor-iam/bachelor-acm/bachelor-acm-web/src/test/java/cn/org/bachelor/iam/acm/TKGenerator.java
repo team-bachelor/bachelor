@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @ClassName TKGenerator
- * @Description:
- * @Author Alexhendar
- * @Date 2018/10/9 12:38
- * @Version 1.0
+ * @description
+ * @author Alexhendar
+ * @date 2018/10/9 12:38
+ * @version 1.0
  **/
 public class TKGenerator {
 

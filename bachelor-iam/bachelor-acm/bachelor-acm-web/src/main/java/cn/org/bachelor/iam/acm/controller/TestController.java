@@ -32,6 +32,8 @@ public class TestController {
 
     /**
      * 下面都是测试用的
+     * @param user
+     * @return
      */
 
     @HystrixCommand(//fallbackMethod = "hiError",
@@ -63,6 +65,10 @@ public class TestController {
         return JsonResponse.createHttpEntity(permList);
     }
 
+    /**
+     * @param user
+     * @return
+     */
     public HttpEntity<JsonResponse> hiError(String user) {
         return JsonResponse.createHttpEntity("hi," + user + ",sorry,error!");
     }

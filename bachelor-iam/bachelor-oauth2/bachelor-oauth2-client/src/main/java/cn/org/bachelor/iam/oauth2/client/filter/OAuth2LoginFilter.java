@@ -59,7 +59,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
  */
 //@Component
 @ServletComponentScan
-@WebFilter(urlPatterns = "/*", filterName = "upFilter")
+@WebFilter(urlPatterns = "/*", filterName = "oauth2LoginFilter")
 public class OAuth2LoginFilter implements Filter {
 
     @Autowired
@@ -92,21 +92,21 @@ public class OAuth2LoginFilter implements Filter {
         response.setCharacterEncoding("UTF-8");
         OAuth2Client client = new OAuth2Client(config, (HttpServletRequest) request, (HttpServletResponse) response);
         if (logger.isDebugEnabled()) {
-            logger.debug("UpFilter session hashcode:" + ((HttpServletRequest) request).getSession());
+            logger.debug("session hashcode:" + ((HttpServletRequest) request).getSession());
         }
         try {
             String requestURI = ((HttpServletRequest) request).getRequestURI();
             if (client.isLogin((HttpServletRequest) request)) {
-                logger.info("UpFilter 进入登录方法isLogin()----url:" + requestURI);
+                logger.info("进入登录方法isLogin()----url:" + requestURI);
                 setLogon((HttpServletResponse) response, true);
                 chain.doFilter(client.request(), response);
-                logger.info("UpFilter isLogin方法通过");
+                logger.info("isLogin方法通过");
                 return;
             } else if (client.isExcluded(EXCEPT_PATTERNS, EXCEPT_PARAMS, (HttpServletRequest) request)) {
-                logger.info("UpFilter url匹配----url:" + requestURI);
-                logger.debug("UpFilter isExcluded");
+                logger.info("url匹配----url:" + requestURI);
+                logger.debug("isExcluded");
                 chain.doFilter(request, response);
-                logger.info("UpFilter url匹配成功通过");
+                logger.info("url匹配成功通过");
                 return;
             } else if ("zmitiApp".equals(((HttpServletRequest) request).getHeader("X-Requested-By"))) {
                 //防止做ajax请求的静态页面登录超时僵死在那
@@ -119,30 +119,30 @@ public class OAuth2LoginFilter implements Filter {
                 logger.info("操作平台ajax请求,session 过期");
                 return;
             } else if (client.isCallback()) {
-                logger.info("UpFilter 验证是否服务端返回的地址----url:" + requestURI);
-                logger.debug("UpFilter isCallback");
+                logger.info("验证是否服务端返回的地址----url:" + requestURI);
+                logger.debug("isCallback");
                 setLogon((HttpServletResponse) response, false);
                 chain.doFilter(request, response);
-                logger.info("UpFilter 验证是否服务端返回的地址，成功通过");
+                logger.info("验证是否服务端返回的地址，成功通过");
                 return;
             }
             setLogon((HttpServletResponse) response, false);
             String code = client.getAuthrizationCode();
-            logger.info("UpFilter code:" + code);
+            logger.info("code:" + code);
             if (code == null) {
-                logger.info("UpFilter code为空时 从服务端获取code----url:" + requestURI);
+                logger.info("code为空时 从服务端获取code----url:" + requestURI);
 //				client.toGetAuthrizationCode();
 				client.toGetAuthrizationCode((HttpServletRequest)request);
 				return;
 			}
 			
 			if (!client.isValidState((HttpServletRequest) request)) {
-				logger.info("UpFilter 验证state失败");
+				logger.info("验证state失败");
 				String result = returnResourceFile(ClientConstant.TEMPLATE_NAME, ClientConstant.STATE_ERROR);
 				response.getWriter().write(result);
 				return;
 			}
-			logger.info("UpFilter 去调用用户信息接口方法----url:"+requestURI);
+			logger.info("去调用用户信息接口方法----url:"+requestURI);
 			client.bindUserInfo(code);
 
 //				if(!client.toOriginalURL()){//如果直接敲有code的url地址
@@ -156,7 +156,7 @@ public class OAuth2LoginFilter implements Filter {
 			if(client.toTargetURL()) {
 				return;
 			}
-			logger.info("====UpFilter执行完毕，接着执行其他的filter！");
+			logger.info("====执行完毕，接着执行其他的filter！");
 			
 			chain.doFilter(request, response);
 		}catch (GetAccessTokenException gte){

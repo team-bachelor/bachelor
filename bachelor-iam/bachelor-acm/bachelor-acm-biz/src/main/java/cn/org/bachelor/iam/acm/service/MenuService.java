@@ -150,10 +150,10 @@ public class MenuService {
 
     /**
      * @param roleCode
-     * @Description:取得备选权限列表
-     * @Author: liuzhuo
-     * @Date: 2018/10/27 11:16
-     * @Return:
+     * @description 取得备选权限列表
+     * @author liuzhuo
+     * @date 2018/10/27 11:16
+     * @return
      */
     public List<String> getRoleMenu(String roleCode) {
         RoleMenu exrm = new RoleMenu();

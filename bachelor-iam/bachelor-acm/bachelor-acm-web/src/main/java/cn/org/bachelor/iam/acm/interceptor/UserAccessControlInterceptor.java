@@ -2,6 +2,7 @@ package cn.org.bachelor.iam.acm.interceptor;
 
 
 import cn.org.bachelor.iam.acm.AuthValueHolderService;
+import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.service.AuthorizeService;
 import cn.org.bachelor.iam.acm.vo.UserVo;
 import org.slf4j.Logger;
@@ -25,10 +26,10 @@ import java.util.Date;
  * <b>NOTE:</b> 根据已经配置的服务和功能授权信息，控制用户的访问权限
  *
  * @author liuzhuo
- * @Version 1.0
+ * @version 2.0
  */
-public class AuthInterceptor extends HandlerInterceptorAdapter {
-    private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
+public class UserAccessControlInterceptor extends HandlerInterceptorAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(UserAccessControlInterceptor.class);
     @Autowired
     private AuthValueHolderService valueHolder;
 
@@ -43,7 +44,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         logger.info("进入权限拦截器：" + permCode);
 //        return true;
         /** 判断请求方式是否符合规范 **/
-
+        PermissionOptions.AccessType accessType = PermissionOptions.AccessType.INTERFACE;
         // 获取访问方法
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
@@ -55,18 +56,18 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             }
             permCode = requestMethod + ":" + requestPath;
         } else if (handler instanceof ResourceHttpRequestHandler) {
-
+            accessType = PermissionOptions.AccessType.RESOURCE;
+//            return true;
         } else {
             return true;
         }
 
         UserVo user = valueHolder.getCurrentUser();
-        boolean pass = user == null ? false : user.isAdministrator() ? true : authorizeService.isAuthorized(permCode, user.getCode());
-
         String usercode = "";
         if(user != null){
             usercode = user.getCode();
         }
+        boolean pass = isPass(permCode, accessType, user, usercode);
         logger.info("access path=[" + requestPath + "], from=[" + valueHolder.getRemoteIP() + "]user=[" + usercode + "], is authorized=[" + pass + "]");
         if (!pass) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -78,6 +79,13 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             }
         }
         return pass;
+    }
+
+    private boolean isPass(String permCode, PermissionOptions.AccessType accessType, UserVo user, String usercode ) {
+        if(user != null && user.isAdministrator()){
+            return true;
+        }
+        return authorizeService.isAuthorized(permCode, usercode, accessType);
     }
 
 }

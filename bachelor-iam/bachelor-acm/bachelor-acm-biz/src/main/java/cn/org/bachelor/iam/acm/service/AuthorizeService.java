@@ -5,6 +5,7 @@ import cn.org.bachelor.iam.acm.AuthValueHolderService;
 import cn.org.bachelor.iam.acm.dao.*;
 import cn.org.bachelor.iam.acm.domain.*;
 import cn.org.bachelor.iam.acm.domain.ObjPermission;
+import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.permission.PermissionPoint;
 import cn.org.bachelor.iam.acm.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
@@ -61,6 +62,10 @@ public class AuthorizeService {
      * @return 是否能访问
      */
     public boolean isAuthorized(String objCode, String userCode) {
+        return isAuthorized(objCode, userCode, PermissionOptions.AccessType.INTERFACE);
+    }
+
+    public boolean isAuthorized(String objCode, String userCode, PermissionOptions.AccessType accessType) {
         if (StringUtil.isEmpty(objCode)) {
             return false;
         }
@@ -68,8 +73,12 @@ public class AuthorizeService {
         example.setCode(objCode);
         example = permissionMapper.selectOne(example);
         //不需要验证则通过
-        if (example == null) {
-            return false;
+        if (example == null ) {
+            if(accessType == PermissionOptions.AccessType.INTERFACE) {
+                return false;
+            }else{
+                return true;
+            }
         }
         if (logger.isDebugEnabled()) {
             logger.debug("obj=[" + objCode + "],user=[" + userCode + "],defAuthOp=[" + example.getDefAuthOp() + "];");
@@ -139,11 +148,11 @@ public class AuthorizeService {
     }
 
     /**
-     * @param orgID
-     * @Description:取得备选权限列表
-     * @Author: liuzhuo
-     * @Date: 2018/10/27 11:16
-     * @Return:
+     * @描述 取得备选权限列表（按组分开）
+     * @param orgID 组织机构ID
+     * @author liuzhuo
+     * @创建时间 2018/10/27 11:16
+     * @return 权限组列表
      */
     public List<PermissionGroup> getPermissionGroupList(String orgID) {
         Example example = new Example(ObjDomain.class);

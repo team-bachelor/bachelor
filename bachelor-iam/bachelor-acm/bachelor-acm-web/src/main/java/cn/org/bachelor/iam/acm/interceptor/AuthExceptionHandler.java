@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.acm.interceptor;
 
-import cn.org.bachelor.iam.acm.exception.UserSysException;
+import cn.org.bachelor.iam.idm.exception.ImSysException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import cn.org.bachelor.web.exception.GlobalExceptionHandler;
@@ -16,17 +16,16 @@ import static org.springframework.http.HttpStatus.LOCKED;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 /**
- * @描述:
- * @创建人: liuzhuo
- * @创建时间: 2018/11/9
- * 全局异常处理
+ * @描述 全局异常处理
+ * @创建时间 2018/11/9
+ * @author liuzhuo
  */
 @RestControllerAdvice
 @Order(-1)
 public class AuthExceptionHandler {
     private static Log logger = LogFactory.getLog(AuthExceptionHandler.class);
 
-    @ExceptionHandler(value = UserSysException.class)
+    @ExceptionHandler(value = ImSysException.class)
     public ResponseEntity handleUserSysException(HttpServletRequest request, Exception e) {
         logger.info(e);
         if ("ACCESS_TOKEN_EXPIRED".equals(e.getMessage())) {

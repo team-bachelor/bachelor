@@ -1,12 +1,12 @@
-package cn.org.bachelor.iam.acm.annotation;
+package cn.org.bachelor.iam.acm.permission;
 
 public class PermissionOptions {
-    public enum Type {
-        INTERFACE("i"), FILE("f");
+    public enum AccessType {
+        INTERFACE("i"), RESOURCE("r");
 
         private final String type;
 
-        Type(String t) {
+        AccessType(String t) {
             this.type = t;
         }
 

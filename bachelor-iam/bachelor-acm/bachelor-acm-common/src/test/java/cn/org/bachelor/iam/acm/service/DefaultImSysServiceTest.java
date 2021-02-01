@@ -1,8 +1,9 @@
 package cn.org.bachelor.iam.acm.service;
 
 import cn.org.bachelor.iam.acm.vo.DataPermVo;
-import cn.org.bachelor.iam.acm.vo.UserSysParam;
+import cn.org.bachelor.iam.idm.service.ImSysParam;
 import cn.org.bachelor.iam.acm.vo.UserVo;
+import cn.org.bachelor.iam.idm.service.ImSysService;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,11 +18,11 @@ import java.util.Set;
  * @创建人: liuzhuo
  * @创建时间: 2019/3/28
  */
-public class DefaultUserSysServiceTest {
+public class DefaultImSysServiceTest {
     private MockAuthValueHolderService valueHolder = new MockAuthValueHolderService();
 
     @Autowired
-    private UserSysService userSysService;
+    private ImSysService imSysService;
 
     @BeforeClass
     public static void prepare() {
@@ -79,19 +80,19 @@ public class DefaultUserSysServiceTest {
 //    }
     @Test
     public void getAppUsers() {
-        UserSysParam param = new UserSysParam();
+        ImSysParam param = new ImSysParam();
         param.setClientId("f10e7cc5133841b8a8ba59b86dd9c4f2");
         param.setDeptName("信息");
         param.setOrgName("威海");
         param.setOrgId("68a99ef178e34d10a53b66e7a98316c9");
         param.setDeptId("6e218c1547b249ceba528a1b9fb04c33");
-        List l = userSysService.findUserByClientID(param);
+        List l = imSysService.findUsersByClientID(param);
     }
 
     @Test
     public void getUserRoles() {
         //"68a99ef178e34d10a53b66e7a98316c9","07d2a7ded91d466aa7ded2b33c2a197b",true,-1,"07d2a7ded91d466aa7ded2b33c2a197b"
-        List l = userSysService.findUserRolesInClient(
+        List l = imSysService.findUserRolesInClient(
                 "9735062ebec44e05b6c44f97f8b76b46",
                 "d75fb9754ecd48f79845873840faa0d0",
                 "68a99ef178e34d10a53b66e7a98316c9",
@@ -103,7 +104,7 @@ public class DefaultUserSysServiceTest {
         //"68a99ef178e34d10a53b66e7a98316c9","07d2a7ded91d466aa7ded2b33c2a197b",true,-1,"07d2a7ded91d466aa7ded2b33c2a197b"
         HashSet<String> depts = new HashSet<>();
         depts.add("294566958f4341148d9cb6ef389314cc");
-        DataPermVo l = userSysService.processDataPerm(
+        DataPermVo l = imSysService.processDataPerm(
                 "68a99ef178e34d10a53b66e7a98316c9",
                 depts,
                 true);
@@ -118,6 +119,6 @@ public class DefaultUserSysServiceTest {
 //        s.add("64c549ed272a4e759505dfaf9dc4e4ec");
         s.add("07d2a7ded91d466aa7ded2b33c2a197b");
 //        s.add("b630d2805553433ea33e38b7b706564e");
-        DataPermVo vo = userSysService.processDataPerm("68a99ef178e34d10a53b66e7a98316c9", s, true);
+        DataPermVo vo = imSysService.processDataPerm("68a99ef178e34d10a53b66e7a98316c9", s, true);
     }
 }

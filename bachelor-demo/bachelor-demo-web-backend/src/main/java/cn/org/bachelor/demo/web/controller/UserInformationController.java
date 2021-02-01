@@ -39,7 +39,7 @@ import java.util.Map;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @Api(tags = {"用户信息"})
-@RequestMapping("/userinfo/")
+@RequestMapping("/userinfo")
 public class UserInformationController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserInformationController.class);
@@ -48,7 +48,10 @@ public class UserInformationController {
     UserInfoService userInfoService;
     @Resource
     UserRoleService userRoleService;
-
+    @GetMapping(value = "")
+        public ResponseEntity<JsonResponse> getUsersDetail1(HttpServletRequest request) {
+        return JsonResponse.createHttpEntity("ok", HttpStatus.OK);
+    }
     @ApiOperation(value = "获取用户的详情")
     @GetMapping(value = "getUsersDetail")
     public ResponseEntity<JsonResponse> getUsersDetail(HttpServletRequest request) {

@@ -17,7 +17,7 @@ import com.google.gson.JsonParser;
 public class ClientUtil {
 	public static ThreadLocal<HttpSession> sessions = new ThreadLocal<HttpSession>();//存放session
 	
-	public static OAuth2CientConfig config;//UpFilter.init的时候初始化
+	public static OAuth2CientConfig config;//OAuth2LoginFilter.init的时候初始化
 	
 	/**
 	 * 设置session到ThreadLocal中
@@ -128,7 +128,7 @@ public class ClientUtil {
 
 
 	/**
-	 * 获取当前UpClientCertification
+	 * 获取当前OAuth2ClientCertification
 	 * @return
 	 */
 	public static OAuth2ClientCertification getCurrentIdentity(){

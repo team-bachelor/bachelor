@@ -1,5 +1,6 @@
 package cn.org.bachelor.iam.acm.service;
 
+import cn.org.bachelor.iam.idm.service.ImSysService;
 import org.apache.commons.lang3.StringUtils;
 import cn.org.bachelor.iam.acm.AuthValueHolderService;
 import cn.org.bachelor.iam.acm.dao.RoleMapper;
@@ -10,7 +11,7 @@ import cn.org.bachelor.iam.acm.domain.Role;
 import cn.org.bachelor.iam.acm.domain.RoleMenu;
 import cn.org.bachelor.iam.acm.domain.RolePermission;
 import cn.org.bachelor.iam.acm.domain.UserRole;
-import cn.org.bachelor.iam.acm.vo.UserSysParam;
+import cn.org.bachelor.iam.idm.service.ImSysParam;
 import cn.org.bachelor.iam.acm.vo.UserVo;
 import cn.org.bachelor.core.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class RoleService {
     @Autowired
     private RoleMenuMapper roleMenuMapper;
     @Autowired
-    private UserSysService userSysService;
+    private ImSysService imSysService;
 
     @Autowired
     private AuthValueHolderService valueHolder;
@@ -84,9 +85,9 @@ public class RoleService {
         return role;
     }
 
-    public List<UserVo> findUserByClientID(UserSysParam param) {
+    public List<UserVo> findUserByClientID(ImSysParam param) {
         param.setClientId(valueHolder.getClientID());
-        List<UserVo> users = userSysService.findUserByClientID(param);
+        List<UserVo> users = imSysService.findUsersByClientID(param);
 //        List<String> ids = new ArrayList<>(users.size());
 //        users.forEach(user -> {
 //            ids.add(user.getId());
@@ -141,9 +142,9 @@ public class RoleService {
         UserRole ur = new UserRole();
         ur.setRoleCode(roleCode);
         List<UserRole> userRoles = userRoleMapper.select(ur);
-        UserSysParam usp = new UserSysParam();
+        ImSysParam usp = new ImSysParam();
         usp.setClientId(valueHolder.getClientID());
-        List<UserVo> remote = userSysService.findUserByClientID(usp);
+        List<UserVo> remote = imSysService.findUsersByClientID(usp);
         Map<String, UserVo> rMap = new HashMap<>(userRoles.size());
         remote.forEach(i -> {
             rMap.put(i.getCode(), i);
@@ -161,7 +162,7 @@ public class RoleService {
                 if (StringUtils.isEmpty(id)) {
                     id = u.getId();
                 }
-                result.addAll(userSysService.findUserDetail(id));
+                result.addAll(imSysService.findUsersDetail(id));
             }
         });
         return result;

@@ -2,7 +2,7 @@ package cn.org.bachelor.iam.acm.interceptor;
 
 
 import cn.org.bachelor.iam.acm.AuthValueHolderService;
-import cn.org.bachelor.iam.acm.service.UserSysService;
+import cn.org.bachelor.iam.idm.service.ImSysService;
 import cn.org.bachelor.iam.acm.token.JwtToken;
 import cn.org.bachelor.iam.acm.vo.UserVo;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
@@ -27,16 +27,16 @@ import java.net.URLDecoder;
  * <b>NOTE:</b> 根据已经配置的服务和功能授权信息，控制用户的访问权限
  *
  * @author liuzhuo
- * @Version 1.0
+ * @version 1.0
  */
-public class UserInterceptor extends HandlerInterceptorAdapter {
-    private static final Logger logger = LoggerFactory.getLogger(UserInterceptor.class);
+public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(UserIdentifyInterceptor.class);
     @Autowired
     private AuthValueHolderService valueHolder;
     @Autowired
-    private UserSysService userSysService;
+    private ImSysService imSysService;
 
-    public static final String ACCESS_BACKEND = "up_access_backend";//是否访问后台获取用户状态，N为不访问，其余为访问
+    private static final String ACCESS_BACKEND = "up_access_backend";//是否访问后台获取用户状态，N为不访问，其余为访问
 
     //private Set<String> urlCache;
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -93,7 +93,7 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
             }
         }
         if (user.isAccessBackend() && user.getAccessToken() != null) {
-            user.setAdministrator(userSysService.checkUserIsAdmin(user));
+            user.setAdministrator(imSysService.checkUserIsAdmin(user));
             user.setAccessBackend(false);
         }
         valueHolder.setCurrentUser(user);

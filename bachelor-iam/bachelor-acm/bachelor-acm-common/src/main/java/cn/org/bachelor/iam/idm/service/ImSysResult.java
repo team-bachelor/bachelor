@@ -1,11 +1,11 @@
-package cn.org.bachelor.iam.acm.vo;
+package cn.org.bachelor.iam.idm.service;
 
 /**
  * @描述:
  * @创建人: liuzhuo
  * @创建时间: 2019/7/24
  */
-public class UserSysResult<T> {
+public class ImSysResult<T> {
     private String result;
     private String message;
     private int total;

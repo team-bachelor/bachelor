@@ -1,4 +1,4 @@
-package cn.org.bachelor.iam.acm.vo;
+package cn.org.bachelor.iam.idm.service;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -10,7 +10,7 @@ import java.util.Map;
  * @创建人: liuzhuo
  * @创建时间: 2019/7/24
  */
-public class UserSysParam {
+public class ImSysParam {
     private String orgId;
     private String orgName;
     private String deptId;

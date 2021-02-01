@@ -3,9 +3,10 @@ package cn.org.bachelor.iam.acm.permission;
 import java.util.List;
 
 /**
- * @描述:
- * @创建人: liuzhuo
- * @创建时间: 2018/10/27
+ * @描述
+ * @创建人 liuzhuo
+ * @创建时间 2018/10/27
+ * @author liuzhuo
  */
 public class PermissionGroup {
 

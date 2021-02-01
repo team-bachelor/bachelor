@@ -9,7 +9,7 @@
         <version>2.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>bachelor-demo-web</artifactId>
+    <artifactId>bachelor-demo-web-backend</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
     <description>服务端例子</description>

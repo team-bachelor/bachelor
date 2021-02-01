@@ -1,4 +1,4 @@
-package cn.org.bachelor.iam.acm.service;
+package cn.org.bachelor.iam.idm.service;
 
 import cn.org.bachelor.iam.acm.vo.*;
 import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import cn.org.bachelor.iam.acm.AuthValueHolderService;
-import cn.org.bachelor.iam.acm.exception.UserSysException;
+import cn.org.bachelor.iam.idm.exception.ImSysException;
 import cn.org.bachelor.core.exception.BusinessException;
 import cn.org.bachelor.core.exception.RemoteException;
 import cn.org.bachelor.core.exception.SystemException;
@@ -22,23 +22,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * @描述: 默认的用户平台服务提供类，如果不加载UP相关包则该类也不加载。
+ * @描述 默认的用户平台服务提供类，如果不加载UP相关包则该类也不加载。
  *       若更换用户平台则需要实现UserSysService中的接口。
- * @创建人: liuzhuo
- * @创建时间: 2018/11/9
- * @更新： 2021/01/20 规范了配置方式，将配置全部转移到OAuth2ClientConfig中。
+ * @author liuzhuo
+ * @创建时间 2018/11/9
+ * @更新履历  2021/01/20 规范了配置方式，将配置全部转移到OAuth2ClientConfig中。
  */
 @Service
 @ConditionalOnClass(OAuth2Client.class)
-public class DefaultUserSysService implements UserSysService {
+public class DefaultImSysService implements ImSysService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultUserSysService.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefaultImSysService.class);
     private ObjectMapper jsonMapper = new ObjectMapper();
     @Autowired
     private AuthValueHolderService valueHolder;
@@ -46,7 +45,11 @@ public class DefaultUserSysService implements UserSysService {
     @Autowired
     private OAuth2CientConfig clientConfig;
 
-    public DefaultUserSysService(AuthValueHolderService valueHolder) {
+    /**
+     * @param valueHolder AuthValueHolderService
+     * @see cn.org.bachelor.iam.acm.AuthValueHolderService
+     */
+    public DefaultImSysService(AuthValueHolderService valueHolder) {
         this.valueHolder = valueHolder;
     }
 
@@ -127,14 +130,14 @@ public class DefaultUserSysService implements UserSysService {
     }
 
     @Override
-    public List<UserVo> findUserByClientID(String clientID) {
-        UserSysParam param = new UserSysParam();
+    public List<UserVo> findUsersByClientID(String clientID) {
+        ImSysParam param = new ImSysParam();
         param.setClientId(clientID);
-        return findUserByClientID(param);
+        return findUsersByClientID(param);
     }
 
     @Override
-    public List<UserVo> findUserByClientID(UserSysParam param) {
+    public List<UserVo> findUsersByClientID(ImSysParam param) {
         if (StringUtils.isEmpty(param.getClientId())) {
             throw new BusinessException("clientID_cannot_be_null");
         }
@@ -161,7 +164,7 @@ public class DefaultUserSysService implements UserSysService {
     }
 
     @Override
-    public List<UserVo> findUserDetail(String userId) {
+    public List<UserVo> findUsersDetail(String userId) {
         if (StringUtils.isEmpty(userId)) {
             throw new BusinessException("userId_cannot_null");
         }
@@ -197,7 +200,7 @@ public class DefaultUserSysService implements UserSysService {
     }
 
     @Override
-    public AppVo findAppsByCode(String appCode) {
+    public AppVo findAppByCode(String appCode) {
         if (StringUtils.isEmpty(appCode)) {
             throw new BusinessException("appCode_cannot_null");
         }
@@ -233,7 +236,7 @@ public class DefaultUserSysService implements UserSysService {
     }
 
     @Override
-    public UserSysResult<List<UserVo>> findUsers(UserSysParam param) {
+    public ImSysResult<List<UserVo>> findUsers(ImSysParam param) {
         String json = callApi(clientConfig.getRsURL().getUsers(), "GET", param.toParamMap());
         return resolveJson2Result(json, UserVo.class, true);
     }
@@ -243,7 +246,7 @@ public class DefaultUserSysService implements UserSysService {
         if (StringUtils.isEmpty(orgId)) {
             throw new BusinessException("orgId_can_not_null_or_empty");
         }
-        UserSysParam param = new UserSysParam();
+        ImSysParam param = new ImSysParam();
         param.setOrgId(orgId);
         param.setDeptId(deptId);
         param.setUserName(userNameParttern);
@@ -255,7 +258,7 @@ public class DefaultUserSysService implements UserSysService {
         if (StringUtils.isEmpty(orgId) && StringUtils.isEmpty(userId)) {
             throw new BusinessException("orgId_userId_cannot_null_both");
         }
-        UserSysParam param = new UserSysParam();
+        ImSysParam param = new ImSysParam();
         param.setOrgId(orgId);
         param.setUserId(userId);
         param.setUserCode(userCode);
@@ -330,10 +333,10 @@ public class DefaultUserSysService implements UserSysService {
      *
      * @param orgId  机构ID
      * @param deptId 父机构ID
-     * @return
+     * @return 部门信息
      */
     @Override
-    public OrgVo findChildDepts(String orgId, String deptId) {
+    public OrgVo findDept(String orgId, String deptId) {
         List<OrgVo> orgs = findDepts(orgId, deptId, true, null);
         for (OrgVo org : orgs) {
             if (org.getId().equals(deptId)) {
@@ -503,7 +506,7 @@ public class DefaultUserSysService implements UserSysService {
 
 //    @Autowired
 //    protected StringRedisTemplate redisTemplate;
-
+    //TODO 要解决redis依赖问题
     // 设置1天有效时间
     private long timeout = 1;
     private String delPrefix = "del_";
@@ -576,7 +579,7 @@ public class DefaultUserSysService implements UserSysService {
         return (T) resolveJson2Result(json, clazz, asList).getRows();
     }
 
-    private <T> UserSysResult<T> resolveJson2Result(String json, Class clazz, boolean asList) {
+    private <T> ImSysResult<T> resolveJson2Result(String json, Class clazz, boolean asList) {
         try {
 
             //Map<String, Object> tokenMap = jsonMapper.readValue(json, Map.class);
@@ -586,11 +589,11 @@ public class DefaultUserSysService implements UserSysService {
             String message = node.get("message").asText();
             int total = node.get("total").asInt();
             if ("1001".equals(result)) {
-                throw new UserSysException("ACCESS_TOKEN_EXPIRED");
+                throw new ImSysException("ACCESS_TOKEN_EXPIRED");
             } else if (!"200".equals(result)) {
                 throw new RemoteException(result + ":" + message);
             }
-            UserSysResult<T> userSysResult = new UserSysResult();
+            ImSysResult<T> userSysResult = new ImSysResult();
             userSysResult.setResult(result);
             userSysResult.setMessage(message);
             userSysResult.setTotal(total);
@@ -609,7 +612,7 @@ public class DefaultUserSysService implements UserSysService {
         }
     }
 
-    public String callApi(String url, String methodType,
+    private String callApi(String url, String methodType,
                           Map<String, String> param, String astoken) {
         if (param == null) {
             param = new HashMap<>(2);
@@ -650,7 +653,7 @@ public class DefaultUserSysService implements UserSysService {
         return json;
     }
 
-    public String callApi(String url, String methodType,
+    private String callApi(String url, String methodType,
                           Map<String, String> param) {
         return callApi(url, methodType, param, null);
     }

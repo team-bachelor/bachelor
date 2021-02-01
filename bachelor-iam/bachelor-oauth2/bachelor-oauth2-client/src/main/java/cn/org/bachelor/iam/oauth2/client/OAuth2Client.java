@@ -66,10 +66,10 @@ public class OAuth2Client {
 	 * @return
 	 */
 	public String getAuthrizationCode() {
-//		logger.info("upClient 进入getAuthrizationCode");
+//		logger.info("进入getAuthrizationCode");
 		String code=request.getParameter("code");
 		boolean isRedirectURL = isRedirectURL();
-		logger.info("upClient 进入getAuthrizationCode，code="+code + "，isRedirectURL=" + isRedirectURL);
+		logger.info("进入getAuthrizationCode，code="+code + "，isRedirectURL=" + isRedirectURL);
 		if(!isRedirectURL){
 //			return null;
 		}
@@ -81,9 +81,9 @@ public class OAuth2Client {
 	 * @return
 	 */
 	public String getPhoneId() {
-//		logger.info("upClient getPhoneId");
+//		logger.info("getPhoneId");
 		String phoneId=request.getParameter("phone_id");
-		logger.info("upClient getPhoneId，phone_id="+phoneId);
+		logger.info("getPhoneId，phone_id="+phoneId);
 		return phoneId;
 	}
 
@@ -111,7 +111,7 @@ public class OAuth2Client {
 	 * @throws IOException 
 	 */
 	public void toGetAuthrizationCode(HttpServletRequest request) throws IOException {
-		logger.info("upClient 进入toGetAuthrizationCode");
+		logger.info("进入toGetAuthrizationCode");
 		String phoneId = getPhoneId();
 //		StringBuffer originalURL=new StringBuffer(url);
 //		String quering=getParamUrl(request,request.getCharacterEncoding(),null);
@@ -158,14 +158,14 @@ public class OAuth2Client {
         }
         String _url = url.toString();
         response.sendRedirect(_url);
-        logger.info("upClient 退出toGetAuthrizationCode，url=" + _url);
+        logger.info("退出toGetAuthrizationCode，url=" + _url);
     }
 
 	public String refreshAccessToken(String currentRefreshToken){
 		String accessToken = "";
 		String refreshToken = "";
 		String expiration = "";
-		logger.info("upclient refresh accesstoken,{}",refreshToken);
+		logger.info("refresh accesstoken,{}",refreshToken);
 		try {
 			TokenRequestBuilder builder = DefaultOAuthRequest
 							.tokenLocation(config.getAsURL().getAccessToken())
@@ -175,7 +175,7 @@ public class OAuth2Client {
 							.setRefreshToken(currentRefreshToken)
 							.setRedirectURI(config.getLoginRedirectURL());
 			DefaultOAuthRequest accessTokenRequest = builder.buildQueryMessage();
-			logger.info("upclient call access_token_url to refreshtoken接口" + builder);
+			logger.info("call access_token_url to refreshtoken接口" + builder);
 			OAuthAccessTokenResponse oAuthResponse = oAuthClient.accessToken(accessTokenRequest, OAuthConstant.HttpMethod.POST);
 			accessToken = oAuthResponse.getAccessToken();
 			refreshToken = oAuthResponse.getRefreshToken();
@@ -198,7 +198,7 @@ public class OAuth2Client {
 			OAuthResourceResponse resourceResponse = oAuthClient.resource(userInfoRequest, OAuthResourceResponse.class);
 			personStr = resourceResponse.getBody();
 			person = JsonParser.parseString(personStr).getAsJsonObject();
-			logger.info("upclient 去调用用户信息接口方法  person:" + person);
+			logger.info("去调用用户信息接口方法  person:" + person);
 			openId = this.getJsonValue(person, "openId");
 			userId = this.getJsonValue(person, "userId");
 		} catch (Exception e) {
@@ -223,7 +223,7 @@ public class OAuth2Client {
 	 * @throws Exception 
 	 */
 	public String bindUserInfo(String authrizationCode) {
-		logger.info("upclient 去调用用户信息接口方法");
+		logger.info("去调用用户信息接口方法");
 		String accessToken = "";
 		String refreshToken = "";
 		String expiration = "";
@@ -237,7 +237,7 @@ public class OAuth2Client {
 				.setRedirectURI(config.getLoginRedirectURL());
 			DefaultOAuthRequest accessTokenRequest = builder.buildQueryMessage();
 
-            logger.info("======upclient 去调用access_token_url接口，参数：" + builder);
+            logger.info("======去调用access_token_url接口，参数：" + builder);
             OAuthAccessTokenResponse oAuthResponse = oAuthClient.accessToken(accessTokenRequest, OAuthConstant.HttpMethod.POST);
             accessToken = oAuthResponse.getAccessToken();
             refreshToken = oAuthResponse.getRefreshToken();
@@ -258,7 +258,7 @@ public class OAuth2Client {
         String deptId;
         String deptName;
         try {
-            logger.info("======upclient 去调用user_info_url接口，参数：" + "accessToken=" + accessToken);
+            logger.info("======去调用user_info_url接口，参数：" + "accessToken=" + accessToken);
             logger.info("如果user_info_url已经赋值，那么直接读取，否则去配置文件中读取");
             String userInfoUrl = config.getAsURL().getUserInfo();
             DefaultOAuthResourceRequest userInfoRequest = new DefaultOAuthResourceRequest("user_info", userInfoUrl, OAuthConstant.HttpMethod.GET);
@@ -269,7 +269,7 @@ public class OAuth2Client {
             person = JsonParser.parseString(personStr).getAsJsonObject();
 
 
-			logger.info("upclient 去调用用户信息接口方法  person:" + person);
+			logger.info("去调用用户信息接口方法  person:" + person);
 
             openId = this.getJsonValue(person, "openId");
             userId = this.getJsonValue(person, "userId");
@@ -293,7 +293,7 @@ public class OAuth2Client {
 			JsonObject person2 = parser.parse(personStr2).getAsJsonObject();
 
 
-			logger.info("upclient 去调用用户  email  和 tel接口方法  person2:" + person2);
+			logger.info("去调用用户  email  和 tel接口方法  person2:" + person2);
 
 			String email = this.getJsonValue(person2, "email");
 			String tel = this.getJsonValue(person2, "tel");
@@ -379,7 +379,7 @@ public class OAuth2Client {
                     try {
                         query.append(URLEncoder.encode(param, encoding));
                     } catch (Exception e) {
-                        logger.error("UpClient.getParamUrl error !", e);
+                        logger.error("getParamUrl error !", e);
                     }
 
                     query.append('=');
@@ -475,7 +475,7 @@ public class OAuth2Client {
         if (obj instanceof OAuth2ClientCertification) {
             OAuth2ClientCertification my = (OAuth2ClientCertification) obj;
             String userid = my.getUserid();
-            logger.info("UpClient 的isLogin(), userid:" + userid);
+            logger.info("isLogin(), userid:" + userid);
             logger.debug("current user:" + userid);
             if (userid != null && !userid.equals("")) {
                 flag = true;
@@ -493,7 +493,7 @@ public class OAuth2Client {
             OAuth2ClientCertification my = (OAuth2ClientCertification) obj;
             String userid = my.getUserid();
             boolean tokenValid = tockenValid(req);
-            logger.info("UpClient 的isLogin(), userid:" + userid + ",tokenVlid=:" + tokenValid);
+            logger.info("isLogin(), userid:" + userid + ",tokenVlid=:" + tokenValid);
             if (userid != null && !userid.equals("") && tokenValid) {
                 ClientUtil.setSession(req.getSession());
                 flag = true;

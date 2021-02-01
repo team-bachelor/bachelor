@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.acm.config;
 
-import cn.org.bachelor.iam.acm.interceptor.AuthInterceptor;
-import cn.org.bachelor.iam.acm.interceptor.UserInterceptor;
+import cn.org.bachelor.iam.acm.interceptor.UserAccessControlInterceptor;
+import cn.org.bachelor.iam.acm.interceptor.UserIdentifyInterceptor;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -17,38 +17,46 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * @描述:
- * @创建人: liuzhuo
- * @创建时间: 2018/11/5
+ * @描述
+ * @创建时间 2018/11/5
+ * @author liuzhuo
  */
 @Configuration
-@ConfigurationProperties(prefix = "bachelor.auth")
-public class AuthenticationConfig implements WebMvcConfigurer {
+@ConfigurationProperties(prefix = "bachelor.iam")
+public class AcmConfig implements WebMvcConfigurer {
 
     private String[] excludePathPatterns;
 
     /**
-     * 是否获取当前登录用户信息:enable_current_user
+     * 是否获取当前登录用户信息:enable_user_identify
      */
-    private boolean enableCurrentUser = true;
+    private boolean enableUserIdentify = true;
 
     /**
-     * 是否对当前登录用户鉴权:enable_authentication
+     * 是否对当前登录用户鉴权:enable_user_access_control
      */
-    private boolean enableAuthentication = true;
+    private boolean enableUserAccessControl = true;
 
     /**
      * 用于加密的私钥文件地址
      */
     private String privateKeyFile = "/id_rsa";
+
+
+    /**
+     * @return 访问控制拦截器
+     */
     @Bean
-    public AuthInterceptor authInterceptor() {
-        return new AuthInterceptor();
+    public UserAccessControlInterceptor authInterceptor() {
+        return new UserAccessControlInterceptor();
     }
 
+    /**
+     * @return 用户识别拦截器
+     */
     @Bean
-    public UserInterceptor userInterceptor() {
-        return new UserInterceptor();
+    public UserIdentifyInterceptor userInterceptor() {
+        return new UserIdentifyInterceptor();
     }
 
     private static final String[] excludePath = {
@@ -56,18 +64,18 @@ public class AuthenticationConfig implements WebMvcConfigurer {
             "/**/*swagger*/**",
             "/**/*hystrix*/**",
             "/error",
-            "/user/accesstoken",
-            "/user/logout"
+            "/idm/as/accesstoken",//与idmascontroller相关
+            "/idm/as/logout"//与idmascontroller相关
     };
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        if(enableCurrentUser) {
+        if(enableUserIdentify) {
             registry.addInterceptor(userInterceptor()).order(-2)
                     .excludePathPatterns(excludePath)
                     .addPathPatterns("/**/*");
         }
-        if(enableAuthentication) {
+        if(enableUserAccessControl) {
             InterceptorRegistration ir = registry.addInterceptor(authInterceptor()).order(-1)
                     .excludePathPatterns(excludePath)
                     .addPathPatterns("/**");
@@ -110,19 +118,19 @@ public class AuthenticationConfig implements WebMvcConfigurer {
         this.excludePathPatterns = excludePathPatterns;
     }
 
-    public boolean isEnableCurrentUser() {
-        return enableCurrentUser;
+    public boolean isEnableUserIdentify() {
+        return enableUserIdentify;
     }
 
-    public void setEnableCurrentUser(boolean enableCurrentUser) {
-        this.enableCurrentUser = enableCurrentUser;
+    public void setEnableUserIdentify(boolean enableUserIdentify) {
+        this.enableUserIdentify = enableUserIdentify;
     }
 
-    public boolean isEnableAuthentication() {
-        return enableAuthentication;
+    public boolean isEnableUserAccessControl() {
+        return enableUserAccessControl;
     }
 
-    public void setEnableAuthentication(boolean enableAuthentication) {
-        this.enableAuthentication = enableAuthentication;
+    public void setEnableUserAccessControl(boolean enableUserAccessControl) {
+        this.enableUserAccessControl = enableUserAccessControl;
     }
 }

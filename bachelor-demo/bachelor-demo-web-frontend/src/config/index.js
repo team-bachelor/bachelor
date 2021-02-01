@@ -40,13 +40,13 @@ export const MENU_GET_MODE = 'local';
 // export const API_HOST = window.location.origin;
 // export const API_HOST = 'http://localhost:8800';
 // export const API_HOST = 'http://10.0.139.239:8888';
-export const API_HOST = 'http://192.168.1.108:8888';
+export const API_HOST = 'http://192.168.1.104:8888';
 
 
 /**
  * API基本URL
  */
-export const API_BASE_URL = '/app-contacts-service';
+export const API_BASE_URL = '/bachelor-demo-web-backend';
 /**
  * 请求限时
  */
@@ -72,12 +72,12 @@ export const AUTH_PATH = `${BASE_URL}auth`;
  * code query
  */
 // export const AUTH_URL = '/user/accesstoken'; // 本地模拟测试
-export const AUTH_URL = '/user/accesstoken';
+export const AUTH_URL = '/idm/as/accesstoken';
 /**
  * 退出登录接口
  */
 // export const LOGOUT_URL_API = '/user/logout'; // 本地模拟测试
-export const LOGOUT_URL_API = '/user/logout';
+export const LOGOUT_URL_API = '/idm/as/logout';
 /**
  * PUP退出登录URL
  */

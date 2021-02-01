@@ -1,8 +1,8 @@
 // vue.config.js
 module.exports = {
-  baseUrl: '/',
+  publicPath: '/',
   devServer: {
     // proxy: 'http://192.168.37.74:8889',
-    proxy: 'http://192.168.30.85:8888/',
+    proxy: 'http://192.168.1.104\n:8888/',
   },
 };
