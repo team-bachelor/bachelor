@@ -16,7 +16,7 @@
         <el-dropdown-item @click.native="openedCommonView('Userinfo')">
           <i class="fa fa-user"></i> 用户信息
         </el-dropdown-item>
-        <el-dropdown-item @click.native="$router.push('/home')">
+        <el-dropdown-item @click.native="$router.logout">
           <i class="fa fa-sign-out"></i> 退出登录
         </el-dropdown-item>
       </el-dropdown-menu>

@@ -12,8 +12,6 @@ const includeStorageState = [
   'userinfo',
   'language',
   'sidebar',
-  'routerList',
-  'defaults',
 ];
 const store = new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
@@ -34,8 +32,6 @@ const store = new Vuex.Store({
     commonView: '', // 公共视图
     inited: false, // 是否初始化
     menu: [], // 菜单
-	routerList: [],
-	defaults: {},
     sidebar: {
       opened: true,
       withoutAnimation: false,

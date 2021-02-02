@@ -33,7 +33,7 @@ export const HOME_PATH = '/';
  * local 从本地读取
  * remote 从远程读取
  */
-export const MENU_GET_MODE = 'local';
+export const MENU_GET_MODE = 'remote';
 /**
  * API域名
  */
@@ -41,6 +41,7 @@ export const MENU_GET_MODE = 'local';
 // export const API_HOST = 'http://localhost:8800';
 // export const API_HOST = 'http://10.0.139.239:8888';
 export const API_HOST = 'http://localhost:8888';
+// export const API_HOST = 'http://192.168.30.85:8888';
 
 
 /**

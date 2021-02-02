@@ -1,16 +1,13 @@
 import { MessageBox, Loading } from 'element-ui';
 import store from '@/store';
 import axios from '@/service';
-import { INIT, CLEAR_TOKEN, SET_TOKEN,ROUTER_LIST,CLEAR_ROUTER_LIST } from '@/store/types';
+import { INIT, CLEAR_TOKEN, SET_TOKEN } from '@/store/types';
 import { HOME_PATH, LOGIN_URL, LOGOUT_URL, LOGOUT_URL_API, AUTH_PATH, AUTH_URL, CLIENT_ID } from '@/config';
 import { isObject, parseJWT } from '@/util';
 import LoadingBar from '@/components/LoadingBar';
 import router from './instance';
 import updateBreadcrumb from './breadcrumb';
 import updateDocumentTitle from './documentTitle';
-import resources from '../config/resources';
-
-import { getAsyncRoutes } from '@/config/asyncRouter'
 
 /**
  * 检查当前路由是否需要授权访问
@@ -54,6 +51,7 @@ const showError = (text) => {
  * 凭code获取accesstoken
  */
 const fetchAccessToken = async (code) => {
+	console.log(code)
   try {
     const { data } = await axios.get(AUTH_URL, {
       params: { code },
@@ -100,7 +98,6 @@ router.logout = () => {
     window.location = logoutUri;
   }
   store.commit(CLEAR_TOKEN);
-  store.commit(CLEAR_ROUTER_LIST);
   loading.show('正在退出...');
   axios.put(LOGOUT_URL_API).then(() => {
     window.location = logoutUri;
@@ -131,7 +128,7 @@ router.beforeEach(async (to, from, next) => {
   /**
    * 检验是否登录回调中
    */
-  let route = store.state.routerList;
+  console.log(to)
   if (to.path === AUTH_PATH) {
     if (!to.query.code) {
       next(to.query.state || HOME_PATH);
@@ -140,40 +137,7 @@ router.beforeEach(async (to, from, next) => {
     loading.show('登录中');
     const done = await fetchAccessToken(to.query.code);
     if (done) {
-		if(route.length>0){}else{
-			axios.get(resources.menuTree.url).then((res) => {
-			  if(res.status==200){
-				  // console.log(JSON.stringify(res.data.data))
-				  //模拟数据
-				  const routerList = res.data.data;
-				  //最后添加404页
-				  routerList.push({
-				  	"path": "*",
-				  	"component": "error/404",
-				  	"name":"404",
-				  	"meta": {
-				  		"title": "404没有找到页面",
-				  		"requireAuth": false,
-				  	},
-				  })
-				  // console.log('登录保存routerList',routerList)
-				  store.commit(ROUTER_LIST, {
-				    routerList,
-				  });
-				  let route = routerList;
-				  let accessRoutes = getAsyncRoutes(route);
-				  router.addRoutes(accessRoutes);
-			  }else{
-				  loading.close();
-				  showError('登录失败!');
-			  }
-			}).catch((err) => {
-			  // console.log(err)
-			  loading.close();
-			  showError('登录失败!');
-			});
-		}
-        next(to.query.state || HOME_PATH);
+      next(to.query.state || HOME_PATH);
     } else {
       loading.close();
       showError('登录失败!');

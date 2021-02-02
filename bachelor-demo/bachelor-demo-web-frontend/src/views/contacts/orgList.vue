@@ -4,8 +4,8 @@
 			<div class="filter" :class="{opened:!opened}">
 				<!-- <div class="hairline"></div> -->
 				<div class="btn">
-					<el-button size="small" @click="onEditRole(0)">新增组织机构</el-button>
-					 <span class="myicon icon-zj"></span>
+					<el-button size="mini" @click="onEditRole(0)">新增组织机构</el-button>
+					 
 				</div>
 
 				<!-- <el-button size="small" type="danger" @click="onRemoveRoles" >删除</el-button> -->
@@ -38,11 +38,11 @@
 					<el-table-column width="232">
 					  <template slot-scope="scope">
 					  <el-button
-					    size="small"
+					    size="mini"
 					    type="primary"
 					    @click="onEditRole(scope.row.id)">编辑</el-button>
 					  <el-button
-					    size="small"
+					    size="mini"
 					    type="danger"
 					    @click="onRemoveRole(scope.row.id)">删除</el-button>
 					  </template>
@@ -52,7 +52,7 @@
 			</div>
 
 			<!-- <div class="list" v-if="opened">
-				<el-button circle size="small" class="list-close" icon="el-icon-d-arrow-right" @click="opened=''">
+				<el-button circle size="mini" class="list-close" icon="el-icon-d-arrow-right" @click="opened=''">
 				</el-button>
 				<org-edit v-if="opened=='contactsEdit'" :id.sync="checkedRoleId"
 				  :organizations="organizations"
@@ -230,22 +230,6 @@
 	};
 </script>
 <style lang="scss" scoped>
-	
-	/deep/.el-table__expand-icon--expanded {
-	  -webkit-transform: rotate(0deg);
-	  transform: rotate(0deg);
-	}
-	
-	/deep/.el-icon-arrow-right:before {
-	  content: "\e790";
-	  font-size: 18px;
-	}
-	 
-	/deep/.el-table__expand-icon--expanded .el-icon-arrow-right:before {
-	  content: "\e791";
-	  font-size: 18px;
-	}
-	
 	.lx-container {
 		flex: 1;
 	}

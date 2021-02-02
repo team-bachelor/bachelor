@@ -1,20 +1,20 @@
 <template>
 <section>
   <div class="handler">
-    <el-button size="small" type="primary" :loading="loading" @click="onSave">{{id?'保存':'创建'}}</el-button>
+    <el-button size="mini" type="primary" :loading="loading" @click="onSave">{{id?'保存':'创建'}}</el-button>
   </div>
   <el-form ref="forms" :model="formData" :rules="formRules" label-width="100px" style="width: 90%;">
 	  
 	<el-form-item label="序号" prop="sortNum">
-	  <el-input size="small" v-model="formData.sortNum" clearable></el-input>
+	  <el-input size="mini" v-model="formData.sortNum"></el-input>
 	</el-form-item>  
 	  
 	<el-form-item label="机构名称" prop="bname">
-	  <el-input size="small" v-model="formData.bname" clearable></el-input>
+	  <el-input size="mini" v-model="formData.bname"></el-input>
 	</el-form-item>
 	  
 	<el-form-item label="上级机构" prop="groupIds">
-		<el-cascader size="small" style="width:100%;margin-top: 6px;"
+		<el-cascader size="mini" style="width:100%;margin-top: 6px;"
 			clearable
 			placeholder="请选择上级机构 【不选则默认为父机构】"
 			ref="orgse"
@@ -26,23 +26,23 @@
 	</el-form-item>
 	
 	<el-form-item label="主管负责人" prop="leadingPerson">
-	  <el-input size="small" v-model="formData.leadingPerson" clearable></el-input>
+	  <el-input size="mini" v-model="formData.leadingPerson"></el-input>
 	</el-form-item>
 	
 	<el-form-item label="负责人电话" prop="leadingPhone">
-	  <el-input size="small" v-model="formData.leadingPhone" clearable></el-input>
+	  <el-input size="mini" v-model="formData.leadingPhone"></el-input>
 	</el-form-item>
 	<el-form-item label="值班电话" prop="dutyPhone">
-	  <el-input size="small" v-model="formData.dutyPhone" clearable></el-input>
+	  <el-input size="mini" v-model="formData.dutyPhone"></el-input>
 	</el-form-item>
 	<el-form-item label="传真" prop="fax">
-	  <el-input size="small" v-model="formData.fax" clearable></el-input>
+	  <el-input size="mini" v-model="formData.fax"></el-input>
 	</el-form-item>
 	<el-form-item label="地址" prop="address">
-	  <el-input size="small" v-model="formData.address" clearable></el-input>
+	  <el-input size="mini" v-model="formData.address"></el-input>
 	</el-form-item>
-	<el-form-item label="描述" prop="description">
-	  <el-input size="small" type="textarea" v-model="formData.description" clearable></el-input>
+	<el-form-item label="描述" prop="description	">
+	  <el-input size="mini" type="textarea" v-model="formData.description	"></el-input>
 	</el-form-item>
 	
   </el-form>
@@ -223,7 +223,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-	
 	.el-form-item {
 	    margin-bottom: 15px;
 	}

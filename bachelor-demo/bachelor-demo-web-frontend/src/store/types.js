@@ -9,6 +9,3 @@ export const FETCH_USERROLE = 'FETCH_USERROLE';
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
 export const FETCH_MENU = 'FETCH_MENU';
 export const SETTING_MENU = 'SET_MENU';
-export const ROUTER_LIST = 'ROUTER_LIST';
-export const DEFAULT_LIST = 'DEFAULT_LIST';
-export const CLEAR_ROUTER_LIST = 'CLEAR_ROUTER_LIST';

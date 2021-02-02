@@ -1,31 +1,31 @@
 <template>
 <section>
   <div class="handler">
-    <el-button size="small" type="primary" :loading="loading" @click="onSave">{{id?'保存':'创建'}}</el-button>
+    <el-button size="mini" type="primary" :loading="loading" @click="onSave">{{id?'保存':'创建'}}</el-button>
   </div>
   <el-form ref="form" :model="formData" :rules="formRules" label-width="100px" style="width: 90%;">
 	  
 	<el-form-item label="序号" prop="sortNum">
-	  <el-input size="small" v-model="formData.sortNum" clearable></el-input>
+	  <el-input size="mini" v-model="formData.sortNum"></el-input>
 	</el-form-item>  
 	  
     <el-form-item label="姓名" prop="bname">
-      <el-input size="small" v-model="formData.bname" clearable></el-input>
+      <el-input size="mini" v-model="formData.bname"></el-input>
     </el-form-item>
 	
     <el-form-item label="性别" prop="gender">
-      <el-select size="small" v-model="formData.gender" placeholder="请选择性别" style="width:100%">
+      <el-select size="mini" v-model="formData.gender" placeholder="请选择性别" style="width:100%">
         <el-option v-for="item in genderList" :key="item.val"
           :label="item.name" :value="item.val"></el-option>
       </el-select>
     </el-form-item>
 	
 	<el-form-item label="手机号" prop="phone">
-	  <el-input size="small" v-model="formData.phone" clearable></el-input>
+	  <el-input size="mini" v-model="formData.phone"></el-input>
 	</el-form-item>
 	
 	<el-form-item label="所属机构" prop="groupIds">
-		<el-cascader size="small" style="width:100%;margin-top: 6px;"
+		<el-cascader size="mini" style="width:100%;margin-top: 6px;"
 			clearable
 			ref="orgs"
 		    v-model="formData.groupIds"
@@ -35,22 +35,22 @@
 	</el-form-item>
 	
 	<el-form-item label="办公电话" prop="officePhone">
-	  <el-input size="small" v-model="formData.officePhone" clearable></el-input>
+	  <el-input size="mini" v-model="formData.officePhone"></el-input>
 	</el-form-item>
 	<el-form-item label="工作单位" prop="officeName">
-	  <el-input size="small" v-model="formData.officeName" clearable></el-input>
+	  <el-input size="mini" v-model="formData.officeName"></el-input>
 	</el-form-item>
 	<el-form-item label="部门" prop="department">
-	  <el-input size="small" v-model="formData.department" clearable></el-input>
+	  <el-input size="mini" v-model="formData.department"></el-input>
 	</el-form-item>
 	<el-form-item label="家庭电话" prop="homePhone">
-	  <el-input size="small" v-model="formData.homePhone"></el-input>
+	  <el-input size="mini" v-model="formData.homePhone"></el-input>
 	</el-form-item>
 	<el-form-item label="家庭地址" prop="homeAddress">
-	  <el-input size="small" v-model="formData.homeAddress" clearable></el-input>
+	  <el-input size="mini" v-model="formData.homeAddress"></el-input>
 	</el-form-item>
 	<el-form-item label="邮箱" prop="email">
-	  <el-input size="small" v-model="formData.email" clearable></el-input>
+	  <el-input size="mini" v-model="formData.email"></el-input>
 	</el-form-item>
 	
   </el-form>

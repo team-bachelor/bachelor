@@ -42,7 +42,7 @@
 			    headers: {
 			      'Content-Type':'multipart/form-data;'
 			    },
-			    url: "import",
+			    url: "/import/importBookExcel",
 			    method: "post",
 			    data: this.formData
 			  })

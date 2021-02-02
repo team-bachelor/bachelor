@@ -4,24 +4,24 @@
       <div class="filter" :class="{opened:!opened}">
         <el-form class="form" ref="filter" :model="filter" @submit.prevent="fetchRoles">
           <el-row :gutter="20">
-            <el-col :span="opened?8:8">
+            <el-col :span="opened?24:8">
               <el-form-item label="">
-                <el-input size="small" style="margin-top: -3px;" v-model="filter.keyWord" placeholder="请输入角色名称或编码"
-                  @keyup.enter.native="fetchRoles" clearable></el-input>
+                <el-input v-model="filter.keyWord" placeholder="请输入角色名称或编码"
+                  @keyup.enter.native="fetchRoles"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="opened?8:8">
+            <el-col :span="opened?12:8">
               <multilevel-dropdown :data="allOrganizations" @command="onCommand"
                 :props="{ label: 'name', key: 'code', children: 'subOrgs' }">
-                <el-button type="primary" size="small">
+                <el-button type="primary">
                   {{filter.orgName ? `${filter.orgName}` : '所属机构'}}
                     <i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
               </multilevel-dropdown>
             </el-col>
-            <el-col :span="opened?8:8">
+            <el-col :span="opened?12:8">
               <el-form-item>
-                <el-button type="primary" size="small" round @click.prevent="fetchRoles" :loading="loading">
+                <el-button type="primary" round @click.prevent="fetchRoles" :loading="loading">
                   <i class="el-icon-search"/>
                   <span>查找</span>
                 </el-button>
@@ -62,15 +62,15 @@
           </el-table-column>
           <el-table-column width="232">
             <template slot-scope="scope">
-            <!-- <el-button
-              size="small"
-              @click="onEditUser(scope.row.code)">关联用户</el-button> -->
             <el-button
-              size="small"
+              size="mini"
+              @click="onEditUser(scope.row.code)">关联用户</el-button>
+            <el-button
+              size="mini"
               type="primary"
               @click="onEditRole(scope.row.id)">编辑</el-button>
             <el-button
-              size="small"
+              size="mini"
               type="danger"
               @click="onRemoveRole(scope.row.id)">删除</el-button>
             </template>
@@ -79,7 +79,7 @@
         </el-table>
       </div>
       <div class="list" v-if="opened">
-        <el-button circle size="small" class="list-close"
+        <el-button circle size="mini" class="list-close"
           icon="el-icon-d-arrow-right"
           @click="opened=''">
         </el-button>
@@ -89,13 +89,13 @@
           @refresh="onRefresh"/>
       </div>
     </section>
-    <!-- <el-pagination
+    <el-pagination
       @current-change="handleCurrentChange"
       :page-size="pageSize"
       :pager-count="6"
       layout="prev, pager, next"
       :total="totalPageNum">
-    </el-pagination> -->
+    </el-pagination>
   </section>
 </template>
 
@@ -236,7 +236,7 @@ export default {
 }
 .filter {
   border-right: 1px solid #eee;
-  width: 50%;
+  width: 350px;
   transition: all 0.4s;
   padding-right: 25px;
   &.opened {

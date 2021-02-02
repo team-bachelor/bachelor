@@ -1,17 +1,17 @@
 <template>
 <section>
   <div class="handler">
-    <el-button type="primary" size="small" :loading="loading" @click="onSave">{{roleId?'保存':'创建'}}</el-button>
+    <el-button type="primary" :loading="loading" @click="onSave">{{roleId?'保存':'创建'}}</el-button>
   </div>
   <el-form ref="form" :model="formData" :rules="formRules" label-width="80px">
     <el-form-item label="角色名称" prop="name">
-      <el-input v-model="formData.name" size="small" clearable></el-input>
+      <el-input v-model="formData.name"></el-input>
     </el-form-item>
     <el-form-item label="角色编码" prop="code">
-      <el-input v-model="formData.code" size="small" clearable></el-input>
+      <el-input v-model="formData.code"></el-input>
     </el-form-item>
     <el-form-item label="所属机构" prop="orgCode">
-      <el-select v-model="formData.orgCode" size="small" placeholder="请选择所属机构" style="width:100%">
+      <el-select v-model="formData.orgCode" placeholder="请选择所属机构" style="width:100%">
         <el-option v-for="item in organizations" :key="item.code"
           :label="item.name" :value="item.code"></el-option>
       </el-select>

@@ -3,7 +3,7 @@
   <el-input
     placeholder="输入关键字进行过滤"
     v-model="filterText"
-    size="small" clearable>
+    size="mini">
   </el-input>
   <!-- 父子不关联 -->
   <!-- :check-strictly="true" -->
@@ -95,7 +95,6 @@ export default {
         [[]]: keys,
       }).then(() => {
         this.$message.success('保存菜单成功');
-		window.location.reload();
       }, () => {
         this.$message.error('保存菜单失败');
       });

@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import ElementUI from 'element-ui';
 import { API_LOG_URL } from './config';
-//import css
-import 'vue-beauty/package/style/vue-beauty.min.css'
 /**
  * 全局样式
  */
@@ -11,6 +9,10 @@ import './assets/styles/index.scss';
  * 入口组件
  */
 import App from './App.vue';
+/**
+ * 路由
+ */
+import router from './router';
 /**
  * 数据仓库
  */
@@ -48,19 +50,11 @@ import Log from './lib/log';
  */
 import Perf from './lib/perf';
 
-/**
- * 路由
- */
-import router from './router';
-
 import axios from 'axios';
 Vue.prototype.$http = axios
 
 import exportExcel from './util/exportExcel' //excel导出
 Vue.prototype.$exportExcel = exportExcel
-
-import {tree} from 'vue-beauty'
-Vue.use(tree)
 
 Vue.use(ElementUI);
 // Vue.use(Tabset, store, {});

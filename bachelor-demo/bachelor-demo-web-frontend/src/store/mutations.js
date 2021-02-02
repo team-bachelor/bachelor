@@ -6,9 +6,6 @@ import {
   SET_TOKEN,
   TOGGLE_SIDEBAR,
   TOGGLE_COMMON_VIEW,
-  ROUTER_LIST,
-  DEFAULT_LIST,
-  CLEAR_ROUTER_LIST
 } from './types';
 
 export default {
@@ -30,18 +27,6 @@ export default {
   [SET_TOKEN](state, payload) {
     state.token = payload.token;
     state.userinfo = payload.userinfo;
-  },
-  
-  [ROUTER_LIST](state, payload) {
-    state.routerList = payload.routerList;
-  },
-  
-  [CLEAR_ROUTER_LIST](state, payload) {
-    state.routerList = [];
-  },
-  
-  [DEFAULT_LIST](state, payload) {
-    state.defaults = payload.defaults;
   },
   /**
    * 切换(关闭)公共视图

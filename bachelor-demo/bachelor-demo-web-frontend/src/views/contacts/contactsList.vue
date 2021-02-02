@@ -1,21 +1,16 @@
 <template>
 	<section>
 		<section class="lx-container">
-			
-			<div class="filters" :class="{opened:!opened}">
-				<v-tree :data="orgList" @select="selectFn" show-line></v-tree>
-			</div>
-			
 			<div class="filter" :class="{opened:!opened}">
 				
 				<el-form class="form" ref="filter" :model="filter">
 				  <el-row :gutter="24">
 					  
-					<!-- <el-col :span="6">
+					<el-col :span="6">
 					  <el-form-item label="">
 					    <el-cascader style="width:100%;margin-top: 6px;"
 					    	clearable
-							size="small"
+							size="mini"
 					    	ref="orgs"
 							placeholder="请选择组织"
 					        v-model="groupIds"
@@ -23,25 +18,25 @@
 					        :props="{ expandTrigger: 'hover',value:'id',label:'bname',checkStrictly:true  }"
 					        @change="handleChange"></el-cascader>
 					  </el-form-item>
-					</el-col> -->  
+					</el-col>  
 					  
 				    <el-col :span="6">
 				      <el-form-item label="">
-				        <el-input v-model="filter.bname" clearable size="small" placeholder="请输入姓名"
+				        <el-input v-model="filter.bname" size="mini" placeholder="请输入姓名"
 				          ></el-input>
 				      </el-form-item>
 				    </el-col>
 					
 					<el-col :span="6">
 					  <el-form-item label="">
-					    <el-input v-model="filter.phone" clearable size="small" placeholder="请输入电话号码"
+					    <el-input v-model="filter.phone" size="mini" placeholder="请输入电话号码"
 					      ></el-input>
 					  </el-form-item>
 					</el-col>
 					
 				    <el-col :span="6">
 				      <el-form-item>
-				        <el-button type="primary" size="small" round @click.prevent="fetchRoles" :loading="loading">
+				        <el-button type="primary" size="mini" round @click.prevent="fetchRoles" :loading="loading">
 				          <i class="el-icon-search"/>
 				          <span>查找</span>
 				        </el-button>
@@ -53,13 +48,13 @@
 				<div class="hairline"></div>
 
 				<div class="btn">
-					<el-button size="small" @click="onEditRole(0)">新增通讯录</el-button>
+					<el-button size="mini" @click="onEditRole(0)">新增通讯录</el-button>
 					<el-button
-					  size="small"
+					  size="mini"
 					  type="primary"
 					  @click="excelImport">导入通讯录</el-button>
 					  
-					<el-button type="warning" icon="el-icon-download" @click="excel" size="small">下载模板</el-button>
+					<el-button type="warning" icon="el-icon-download" @click="excel" size="mini">下载模板</el-button>
 					 
 				</div>
 				<!-- <el-button size="small" type="danger" @click="onRemoveRoles" >删除</el-button> -->
@@ -91,11 +86,11 @@
 					<el-table-column width="232">
 					  <template slot-scope="scope">
 					  <el-button
-					    size="small"
+					    size="mini"
 					    type="primary"
 					    @click="onEditRole(scope.row.id)">编辑</el-button>
 					  <el-button
-					    size="small"
+					    size="mini"
 					    type="danger"
 					    @click="onRemoveRole(scope.row.id)">删除</el-button>
 					  </template>
@@ -105,7 +100,7 @@
 			</div>
 
 			<!-- <div class="list" v-if="opened">
-				<el-button circle size="small" class="list-close" icon="el-icon-d-arrow-right" @click="opened=''">
+				<el-button circle size="mini" class="list-close" icon="el-icon-d-arrow-right" @click="opened=''">
 				</el-button>
 				<contacts-edit v-if="opened=='contactsEdit'" :id.sync="checkedRoleId"
 				  :organizations="organizations"
@@ -144,34 +139,11 @@
 		},
 		data() {
 			return {
-				treeData: [{
-				  title: 'parent 1',
-				  expanded: true,
-				  selected: true,
-				  children: [{
-				    title: 'parent 1-0',
-				    expanded: true,
-				    children: [{
-				      title: 'leaf',
-				      disableCheckbox: true
-				    }, {
-				      title: 'leaf',
-				    }]
-				  }, {
-				    title: 'parent 1-1',
-				    checked: true,
-				    children: [{
-				      title: "<span style='color: #08c'>sss</span>"
-				    }]
-				  }]
-				}],
-				
 				dialogVisible: false,
 				dataType: 2,
 				fileTit:'',
 				showDialog: 0,
 				
-				orgList: [],
 				roles: [],
 				checkedRoleId: '',
 				checkedRoleCode: '',
@@ -267,49 +239,18 @@
 			onRemoveRole(id) {
 				this.removeRoles(() => this.removeRole(id));
 			},
-			mapTree (org) {
-			    const haveChildren = Array.isArray(org.children) && org.children.length > 0;
-				if(haveChildren){
-					return {
-					    title: org.bname+" ("+org.counts+')',
-					    value: org.id,
-					    data: {...org},
-					    //判断它是否存在子集，若果存在就进行再次进行遍历操作，知道不存在子集便对其他的元素进行操作
-					    children: haveChildren ? org.children.map(i => this.mapTree(i)) : []
-					};
-				}else{
-					return {
-					    title: org.bname+" ("+org.counts+')',
-					    value: org.id,
-					    data: {...org},
-					};
-				}
-			    
-			},
 			initOrg() {
 				this.$api.orgTree().then(
 					({data}) => {
 						// console.log('获取机构',data.data)
 						this.organizations = data.data;
-						let orgTree = data.data.map(org => this.mapTree(org));
-						// console.log(orgTree)
-						this.orgList = orgTree;
 					},
 					() => {
 						this.$message.error('获取机构失败！');
 					},
 				);
 			},
-			selectFn(e){
-				if(e.length>0){
-					this.filter.groupId = e[0].value;
-				}else{
-					this.filter.groupId = '';
-				}
-				// console.log(!!this.$refs["orgs"].getCheckedNodes()[0].value)
-				this.currentPage = 1;
-				this.fetchRoles();
-			},
+
 			removeRoles(callback) {
 				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
 					confirmButtonText: '继续删除',
@@ -357,19 +298,6 @@
 	/deep/.el-dialog__body {
 	    padding: 10px 20px;
 	}
-	.filters{
-		margin-right: 20px;
-		border-right: 1px solid #d9d9d9 !important; 
-		width: 50%;
-		transition: all 0.4s;
-		padding: 0px 15px;
-		overflow:auto;
-		height: calc(100vh - 170px);
-		&.opened {
-			border: none;
-			width: 12%;
-		}
-	}
 	.filter {
 		border-right: 1px solid #eee;
 		width: 50%;
@@ -378,7 +306,7 @@
 
 		&.opened {
 			border: none;
-			width: 88%;
+			width: 100%;
 		}
 
 		.btn {

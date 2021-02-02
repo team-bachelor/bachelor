@@ -5,7 +5,7 @@
       <div class="date_box">2020年12月25日 11:21:57</div>
       <div class="title_box">东营港应急指挥中心</div>
       <div class="duty_box">今日值班人员：王贵 祝家辉 黎明 王启超  张 </div>
-      <div class="user_box" @click="$router.logout">欢迎您：刘琳 退出</div>
+      <div class="user_box">欢迎您：刘琳</div>
     </div>
     <div class="num_box">
       <ul>
@@ -81,7 +81,7 @@
           <div class="btn_box">
             <div class="btn_item"><img src="../assets/images/menu7.png"><p>舆情检测</p></div>
             <div class="btn_item"><img src="../assets/images/menu8.png"><p>检测监控</p></div>
-            <div class="btn_item" @click="openSys('/userRight')"><img src="../assets/images/menu9.png"><p>应急通讯录</p></div>
+            <div class="btn_item"><img src="../assets/images/menu9.png" @click="openSys('/parkPhoneBook')"><p>应急通讯录</p></div>
             <div class="btn_item"><img src="../assets/images/menu10.png"><p>值班值守</p></div>
             <div class="btn_item"><img src="../assets/images/menu11.png"><p>应急通讯与会商</p></div>
           </div>
@@ -92,7 +92,6 @@
 </template>
 
 <script>
-import { getAsyncRoutes } from '@/config/asyncRouter'
 export default {
   data() {
     return {
@@ -101,7 +100,7 @@ export default {
   },
   methods: {
 	  openSys(url){
-		this.$router.push(url)
+		  this.$router.push(url)
 	  },
   },
 }
@@ -134,7 +133,6 @@ html,body{
     }
     .date_box,.user_box{
       text-align: right;
-	  cursor: pointer;
     }
     .title_box{
       text-align: center;

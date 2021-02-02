@@ -2,7 +2,6 @@
   <el-dialog title="添加角色用户" :visible.sync="value" :before-close="beforeClose">
     <el-table
       :data="users"
-	  height="500"
       @selection-change="onSelectionChange">
       <el-table-column
         type="selection"
