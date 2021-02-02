@@ -1,27 +1,30 @@
 package cn.org.bachelor.iam.idm.service;
 
+import cn.org.bachelor.core.exception.BusinessException;
+import cn.org.bachelor.core.exception.RemoteException;
+import cn.org.bachelor.core.exception.SystemException;
+import cn.org.bachelor.iam.acm.IamValueHolderService;
 import cn.org.bachelor.iam.acm.vo.*;
-import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
+import cn.org.bachelor.iam.idm.exception.ImSysException;
 import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
+import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
+import cn.org.bachelor.iam.oauth2.client.SignSecurityOAuthClient;
+import cn.org.bachelor.iam.oauth2.client.URLConnectionClient;
+import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
+import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
+import cn.org.bachelor.iam.oauth2.request.DefaultOAuthResourceRequest;
+import cn.org.bachelor.iam.oauth2.response.OAuthResourceResponse;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
-import cn.org.bachelor.iam.acm.AuthValueHolderService;
-import cn.org.bachelor.iam.idm.exception.ImSysException;
-import cn.org.bachelor.core.exception.BusinessException;
-import cn.org.bachelor.core.exception.RemoteException;
-import cn.org.bachelor.core.exception.SystemException;
-import cn.org.bachelor.iam.oauth2.client.SignSecurityOAuthClient;
-import cn.org.bachelor.iam.oauth2.client.URLConnectionClient;
-import cn.org.bachelor.iam.oauth2.request.DefaultOAuthResourceRequest;
-import cn.org.bachelor.iam.oauth2.response.OAuthResourceResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -40,16 +43,16 @@ public class DefaultImSysService implements ImSysService {
     private static final Logger logger = LoggerFactory.getLogger(DefaultImSysService.class);
     private ObjectMapper jsonMapper = new ObjectMapper();
     @Autowired
-    private AuthValueHolderService valueHolder;
+    private IamValueHolderService valueHolder;
 
     @Autowired
     private OAuth2CientConfig clientConfig;
 
     /**
      * @param valueHolder AuthValueHolderService
-     * @see cn.org.bachelor.iam.acm.AuthValueHolderService
+     * @see cn.org.bachelor.iam.acm.IamValueHolderService
      */
-    public DefaultImSysService(AuthValueHolderService valueHolder) {
+    public DefaultImSysService(IamValueHolderService valueHolder) {
         this.valueHolder = valueHolder;
     }
 
@@ -95,7 +98,7 @@ public class DefaultImSysService implements ImSysService {
         if (user.getAccessToken() == null) {
             return false;
         }
-        List<RoleVo> roles = findUserRolesInClient(valueHolder.getClientID(), user.getId(), user.getOrgId(), user.getAccessToken());
+        List<RoleVo> roles = findUserRolesInClient(clientConfig.getId(), user.getId(), user.getOrgId(), user.getAccessToken());
         AtomicBoolean result = new AtomicBoolean(false);
         roles.forEach(roleVo -> {
             if ("super_admin".equals(roleVo.getCode())) {
@@ -634,6 +637,10 @@ public class DefaultImSysService implements ImSysService {
                 UserVo user = valueHolder.getCurrentUser();
                 if (user != null && user.getAccessToken() != null) {
                     token = user.getAccessToken();
+                }else{
+                    OAuth2ClientCertification upCC =
+                            (OAuth2ClientCertification) valueHolder.getValueHolderService().getSessionAttribute(ClientConstant.SESSIONAUTHENTICATIONKEY);
+                    token = upCC.getAccessToken();
                 }
             } else {
                 token = astoken;

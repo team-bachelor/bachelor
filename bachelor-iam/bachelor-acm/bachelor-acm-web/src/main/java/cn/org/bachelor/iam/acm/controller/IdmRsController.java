@@ -1,11 +1,11 @@
 package cn.org.bachelor.iam.acm.controller;
 
-import cn.org.bachelor.iam.acm.AuthValueHolderService;
 import cn.org.bachelor.iam.idm.service.DefaultImSysService;
 import cn.org.bachelor.iam.acm.vo.AppVo;
 import cn.org.bachelor.iam.idm.service.ImSysParam;
 import cn.org.bachelor.iam.idm.service.ImSysResult;
 import cn.org.bachelor.iam.acm.vo.UserVo;
+import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
 import cn.org.bachelor.web.json.JsonResponse;
 import cn.org.bachelor.web.json.ResponseStatus;
 import io.swagger.annotations.ApiImplicitParam;
@@ -43,7 +43,7 @@ public class IdmRsController {
     @Autowired
     private DefaultImSysService userSysService;
     @Autowired
-    private AuthValueHolderService valueHolder;
+    private OAuth2CientConfig clientConfig;
 
     @ApiOperation(value = "根据当前clientID查询用户")
     @ApiImplicitParams({
@@ -211,7 +211,7 @@ public class IdmRsController {
         param.setDeptName(deptName);
         param.setPage(page == null ? null : String.valueOf(page));
         param.setPageSize(page == null ? null : String.valueOf(pageSize));
-        param.setClientId(valueHolder.getClientID());
+        param.setClientId(clientConfig.getId());
         return JsonResponse.createHttpEntity(userSysService.findUsersByClientID(param));
     }
 }

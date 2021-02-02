@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.acm.interceptor;
 
 
-import cn.org.bachelor.iam.acm.AuthValueHolderService;
+import cn.org.bachelor.iam.acm.IamValueHolderService;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.service.AuthorizeService;
 import cn.org.bachelor.iam.acm.vo.UserVo;
@@ -31,7 +31,7 @@ import java.util.Date;
 public class UserAccessControlInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LoggerFactory.getLogger(UserAccessControlInterceptor.class);
     @Autowired
-    private AuthValueHolderService valueHolder;
+    private IamValueHolderService valueHolder;
 
     @Autowired
     private AuthorizeService authorizeService;

@@ -1,8 +1,9 @@
 package cn.org.bachelor.iam.acm.service;
 
 import cn.org.bachelor.iam.idm.service.ImSysService;
+import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
 import org.apache.commons.lang3.StringUtils;
-import cn.org.bachelor.iam.acm.AuthValueHolderService;
+import cn.org.bachelor.iam.acm.IamValueHolderService;
 import cn.org.bachelor.iam.acm.dao.RoleMapper;
 import cn.org.bachelor.iam.acm.dao.RoleMenuMapper;
 import cn.org.bachelor.iam.acm.dao.RolePermissionMapper;
@@ -40,7 +41,10 @@ public class RoleService {
     private ImSysService imSysService;
 
     @Autowired
-    private AuthValueHolderService valueHolder;
+    private IamValueHolderService valueHolder;
+
+    @Autowired
+    private OAuth2CientConfig clientConfig;
 
     /**
      * @return
@@ -86,7 +90,7 @@ public class RoleService {
     }
 
     public List<UserVo> findUserByClientID(ImSysParam param) {
-        param.setClientId(valueHolder.getClientID());
+        param.setClientId(clientConfig.getId());
         List<UserVo> users = imSysService.findUsersByClientID(param);
 //        List<String> ids = new ArrayList<>(users.size());
 //        users.forEach(user -> {
@@ -143,7 +147,7 @@ public class RoleService {
         ur.setRoleCode(roleCode);
         List<UserRole> userRoles = userRoleMapper.select(ur);
         ImSysParam usp = new ImSysParam();
-        usp.setClientId(valueHolder.getClientID());
+        usp.setClientId(clientConfig.getId());
         List<UserVo> remote = imSysService.findUsersByClientID(usp);
         Map<String, UserVo> rMap = new HashMap<>(userRoles.size());
         remote.forEach(i -> {

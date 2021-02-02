@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.acm.service;
 
 import org.apache.commons.lang3.StringUtils;
-import cn.org.bachelor.iam.acm.AuthValueHolderService;
+import cn.org.bachelor.iam.acm.IamValueHolderService;
 import cn.org.bachelor.iam.acm.dao.MenuMapper;
 import cn.org.bachelor.iam.acm.dao.OrgMenuMapper;
 import cn.org.bachelor.iam.acm.dao.RoleMenuMapper;
@@ -34,7 +34,7 @@ public class MenuService {
     private MenuMapper menuMapper;
 
     @Autowired
-    private AuthValueHolderService valueHolder;
+    private IamValueHolderService valueHolder;
 
     /**
      * 计算当前用户的菜单

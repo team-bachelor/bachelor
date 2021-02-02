@@ -26,7 +26,7 @@ public class AuthExceptionHandler {
     private static Log logger = LogFactory.getLog(AuthExceptionHandler.class);
 
     @ExceptionHandler(value = ImSysException.class)
-    public ResponseEntity handleUserSysException(HttpServletRequest request, Exception e) {
+    public ResponseEntity handleImSysException(HttpServletRequest request, Exception e) {
         logger.info(e);
         if ("ACCESS_TOKEN_EXPIRED".equals(e.getMessage())) {
             return GlobalExceptionHandler.createExceptionResponseEntity(e.getMessage(), null, BIZ_ERR, LOCKED);

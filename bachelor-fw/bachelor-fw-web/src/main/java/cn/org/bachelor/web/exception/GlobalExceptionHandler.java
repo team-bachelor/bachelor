@@ -77,7 +77,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String msg = code;
         try {
             if (code != null && !"".equals(code)) {
-                msg = MessageUtil.getMessage(code, Arrays.asList(args).toArray());
+                msg = MessageUtil.getMessage(code, args == null? "null" : Arrays.asList(args).toArray());
             }
         } catch (NoSuchMessageException e) {
             logger.debug(e.getMessage());

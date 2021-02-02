@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.acm.service;
 
 
-import cn.org.bachelor.iam.acm.AuthValueHolderService;
+import cn.org.bachelor.iam.acm.IamValueHolderService;
 import cn.org.bachelor.iam.acm.dao.*;
 import cn.org.bachelor.iam.acm.domain.*;
 import cn.org.bachelor.iam.acm.domain.ObjPermission;
@@ -48,7 +48,7 @@ public class AuthorizeService {
     private ObjOperationMapper objOperationMapper;
 
     @Autowired
-    private AuthValueHolderService valueHolder;
+    private IamValueHolderService valueHolder;
 
     private static final String DEF_AUTH_OP_ALLOW = "a";
     private static final String DEF_AUTH_OP_CHECK = "c";

@@ -15,17 +15,10 @@ import org.springframework.stereotype.Service;
  * @author Team Bachelor
  */
 @Service
-public class AuthValueHolderService {
+public class IamValueHolderService {
 
     @Autowired
     private IVLService valueHolderService;
-
-    public String getClientID() {
-        return clientID;
-    }
-
-    @Value("${spring.application.id:}")
-    private String clientID;
 
     private String remoteIP;
 

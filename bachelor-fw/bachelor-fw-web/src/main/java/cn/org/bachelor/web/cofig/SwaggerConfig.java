@@ -11,11 +11,27 @@ import org.springframework.stereotype.Component;
  * @Modified By:
  */
 @Component
-@ConfigurationProperties(prefix = "swagger")
+@ConfigurationProperties(prefix = "bachelor.swagger")
 public class SwaggerConfig {
+
+  /**
+   * swagger扫描的基础包
+   */
   String[] basePackage;
+
+  /**
+   * swagger页面标题
+   */
   String title;
+
+  /**
+   * API版本
+   */
   String version;
+
+  /**
+   * 模块描述
+   */
   String description;
 
 

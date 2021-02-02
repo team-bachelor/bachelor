@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.acm.service;
 
-import cn.org.bachelor.iam.acm.AuthValueHolderService;
+import cn.org.bachelor.iam.acm.IamValueHolderService;
 import cn.org.bachelor.iam.acm.vo.UserVo;
 
 /**
@@ -8,7 +8,7 @@ import cn.org.bachelor.iam.acm.vo.UserVo;
  * @创建人: liuzhuo
  * @创建时间: 2019/3/28
  */
-public class MockAuthValueHolderService extends AuthValueHolderService {
+public class MockAuthValueHolderService extends IamValueHolderService {
 
     private String remoteIP;
     private UserVo user;
