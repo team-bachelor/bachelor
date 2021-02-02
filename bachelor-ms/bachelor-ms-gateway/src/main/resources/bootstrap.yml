@@ -18,6 +18,7 @@ spring:
       discovery:
         locator:
           enabled: true
+          lowerCaseServiceId: true
   messages:
     basename: i18n/messages
 

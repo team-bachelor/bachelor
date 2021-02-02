@@ -40,7 +40,7 @@ export const MENU_GET_MODE = 'local';
 // export const API_HOST = window.location.origin;
 // export const API_HOST = 'http://localhost:8800';
 // export const API_HOST = 'http://10.0.139.239:8888';
-export const API_HOST = 'http://192.168.1.104:8888';
+export const API_HOST = 'http://localhost:8888';
 
 
 /**

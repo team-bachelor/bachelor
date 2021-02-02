@@ -1,0 +1,39 @@
+{
+  "groups": [
+    {
+      "name": "bachelor.iam",
+      "type": "cn.org.bachelor.iam.acm.config.AcmConfig",
+      "sourceType": "cn.org.bachelor.iam.acm.config.AcmConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "bachelor.iam.enable-user-access-control",
+      "type": "java.lang.Boolean",
+      "description": "是否对当前登录用户鉴权",
+      "sourceType": "cn.org.bachelor.iam.acm.config.AcmConfig",
+      "defaultValue": true
+    },
+    {
+      "name": "bachelor.iam.enable-user-identify",
+      "type": "java.lang.Boolean",
+      "description": "是否获取当前用户信息",
+      "sourceType": "cn.org.bachelor.iam.acm.config.AcmConfig",
+      "defaultValue": true
+    },
+    {
+      "name": "bachelor.iam.exclude-path-patterns",
+      "type": "java.lang.String[]",
+      "description": "用户拦截器和访问控制拦截器要拦截的地址",
+      "sourceType": "cn.org.bachelor.iam.acm.config.AcmConfig"
+    },
+    {
+      "name": "bachelor.iam.private-key-file",
+      "type": "java.lang.String",
+      "description": "用于token加密的私钥文件地址",
+      "sourceType": "cn.org.bachelor.iam.acm.config.AcmConfig",
+      "defaultValue": "/id_rsa"
+    }
+  ],
+  "hints": []
+}

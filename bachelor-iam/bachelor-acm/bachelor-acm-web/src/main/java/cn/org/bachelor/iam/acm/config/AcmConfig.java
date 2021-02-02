@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Description;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -25,20 +26,23 @@ import java.io.InputStreamReader;
 @ConfigurationProperties(prefix = "bachelor.iam")
 public class AcmConfig implements WebMvcConfigurer {
 
+    /**
+     * 用户拦截器和访问控制拦截器要拦截的地址
+     */
     private String[] excludePathPatterns;
 
     /**
-     * 是否获取当前登录用户信息:enable_user_identify
+     * 是否获取当前用户信息
      */
     private boolean enableUserIdentify = true;
 
     /**
-     * 是否对当前登录用户鉴权:enable_user_access_control
+     * 是否对当前登录用户鉴权
      */
     private boolean enableUserAccessControl = true;
 
     /**
-     * 用于加密的私钥文件地址
+     * 用于token加密的私钥文件地址:private_key_file
      */
     private String privateKeyFile = "/id_rsa";
 

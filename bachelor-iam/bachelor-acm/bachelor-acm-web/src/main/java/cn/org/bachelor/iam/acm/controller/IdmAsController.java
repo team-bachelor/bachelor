@@ -85,7 +85,7 @@ public class IdmAsController {
             userinfo = client.bindUserInfo(code);
         } catch (OAuthBusinessException e) {
             e.printStackTrace();
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return JsonResponse.createHttpEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
         OAuth2ClientCertification upCC = (OAuth2ClientCertification) request.getSession()
                 .getAttribute(ClientConstant.SESSIONAUTHENTICATIONKEY);

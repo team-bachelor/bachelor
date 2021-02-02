@@ -18,22 +18,49 @@ import org.springframework.context.annotation.PropertySource;
 @ConfigurationProperties(prefix = "bachelor.iam.client", ignoreInvalidFields = true)
 public class OAuth2CientConfig {
 
+    /**
+     * 用户平台中的client_id
+     */
     private String id;
 
+    /**
+     * 用户平台中的client_secret
+     */
     private String secret;
 
+    /**
+     * 登录过程中获取astoken成功后的回调地址，用于页面跳转型的认证，jwt型中认证没用
+     */
     private String targetURL;
 
+    /**
+     * 认证失败时是否导向到登录的重定向地址
+     */
     private boolean toLoginRedirectURL = true;
 
+    /**
+     * 登录的重定向回调地址
+     */
     private String loginRedirectURL;
 
+    /**
+     * 登出的重定向回调地址
+     */
     private String logoutRedirectURL;
 
+    /**
+     * 是否启用登录过滤器(过滤未登录的请求)
+     */
     private boolean loginFilterEnable = true;
 
+    /**
+     * 认证服务接口地址集合
+     */
     private AsUrlConfig asURL = new AsUrlConfig();
 
+    /**
+     * 资源服务认证地址集合
+     */
     private RsUrlConfig rsURL = new RsUrlConfig();
 
     public String getId() {
@@ -101,7 +128,7 @@ public class OAuth2CientConfig {
     }
 
     public String toString() {
-        return    "<br/>clientId            :" + id
+        return "<br/>clientId            :" + id
                 + "<br/>clientSecret        :" + secret
                 + "<br/>targetURL           :" + targetURL
                 + "<br/>isToLoginRedirectURL:" + toLoginRedirectURL
@@ -124,34 +151,76 @@ public class OAuth2CientConfig {
      * @author team bachelor
      *
      */
-
     public static class RsUrlConfig {
 
+        /**
+         * 资源服务根地址
+         */
         private String base = "";
 
+        /**
+         * 获取应用信息的接口地址
+         */
         private String app = "/app";
 
-        private String userInfoDetail="/userInfoDetail";
+        /**
+         * 获取用户详细信息的接口地址
+         */
+        private String userInfoDetail = "/userInfoDetail";
 
-        private String userRole ="/userRoles";
+        /**
+         * 获取用户角色信息的接口地址
+         */
+        private String userRole = "/userRoles";
 
-        private String users="/users";
+        /**
+         * 获取用户信息的接口地址
+         */
+        private String users = "/users";
 
-        private String depts="/depts";
+        /**
+         * 获取部门信息的接口地址
+         */
+        private String depts = "/depts";
 
-        private String orgs="/orgs";
+        /**
+         * 获取组织结构信息的接口地址
+         */
+        private String orgs = "/orgs";
 
-        private String userByIds="../userapi/user/getUserByIds";
+        /**
+         * 根据用户id获取用户信息的接口地址
+         */
+        private String userByIds = "../userapi/user/getUserByIds";
 
-        private String userByClientID="/users/authorizeByApp";
+        /**
+         * 获取可访问应用的全部用户的接口地址
+         */
+        private String userByClientID = "/users/authorizeByApp";
 
-        private String appsByUserId="/users/authorizedApp";
+        /**
+         * 获取用户可访问的应用的接口地址
+         */
+        private String appsByUserId = "/users/authorizedApp";
 
-        private String mtUserRoles="/mtUserRoles";
+        /**
+         * 获取用户角色信息的接口地址
+         */
+        private String mtUserRoles = "/mtUserRoles";
 
-        private String userDetails="/user_details";
+        /**
+         * 获取用户详细信息的接口地址
+         */
+        private String userDetails = "/user_details";
 
-        private String deptDetails="/deptDetails";
+        /**
+         * 获取部门详细信息的接口地址
+         */
+        private String deptDetails = "/deptDetails";
+
+        private String prefix(String url) {
+            return this.getBase() + url;
+        }
 
         public String getBase() {
             return base;
@@ -159,6 +228,18 @@ public class OAuth2CientConfig {
 
         public void setBase(String base) {
             this.base = base;
+            app = prefix(app);
+            userInfoDetail = prefix(userInfoDetail);
+            userRole = prefix(userRole);
+            users = prefix(users);
+            depts = prefix(depts);
+            orgs = prefix(orgs);
+            userByIds = prefix(userByIds);
+            userByClientID = prefix(userByClientID);
+            appsByUserId = prefix(appsByUserId);
+            mtUserRoles = prefix(mtUserRoles);
+            userDetails = prefix(userDetails);
+            deptDetails = prefix(deptDetails);
         }
 
         public String getApp() {
@@ -166,7 +247,7 @@ public class OAuth2CientConfig {
         }
 
         public void setApp(String app) {
-            this.app = app;
+            this.app = prefix(app);
         }
 
         public String getUserInfoDetail() {
@@ -174,7 +255,7 @@ public class OAuth2CientConfig {
         }
 
         public void setUserInfoDetail(String userInfoDetail) {
-            this.userInfoDetail = userInfoDetail;
+            this.userInfoDetail = prefix(userInfoDetail);
         }
 
         public String getUserRole() {
@@ -182,7 +263,7 @@ public class OAuth2CientConfig {
         }
 
         public void setUserRole(String userRole) {
-            this.userRole = userRole;
+            this.userRole = prefix(userRole);
         }
 
         public String getUsers() {
@@ -190,7 +271,7 @@ public class OAuth2CientConfig {
         }
 
         public void setUsers(String users) {
-            this.users = users;
+            this.users = prefix(users);
         }
 
         public String getDepts() {
@@ -198,7 +279,7 @@ public class OAuth2CientConfig {
         }
 
         public void setDepts(String depts) {
-            this.depts = depts;
+            this.depts = prefix(depts);
         }
 
         public String getOrgs() {
@@ -206,7 +287,7 @@ public class OAuth2CientConfig {
         }
 
         public void setOrgs(String orgs) {
-            this.orgs = orgs;
+            this.orgs = prefix(orgs);
         }
 
         public String getUserByIds() {
@@ -214,7 +295,7 @@ public class OAuth2CientConfig {
         }
 
         public void setUserByIds(String userByIds) {
-            this.userByIds = userByIds;
+            this.userByIds = prefix(userByIds);
         }
 
         public String getUserByClientID() {
@@ -222,7 +303,7 @@ public class OAuth2CientConfig {
         }
 
         public void setUserByClientID(String userByClientID) {
-            this.userByClientID = userByClientID;
+            this.userByClientID = prefix(userByClientID);
         }
 
         public String getAppsByUserId() {
@@ -230,7 +311,7 @@ public class OAuth2CientConfig {
         }
 
         public void setAppsByUserId(String appsByUserId) {
-            this.appsByUserId = appsByUserId;
+            this.appsByUserId = prefix(appsByUserId);
         }
 
         public String getMtUserRoles() {
@@ -238,7 +319,7 @@ public class OAuth2CientConfig {
         }
 
         public void setMtUserRoles(String mtUserRoles) {
-            this.mtUserRoles = mtUserRoles;
+            this.mtUserRoles = prefix(mtUserRoles);
         }
 
         public String getUserDetails() {
@@ -246,7 +327,7 @@ public class OAuth2CientConfig {
         }
 
         public void setUserDetails(String userDetails) {
-            this.userDetails = userDetails;
+            this.userDetails = prefix(userDetails);
         }
 
         public String getDeptDetails() {
@@ -254,11 +335,11 @@ public class OAuth2CientConfig {
         }
 
         public void setDeptDetails(String deptDetails) {
-            this.deptDetails = deptDetails;
+            this.deptDetails = prefix(deptDetails);
         }
 
         public String toString() {
-            return    "<br/>base                :" + getBase()
+            return "<br/>base                :" + getBase()
                     + "<br/>app                 :" + getApp()
                     + "<br/>userInfoDetail      :" + getUserInfoDetail()
                     + "<br/>useRole             :" + getUserRole()
@@ -281,15 +362,31 @@ public class OAuth2CientConfig {
 
     public static class AsUrlConfig {
 
+        /**
+         * 认证服务的根接口地址
+         */
         private String base = "";
 
+        /**
+         * 授权的接口地址
+         */
         private String authorize = "/authorize";
 
+        /**
+         * 获取token的接口地址
+         */
         private String accessToken = "/accessToken";
 
+        /**
+         * 登出的接口地址
+         */
         private String logout = "/logout";
 
+        /**
+         * 获取用户基本信息的接口地址
+         */
         private String userInfo = "/userInfo";
+
 
         public String getBase() {
             return base;
@@ -297,6 +394,14 @@ public class OAuth2CientConfig {
 
         public void setBase(String base) {
             this.base = base;
+            authorize = prefix(authorize);
+            accessToken = prefix(accessToken);
+            logout = prefix(logout);
+            userInfo = prefix(userInfo);
+        }
+
+        private String prefix(String url) {
+            return this.getBase() + url;
         }
 
         public String getAuthorize() {
@@ -304,7 +409,7 @@ public class OAuth2CientConfig {
         }
 
         public void setAuthorize(String authorize) {
-            this.authorize = authorize;
+            this.authorize = prefix(authorize);
         }
 
         public String getAccessToken() {
@@ -312,7 +417,7 @@ public class OAuth2CientConfig {
         }
 
         public void setAccessToken(String accessToken) {
-            this.accessToken = accessToken;
+            this.accessToken = prefix(accessToken);
         }
 
         public String getLogout() {
@@ -320,7 +425,7 @@ public class OAuth2CientConfig {
         }
 
         public void setLogout(String logout) {
-            this.logout = logout;
+            this.logout = prefix(logout);
         }
 
         public String getUserInfo() {
@@ -328,11 +433,11 @@ public class OAuth2CientConfig {
         }
 
         public void setUserInfo(String userInfo) {
-            this.userInfo = userInfo;
+            this.userInfo = prefix(userInfo);
         }
 
         public String toString() {
-            return    "<br/>base     :" + getBase()
+            return "<br/>base     :" + getBase()
                     + "<br/>authorize  :" + getAuthorize()
                     + "<br/>accessToken:" + getAccessToken()
                     + "<br/>logout     :" + getLogout()
