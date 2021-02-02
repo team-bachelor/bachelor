@@ -41,7 +41,6 @@ spring:
       cache: false
   mvc:
     static-path-pattern: /**
-  cloud:
     refresh:
       refreshable: none
 
@@ -104,20 +103,20 @@ bachelor:
     enable_user_access_control: false
     ########################################↓权限配置↓########################################
     client:
-      client_id: 8872cb73cb054676aeeadfe97f0ba400
-      client_secret: 01bd345836644d3780cb0d4db17689af
+      id: 8872cb73cb054676aeeadfe97f0ba400
+      secret: 01bd345836644d3780cb0d4db17689af
       logoutRedirectURL: https://wfw.dygzhyq.cn/app-logistics/index.html
       loginRedirectURL: http://localhost:8888
       as_url:
-        base: https://yhty.dygzhyq.cn/user-asserver/
+        base: https://yhty.dygzhyq.cn/user-asserver
       rs_url:
-        base: https://yhty.dygzhyq.cn/user/
+        base: https://yhty.dygzhyq.cn/user/api
   ########################################↑权限配置↑########################################
-swagger:
-  base-package: "cn.org.bachelor.ms.contacts.controller"
-  title: "应急通讯录模块的Restful API"
-  version: "1.0"
-  description: ""
+  swagger:
+    base-package: "cn.org.bachelor.ms.contacts.controller"
+    title: "应急通讯录模块的Restful API"
+    version: "1.0"
+    description: ""
 
 
 
