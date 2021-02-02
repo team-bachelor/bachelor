@@ -1,7 +1,7 @@
 import Layout from '@/layout/default/Index.vue';
 
 const routes = [
-	{path: '/', redirect: "/home"},
+	{path: '/', redirect: "/parkPhoneBook"},
   {
     path: '/home',
     name: '一张图',
