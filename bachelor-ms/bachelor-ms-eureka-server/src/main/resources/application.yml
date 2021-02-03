@@ -9,7 +9,7 @@ eureka:
 #    registerWithEureka: false
 #    fetchRegistry: true
     serviceUrl:
-      defaultZone: http://127.0.0.1:8740/eureka #http://192.168.1.5:8740/eureka/,http://192.168.1.6:8740/eureka/
+      defaultZone: http://127.0.0.1:8740/eureka
   server:
     response-cache-update-interval-ms: 3000
     response-cache-auto-expiration-in-seconds: 180
