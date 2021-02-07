@@ -159,11 +159,17 @@ public class ObjDomain {
     }
 
 
-    public Boolean getSys() {
+    /**
+     * @return 是否为系统默认
+     */
+    public Boolean isSys() {
         return isSys;
     }
 
-    public void setSys(Boolean sys) {
+    /**
+     * @param sys 是否为系统默认
+     */
+    public void setIsSys(Boolean sys) {
         isSys = sys;
     }
 }

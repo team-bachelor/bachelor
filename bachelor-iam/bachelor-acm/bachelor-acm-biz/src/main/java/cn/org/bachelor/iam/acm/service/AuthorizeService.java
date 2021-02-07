@@ -39,7 +39,7 @@ public class AuthorizeService {
     private OrgPermissionMapper orgPermissionMapper;
 
     @Autowired
-    private PermissionMapper permissionMapper;
+    private ObjPermissionMapper permissionMapper;
 
     @Autowired
     private ObjDomainMapper objDomainMapper;
@@ -50,9 +50,9 @@ public class AuthorizeService {
     @Autowired
     private IamValueHolderService valueHolder;
 
-    private static final String DEF_AUTH_OP_ALLOW = "a";
-    private static final String DEF_AUTH_OP_CHECK = "c";
-    private static final String DEF_AUTH_OP_LOGON = "l";
+    private static final String DEF_AUTH_OP_ALLOW = PermissionOptions.CheckLevel.NONE.toString();
+    private static final String DEF_AUTH_OP_CHECK = PermissionOptions.CheckLevel.Authorized.toString();
+    private static final String DEF_AUTH_OP_LOGON = PermissionOptions.CheckLevel.LOGON.toString();
 
     /**
      * 根据用户编码判断用户是否能访问当前对象

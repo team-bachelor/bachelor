@@ -1,0 +1,56 @@
+package cn.org.bachelor.iam.acm.service;
+
+import cn.org.bachelor.iam.acm.dao.ObjOperationMapper;
+import cn.org.bachelor.iam.acm.domain.ObjDomain;
+import cn.org.bachelor.iam.acm.domain.ObjOperation;
+import cn.org.bachelor.iam.acm.domain.ObjPermission;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @描述:
+ * @创建人: liuzhuo
+ * @创建时间: 2021/02/07
+ */
+@Service
+public class ObjOperationService {
+
+    @Autowired
+    private ObjOperationMapper operationMapper;
+
+
+    /**
+     * @param issys 是否为系统默认
+     * @return
+     */
+    public List<ObjOperation> getOperations(Boolean issys) {
+        ObjOperation exrm = new ObjOperation();
+        exrm.setIsSys(issys);
+        return operationMapper.select(exrm);
+    }
+
+
+    public void saveOrUpdate(List<ObjOperation> operations) {
+        //设置查询的样例
+        List<ObjOperation> dbperms = getOperations(false);
+        Map<String, ObjOperation> dbMap = new HashMap<>(dbperms.size());
+        for (ObjOperation dbvalue : dbperms) {
+            dbMap.put(dbvalue.getCode(), dbvalue);
+        }
+        for (ObjOperation newvalue : operations) {
+            if(dbMap.containsKey(newvalue.getCode())){
+                ObjOperation dbvalue = dbMap.get(newvalue.getCode());
+                newvalue.setId(dbvalue.getId());
+                operationMapper.updateByPrimaryKey(newvalue);
+            }else{
+                operationMapper.insert(newvalue);
+            }
+
+        }
+    }
+
+}

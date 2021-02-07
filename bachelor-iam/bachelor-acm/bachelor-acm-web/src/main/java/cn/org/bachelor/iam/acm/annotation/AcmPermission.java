@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.acm.annotation;
 
-import cn.org.bachelor.iam.acm.permission.PermissionOptions;
+import cn.org.bachelor.iam.acm.PermissionOptions;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
@@ -23,7 +23,7 @@ public @interface AcmPermission {
     /**
      * 接口类型，默认一般不需要改
      */
-    PermissionOptions.AccessType type() default PermissionOptions.AccessType.INTERFACE;
+    PermissionOptions.Type type() default PermissionOptions.Type.INTERFACE;
 
     /**
      * 排序

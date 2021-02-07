@@ -11,7 +11,7 @@ import tk.mybatis.mapper.common.Mapper;
 import java.util.List;
 
 @Repository
-public interface PermissionMapper extends Mapper<ObjPermission> {
+public interface ObjPermissionMapper extends Mapper<ObjPermission> {
     @Select("SELECT\n" +
             "o.ID,\n" +
             "o.NAME,\n" +

@@ -62,6 +62,15 @@ public class ObjPermissionVo {
     private String updateUser;
 
     /**
+     * 权限对应的httpmethod
+     */
+    private String httpMethod;
+
+    /**
+     * 操作类型的中文名
+     */
+    private String operateName;
+    /**
      * 获取ID
      *
      * @return ID - ID
@@ -275,5 +284,21 @@ public class ObjPermissionVo {
      */
     public void setDomainName(String domainName) {
         this.domainName = domainName;
+    }
+
+    public String getHttpMethod() {
+        return httpMethod;
+    }
+
+    public void setHttpMethod(String httpMethod) {
+        this.httpMethod = httpMethod;
+    }
+
+    public String getOperateName() {
+        return operateName;
+    }
+
+    public void setOperateName(String operateName) {
+        this.operateName = operateName;
     }
 }

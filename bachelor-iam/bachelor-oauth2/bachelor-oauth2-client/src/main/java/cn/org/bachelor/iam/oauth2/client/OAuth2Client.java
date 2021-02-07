@@ -340,8 +340,6 @@ public class OAuth2Client {
 	public boolean isCallback() {
 		if(isRedirectURL()){
 			String error=request.getParameter("error");
-//			String errorCode=request.getParameter("errorCode");
-//			String errorDescription=request.getParameter("errorDescription");
 			if(error!=null){
 				return true;
 			}
