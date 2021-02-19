@@ -113,7 +113,7 @@ bachelor:
         base: https://yhty.dygzhyq.cn/user/api
   ########################################↑权限配置↑########################################
   swagger:
-    base-package: "cn.org.bachelor.ms.contacts.controller"
+    base-packages: "cn.org.bachelor.ms.contacts.controller"
     title: "应急通讯录模块的Restful API"
     version: "1.0"
     description: ""
