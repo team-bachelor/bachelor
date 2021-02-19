@@ -17,7 +17,7 @@ public class SwaggerConfig {
   /**
    * swagger扫描的基础包
    */
-  String[] basePackage;
+  String[] basePackages;
 
   /**
    * swagger页面标题
@@ -35,12 +35,12 @@ public class SwaggerConfig {
   String description;
 
 
-  public String[] getBasePackage() {
-    return basePackage;
+  public String[] getBasePackages() {
+    return basePackages;
   }
 
-  public void setBasePackage(String[] basePackage) {
-    this.basePackage = basePackage;
+  public void setBasePackages(String[] basePackages) {
+    this.basePackages = basePackages;
   }
 
   public String getTitle() {

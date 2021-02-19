@@ -32,7 +32,7 @@ public class Swagger2 {
     public Docket createRestApi() {
         ApiSelectorBuilder asb = new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo()).select();
         // 为当前包路径
-        for (String pkg : swaggerConfig.getBasePackage()) {
+        for (String pkg : swaggerConfig.getBasePackages()) {
             asb.apis(RequestHandlerSelectors.basePackage(pkg));
         }
 
