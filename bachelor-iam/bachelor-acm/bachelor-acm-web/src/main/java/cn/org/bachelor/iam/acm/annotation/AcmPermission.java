@@ -26,6 +26,11 @@ public @interface AcmPermission {
     PermissionOptions.Type type() default PermissionOptions.Type.INTERFACE;
 
     /**
+     * 服务对象描述
+     */
+    String[] serveFor() default {};
+
+    /**
      * 排序
      */
     int order() default 0;
