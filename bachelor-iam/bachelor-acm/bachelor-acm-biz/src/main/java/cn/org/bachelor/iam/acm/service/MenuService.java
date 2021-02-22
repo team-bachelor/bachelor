@@ -138,12 +138,11 @@ public class MenuService {
                 m.getId(),
                 m.getCode(),
                 m.getUri(),
-                m.getComponent(),
                 m.getIcon(),
                 m.getComment(),
                 type,
                 parent,
-                new ArrayList<MenuVo>());
+                new ArrayList<>());
         mv.setName(m.getName());
         mv.setOwner(owner);
         mv.setHas(has);
