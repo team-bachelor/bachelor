@@ -14,10 +14,13 @@ import java.util.List;
 public class MenuVo {
     private String id;
     private String code;
+    private String name;
     private String uri;
     private String icon;
+    private String component;
     @JsonIgnore
     private MenuVo parent;
+    private String parentId;
     private String comment;
     private boolean has;
     /**
@@ -37,6 +40,7 @@ public class MenuVo {
     public MenuVo(String id,
                   String code,
                   String uri,
+                  String component,
                   String icon,
                   String comment,
                   PermissionModel type,
@@ -45,6 +49,7 @@ public class MenuVo {
         this.id = id;
         this.code = code;
         this.uri = uri;
+        this.component = component;
         this.icon = icon;
         this.comment = comment;
         this.type = type;
@@ -133,5 +138,29 @@ public class MenuVo {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getComponent() {
+        return component;
+    }
+
+    public void setComponent(String component) {
+        this.component = component;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 }

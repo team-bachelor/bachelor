@@ -40,6 +40,15 @@ public class IamValueHolderService {
         return user;
     }
 
+    public String getCurrentUserCode(){
+        UserVo user  = getCurrentUser();
+        if(user == null){
+            return null;
+        }else{
+            return user.getCode();
+        }
+    }
+
     public String getRemoteIP() {
         return remoteIP;
     }

@@ -1,5 +1,6 @@
 package cn.org.bachelor.iam.acm.service;
 
+import cn.org.bachelor.iam.acm.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import cn.org.bachelor.iam.acm.IamValueHolderService;
 import cn.org.bachelor.iam.acm.dao.MenuMapper;
@@ -35,6 +36,39 @@ public class MenuService {
 
     @Autowired
     private IamValueHolderService valueHolder;
+
+
+    /**
+     * 新增菜单
+     * @param m 菜单信息
+     */
+    public void insert(Menu m) {
+        m.setId(UUID.randomUUID().toString());
+        m.setUpdateTime(new Date());
+        String userCode = valueHolder.getCurrentUserCode();
+        m.setUpdateUser(userCode == null ? valueHolder.getRemoteIP() : userCode);
+        menuMapper.insert(m);
+    }
+
+    /**
+     * 更新菜单
+     * @param m 菜单信息
+     */
+    public void update(Menu m) {
+        m.setUpdateTime(new Date());
+        String userCode = valueHolder.getCurrentUserCode();
+        m.setUpdateUser(userCode == null ? valueHolder.getRemoteIP() : userCode);
+        menuMapper.updateByPrimaryKey(m);
+    }
+
+
+    /**
+     * 删除菜单
+     * @param menuId 菜单ID
+     */
+    public void delete(String menuId) {
+        menuMapper.deleteByPrimaryKey(menuId);
+    }
 
     /**
      * 计算当前用户的菜单
@@ -104,16 +138,24 @@ public class MenuService {
                 m.getId(),
                 m.getCode(),
                 m.getUri(),
+                m.getComponent(),
                 m.getIcon(),
                 m.getComment(),
                 type,
                 parent,
                 new ArrayList<MenuVo>());
+        mv.setName(m.getName());
         mv.setOwner(owner);
         mv.setHas(has);
         return mv;
     }
 
+    /**
+     * 获取组织机构的菜单
+     *
+     * @param orgId 组织机构ID
+     * @return 菜单编号
+     */
     public List<String> getOrgMenu(String orgId) {
         OrgMenu exrm = new OrgMenu();
         exrm.setOrgCode(orgId);
@@ -126,7 +168,9 @@ public class MenuService {
     }
 
     /**
-     * @param roleCode
+     *
+     *
+     * @param roleCode 角色编码
      * @param menuCode 当前角色拥有的所有菜单列表
      * @author liuzhuo
      */
@@ -150,10 +194,10 @@ public class MenuService {
 
     /**
      * @param roleCode
+     * @return
      * @description 取得备选权限列表
      * @author liuzhuo
      * @date 2018/10/27 11:16
-     * @return
      */
     public List<String> getRoleMenu(String roleCode) {
         RoleMenu exrm = new RoleMenu();

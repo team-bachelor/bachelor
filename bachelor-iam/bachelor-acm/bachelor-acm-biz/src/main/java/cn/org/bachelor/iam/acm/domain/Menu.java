@@ -33,6 +33,12 @@ public class Menu {
     private String uri;
 
     /**
+     * 组件位置
+     */
+    @Column(name = "COMPONENT")
+    private String component;
+
+    /**
      * 菜单定位
      */
     @Column(name = "ICON")
@@ -236,5 +242,13 @@ public class Menu {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getComponent() {
+        return component;
+    }
+
+    public void setComponent(String component) {
+        this.component = component;
     }
 }

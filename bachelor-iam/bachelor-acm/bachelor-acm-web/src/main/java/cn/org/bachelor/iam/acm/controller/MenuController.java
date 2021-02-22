@@ -1,5 +1,6 @@
 package cn.org.bachelor.iam.acm.controller;
 
+import cn.org.bachelor.iam.acm.domain.Menu;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -42,6 +43,57 @@ public class MenuController {
     @RequestMapping(value = "/role/menu/{role}", method = RequestMethod.POST)
     public ResponseEntity setRoleMenu(@PathVariable("role") String role, @RequestBody List<String> menus) {
         menuService.setRoleMenu(role, menus);
+        return JsonResponse.createHttpEntity(HttpStatus.OK);
+    }
+
+    /**
+     * 新增菜单
+     *
+     * @param menu 菜单数据
+     * @return OK
+     * @更新履历 2021.1.28 访问路径 /role_menu/{role} => /role/menu/{role}
+     */
+    @ApiOperation(value = "新增菜单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "menu", value = "菜单数据", paramType = "body", required = true)
+    })
+    @PostMapping(value = "/menu")
+    public ResponseEntity newMenu(@RequestBody Menu menu) {
+        menuService.insert(menu);
+        return JsonResponse.createHttpEntity(HttpStatus.OK);
+    }
+
+    /**
+     * 更新菜单
+     *
+     * @param menu 菜单数据
+     * @return OK
+     * @更新履历 2021.1.28 访问路径 /role_menu/{role} => /role/menu/{role}
+     */
+    @ApiOperation(value = "设置角色的菜单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "menu", value = "菜单数据", paramType = "body", required = true)
+    })
+    @PutMapping(value = "/menu")
+    public ResponseEntity updateMenu(@RequestBody Menu menu) {
+        menuService.update(menu);
+        return JsonResponse.createHttpEntity(HttpStatus.OK);
+    }
+
+    /**
+     * 删除菜单
+     *
+     * @param menuId 菜单Id
+     * @return OK
+     * @更新履历 2021.1.28 访问路径 /role_menu/{role} => /role/menu/{role}
+     */
+    @ApiOperation(value = "设置角色的菜单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "menuId", value = "菜单数据", paramType = "path", required = true)
+    })
+    @PutMapping(value = "/menu/{menuId}")
+    public ResponseEntity updateMenu(@PathVariable String menuId) {
+        menuService.delete(menuId);
         return JsonResponse.createHttpEntity(HttpStatus.OK);
     }
 
@@ -118,6 +170,5 @@ public class MenuController {
         List menus = menuService.calUserMenu(userCode);
         return JsonResponse.createHttpEntity(menus);
     }
-
 
 }
