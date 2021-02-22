@@ -8,7 +8,4 @@ import java.util.List;
 
 @Repository
 public interface ObjDomainMapper extends Mapper<ObjDomain> {
-
-    @Override
-    List<ObjDomain> selectAll();
 }

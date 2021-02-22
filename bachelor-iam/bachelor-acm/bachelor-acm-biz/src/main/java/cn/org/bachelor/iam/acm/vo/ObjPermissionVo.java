@@ -70,6 +70,8 @@ public class ObjPermissionVo {
      * 操作类型的中文名
      */
     private String operateName;
+
+    private String serveFor;
     /**
      * 获取ID
      *
@@ -300,5 +302,13 @@ public class ObjPermissionVo {
 
     public void setOperateName(String operateName) {
         this.operateName = operateName;
+    }
+
+    public String getServeFor() {
+        return serveFor;
+    }
+
+    public void setServeFor(String serveFor) {
+        this.serveFor = serveFor;
     }
 }

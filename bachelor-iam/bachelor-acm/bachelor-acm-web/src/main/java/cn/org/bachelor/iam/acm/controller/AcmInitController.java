@@ -145,6 +145,7 @@ public class AcmInitController {
         newPermission.setDefAuthOp(m.getDefAuthOp());
 //            newPermission.setComment();
         newPermission.setIsSys(false);
+        newPermission.setServeFor(m.getServeFor());
         newPermission.setUpdateTime(new Date());
         newPermission.setUpdateUser(name);//获取当前用户
         permissions.add( newPermission);
@@ -209,6 +210,7 @@ public class AcmInitController {
                             permissionVo.setSeqOrder(acmPermission.order());
                             permissionVo.setName(acmPermission.opType());
                             permissionVo.setOperateName(acmPermission.opType());
+                            permissionVo.setServeFor(Arrays.toString(acmPermission.serveFor()));
                         }
                     }
                 }

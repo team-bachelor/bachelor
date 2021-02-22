@@ -7,6 +7,7 @@ import cn.org.bachelor.iam.acm.domain.ObjPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,15 @@ public class ObjOperationService {
         return operationMapper.select(exrm);
     }
 
+    public List<ObjOperation> selectAll(){
+        return operationMapper.selectAll();
+    }
+
+    public void saveOrUpdate(ObjOperation operation) {
+        List<ObjOperation> list = new ArrayList<>(1);
+        list.add(operation);
+        saveOrUpdate(list);
+    }
 
     public void saveOrUpdate(List<ObjOperation> operations) {
         //设置查询的样例

@@ -69,6 +69,12 @@ public class ObjPermission {
     private String defAuthOp;
 
     /**
+     * 服务对象
+     */
+    @Column(name = "SERVE_FOR")
+    private String serveFor;
+
+    /**
      * 说明
      */
     @Column(name = "COMMENT")
@@ -298,5 +304,13 @@ public class ObjPermission {
 
     public void setIsSys(Boolean isSys) {
         isSys = isSys;
+    }
+
+    public String getServeFor() {
+        return serveFor;
+    }
+
+    public void setServeFor(String serveFor) {
+        this.serveFor = serveFor;
     }
 }

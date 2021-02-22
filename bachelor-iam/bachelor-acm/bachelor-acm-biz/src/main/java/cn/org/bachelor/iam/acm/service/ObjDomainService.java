@@ -3,10 +3,12 @@ package cn.org.bachelor.iam.acm.service;
 import cn.org.bachelor.iam.acm.dao.ObjDomainMapper;
 import cn.org.bachelor.iam.acm.dao.ObjPermissionMapper;
 import cn.org.bachelor.iam.acm.domain.ObjDomain;
+import cn.org.bachelor.iam.acm.domain.ObjOperation;
 import cn.org.bachelor.iam.acm.domain.ObjPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +35,14 @@ public class ObjDomainService {
         exrm.setIsSys(issys);
         return domainMapper.select(exrm);
     }
-
+    public List<ObjDomain> selectAll(){
+        return domainMapper.selectAll();
+    }
+    public void saveOrUpdate(ObjDomain domain) {
+        List<ObjDomain> list = new ArrayList<>(1);
+        list.add(domain);
+        saveOrUpdate(list);
+    }
 
     public void saveOrUpdate(List<ObjDomain> domains) {
         //设置查询的样例

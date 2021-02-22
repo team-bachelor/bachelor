@@ -5,10 +5,7 @@ import cn.org.bachelor.iam.acm.dao.MenuMapper;
 import cn.org.bachelor.iam.acm.dao.ObjPermissionMapper;
 import cn.org.bachelor.iam.acm.dao.OrgMenuMapper;
 import cn.org.bachelor.iam.acm.dao.RoleMenuMapper;
-import cn.org.bachelor.iam.acm.domain.Menu;
-import cn.org.bachelor.iam.acm.domain.ObjPermission;
-import cn.org.bachelor.iam.acm.domain.OrgMenu;
-import cn.org.bachelor.iam.acm.domain.RoleMenu;
+import cn.org.bachelor.iam.acm.domain.*;
 import cn.org.bachelor.iam.acm.permission.PermissionModel;
 import cn.org.bachelor.iam.acm.vo.MenuVo;
 import org.apache.commons.lang3.StringUtils;
@@ -39,8 +36,14 @@ public class ObjPermissionService {
         exrm.setIsSys(issys);
         return permissionMapper.select(exrm);
     }
-
-
+    public List<ObjPermission> selectAll(){
+        return permissionMapper.selectAll();
+    }
+    public void saveOrUpdate(ObjPermission permission) {
+        List<ObjPermission> list = new ArrayList<>(1);
+        list.add(permission);
+        saveOrUpdate(list);
+    }
     /**
      * @param permissions
      */
