@@ -71,7 +71,11 @@ public class ObjPermissionVo {
      */
     private String operateName;
 
+    /**
+     * 服务对象
+     */
     private String serveFor;
+
     /**
      * 获取ID
      *

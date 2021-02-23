@@ -37,7 +37,7 @@ import java.util.*;
  * Created by gxf on 2021/1/21 9:49
  */
 @RestController
-@RequestMapping(value = "/initPermissions")
+@RequestMapping(value = "/acm")
 @Api(tags = {"初始化权限数据"})
 public class AcmInitController {
 
@@ -54,7 +54,7 @@ public class AcmInitController {
 
 
     @ApiOperation(value = "初始化权限点")
-    @GetMapping(value = "")
+    @GetMapping(value = "/init")
     public ResponseEntity<JsonResponse> initPermissions() {
         List<ObjPermissionVo> list = getObjPermissionVos();
         String userCode = getUserName();
