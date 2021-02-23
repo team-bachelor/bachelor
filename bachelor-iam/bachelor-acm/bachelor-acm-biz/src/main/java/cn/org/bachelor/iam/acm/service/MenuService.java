@@ -144,6 +144,8 @@ public class MenuService {
                 parent,
                 new ArrayList<>());
         mv.setName(m.getName());
+        mv.setParentId(m.getParentId());
+        mv.setSeqOrder(m.getSeqOrder());
         mv.setOwner(owner);
         mv.setHas(has);
         return mv;

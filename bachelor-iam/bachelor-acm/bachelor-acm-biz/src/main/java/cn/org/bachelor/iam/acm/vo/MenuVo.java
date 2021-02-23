@@ -20,6 +20,7 @@ public class MenuVo {
     @JsonIgnore
     private MenuVo parent;
     private String parentId;
+    private int seqOrder;
     private String comment;
     private boolean has;
     /**
@@ -151,5 +152,13 @@ public class MenuVo {
 
     public void setParentId(String parentId) {
         this.parentId = parentId;
+    }
+
+    public int getSeqOrder() {
+        return seqOrder;
+    }
+
+    public void setSeqOrder(int seqOrder) {
+        this.seqOrder = seqOrder;
     }
 }

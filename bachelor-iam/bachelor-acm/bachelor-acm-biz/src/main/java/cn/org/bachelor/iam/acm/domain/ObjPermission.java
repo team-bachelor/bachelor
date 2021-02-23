@@ -303,7 +303,7 @@ public class ObjPermission {
     }
 
     public void setIsSys(Boolean isSys) {
-        isSys = isSys;
+        this.isSys = isSys;
     }
 
     public String getServeFor() {

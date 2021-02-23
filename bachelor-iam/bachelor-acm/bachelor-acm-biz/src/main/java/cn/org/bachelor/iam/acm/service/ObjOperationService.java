@@ -46,7 +46,7 @@ public class ObjOperationService {
 
     public void saveOrUpdate(List<ObjOperation> operations) {
         //设置查询的样例
-        List<ObjOperation> dbperms = getOperations(false);
+        List<ObjOperation> dbperms = selectAll();
         Map<String, ObjOperation> dbMap = new HashMap<>(dbperms.size());
         for (ObjOperation dbvalue : dbperms) {
             dbMap.put(dbvalue.getCode(), dbvalue);
@@ -54,6 +54,9 @@ public class ObjOperationService {
         for (ObjOperation newvalue : operations) {
             if(dbMap.containsKey(newvalue.getCode())){
                 ObjOperation dbvalue = dbMap.get(newvalue.getCode());
+                if(dbvalue.getIsSys()){
+                    continue;
+                }
                 newvalue.setId(dbvalue.getId());
                 operationMapper.updateByPrimaryKey(newvalue);
             }else{
