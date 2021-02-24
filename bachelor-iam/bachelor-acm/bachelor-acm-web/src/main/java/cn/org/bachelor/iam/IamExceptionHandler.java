@@ -1,4 +1,4 @@
-package cn.org.bachelor.iam.acm.interceptor;
+package cn.org.bachelor.iam;
 
 import cn.org.bachelor.iam.idm.exception.ImSysException;
 import org.apache.commons.logging.Log;
@@ -22,8 +22,8 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
  */
 @RestControllerAdvice
 @Order(-1)
-public class AuthExceptionHandler {
-    private static Log logger = LogFactory.getLog(AuthExceptionHandler.class);
+public class IamExceptionHandler {
+    private static Log logger = LogFactory.getLog(IamExceptionHandler.class);
 
     @ExceptionHandler(value = ImSysException.class)
     public ResponseEntity handleImSysException(HttpServletRequest request, Exception e) {

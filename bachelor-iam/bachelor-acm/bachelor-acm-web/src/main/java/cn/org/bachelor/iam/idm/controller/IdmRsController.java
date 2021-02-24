@@ -1,4 +1,4 @@
-package cn.org.bachelor.iam.acm.controller;
+package cn.org.bachelor.iam.idm.controller;
 
 import cn.org.bachelor.iam.idm.service.DefaultImSysService;
 import cn.org.bachelor.iam.acm.vo.AppVo;

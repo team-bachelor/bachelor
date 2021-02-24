@@ -1,12 +1,11 @@
-package cn.org.bachelor.iam.acm.config;
+package cn.org.bachelor.iam;
 
 import cn.org.bachelor.iam.acm.interceptor.UserAccessControlInterceptor;
-import cn.org.bachelor.iam.acm.interceptor.UserIdentifyInterceptor;
+import cn.org.bachelor.iam.idm.interceptor.UserIdentifyInterceptor;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Description;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -24,7 +23,7 @@ import java.io.InputStreamReader;
  */
 @Configuration
 @ConfigurationProperties(prefix = "bachelor.iam")
-public class AcmConfig implements WebMvcConfigurer {
+public class IamConfig implements WebMvcConfigurer {
 
     /**
      * 用户拦截器和访问控制拦截器要拦截的地址

@@ -54,7 +54,7 @@ public class ObjOperationService {
         for (ObjOperation newvalue : operations) {
             if(dbMap.containsKey(newvalue.getCode())){
                 ObjOperation dbvalue = dbMap.get(newvalue.getCode());
-                if(dbvalue.getIsSys()){
+                if(dbvalue.getIsSys() || "".equals(newvalue.getName())){
                     continue;
                 }
                 newvalue.setId(dbvalue.getId());

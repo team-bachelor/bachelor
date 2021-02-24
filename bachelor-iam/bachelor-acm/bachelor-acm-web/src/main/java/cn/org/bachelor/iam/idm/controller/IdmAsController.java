@@ -1,8 +1,8 @@
-package cn.org.bachelor.iam.acm.controller;
+package cn.org.bachelor.iam.idm.controller;
 
+import cn.org.bachelor.iam.IamConfig;
 import cn.org.bachelor.core.exception.BusinessException;
 import cn.org.bachelor.iam.acm.AuthConstant;
-import cn.org.bachelor.iam.acm.config.AcmConfig;
 import cn.org.bachelor.iam.idm.service.DefaultImSysService;
 import cn.org.bachelor.iam.acm.token.JwtToken;
 import cn.org.bachelor.iam.acm.vo.UserVo;
@@ -50,7 +50,7 @@ public class IdmAsController {
     private DefaultImSysService userSysService;
 
     @Autowired
-    private AcmConfig authConfig;
+    private IamConfig authConfig;
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
