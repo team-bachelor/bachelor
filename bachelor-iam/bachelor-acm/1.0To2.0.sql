@@ -13,5 +13,5 @@ ALTER TABLE cmn_auth_user_role RENAME TO cmn_acm_user_role;
 
 ALTER TABLE cmn_acm_obj_domain ADD COLUMN `IS_SYS` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否为系统默认' AFTER `CODE`;
 ALTER TABLE cmn_acm_obj_permission ADD COLUMN `IS_SYS` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否为系统默认' AFTER `DOMAIN_CODE`;
-ALTER TABLE cmn_acm_obj_permission ADD COLUMN `SERVE_FOR` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否为系统默认' AFTER `DOMAIN_CODE`;
+ALTER TABLE cmn_acm_obj_permission ADD COLUMN `SERVE_FOR` varchar(255) NULL DEFAULT NULL COMMENT '服务对象' AFTER `TYPE`;
 -- ALTER TABLE cmn_acm_menu ADD COLUMN `COMPONENT` varchar(255) NULL DEFAULT NULL COMMENT '组件位置' AFTER `URI`;
