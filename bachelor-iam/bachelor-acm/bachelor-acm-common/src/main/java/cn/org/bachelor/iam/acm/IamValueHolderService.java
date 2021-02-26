@@ -41,12 +41,14 @@ public class IamValueHolderService {
     }
 
     public String getCurrentUserCode(){
-        UserVo user  = getCurrentUser();
-        if(user == null){
-            return null;
-        }else{
-            return user.getCode();
+        UserVo user = getCurrentUser();
+        String name = "user_unknow";
+        if (user != null && user.getCode() != null) {
+            name = user.getCode();
+        } else if (getRemoteIP() != null) {
+            name = getRemoteIP();
         }
+        return name;
     }
 
     public String getRemoteIP() {
