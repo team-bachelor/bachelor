@@ -10,9 +10,7 @@ public class PermissionOptions {
             this.type = t;
         }
 
-        public String toString() {
-            return type;
-        }
+        public String toString() { return type; }
     }
 
     public enum CheckLevel {
@@ -22,6 +20,9 @@ public class PermissionOptions {
 
         CheckLevel(String l) {
             this.type = l;
+        }
+        public String toString() {
+            return this.type;
         }
     }
 }
