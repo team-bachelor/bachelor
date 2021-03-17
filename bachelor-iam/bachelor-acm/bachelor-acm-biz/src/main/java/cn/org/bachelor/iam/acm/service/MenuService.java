@@ -273,7 +273,7 @@ public class MenuService {
 
     public List<MenuVo> getMenuList(boolean isFlat) {
         Example example = new Example(Menu.class);
-        example.setOrderByClause("PARENT_ID, SEQ_ORDER ASC");
+        example.orderBy("seqOrder").orderBy("parentId").asc();
         List<Menu> menus = menuMapper.selectByExample(example);
         Map<String, MenuVo> menuVoMap = new LinkedHashMap<>(menus.size());
         for (Menu m : menus) {
