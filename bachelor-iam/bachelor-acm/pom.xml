@@ -17,6 +17,7 @@
         <module>bachelor-acm-common</module>
         <module>bachelor-acm-biz</module>
         <module>bachelor-acm-web</module>
+        <module>bachelor-acm-web-service</module>
     </modules>
     <properties>
         <artifact.version>2.0-SNAPSHOT</artifact.version>
