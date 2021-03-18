@@ -193,7 +193,7 @@ public class OAuth2Client {
 		String personStr;
 		try{
 			String userInfoUrl = config.getAsURL().getUserInfo();
-			DefaultOAuthResourceRequest userInfoRequest = new DefaultOAuthResourceRequest("user_info", userInfoUrl, OAuthConstant.HttpMethod.GET);
+			DefaultOAuthResourceRequest userInfoRequest = new DefaultOAuthResourceRequest(userInfoUrl, OAuthConstant.HttpMethod.GET);
 			userInfoRequest.setAccessToken(accessToken);
 			OAuthResourceResponse resourceResponse = oAuthClient.resource(userInfoRequest, OAuthResourceResponse.class);
 			personStr = resourceResponse.getBody();
@@ -261,7 +261,7 @@ public class OAuth2Client {
             logger.info("======去调用user_info_url接口，参数：" + "accessToken=" + accessToken);
             logger.info("如果user_info_url已经赋值，那么直接读取，否则去配置文件中读取");
             String userInfoUrl = config.getAsURL().getUserInfo();
-            DefaultOAuthResourceRequest userInfoRequest = new DefaultOAuthResourceRequest("user_info", userInfoUrl, OAuthConstant.HttpMethod.GET);
+            DefaultOAuthResourceRequest userInfoRequest = new DefaultOAuthResourceRequest(userInfoUrl, OAuthConstant.HttpMethod.GET);
             userInfoRequest.setAccessToken(accessToken);
             OAuthResourceResponse resourceResponse = oAuthClient.resource(userInfoRequest, OAuthResourceResponse.class);
             personStr = resourceResponse.getBody();

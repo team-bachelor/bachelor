@@ -50,7 +50,7 @@ public class SignSecurityOAuthClient {
     public <T extends OAuthResponse> T resource(DefaultOAuthResourceRequest request, Class<T> responseClass)
             throws OAuthSystemException, OAuthBusinessException, SignCreationException {
         try {
-            request.setParameter(ClientConstant.HTTP_REQUEST_PARAM_SIGN, SignatureUtil.createSignature(request.toString1()));
+            request.setParameter(ClientConstant.HTTP_REQUEST_PARAM_SIGN, SignatureUtil.createSignature(request.getParamsString()));
         } catch (Exception e) {
             e.printStackTrace();
             throw new SignCreationException(e);

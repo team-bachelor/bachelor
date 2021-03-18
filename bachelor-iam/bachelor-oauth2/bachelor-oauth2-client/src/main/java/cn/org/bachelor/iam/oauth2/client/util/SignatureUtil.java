@@ -35,6 +35,7 @@ public class SignatureUtil {
      * @param secret 密钥 必填项
      * @return
      */
+    //TODO 什么鬼？这种加密方式绝了，要改掉
     public static String createSignature(String query,String secret){
         StringBuffer keys = new StringBuffer();
         keys = keys.append(secret).append(query).append(secret);

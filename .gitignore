@@ -8,3 +8,4 @@ target
 .idea
 *.iml
 /bachelor-demo/bachelor-demo-web-backend/src/main/resources/application-local.yml
+/bachelor-iam/bachelor-acm/bachelor-acm-web-service/src/main/resources/application-local.yml

@@ -24,7 +24,7 @@ public class DefaultOAuthRequest implements OAuthRequest {
 
     protected DefaultOAuthRequest(String url) {
         this.url = url;
-        this.headers=new HashMap<String, String>();
+        this.headers = new HashMap<String, String>();
     }
 
     public static AuthenticationRequestBuilder authorizationLocation(String url) {
@@ -94,24 +94,24 @@ public class DefaultOAuthRequest implements OAuthRequest {
         public DefaultOAuthRequest buildQueryMessage() throws OAuthSystemException {
             DefaultOAuthRequest request = new DefaultOAuthRequest(url);
             this.applier = new URLPathParameterApplier();
-            return (DefaultOAuthRequest)applier.applyOAuthParameters(request, parameters);
+            return (DefaultOAuthRequest) applier.applyOAuthParameters(request, parameters);
         }
 
         public DefaultOAuthRequest buildBodyMessage() throws OAuthSystemException {
             DefaultOAuthRequest request = new DefaultOAuthRequest(url);
             this.applier = new BodyParameterApplier();
-            return (DefaultOAuthRequest)applier.applyOAuthParameters(request, parameters);
+            return (DefaultOAuthRequest) applier.applyOAuthParameters(request, parameters);
         }
 
         public DefaultOAuthRequest buildHeaderMessage() throws OAuthSystemException {
             DefaultOAuthRequest request = new DefaultOAuthRequest(url);
             this.applier = new HeaderParameterApplier();
-            return (DefaultOAuthRequest)applier.applyOAuthParameters(request, parameters);
+            return (DefaultOAuthRequest) applier.applyOAuthParameters(request, parameters);
         }
 
-		public String toString() {
-			return "OAuthRequestBuilder{url= " + url + ",parameter= " + parameters + "}";
-		}
+        public String toString() {
+            return this.getClass().getSimpleName() + "{url= " + url + ",parameter= " + parameters + "}";
+        }
     }
 
     public static class AuthenticationRequestBuilder extends OAuthRequestBuilder {

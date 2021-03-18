@@ -630,7 +630,7 @@ public class DefaultImSysService implements ImSysService {
                     new URLConnectionClient());
 
             DefaultOAuthResourceRequest userInfoRequest = new DefaultOAuthResourceRequest(
-                    url, url, methodType);
+                    url, methodType);
 
             String token = "";
             if (astoken == null) {

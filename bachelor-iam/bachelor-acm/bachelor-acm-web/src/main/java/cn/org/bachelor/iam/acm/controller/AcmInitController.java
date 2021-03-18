@@ -10,7 +10,6 @@ import cn.org.bachelor.iam.acm.service.ObjDomainService;
 import cn.org.bachelor.iam.acm.service.ObjOperationService;
 import cn.org.bachelor.iam.acm.service.ObjPermissionService;
 import cn.org.bachelor.iam.acm.vo.ObjPermissionVo;
-import cn.org.bachelor.iam.acm.vo.UserVo;
 import cn.org.bachelor.web.json.JsonResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -10,12 +10,10 @@ import java.util.*;
  * Created by team bachelor on 15/5/20.
  */
 public class DefaultOAuthResourceRequest extends DefaultOAuthRequest.OAuthRequestBuilder {
-    private String uri = null;
     private String method = null;
 
-    public DefaultOAuthResourceRequest(String uri, String url, String method) {
+    public DefaultOAuthResourceRequest(String url, String method) {
         super(url);
-        this.uri = uri;
         this.method = method;
     }
 
@@ -55,15 +53,7 @@ public class DefaultOAuthResourceRequest extends DefaultOAuthRequest.OAuthReques
         this.method = method;
     }
 
-    public String getUri() {
-        return uri;
-    }
-
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
-
-    public String toString() {
+    public String prepareSignString() {
         // 将加入两个id的key集合排序
         Set<String> keySet = this.parameters.keySet();
         List<String> paramkeys = new ArrayList<String>(keySet);
@@ -84,14 +74,14 @@ public class DefaultOAuthResourceRequest extends DefaultOAuthRequest.OAuthReques
         String param = paramBuilder.toString();
         paramBuilder = new StringBuilder(getMethod())
                 .append("&")
-                .append(encode(getUri()))
+                .append(encode(this.url))
                 .append("&")
                 .append(encode(param));
         return paramBuilder.toString();
     }
 
     //改写toString方法
-    public String toString1(){
+    public String getParamsString(){
         // 将加入两个id的key集合排序
         Set<String> keySet = this.parameters.keySet();
         List<String> paramkeys = new ArrayList<String>(keySet);
@@ -109,9 +99,7 @@ public class DefaultOAuthResourceRequest extends DefaultOAuthRequest.OAuthReques
             }
         }
         paramBuilder.deleteCharAt(paramBuilder.length() - 1);
-        String param = paramBuilder.toString();
-        paramBuilder = new StringBuilder(encode(param));
-        return paramBuilder.toString();
+        return encode(paramBuilder.toString());
     }
 
     private static String encode(String src) {
