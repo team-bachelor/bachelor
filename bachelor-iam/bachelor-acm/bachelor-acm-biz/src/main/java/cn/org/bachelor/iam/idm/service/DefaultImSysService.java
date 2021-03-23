@@ -639,7 +639,7 @@ public class DefaultImSysService implements ImSysService {
                     token = user.getAccessToken();
                 }else{
                     OAuth2ClientCertification upCC =
-                            (OAuth2ClientCertification) valueHolder.getValueHolderService().getSessionAttribute(ClientConstant.SESSIONAUTHENTICATIONKEY);
+                            (OAuth2ClientCertification) valueHolder.getValueHolderService().getSessionAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
                     token = upCC.getAccessToken();
                 }
             } else {

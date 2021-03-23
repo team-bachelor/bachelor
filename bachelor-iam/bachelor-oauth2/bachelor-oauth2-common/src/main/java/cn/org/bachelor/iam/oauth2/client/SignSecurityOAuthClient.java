@@ -1,8 +1,7 @@
 package cn.org.bachelor.iam.oauth2.client;
 
-import cn.org.bachelor.iam.oauth2.client.exception.SignCreationException;
-import cn.org.bachelor.iam.oauth2.ClientConstant;
-import cn.org.bachelor.iam.oauth2.client.util.SignatureUtil;
+import cn.org.bachelor.iam.oauth2.exception.SignCreationException;
+import cn.org.bachelor.iam.oauth2.OAuthConstant;
 import cn.org.bachelor.iam.oauth2.exception.OAuthBusinessException;
 import cn.org.bachelor.iam.oauth2.exception.OAuthSystemException;
 import cn.org.bachelor.iam.oauth2.request.DefaultOAuthRequest;
@@ -10,6 +9,7 @@ import cn.org.bachelor.iam.oauth2.request.DefaultOAuthResourceRequest;
 import cn.org.bachelor.iam.oauth2.response.OAuthAccessTokenResponse;
 import cn.org.bachelor.iam.oauth2.response.OAuthResponse;
 import cn.org.bachelor.iam.oauth2.response.OAuthJSONAccessTokenResponse;
+import cn.org.bachelor.iam.oauth2.utils.SignatureUtil;
 
 
 import java.util.HashMap;
@@ -50,7 +50,7 @@ public class SignSecurityOAuthClient {
     public <T extends OAuthResponse> T resource(DefaultOAuthResourceRequest request, Class<T> responseClass)
             throws OAuthSystemException, OAuthBusinessException, SignCreationException {
         try {
-            request.setParameter(ClientConstant.HTTP_REQUEST_PARAM_SIGN, SignatureUtil.createSignature(request.getParamsString()));
+            request.setParameter(OAuthConstant.HTTP_REQUEST_PARAM_SIGN, SignatureUtil.createSignature(request.getParamsString()));
         } catch (Exception e) {
             e.printStackTrace();
             throw new SignCreationException(e);

@@ -42,7 +42,7 @@ public class ClientUtil {
 	public static String getCurrentOpenId(){
 		HttpSession session = sessions.get();
 		if(session == null) return null;
-		return (String) session.getAttribute(ClientConstant.UPOPENID);
+		return (String) session.getAttribute(ClientConstant.UP_OPEN_ID);
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class ClientUtil {
 	public static String getCurrentUserId(){
 		HttpSession session = sessions.get();
 		if(session == null) return null;
-		return (String) session.getAttribute(ClientConstant.UPUSERID);
+		return (String) session.getAttribute(ClientConstant.UP_USER_ID);
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class ClientUtil {
 	public static String getCurrentUserStr(){
 		HttpSession session = sessions.get();
 		if(session == null) return null;
-		return String.valueOf(session.getAttribute(ClientConstant.UPUSER));
+		return String.valueOf(session.getAttribute(ClientConstant.UP_USER));
 	}
 
 
@@ -134,15 +134,15 @@ public class ClientUtil {
 	public static OAuth2ClientCertification getCurrentIdentity(){
 		HttpSession session = sessions.get();
 		if(session == null) return null;
-		return (OAuth2ClientCertification) session.getAttribute(ClientConstant.SESSIONAUTHENTICATIONKEY);
+		return (OAuth2ClientCertification) session.getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
 	}
 
 	public static void RemoveSession(){
 		HttpSession session = sessions.get();
-		session.removeAttribute(ClientConstant.UPUSER);
-		session.removeAttribute(ClientConstant.UPUSERID);
-		session.removeAttribute(ClientConstant.UPOPENID);
-		session.removeAttribute(ClientConstant.SESSIONAUTHENTICATIONKEY);
+		session.removeAttribute(ClientConstant.UP_USER);
+		session.removeAttribute(ClientConstant.UP_USER_ID);
+		session.removeAttribute(ClientConstant.UP_OPEN_ID);
+		session.removeAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
 
 	}
 }

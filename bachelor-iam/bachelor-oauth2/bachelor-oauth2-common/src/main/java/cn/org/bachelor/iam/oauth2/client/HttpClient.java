@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface HttpClient {
 
-    public <T extends OAuthResponse> T execute(
+    <T extends OAuthResponse> T execute(
             DefaultOAuthRequest request,
             Map<String, String> headers,
             String requestMethod,
@@ -23,5 +23,5 @@ public interface HttpClient {
     /**
      * Shut down the client and release the resources associated with the HttpClient
      */
-    public void shutdown();
+    void shutdown();
 }

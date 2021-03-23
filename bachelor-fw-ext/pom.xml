@@ -15,5 +15,6 @@
     <url>http://maven.apache.org</url>
     <modules>
         <module>bachelor-fw-cache-redis</module>
+        <module>bachelor-fw-jms-rabbit</module>
     </modules>
 </project>

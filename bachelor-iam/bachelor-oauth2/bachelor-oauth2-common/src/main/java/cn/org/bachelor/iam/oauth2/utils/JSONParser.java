@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.oauth2.utils;
 
 
-import cn.org.bachelor.iam.oauth2.ClientConstant;
+import cn.org.bachelor.iam.oauth2.OAuthConstant;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cn.org.bachelor.core.exception.BusinessException;
@@ -34,7 +34,7 @@ public final class JSONParser {
             Map<String, Object> tokenMap = mapper.readValue(jsonBody, Map.class);
             return tokenMap;
         } catch (IOException e) {
-            throw new OAuthBusinessException(ClientConstant.CodeResponse.UNSUPPORTED_RESPONSE_TYPE,
+            throw new OAuthBusinessException(OAuthConstant.CodeResponse.UNSUPPORTED_RESPONSE_TYPE,
                     "Invalid response! Response body is not " + OAuthConstant.ContentType.JSON + " encoded");
         }
     }

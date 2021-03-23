@@ -12,6 +12,7 @@ import cn.org.bachelor.iam.oauth2.client.util.ClientUtil;
 import cn.org.bachelor.iam.oauth2.client.util.StateGenerator;
 import cn.org.bachelor.iam.oauth2.client.util.UrlExpProcessor;
 import cn.org.bachelor.iam.oauth2.exception.OAuthBusinessException;
+import cn.org.bachelor.iam.oauth2.key.Base64;
 import cn.org.bachelor.iam.oauth2.request.DefaultOAuthRequest;
 import cn.org.bachelor.iam.oauth2.request.DefaultOAuthRequest.TokenRequestBuilder;
 import cn.org.bachelor.iam.oauth2.request.DefaultOAuthResourceRequest;
@@ -22,7 +23,6 @@ import cn.org.bachelor.iam.oauth2.utils.StringUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -205,14 +205,14 @@ public class OAuth2Client {
 			logger.error("获取用户基本信息错误=======>", e);
 			throw new GetUserInfoException(e);
 		}
-		request.getSession().setAttribute(ClientConstant.UPUSER, personStr);
-		request.getSession().setAttribute(ClientConstant.UPUSERID, userId);
-		request.getSession().setAttribute(ClientConstant.UPOPENID, openId);
-		request.getSession().setAttribute(ClientConstant.SESSIONAUTHENTICATIONKEY, new OAuth2ClientCertification(userId, accessToken, refreshToken, expiration));
+		request.getSession().setAttribute(ClientConstant.UP_USER, personStr);
+		request.getSession().setAttribute(ClientConstant.UP_USER_ID, userId);
+		request.getSession().setAttribute(ClientConstant.UP_OPEN_ID, openId);
+		request.getSession().setAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY, new OAuth2ClientCertification(userId, accessToken, refreshToken, expiration));
 		ClientUtil.setSession(request.getSession());
 
 		logger.info("当前登录用户 userId:"+ ClientUtil.getCurrentUserId());
-		logger.info("登录后的令牌信息：" + request.getSession().getAttribute(ClientConstant.SESSIONAUTHENTICATIONKEY));
+		logger.info("登录后的令牌信息：" + request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY));
 		return person.toString();
 	}
 
@@ -309,19 +309,19 @@ public class OAuth2Client {
 		}*/
 		//检验 email  and  tel   ------------end
 //		request.getSession().setAttribute(UpClientConstant.UPUSER, new MJsonObject(person));
-        request.getSession().setAttribute(ClientConstant.UPUSER, personStr);
-        request.getSession().setAttribute(ClientConstant.UPUSERID, userId);
-        request.getSession().setAttribute(ClientConstant.UPOPENID, openId);
-        request.getSession().setAttribute(ClientConstant.UPORGID, orgId);
-        request.getSession().setAttribute(ClientConstant.UPUSERNAME, userName);
-        request.getSession().setAttribute(ClientConstant.UPORGNAME, orgName);
-        request.getSession().setAttribute(ClientConstant.UPDEPTID, deptId);
-        request.getSession().setAttribute(ClientConstant.UPDEPTNAME, deptName);
-        request.getSession().setAttribute(ClientConstant.SESSIONAUTHENTICATIONKEY, new OAuth2ClientCertification(userId, accessToken, refreshToken, expiration));
+        request.getSession().setAttribute(ClientConstant.UP_USER, personStr);
+        request.getSession().setAttribute(ClientConstant.UP_USER_ID, userId);
+        request.getSession().setAttribute(ClientConstant.UP_OPEN_ID, openId);
+        request.getSession().setAttribute(ClientConstant.UP_ORG_ID, orgId);
+        request.getSession().setAttribute(ClientConstant.UP_USER_NAME, userName);
+        request.getSession().setAttribute(ClientConstant.UP_ORG_NAME, orgName);
+        request.getSession().setAttribute(ClientConstant.UP_DEPT_ID, deptId);
+        request.getSession().setAttribute(ClientConstant.UP_DEPT_NAME, deptName);
+        request.getSession().setAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY, new OAuth2ClientCertification(userId, accessToken, refreshToken, expiration));
         ClientUtil.setSession(request.getSession());
 
 		logger.info("当前登录用户 userId:"+ ClientUtil.getCurrentUserId());
-		logger.info("登录后的令牌信息：" + request.getSession().getAttribute(ClientConstant.SESSIONAUTHENTICATIONKEY));
+		logger.info("登录后的令牌信息：" + request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY));
 		return person.toString();
 	}
 
@@ -330,7 +330,7 @@ public class OAuth2Client {
 	 * @return
 	 */
 	public String getUserId() {
-		return (String)request.getSession().getAttribute(ClientConstant.UPUSERID);
+		return (String)request.getSession().getAttribute(ClientConstant.UP_USER_ID);
 	}
 
 	/**
@@ -399,7 +399,7 @@ public class OAuth2Client {
     }
 
 	public boolean toOriginalURL() throws Exception {
-		String originalURL=(String) request.getSession().getAttribute(ClientConstant.ORIGINALURL);
+		String originalURL=(String) request.getSession().getAttribute(ClientConstant.ORIGINAL_URL);
 		logger.debug("SSOClient toOriginalURL:"+originalURL);
 		if(originalURL!=null){
 			response.sendRedirect(originalURL);
@@ -469,7 +469,7 @@ public class OAuth2Client {
 
     public boolean isLogin() {
         boolean flag = false;
-        Object obj = request.getSession().getAttribute(ClientConstant.SESSIONAUTHENTICATIONKEY);
+        Object obj = request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
         if (obj instanceof OAuth2ClientCertification) {
             OAuth2ClientCertification my = (OAuth2ClientCertification) obj;
             String userid = my.getUserid();
@@ -484,7 +484,7 @@ public class OAuth2Client {
 
     public boolean isLogin(HttpServletRequest req) {
         boolean flag = false;
-        Object obj = request.getSession().getAttribute(ClientConstant.SESSIONAUTHENTICATIONKEY);
+        Object obj = request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
         logger.info("进入登录验证========> 登录后的令牌信息：=" + obj);
         //logger.info("当前登录用户 userId:" + ClientUtil.getCurrentUserId());
         if (obj instanceof OAuth2ClientCertification) {
@@ -515,9 +515,9 @@ public class OAuth2Client {
             if (my == null) {
 				return null;
 			}
-            byte[] b = my.getValue().getBytes(ClientConstant.charset);
+            byte[] b = my.getValue().getBytes(ClientConstant.DEFAULT_CHARSET);
             b = new Base64().decode(b);
-            String access = new String(b, ClientConstant.charset);
+            String access = new String(b, ClientConstant.DEFAULT_CHARSET);
             String[] tokens = StringUtils.delimitedListToStringArray(access, ClientConstant.COOKIE_SEPERATOR);
             return tokens;
         } else {
@@ -526,7 +526,7 @@ public class OAuth2Client {
     }
 
     private boolean tockenValid(HttpServletRequest req) {
-        Object obj = request.getSession().getAttribute(ClientConstant.SESSIONAUTHENTICATIONKEY);
+        Object obj = request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
         if (!(obj instanceof OAuth2ClientCertification)) {
             return false;
         }
@@ -595,7 +595,7 @@ public class OAuth2Client {
 		Object so = session.getAttribute(ClientConstant.OAUTH_STATE);
 		if (StringUtils.isEmpty(so)) {
 			return true;
-		} else if (so.toString().equals(request.getParameter(OAuthConstant.OAUTH_STATE))) {
+		} else if (so.toString().equals(request.getParameter(ClientConstant.OAUTH_STATE))) {
 			session.removeAttribute(ClientConstant.OAUTH_STATE);
 			return true;
 		}

@@ -22,21 +22,21 @@ public class ResourceRequest {
     }
 
     public ResourceRequest setOpentID(String opentID) {
-        this.parameters.put(ClientConstant.HTTP_REQUEST_PARAM_OPEN_ID, opentID);
+        this.parameters.put(OAuthConstant.HTTP_REQUEST_PARAM_OPEN_ID, opentID);
         return this;
     }
 
     public String getOpenID() {
-        return this.parameters.get(ClientConstant.HTTP_REQUEST_PARAM_OPEN_ID).toString();
+        return this.parameters.get(OAuthConstant.HTTP_REQUEST_PARAM_OPEN_ID).toString();
     }
 
     public ResourceRequest setClientID(String clientID) {
-        this.parameters.put(ClientConstant.HTTP_REQUEST_PARAM_CLIENT_ID, clientID);
+        this.parameters.put(OAuthConstant.HTTP_REQUEST_PARAM_CLIENT_ID, clientID);
         return this;
     }
 
     public String getClientID() {
-        return this.parameters.get(ClientConstant.HTTP_REQUEST_PARAM_CLIENT_ID).toString();
+        return this.parameters.get(OAuthConstant.HTTP_REQUEST_PARAM_CLIENT_ID).toString();
     }
 
     public String getMethod() {

@@ -88,7 +88,7 @@ public class IdmAsController {
             return JsonResponse.createHttpEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
         OAuth2ClientCertification upCC = (OAuth2ClientCertification) request.getSession()
-                .getAttribute(ClientConstant.SESSIONAUTHENTICATIONKEY);
+                .getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
         String token_s = getJWTString(upCC, userinfo);
         Map<String, String> token = new HashMap<String, String>(1);
         token.put("token", token_s);
@@ -114,7 +114,7 @@ public class IdmAsController {
         OAuth2Client client = new OAuth2Client(clientConfig, request, response);
         String userinfo = client.refreshAccessToken(userSysService.getRefreshToken(account));
         OAuth2ClientCertification upCC = (OAuth2ClientCertification) request.getSession()
-                .getAttribute(ClientConstant.SESSIONAUTHENTICATIONKEY);
+                .getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
         String token_s = getJWTString(upCC, userinfo);
         Map<String, String> token = new HashMap<String, String>(1);
         token.put("token", token_s);

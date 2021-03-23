@@ -1,4 +1,4 @@
-package cn.org.bachelor.iam.oauth2.client.exception;
+package cn.org.bachelor.iam.oauth2.exception;
 
 /**
  * Created by liuzhuo on 2015/5/6.

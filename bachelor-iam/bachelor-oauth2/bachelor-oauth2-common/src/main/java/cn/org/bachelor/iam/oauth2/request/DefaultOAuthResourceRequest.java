@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.oauth2.request;
 
-import cn.org.bachelor.iam.oauth2.ClientConstant;
+import cn.org.bachelor.iam.oauth2.OAuthConstant;
 import cn.org.bachelor.iam.oauth2.OAuthConstant;
 
 import java.io.UnsupportedEncodingException;
@@ -28,21 +28,21 @@ public class DefaultOAuthResourceRequest extends DefaultOAuthRequest.OAuthReques
     }
 
     public DefaultOAuthResourceRequest setOpentID(String opentID) {
-        this.parameters.put(ClientConstant.HTTP_REQUEST_PARAM_OPEN_ID, opentID);
+        this.parameters.put(OAuthConstant.HTTP_REQUEST_PARAM_OPEN_ID, opentID);
         return this;
     }
 
     public String getOpenID() {
-        return this.parameters.get(ClientConstant.HTTP_REQUEST_PARAM_OPEN_ID).toString();
+        return this.parameters.get(OAuthConstant.HTTP_REQUEST_PARAM_OPEN_ID).toString();
     }
 
     public DefaultOAuthResourceRequest setClientID(String clientID) {
-        this.parameters.put(ClientConstant.HTTP_REQUEST_PARAM_CLIENT_ID, clientID);
+        this.parameters.put(OAuthConstant.HTTP_REQUEST_PARAM_CLIENT_ID, clientID);
         return this;
     }
 
     public String getClientID() {
-        return this.parameters.get(ClientConstant.HTTP_REQUEST_PARAM_CLIENT_ID).toString();
+        return this.parameters.get(OAuthConstant.HTTP_REQUEST_PARAM_CLIENT_ID).toString();
     }
 
     public String getMethod() {
@@ -53,7 +53,7 @@ public class DefaultOAuthResourceRequest extends DefaultOAuthRequest.OAuthReques
         this.method = method;
     }
 
-    public String prepareSignString() {
+    public String toString() {
         // 将加入两个id的key集合排序
         Set<String> keySet = this.parameters.keySet();
         List<String> paramkeys = new ArrayList<String>(keySet);

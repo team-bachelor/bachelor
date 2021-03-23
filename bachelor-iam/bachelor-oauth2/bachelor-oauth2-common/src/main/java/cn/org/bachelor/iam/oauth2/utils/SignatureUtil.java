@@ -1,7 +1,7 @@
-package cn.org.bachelor.iam.oauth2.client.util;
+package cn.org.bachelor.iam.oauth2.utils;
 
 
-import cn.org.bachelor.iam.oauth2.ClientConstant;
+import cn.org.bachelor.iam.oauth2.OAuthConstant;
 import cn.org.bachelor.iam.oauth2.ResourceRequest;
 import cn.org.bachelor.iam.oauth2.key.MD5;
 
@@ -52,7 +52,7 @@ public class SignatureUtil {
         ResourceRequest request = new ResourceRequest(httpRequest.getRequestURI(), httpRequest.getMethod());
         Set<String> keys = httpRequest.getParameterMap().keySet();
         for(String name : keys){
-            if(!name.equals(ClientConstant.HTTP_REQUEST_PARAM_SIGN)){
+            if(!name.equals(OAuthConstant.HTTP_REQUEST_PARAM_SIGN)){
                 request.setParameter(name, httpRequest.getParameter(name));
             }
         }

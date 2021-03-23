@@ -11,17 +11,30 @@
     <developers>
         <developer>
             <name>bachelor</name>
-            <email></email>
+            <email>liuzhuo84@hotmail.com</email>
             <organization>bachelor</organization>
             <organizationUrl>http://www.bachelor.org.cn</organizationUrl>
         </developer>
     </developers>
+    <distributionManagement>
+        <repository>
+            <id>central_maven_release</id>
+            <name>releases</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+        <snapshotRepository>
+            <id>central_maven_snapshot</id>
+            <name>snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <layout>default</layout>
+        </snapshotRepository>
+    </distributionManagement>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>2.2.8.RELEASE</spring-boot.version>
-        <spring-cloud.version>Hoxton.RELEASE</spring-cloud.version>
+        <spring-boot.version>2.3.2.RELEASE</spring-boot.version>
+        <spring-cloud.version>Hoxton.SR10</spring-cloud.version>
         <swagger2-ui.version>2.9.2</swagger2-ui.version>
         <github-pagehelper.version>1.2.13</github-pagehelper.version>
         <tk-mybatis.version>2.1.5</tk-mybatis.version>
@@ -38,6 +51,7 @@
         <spring-boot-plugin.version>2.3.1.RELEASE</spring-boot-plugin.version>
         <jettison.version>1.2</jettison.version>
         <sbcp.version>2.4.1</sbcp.version>
+        <feign.version>1.4.4.RELEASE</feign.version>
         <bachelor-fw.version>2.0-SNAPSHOT</bachelor-fw.version>
         <bachelor-iam-oauth2.version>2.0-SNAPSHOT</bachelor-iam-oauth2.version>
         <bachelor-iam-acm.version>2.0-SNAPSHOT</bachelor-iam-acm.version>
@@ -185,6 +199,11 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-configuration-processor</artifactId>
                 <version>${sbcp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-feign</artifactId>
+                <version>${feign.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
