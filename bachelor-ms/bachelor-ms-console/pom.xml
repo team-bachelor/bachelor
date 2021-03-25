@@ -128,6 +128,10 @@
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-acm-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.org.bachelor</groupId>
+            <artifactId>bachelor-iam-web</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

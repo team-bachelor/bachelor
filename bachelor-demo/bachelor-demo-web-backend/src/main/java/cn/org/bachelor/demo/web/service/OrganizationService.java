@@ -1,6 +1,6 @@
 package cn.org.bachelor.demo.web.service;
 
-import cn.org.bachelor.iam.acm.token.JwtToken;
+import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.demo.web.dao.ContactOrganizationVoMapper;
 import cn.org.bachelor.demo.web.dao.OrganizationMapper;
 import cn.org.bachelor.demo.web.domain.Organization;

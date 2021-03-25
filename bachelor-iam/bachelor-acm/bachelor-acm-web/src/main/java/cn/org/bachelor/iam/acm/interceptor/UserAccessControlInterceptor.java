@@ -1,10 +1,10 @@
 package cn.org.bachelor.iam.acm.interceptor;
 
 
-import cn.org.bachelor.iam.acm.IamValueHolderService;
+import cn.org.bachelor.iam.IamValueHolderService;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.service.AuthorizeService;
-import cn.org.bachelor.iam.acm.vo.UserVo;
+import cn.org.bachelor.iam.vo.UserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

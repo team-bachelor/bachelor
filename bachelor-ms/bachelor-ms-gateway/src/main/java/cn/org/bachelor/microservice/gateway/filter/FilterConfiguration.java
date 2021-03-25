@@ -1,7 +1,7 @@
 package cn.org.bachelor.microservice.gateway.filter;
 
 import org.apache.commons.lang.StringUtils;
-import cn.org.bachelor.iam.acm.AuthConstant;
+import cn.org.bachelor.iam.IamConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +32,7 @@ public class FilterConfiguration {
 
     // 这里为支持的请求头，如果有自定义的header字段请自己添加
     private static final String ALLOWED_HEADERS = "x-requested-with, Content-Type, Authorization, credential, " +
-            "X-XSRF-TOKEN,token,username,client,SiteID," + AuthConstant.HTTP_HEADER_TOKEN_KEY;
+            "X-XSRF-TOKEN,token,username,client,SiteID," + IamConstant.HTTP_HEADER_TOKEN_KEY;
     private static final String ALLOWED_METHODS = "*";
     private static final String ALLOWED_ORIGIN = "*";
     private static final String ALLOWED_Expose = "*";

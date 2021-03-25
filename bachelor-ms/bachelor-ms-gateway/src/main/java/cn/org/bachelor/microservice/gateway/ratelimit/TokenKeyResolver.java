@@ -1,6 +1,6 @@
 package cn.org.bachelor.microservice.gateway.ratelimit;
 
-import cn.org.bachelor.iam.acm.token.JwtToken;
+import cn.org.bachelor.iam.token.JwtToken;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;

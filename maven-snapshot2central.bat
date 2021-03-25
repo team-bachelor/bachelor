@@ -1,1 +1,5 @@
-mvn clean package deploy -DaltDeploymentRepository=central_maven_snapshot::default::https://oss.sonatype.org/content/repositories/snapshots -f bachelor-dependencies && mvn clean package deploy -DaltDeploymentRepository=central_maven_snapshot::default::https://oss.sonatype.org/content/repositories/snapshots -f bachelor-fw && mvn clean package deploy -DaltDeploymentRepository=central_maven_snapshot::default::https://oss.sonatype.org/content/repositories/snapshots -f bachelor-iam/bachelor-oauth2 && mvn clean package deploy -DaltDeploymentRepository=central_maven_snapshot::default::https://oss.sonatype.org/content/repositories/snapshots -f bachelor-iam/bachelor-acm
+set url="https://oss.sonatype.org/content/repositories/snapshots"
+
+CALL mvn clean package deploy -DaltDeploymentRepository=central_maven_snapshot::default::%url% -f bachelor-dependencies
+CALL mvn clean package deploy -DaltDeploymentRepository=central_maven_snapshot::default::%url% -f bachelor-fw
+CALL mvn clean package deploy -DaltDeploymentRepository=central_maven_snapshot::default::%url% -f bachelor-iam

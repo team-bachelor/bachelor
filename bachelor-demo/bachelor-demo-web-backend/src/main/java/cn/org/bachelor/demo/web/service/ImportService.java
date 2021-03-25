@@ -1,7 +1,7 @@
 package cn.org.bachelor.demo.web.service;
 
 import lombok.extern.slf4j.Slf4j;
-import cn.org.bachelor.iam.acm.token.JwtToken;
+import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.demo.web.dao.ContactMapper;
 import cn.org.bachelor.demo.web.dao.OrganizationMapper;
 import cn.org.bachelor.demo.web.domain.Contact;

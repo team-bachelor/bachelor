@@ -1,7 +1,6 @@
 package cn.org.bachelor.iam.acm.annotation;
 
-import cn.org.bachelor.iam.acm.PermissionOptions;
-import io.swagger.annotations.ApiOperation;
+import cn.org.bachelor.iam.PermissionOptions;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

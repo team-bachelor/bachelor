@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.acm.controller;
 
 import cn.org.bachelor.iam.acm.domain.Role;
-import cn.org.bachelor.iam.acm.vo.UserVo;
+import cn.org.bachelor.iam.vo.UserVo;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;

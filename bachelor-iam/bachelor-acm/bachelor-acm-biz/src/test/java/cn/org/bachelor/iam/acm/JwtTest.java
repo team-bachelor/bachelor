@@ -1,8 +1,8 @@
 package cn.org.bachelor.iam.acm;
 
-import cn.org.bachelor.iam.acm.token.JwtToken;
-import cn.org.bachelor.iam.acm.token.RSAKeyCreator;
-import cn.org.bachelor.iam.acm.token.RSAKeyPair;
+import cn.org.bachelor.iam.token.JwtToken;
+import cn.org.bachelor.iam.token.RSAKeyCreator;
+import cn.org.bachelor.iam.token.RSAKeyPair;
 import org.junit.Test;
 
 /**

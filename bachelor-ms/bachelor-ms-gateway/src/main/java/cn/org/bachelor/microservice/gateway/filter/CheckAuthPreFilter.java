@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.lang3.StringUtils;
-import cn.org.bachelor.iam.acm.AuthConstant;
-import cn.org.bachelor.iam.acm.token.JwtToken;
+import cn.org.bachelor.iam.IamConstant;
+import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.core.exception.BusinessException;
 import cn.org.bachelor.web.json.JsonResponse;
 import org.slf4j.Logger;
@@ -65,8 +65,8 @@ public class CheckAuthPreFilter implements GlobalFilter {
         //获取头部的token
         HttpHeaders headers = request.getHeaders();
         //List<String> tokens = headers.get(AuthConstant.HTTP_HEADER_TOKEN_KEY);
-        String token = headers.get(AuthConstant.HTTP_HEADER_TOKEN_KEY) == null ? "" :
-                headers.get(AuthConstant.HTTP_HEADER_TOKEN_KEY).get(0);
+        String token = headers.get(IamConstant.HTTP_HEADER_TOKEN_KEY) == null ? "" :
+                headers.get(IamConstant.HTTP_HEADER_TOKEN_KEY).get(0);
 //        if (tokens != null)
 //            for (String t : tokens) {
 //                if (!t.isEmpty()) {

@@ -1,6 +1,6 @@
 package cn.org.bachelor.demo.web.service;
 
-import cn.org.bachelor.iam.acm.token.JwtToken;
+import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.demo.web.dao.BaseMenuMapper;
 import cn.org.bachelor.demo.web.domain.BaseMenu;
 import cn.org.bachelor.demo.web.utils.ChildrenListUtil;

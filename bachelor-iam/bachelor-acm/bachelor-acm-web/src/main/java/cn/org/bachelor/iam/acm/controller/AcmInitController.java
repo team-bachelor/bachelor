@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.acm.controller;
 
-import cn.org.bachelor.iam.acm.IamValueHolderService;
+import cn.org.bachelor.iam.IamValueHolderService;
 import cn.org.bachelor.iam.acm.annotation.AcmDomain;
 import cn.org.bachelor.iam.acm.annotation.AcmPermission;
 import cn.org.bachelor.iam.acm.domain.ObjDomain;

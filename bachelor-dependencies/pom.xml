@@ -53,8 +53,7 @@
         <sbcp.version>2.4.1</sbcp.version>
         <feign.version>1.4.4.RELEASE</feign.version>
         <bachelor-fw.version>2.0-SNAPSHOT</bachelor-fw.version>
-        <bachelor-iam-oauth2.version>2.0-SNAPSHOT</bachelor-iam-oauth2.version>
-        <bachelor-iam-acm.version>2.0-SNAPSHOT</bachelor-iam-acm.version>
+        <bachelor-iam.version>2.0-SNAPSHOT</bachelor-iam.version>
     </properties>
 
     <dependencyManagement>
@@ -160,40 +159,58 @@
             </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
-                <artifactId>bachelor-cache-redis</artifactId>
+                <artifactId>bachelor-fw-cache-redis</artifactId>
                 <version>${bachelor-fw.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
-                <artifactId>bachelor-usermanage</artifactId>
-                <version>${bachelor-iam-oauth2.version}</version>
+                <artifactId>bachelor-fw-jms-rabbit</artifactId>
+                <version>${bachelor-fw.version}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-iam</artifactId>
+                <version>${bachelor-iam.version}</version>
+            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>cn.org.bachelor</groupId>-->
+<!--                <artifactId>bachelor-usermanage</artifactId>-->
+<!--                <version>${bachelor-iam.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
                 <artifactId>bachelor-oauth2-client</artifactId>
-                <version>${bachelor-iam-oauth2.version}</version>
+                <version>${bachelor-iam.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
                 <artifactId>bachelor-oauth2-common</artifactId>
-                <version>${bachelor-iam-oauth2.version}</version>
+                <version>${bachelor-iam.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
-                <artifactId>bachelor-acm-common</artifactId>
-                <version>${bachelor-iam-acm.version}</version>
+                <artifactId>bachelor-iam-common</artifactId>
+                <version>${bachelor-iam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-idm-web</artifactId>
+                <version>${bachelor-iam.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
                 <artifactId>bachelor-acm-biz</artifactId>
-                <version>${bachelor-iam-acm.version}</version>
+                <version>${bachelor-iam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-iam-web</artifactId>
+                <version>${bachelor-iam.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
                 <artifactId>bachelor-acm-web</artifactId>
-                <version>${bachelor-iam-acm.version}</version>
+                <version>${bachelor-iam.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>

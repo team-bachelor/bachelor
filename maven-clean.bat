@@ -1,1 +1,4 @@
-mvn clean -f bachelor-dependencies && mvn clean -f bachelor-fw && mvn clean -f bachelor-iam/bachelor-oauth2 && mvn clean -f bachelor-iam/bachelor-acm
+CALL mvn clean -f bachelor-dependencies
+CALL mvn clean -f bachelor-fw
+CALL mvn clean -f bachelor-iam
+CALL mvn clean -f bachelor-ms

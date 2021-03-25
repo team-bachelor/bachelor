@@ -1,7 +1,7 @@
 package cn.org.bachelor.demo.web.service;
 
 import com.github.pagehelper.PageInfo;
-import cn.org.bachelor.iam.acm.token.JwtToken;
+import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.demo.web.dao.ContactMapper;
 import cn.org.bachelor.demo.web.domain.Contact;
 import cn.org.bachelor.demo.web.vo.ContactOrganizationVo;

@@ -1,18 +1,6 @@
 package cn.org.bachelor.iam.oauth2.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.TreeSet;
+import java.util.*;
 
 public abstract class StringUtils
 {
@@ -21,6 +9,7 @@ public abstract class StringUtils
   private static final String TOP_PATH = "..";
   private static final String CURRENT_PATH = ".";
   private static final char EXTENSION_SEPARATOR = '.';
+  public static final String EMPTY = "";
 
   public StringUtils() {
   }
