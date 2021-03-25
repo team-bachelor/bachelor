@@ -1,4 +1,4 @@
-package cn.org.bachelor.iam.acm.token;
+package cn.org.bachelor.iam.token;
 
 import java.io.Serializable;
 import java.security.interfaces.RSAPrivateKey;
