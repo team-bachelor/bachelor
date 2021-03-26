@@ -276,13 +276,21 @@ public class MenuService {
         List<Menu> menus = menuMapper.selectByExample(example);
         Map<String, MenuVo> menuVoMap = new LinkedHashMap<>(menus.size());
         for (Menu m : menus) {
+            MenuVo mvo = toMenuVo(null, PermissionModel.ROLE, false, m, null);
+            menuVoMap.put(m.getId(), mvo);
+        }
+        for (Menu m : menus) {
             MenuVo parent = null;
             if (menuVoMap.containsKey(m.getParentId())) {
                 parent = menuVoMap.get(m.getParentId());
             }
-            MenuVo mvo = toMenuVo(null, PermissionModel.ROLE, false, m, parent);
-            if (parent != null)
+            //MenuVo mvo = toMenuVo(null, PermissionModel.ROLE, false, m, parent);
+            MenuVo mvo = menuVoMap.get(m.getId());
+            if(parent != null) {
+                mvo.setParentId(parent.getId());
+                mvo.setParent(parent);
                 parent.getSubMenus().add(mvo);
+            }
             menuVoMap.put(m.getId(), mvo);
         }
         List<MenuVo> result = new ArrayList<>();
