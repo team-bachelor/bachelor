@@ -91,7 +91,8 @@ public class MenuController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "menuId", value = "菜单数据", paramType = "path", required = true)
     })
-    @PutMapping(value = "/menu/{menuId}")
+    //@PutMapping(value = "/menu/{menuId}")
+    @DeleteMapping(value = "/menu/{menuId}")
     public ResponseEntity updateMenu(@PathVariable String menuId) {
         menuService.delete(menuId);
         return JsonResponse.createHttpEntity(HttpStatus.OK);
