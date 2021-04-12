@@ -81,7 +81,7 @@ public class MenuService {
             userCode = null;
         }
         if (StringUtils.isEmpty(userCode)) {
-            return getMenuVoList(userCode, PermissionModel.USER, null);
+            return getMenuVoListWithCodes(userCode, PermissionModel.USER, null);
         } else {
             List<RoleMenu> rmList = roleMenuMapper.selectViaUserCode(userCode);
             return calRoleMenu(userCode, PermissionModel.USER, rmList);
@@ -97,57 +97,7 @@ public class MenuService {
         for (RoleMenu p : rmList) {
             menuCodes.add(p.getMenuCode());
         }
-        return getMenuVoList(owner, type, menuCodes);
-    }
-
-    private List<MenuVo> getMenuVoList(String owner, PermissionModel type, List<String> menuCodes) {
-        Example example = new Example(Menu.class);
-        example.setOrderByClause("PARENT_ID, SEQ_ORDER ASC");
-        if (menuCodes != null && menuCodes.size() != 0) {
-            example.createCriteria().andIn("code", menuCodes);
-        }
-        List<Menu> menus = menuMapper.selectByExample(example);
-        return getMenuVo(owner, type, menus);
-    }
-
-    private List<MenuVo> getMenuVo(String owner, PermissionModel type, List<Menu> menus) {
-        Map<String, MenuVo> menuMap = new LinkedHashMap<>(menus.size());
-
-        for (Menu m : menus) {
-            MenuVo vo = toMenuVo(owner, type, true, m, null);
-            if (StringUtils.isNotEmpty(m.getParentId())
-                    && menuMap.containsKey(m.getParentId())) {
-                MenuVo parent = menuMap.get(m.getParentId());
-                vo.setParent(parent);
-                parent.getSubMenus().add(vo);
-            }
-            menuMap.put(m.getId(), vo);
-        }
-        List<MenuVo> result = new ArrayList<>();
-        for (MenuVo m : menuMap.values()) {
-            if (m.getParent() == null) {
-                result.add(m);
-            }
-        }
-        return result;
-    }
-
-    private MenuVo toMenuVo(String owner, PermissionModel type, boolean has, Menu m, MenuVo parent) {
-        MenuVo mv = new MenuVo(
-                m.getId(),
-                m.getCode(),
-                m.getUri(),
-                m.getIcon(),
-                m.getComment(),
-                type,
-                parent,
-                new ArrayList<>());
-        mv.setName(m.getName());
-        mv.setParentId(m.getParentId());
-        mv.setSeqOrder(m.getSeqOrder());
-        mv.setOwner(owner);
-        mv.setHas(has);
-        return mv;
+        return getMenuVoListWithCodes(owner, type, menuCodes);
     }
 
     /**
@@ -270,13 +220,35 @@ public class MenuService {
         return getMenuList(false);
     }
 
-    public List<MenuVo> getMenuList(boolean isFlat) {
+    private List<MenuVo> getMenuVoListWithCodes(String owner, PermissionModel type, List<String> menuCodes) {
+        Example example = getMenuExample(menuCodes);
+        List<Menu> menus = menuMapper.selectByExample(example);
+        return getMenuVo(owner, type, menus);
+    }
+
+    private Example getMenuExample(List<String> menuCodes) {
         Example example = new Example(Menu.class);
         example.orderBy("seqOrder").orderBy("parentId").asc();
+        if (menuCodes != null && menuCodes.size() != 0) {
+            example.createCriteria().andIn("code", menuCodes);
+        }
+        return example;
+    }
+
+    private List<MenuVo> getMenuVo(String owner, PermissionModel type, List<Menu> menus) {
+        return getMenuList(false, menus, owner, type, true);
+    }
+
+    public List<MenuVo> getMenuList(boolean isFlat) {
+        Example example = getMenuExample(null);
         List<Menu> menus = menuMapper.selectByExample(example);
+        return getMenuList(isFlat, menus, null, PermissionModel.ROLE,false);
+    }
+
+    private List<MenuVo> getMenuList(boolean isFlat, List<Menu> menus, String owner, PermissionModel type, boolean isHas) {
         Map<String, MenuVo> menuVoMap = new LinkedHashMap<>(menus.size());
         for (Menu m : menus) {
-            MenuVo mvo = toMenuVo(null, PermissionModel.ROLE, false, m, null);
+            MenuVo mvo = toMenuVo(null, type, isHas, m, null);
             menuVoMap.put(m.getId(), mvo);
         }
         for (Menu m : menus) {
@@ -306,4 +278,21 @@ public class MenuService {
         return result;
     }
 
+    private MenuVo toMenuVo(String owner, PermissionModel type, boolean has, Menu m, MenuVo parent) {
+        MenuVo mv = new MenuVo(
+                m.getId(),
+                m.getCode(),
+                m.getUri(),
+                m.getIcon(),
+                m.getComment(),
+                type,
+                parent,
+                new ArrayList<>());
+        mv.setName(m.getName());
+        mv.setParentId(m.getParentId());
+        mv.setSeqOrder(m.getSeqOrder());
+        mv.setOwner(owner);
+        mv.setHas(has);
+        return mv;
+    }
 }
