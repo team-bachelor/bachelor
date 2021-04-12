@@ -1,25 +1,22 @@
 package cn.org.bachelor.web.exception;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import cn.org.bachelor.core.exception.BusinessException;
 import cn.org.bachelor.core.exception.RemoteException;
 import cn.org.bachelor.core.exception.SystemException;
 import cn.org.bachelor.web.json.JsonResponse;
 import cn.org.bachelor.web.json.ResponseStatus;
 import cn.org.bachelor.web.util.MessageUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.NoSuchMessageException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.Locale;
 
 import static cn.org.bachelor.web.json.ResponseStatus.BIZ_ERR;
 import static cn.org.bachelor.web.json.ResponseStatus.SYS_ERR;
@@ -32,14 +29,21 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
  * @创建时间: 2018/11/9
  * 全局异常处理
  */
-@RestControllerAdvice(annotations = {ExceptionHandle.class})
+//@RestControllerAdvice(annotations = {ExceptionHandle.class})
+@RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private static Log logger = LogFactory.getLog(GlobalExceptionHandler.class);
 
-    @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return new ResponseEntity<Object>(body, status);
-    }
+//    @PostConstruct
+//    private void postConstruct(){
+//        if(logger.isDebugEnabled()) {
+//            logger.debug("cn.org.bachelor.web.exception.GlobalExceptionHandler construction complete!!");
+//        }
+//    }
+//    @Override
+//    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+//        return new ResponseEntity<Object>(body, status);
+//    }
 
     @ExceptionHandler(value = RemoteException.class)
     public ResponseEntity handleRemoteException(HttpServletRequest request, Exception e) throws Exception {
@@ -77,7 +81,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String msg = code;
         try {
             if (code != null && !"".equals(code)) {
-                msg = MessageUtil.getMessage(code, args == null? "null" : Arrays.asList(args).toArray());
+                msg = MessageUtil.getMessage(code, args == null ? "null" : Arrays.asList(args).toArray());
             }
         } catch (NoSuchMessageException e) {
             logger.debug(e.getMessage());
