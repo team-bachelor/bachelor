@@ -106,16 +106,6 @@
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-acm-biz</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jettison</artifactId>
-                    <groupId>org.codehaus.jettison</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-iam-common</artifactId>
         </dependency>
         <dependency>
