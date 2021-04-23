@@ -34,20 +34,9 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private static Log logger = LogFactory.getLog(GlobalExceptionHandler.class);
 
-//    @PostConstruct
-//    private void postConstruct(){
-//        if(logger.isDebugEnabled()) {
-//            logger.debug("cn.org.bachelor.web.exception.GlobalExceptionHandler construction complete!!");
-//        }
-//    }
-//    @Override
-//    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-//        return new ResponseEntity<Object>(body, status);
-//    }
-
     @ExceptionHandler(value = RemoteException.class)
     public ResponseEntity handleRemoteException(HttpServletRequest request, Exception e) throws Exception {
-        logger.debug(e);
+        logWarn(e);
         RemoteException re = (RemoteException) e;
         // 远程异常
         Throwable cause = e.getCause();
@@ -60,20 +49,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = BusinessException.class)
     public ResponseEntity handleBusinessException(HttpServletRequest request, Exception e) throws Exception {
-        logger.debug(e);
+        logDebug(e);
         BusinessException be = (BusinessException) e;
         return createExceptionResponseEntity(e.getMessage(), be.getArgs(), BIZ_ERR, BAD_REQUEST);
     }
 
     @ExceptionHandler(value = SystemException.class)
     public ResponseEntity handleSystemException(HttpServletRequest request, Exception e) throws Exception {
-        logger.error(e);
+        logError(e);
         return createExceptionResponseEntity(e.getMessage(), null, SYS_ERR, INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(value = Throwable.class)
     public ResponseEntity handleException(HttpServletRequest request, Throwable e) throws Exception {
-        logger.error(e);
+        logError(e);
         return createExceptionResponseEntity("UNEXPECT_SYSTEM_EXCEPTION", null, SYS_ERR, INTERNAL_SERVER_ERROR);
     }
 
@@ -89,5 +78,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         JsonResponse jr = new JsonResponse(null, code, msg, rs);
         return new ResponseEntity(jr, hs);
     }
-
+    private void logWarn(Throwable e){
+        if(logger.isWarnEnabled()) {
+            logger.warn("", e);
+        }
+        if(logger.isDebugEnabled()) {
+            e.printStackTrace();
+        }
+    }
+    private void logError(Throwable e){
+        if(logger.isErrorEnabled()) {
+            logger.error("", e);
+        }
+        if(logger.isDebugEnabled()) {
+            e.printStackTrace();
+        }
+    }
+    private void logDebug(Throwable e){
+        if(logger.isDebugEnabled()) {
+            logger.debug("", e);
+            e.printStackTrace();
+        }
+    }
 }
