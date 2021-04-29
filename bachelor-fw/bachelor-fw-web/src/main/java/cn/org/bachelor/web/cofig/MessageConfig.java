@@ -1,6 +1,7 @@
 package cn.org.bachelor.web.cofig;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnResource;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
  * @创建时间: 2018/11/9
  */
 @Configuration
+@ConditionalOnResource(resources= {"${spring.messages.basename}"})
 public class MessageConfig {
 
     /** 国际化文件路径 */

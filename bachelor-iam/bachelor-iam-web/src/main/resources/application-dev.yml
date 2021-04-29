@@ -8,9 +8,9 @@ spring:
     url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
     username: root
     password: Aa123456
-  messages:
-    basename: i18n/messages
-    encoding: UTF-8
+#  messages:
+#    basename: i18n/messages
+#    encoding: UTF-8
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
