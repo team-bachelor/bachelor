@@ -1,8 +1,11 @@
 package cn.org.bachelor.iam.acm.domain;
 
+import lombok.Data;
+
 import java.util.Date;
 import javax.persistence.*;
 
+@Data
 @Table(name = "cmn_acm_org_permission")
 public class OrgPermission {
     /**
@@ -47,130 +50,4 @@ public class OrgPermission {
      */
     @Column(name = "UPDATE_USER")
     private String updateUser;
-
-    /**
-     * 获取ID
-     *
-     * @return ID - ID
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * 设置ID
-     *
-     * @param id ID
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    /**
-     * 获取机构编码
-     *
-     * @return ORG_CODE - 机构编码
-     */
-    public String getOrgCode() {
-        return orgCode;
-    }
-
-    /**
-     * 设置机构编码
-     *
-     * @param orgCode 机构编码
-     */
-    public void setOrgCode(String orgCode) {
-        this.orgCode = orgCode;
-    }
-
-    /**
-     * 获取对象编码
-     *
-     * @return OBJ_CODE - 对象编码
-     */
-    public String getObjCode() {
-        return objCode;
-    }
-
-    /**
-     * 设置对象编码
-     *
-     * @param objCode 对象编码
-     */
-    public void setObjCode(String objCode) {
-        this.objCode = objCode;
-    }
-
-    /**
-     * 获取对象定位
-     *
-     * @return OBJ_URI - 对象定位
-     */
-    public String getObjUri() {
-        return objUri;
-    }
-
-    /**
-     * 设置对象定位
-     *
-     * @param objUri 对象定位
-     */
-    public void setObjUri(String objUri) {
-        this.objUri = objUri;
-    }
-
-    /**
-     * 获取对象操作
-     *
-     * @return OBJ_OPERATE - 对象操作
-     */
-    public String getObjOperate() {
-        return objOperate;
-    }
-
-    /**
-     * 设置对象操作
-     *
-     * @param objOperate 对象操作
-     */
-    public void setObjOperate(String objOperate) {
-        this.objOperate = objOperate;
-    }
-
-    /**
-     * 获取更新时间
-     *
-     * @return UPDATE_TIME - 更新时间
-     */
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    /**
-     * 设置更新时间
-     *
-     * @param updateTime 更新时间
-     */
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    /**
-     * 获取更新人
-     *
-     * @return UPDATE_USER - 更新人
-     */
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    /**
-     * 设置更新人
-     *
-     * @param updateUser 更新人
-     */
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
 }

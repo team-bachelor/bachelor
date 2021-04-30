@@ -172,4 +172,15 @@ public class MenuController {
         return JsonResponse.createHttpEntity(menus);
     }
 
+    /**
+     * 获得用户的菜单(分组）
+     * @param userCode 用户的编码
+     * @param group 菜单分组
+     * @return
+     */
+    @RequestMapping(value = "/user/menu/{userCode}/{group}", method = RequestMethod.GET)
+    public HttpEntity<JsonResponse> getUserMenu(@PathVariable String userCode, @PathVariable String group) {
+        List menus = menuService.calUserMenu(userCode, group);
+        return JsonResponse.createHttpEntity(menus);
+    }
 }

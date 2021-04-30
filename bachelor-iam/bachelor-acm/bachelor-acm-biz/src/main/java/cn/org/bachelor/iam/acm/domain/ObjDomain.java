@@ -1,10 +1,13 @@
 package cn.org.bachelor.iam.acm.domain;
 
+import lombok.Data;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
+@Data
 @Table(name = "cmn_acm_obj_domain")
 public class ObjDomain {
     /**
@@ -49,127 +52,4 @@ public class ObjDomain {
      */
     @Column(name = "UPDATE_USER")
     private String updateUser;
-
-    /**
-     * 获取ID
-     *
-     * @return ID - ID
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * 设置ID
-     *
-     * @param id ID
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    /**
-     * 获取域名称
-     *
-     * @return NAME - 域名称
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * 设置域名称
-     *
-     * @param name 域名称
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * 获取域编码
-     *
-     * @return CODE - 域编码
-     */
-    public String getCode() {
-        return code;
-    }
-
-    /**
-     * 设置域编码
-     *
-     * @param code 域编码
-     */
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    /**
-     * 获取排序
-     *
-     * @return SEQ_ORDER - 排序
-     */
-    public Short getSeqOrder() {
-        return seqOrder;
-    }
-
-    /**
-     * 设置排序
-     *
-     * @param seqOrder 排序
-     */
-    public void setSeqOrder(Short seqOrder) {
-        this.seqOrder = seqOrder;
-    }
-
-    /**
-     * 获取更新时间
-     *
-     * @return UPDATE_TIME - 更新时间
-     */
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    /**
-     * 设置更新时间
-     *
-     * @param updateTime 更新时间
-     */
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    /**
-     * 获取更新人
-     *
-     * @return UPDATE_USER - 更新人
-     */
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    /**
-     * 设置更新人
-     *
-     * @param updateUser 更新人
-     */
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-
-    /**
-     * @return 是否为系统默认
-     */
-    public Boolean isSys() {
-        return isSys;
-    }
-
-    /**
-     * @param sys 是否为系统默认
-     */
-    public void setIsSys(Boolean sys) {
-        isSys = sys;
-    }
 }

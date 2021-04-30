@@ -11,11 +11,7 @@ import java.util.List;
 
 @Repository
 public interface RoleMenuMapper extends Mapper<RoleMenu> {
-    @Select("SELECT rm.ID, " +
-            "rm.ROLE_CODE, " +
-            "rm.MENU_CODE, " +
-            "rm.UPDATE_TIME, " +
-            "rm.UPDATE_USER " +
+    @Select("SELECT DISTINCTROW rm.MENU_CODE " +
             "FROM cmn_acm_role_menu rm " +
             "JOIN cmn_acm_user_role ur " +
             "ON rm.ROLE_CODE = ur.ROLE_CODE " +
@@ -23,7 +19,8 @@ public interface RoleMenuMapper extends Mapper<RoleMenu> {
     @Results(value = {
             @Result(id = true, column = "ID", property = "id"),
             @Result(property = "roleCode", column = "ROLE_CODE"),
-            @Result(property = "objCode", column = "OBJ_CODE"),
+            @Result(property = "menuCode", column = "MENU_CODE"),
+            @Result(property = "menuCode", column = "MENU_CODE"),
             @Result(property = "updateTime", column = "UPDATE_TIME"),
             @Result(property = "updateUser", column = "UPDATE_USER")
     })

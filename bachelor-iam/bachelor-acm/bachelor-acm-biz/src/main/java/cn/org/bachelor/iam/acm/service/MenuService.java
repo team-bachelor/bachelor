@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.acm.service;
 
-import org.apache.commons.lang3.StringUtils;
+import cn.org.bachelor.core.exception.BusinessException;
 import cn.org.bachelor.iam.IamValueHolderService;
 import cn.org.bachelor.iam.acm.dao.MenuMapper;
 import cn.org.bachelor.iam.acm.dao.OrgMenuMapper;
@@ -8,8 +8,9 @@ import cn.org.bachelor.iam.acm.dao.RoleMenuMapper;
 import cn.org.bachelor.iam.acm.domain.Menu;
 import cn.org.bachelor.iam.acm.domain.OrgMenu;
 import cn.org.bachelor.iam.acm.domain.RoleMenu;
-import cn.org.bachelor.iam.acm.vo.MenuVo;
 import cn.org.bachelor.iam.acm.permission.PermissionModel;
+import cn.org.bachelor.iam.acm.vo.MenuVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -39,6 +40,7 @@ public class MenuService {
 
     /**
      * 新增菜单
+     *
      * @param m 菜单信息
      */
     public void insert(Menu m) {
@@ -51,6 +53,7 @@ public class MenuService {
 
     /**
      * 更新菜单
+     *
      * @param m 菜单信息
      */
     public void update(Menu m) {
@@ -63,6 +66,7 @@ public class MenuService {
 
     /**
      * 删除菜单
+     *
      * @param menuId 菜单ID
      */
     public void delete(String menuId) {
@@ -76,20 +80,37 @@ public class MenuService {
      * @return 用户菜单
      */
     public List<MenuVo> calUserMenu(String userCode) {
-        if (userCode.equals(valueHolder.getCurrentUser().getCode())
-                && valueHolder.getCurrentUser().isAdministrator()) {
-            userCode = null;
+        return calUserMenu(userCode, null);
+    }
+
+    /**
+     * 计算当前用户的菜单
+     *
+     * @param userCode 用户编码
+     * @return 用户菜单
+     */
+    public List<MenuVo> calUserMenu(String userCode, String group) {
+        if (userCode == null) {
+            throw new BusinessException("user code could not be null");
         }
-        if (StringUtils.isEmpty(userCode)) {
-            return getMenuVoListWithCodes(userCode, PermissionModel.USER, null);
+        boolean isAdmin;
+        //如果是管理员则取全部菜单
+        isAdmin = userCode.equals(valueHolder.getCurrentUser().getCode())
+                && valueHolder.getCurrentUser().isAdministrator();
+        if (isAdmin) {
+            return getAllMenu(group);
         } else {
             List<RoleMenu> rmList = roleMenuMapper.selectViaUserCode(userCode);
-            return calRoleMenu(userCode, PermissionModel.USER, rmList);
+            return calRoleMenu(userCode, PermissionModel.USER, rmList, group);
         }
 
     }
 
-    private List<MenuVo> calRoleMenu(String owner, PermissionModel type, List<RoleMenu> rmList) {
+    private List<MenuVo> getAllMenu(String group) {
+        return getMenuVoListWithCodes(null, PermissionModel.USER, null, group);
+    }
+
+    private List<MenuVo> calRoleMenu(String owner, PermissionModel type, List<RoleMenu> rmList, String groupName) {
         if (rmList.size() == 0) {
             return Collections.emptyList();
         }
@@ -97,7 +118,7 @@ public class MenuService {
         for (RoleMenu p : rmList) {
             menuCodes.add(p.getMenuCode());
         }
-        return getMenuVoListWithCodes(owner, type, menuCodes);
+        return getMenuVoListWithCodes(owner, type, menuCodes, groupName);
     }
 
     /**
@@ -118,8 +139,6 @@ public class MenuService {
     }
 
     /**
-     *
-     *
      * @param roleCode 角色编码
      * @param menuCode 当前角色拥有的所有菜单列表
      * @author liuzhuo
@@ -185,7 +204,7 @@ public class MenuService {
     }
 
     private List<String> sortMenuCode(List<String> menuCode) {
-        List<MenuVo> fullMenu = getMenuList(true);
+        List<MenuVo> fullMenu = getMenuList(true, null);
         Map<String, MenuVo> mmap = new HashMap<>(fullMenu.size());
         fullMenu.forEach(menu -> {
             mmap.put(menu.getCode(), menu);
@@ -217,32 +236,36 @@ public class MenuService {
      */
     //TODO 目前不考虑机构隔离，以后要考虑
     public List<MenuVo> getMenuList() {
-        return getMenuList(false);
+        return getMenuList(false, null);
     }
 
-    private List<MenuVo> getMenuVoListWithCodes(String owner, PermissionModel type, List<String> menuCodes) {
-        Example example = getMenuExample(menuCodes);
+    private List<MenuVo> getMenuVoListWithCodes(String owner, PermissionModel type, List<String> menuCodes, String group) {
+        Example example = getMenuCriteria(menuCodes, group);
         List<Menu> menus = menuMapper.selectByExample(example);
-        return getMenuVo(owner, type, menus);
+        return getMenuList(owner, type, menus);
     }
 
-    private Example getMenuExample(List<String> menuCodes) {
+    private Example getMenuCriteria(List<String> menuCodes, String group) {
         Example example = new Example(Menu.class);
         example.orderBy("seqOrder").orderBy("parentId").asc();
+        Example.Criteria criteria = example.createCriteria();
+        if(StringUtils.isNotEmpty(group)){
+            criteria.andEqualTo("groupName", group);
+        }
         if (menuCodes != null && menuCodes.size() != 0) {
-            example.createCriteria().andIn("code", menuCodes);
+            criteria.andIn("code", menuCodes);
         }
         return example;
     }
 
-    private List<MenuVo> getMenuVo(String owner, PermissionModel type, List<Menu> menus) {
+    private List<MenuVo> getMenuList(String owner, PermissionModel type, List<Menu> menus) {
         return getMenuList(false, menus, owner, type, true);
     }
 
-    public List<MenuVo> getMenuList(boolean isFlat) {
-        Example example = getMenuExample(null);
+    public List<MenuVo> getMenuList(boolean isFlat, String groupName) {
+        Example example = getMenuCriteria(null, groupName);
         List<Menu> menus = menuMapper.selectByExample(example);
-        return getMenuList(isFlat, menus, null, PermissionModel.ROLE,false);
+        return getMenuList(isFlat, menus, null, PermissionModel.ROLE, false);
     }
 
     private List<MenuVo> getMenuList(boolean isFlat, List<Menu> menus, String owner, PermissionModel type, boolean isHas) {
@@ -258,7 +281,7 @@ public class MenuService {
             }
             //MenuVo mvo = toMenuVo(null, PermissionModel.ROLE, false, m, parent);
             MenuVo mvo = menuVoMap.get(m.getId());
-            if(parent != null) {
+            if (parent != null) {
                 mvo.setParentId(parent.getId());
                 mvo.setParent(parent);
                 parent.getSubMenus().add(mvo);
@@ -293,6 +316,7 @@ public class MenuService {
         mv.setSeqOrder(m.getSeqOrder());
         mv.setOwner(owner);
         mv.setHas(has);
+        mv.setGroupName(m.getGroupName());
         return mv;
     }
 }
