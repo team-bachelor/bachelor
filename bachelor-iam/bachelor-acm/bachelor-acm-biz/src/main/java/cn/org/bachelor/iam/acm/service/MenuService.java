@@ -107,7 +107,7 @@ public class MenuService {
     }
 
     private List<MenuVo> getAllMenu(String group) {
-        return getMenuVoListWithCodes(null, PermissionModel.USER, null, group);
+        return getMenuVoListWithCodes(null, PermissionModel.USER, group, null);
     }
 
     private List<MenuVo> calRoleMenu(String owner, PermissionModel type, List<RoleMenu> rmList, String groupName) {
@@ -118,7 +118,7 @@ public class MenuService {
         for (RoleMenu p : rmList) {
             menuCodes.add(p.getMenuCode());
         }
-        return getMenuVoListWithCodes(owner, type, menuCodes, groupName);
+        return getMenuVoListWithCodes(owner, type, groupName, menuCodes);
     }
 
     /**
@@ -239,7 +239,7 @@ public class MenuService {
         return getMenuList(false, null);
     }
 
-    private List<MenuVo> getMenuVoListWithCodes(String owner, PermissionModel type, List<String> menuCodes, String group) {
+    private List<MenuVo> getMenuVoListWithCodes(String owner, PermissionModel type, String group, List<String> menuCodes) {
         Example example = getMenuCriteria(menuCodes, group);
         List<Menu> menus = menuMapper.selectByExample(example);
         return getMenuList(owner, type, menus);
