@@ -17,5 +17,6 @@
     </properties>
     <modules>
         <module>bachelor-fw-cache-redis</module>
+        <module>bachelor-fw-jms-rabbit</module>
     </modules>
 </project>
