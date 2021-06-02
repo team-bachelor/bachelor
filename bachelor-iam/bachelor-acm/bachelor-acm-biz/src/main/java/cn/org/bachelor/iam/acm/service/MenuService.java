@@ -213,7 +213,11 @@ public class MenuService {
         menuCode.forEach(code -> {
             checkForParentMenu(adds, mmap, code);
         });
-        menuCode.addAll(adds);
+        adds.forEach(m -> {
+            if(!menuCode.contains(m)){
+                menuCode.add(m);
+            }
+        });
         return menuCode;
     }
 
@@ -223,7 +227,9 @@ public class MenuService {
         if (m.getParent() == null) {
             return;
         } else {
-            adds.add(m.getParent().getCode());
+            if (!adds.contains(m.getParent().getCode())) {
+                adds.add(m.getParent().getCode());
+            }
             checkForParentMenu(adds, mmap, m.getParent().getCode());
         }
     }
@@ -249,7 +255,7 @@ public class MenuService {
         Example example = new Example(Menu.class);
         example.orderBy("seqOrder").orderBy("parentId").asc();
         Example.Criteria criteria = example.createCriteria();
-        if(StringUtils.isNotEmpty(group)){
+        if (StringUtils.isNotEmpty(group)) {
             criteria.andEqualTo("groupName", group);
         }
         if (menuCodes != null && menuCodes.size() != 0) {

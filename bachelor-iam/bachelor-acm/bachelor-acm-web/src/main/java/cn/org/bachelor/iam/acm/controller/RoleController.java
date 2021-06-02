@@ -160,7 +160,6 @@ public class RoleController {
         roleService.deleteUsersFromRole(roleCode, users);
         return JsonResponse.createHttpEntity(HttpStatus.OK);
     }
-
         //    /**
         ////     * @描述 根据当前clientID查询用户
         ////     * @param deptId 部门编码

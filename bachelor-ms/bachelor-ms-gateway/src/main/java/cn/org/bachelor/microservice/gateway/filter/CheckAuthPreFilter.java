@@ -77,6 +77,10 @@ public class CheckAuthPreFilter implements GlobalFilter {
         logger.info("access with token=[" + token + "]");
         //解析token获取用户信息
 //        String user = null;
+        if (token == null || "".equals(token)){
+            return chain.filter(exchange);
+        }
+
         ServerHttpRequest host = request;
         boolean pass = true;
         boolean isValidToekn = false;

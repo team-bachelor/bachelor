@@ -34,7 +34,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 server:
-  port: 8888
+  port: 8899
 #  connection-timeout: 1000
 feign:
   hystrix:

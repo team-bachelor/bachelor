@@ -1,8 +1,6 @@
 package cn.org.bachelor.iam.acm.service;
 
-import cn.org.bachelor.iam.idm.service.ImSysService;
-import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
-import org.apache.commons.lang3.StringUtils;
+import cn.org.bachelor.core.exception.BusinessException;
 import cn.org.bachelor.iam.IamValueHolderService;
 import cn.org.bachelor.iam.acm.dao.RoleMapper;
 import cn.org.bachelor.iam.acm.dao.RoleMenuMapper;
@@ -13,8 +11,10 @@ import cn.org.bachelor.iam.acm.domain.RoleMenu;
 import cn.org.bachelor.iam.acm.domain.RolePermission;
 import cn.org.bachelor.iam.acm.domain.UserRole;
 import cn.org.bachelor.iam.idm.service.ImSysParam;
+import cn.org.bachelor.iam.idm.service.ImSysService;
+import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
 import cn.org.bachelor.iam.vo.UserVo;
-import cn.org.bachelor.core.exception.BusinessException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -184,7 +184,9 @@ public class RoleService {
         List<UserRole> userRoles = userRoleMapper.select(ur);
         List<String> result = new ArrayList<>(userRoles.size());
         userRoles.forEach(userRole -> {
-            result.add(userRole.getRoleCode());
+            if (!result.contains(userRole.getRoleCode())) {
+                result.add(userRole.getRoleCode());
+            }
         });
         return result;
     }

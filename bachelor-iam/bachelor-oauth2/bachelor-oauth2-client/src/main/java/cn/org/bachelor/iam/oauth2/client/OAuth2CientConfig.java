@@ -3,6 +3,7 @@
  */
 package cn.org.bachelor.iam.oauth2.client;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -219,7 +220,11 @@ public class OAuth2CientConfig {
         private String deptDetails = "/deptDetails";
 
         private String prefix(String url) {
-            return this.getBase() + url;
+            return prefix(url, null);
+        }
+
+        private String prefix(String url, String newBase) {
+            return newBase + (StringUtils.isEmpty(this.getBase()) ? url : url.replace(this.getBase(), ""));
         }
 
         public String getBase() {
@@ -227,19 +232,19 @@ public class OAuth2CientConfig {
         }
 
         public void setBase(String base) {
+            app = prefix(app, base);
+            userInfoDetail = prefix(userInfoDetail, base);
+            userRole = prefix(userRole, base);
+            users = prefix(users, base);
+            depts = prefix(depts, base);
+            orgs = prefix(orgs, base);
+            userByIds = prefix(userByIds, base);
+            userByClientID = prefix(userByClientID, base);
+            appsByUserId = prefix(appsByUserId, base);
+            mtUserRoles = prefix(mtUserRoles, base);
+            userDetails = prefix(userDetails, base);
+            deptDetails = prefix(deptDetails, base);
             this.base = base;
-            app = prefix(app);
-            userInfoDetail = prefix(userInfoDetail);
-            userRole = prefix(userRole);
-            users = prefix(users);
-            depts = prefix(depts);
-            orgs = prefix(orgs);
-            userByIds = prefix(userByIds);
-            userByClientID = prefix(userByClientID);
-            appsByUserId = prefix(appsByUserId);
-            mtUserRoles = prefix(mtUserRoles);
-            userDetails = prefix(userDetails);
-            deptDetails = prefix(deptDetails);
         }
 
         public String getApp() {
