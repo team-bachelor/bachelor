@@ -1,6 +1,6 @@
 spring:
   application:
-    name: bachelor-demo-web-backend
+    name: bachelor-ms-iam-webservice
     id: "8872cb73cb054676aeeadfe97f0ba400"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

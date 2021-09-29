@@ -1,7 +1,6 @@
 package cn.org.bachelor.iam.acm.service;
 
 import cn.org.bachelor.core.exception.BusinessException;
-import cn.org.bachelor.iam.IamValueHolderService;
 import cn.org.bachelor.iam.acm.dao.RoleMapper;
 import cn.org.bachelor.iam.acm.dao.RoleMenuMapper;
 import cn.org.bachelor.iam.acm.dao.RolePermissionMapper;
@@ -23,11 +22,11 @@ import java.util.*;
 
 /**
  * @描述:
- * @创建人: liuzhuo
+ * @author : liuzhuo
  * @创建时间: 2018/10/27
  */
-@Service
-public class RoleService {
+@Service("dbRoleService")
+public class RoleService implements RoleServiceStub {
 
     @Autowired
     private RoleMapper roleMapper;
@@ -41,23 +40,14 @@ public class RoleService {
     private ImSysService imSysService;
 
     @Autowired
-    private IamValueHolderService valueHolder;
-
-    @Autowired
     private OAuth2CientConfig clientConfig;
-
-    /**
-     * @return
-     */
-    public List<Role> findAll() {
-        return roleMapper.selectAll();
-    }
 
     /**
      * @param orgCode
      * @param keyWord
      * @return
      */
+    @Override
     public List<Role> findViaOrg(String orgCode, String keyWord) {
         Example ex = new Example(Role.class);
         ex.setOrderByClause("NAME ASC");
@@ -75,6 +65,7 @@ public class RoleService {
      * @param role
      * @return
      */
+    @Override
     public Role createRole(Role role) {
         role.setId(UUID.randomUUID().toString());
         role.setUpdateTime(new Date());
@@ -89,20 +80,17 @@ public class RoleService {
         return role;
     }
 
-    public List<UserVo> findUserByClientID(ImSysParam param) {
-        param.setClientId(clientConfig.getId());
-        List<UserVo> users = imSysService.findUsersByClientID(param);
-//        List<String> ids = new ArrayList<>(users.size());
-//        users.forEach(user -> {
-//            ids.add(user.getId());
-//        });
-//        users = userSysService.findUserByIds(StringUtils.join(ids.toArray(), ','));
-        return users;
-    }
+//    @Override
+//    public List<UserVo> findUserByClientID(ImSysParam param) {
+//        param.setClientId(clientConfig.getId());
+//        List<UserVo> users = imSysService.findUsersByClientID(param);
+//        return users;
+//    }
 
     /**
      * @param roleID
      */
+    @Override
     public void deleteRole(String roleID) {
         Role role = roleMapper.selectByPrimaryKey(roleID);
         if (role == null) {
@@ -123,6 +111,7 @@ public class RoleService {
     /**
      * @param role
      */
+    @Override
     public void modifyRole(Role role) {
         if (StringUtils.isEmpty(role.getId())) {
             throw new BusinessException("role_id_must_be_exist");
@@ -142,6 +131,7 @@ public class RoleService {
      * @param roleCode
      * @return
      */
+    @Override
     public List<UserVo> getRoleUsers(String roleCode) {
         UserRole ur = new UserRole();
         ur.setRoleCode(roleCode);
@@ -178,6 +168,7 @@ public class RoleService {
      * @param userCode
      * @return roleCodes
      */
+    @Override
     public List<String> getUserRoles(String userCode) {
         UserRole ur = new UserRole();
         ur.setUserCode(userCode);
@@ -195,6 +186,7 @@ public class RoleService {
      * @param roleCode
      * @param users
      */
+    @Override
     public void addUsersToRole(String roleCode, List<UserVo> users) {
         if (StringUtils.isEmpty(roleCode)) {
             throw new BusinessException("role_code_must_be_exist");
@@ -221,6 +213,7 @@ public class RoleService {
      * @param roleCode
      * @param users
      */
+    @Override
     public void deleteUsersFromRole(String roleCode, List<String> users) {
         Example ex = new Example(UserRole.class);
         ex.createCriteria()
@@ -234,6 +227,7 @@ public class RoleService {
      * @param roleID
      * @return
      */
+    @Override
     public Role selectByPrimaryKey(String roleID) {
         return roleMapper.selectByPrimaryKey(roleID);
     }
