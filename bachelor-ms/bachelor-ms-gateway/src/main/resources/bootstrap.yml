@@ -1,6 +1,6 @@
 spring:
   application:
-    name: gateway
+    name: bachelor-ms-gateway
     workbench-code: workbench-manage
   cloud:
     gateway:

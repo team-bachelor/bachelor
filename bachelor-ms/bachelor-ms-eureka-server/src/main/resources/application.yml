@@ -16,4 +16,4 @@ eureka:
     eviction-interval-timer-in-ms: 3000
 spring:
   application:
-    name: eureka-server
+    name: bachelor-ms-eureka-server

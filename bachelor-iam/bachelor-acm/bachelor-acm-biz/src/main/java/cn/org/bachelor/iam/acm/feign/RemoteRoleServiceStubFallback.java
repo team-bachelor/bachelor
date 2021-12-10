@@ -1,14 +1,10 @@
-package cn.org.bachelor.iam.acm.fiegn;
+package cn.org.bachelor.iam.acm.feign;
 
 import cn.org.bachelor.iam.acm.domain.Role;
-import cn.org.bachelor.iam.idm.service.ImSysParam;
 import cn.org.bachelor.iam.vo.UserVo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
@@ -16,6 +12,8 @@ import java.util.List;
  * 角色服务
  */
 @Component
+@ConditionalOnProperty(prefix = "bachelor.iam",
+        name = {"service-provider"}, havingValue = "rpc")
 public class RemoteRoleServiceStubFallback implements RemoteRoleServiceStub {
 
     @Override

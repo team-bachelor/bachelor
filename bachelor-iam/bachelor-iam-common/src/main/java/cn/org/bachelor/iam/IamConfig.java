@@ -35,6 +35,10 @@ public class IamConfig {
     private boolean enableUserAccessControl = true;
 
     /**
+     * IAM服务提供方式
+     */
+    private String serviceProvider = "db";
+    /**
      * 用于token加密的私钥文件地址:private_key_file
      */
     private String privateKeyFile = "/id_rsa";

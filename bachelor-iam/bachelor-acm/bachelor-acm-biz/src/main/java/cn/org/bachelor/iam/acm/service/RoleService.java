@@ -15,17 +15,21 @@ import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
 import cn.org.bachelor.iam.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
 
 /**
- * @描述:
  * @author : liuzhuo
+ * @描述:
  * @创建时间: 2018/10/27
  */
-@Service("dbRoleService")
+//@Service("dbRoleService")
+@Service
+@ConditionalOnProperty(prefix = "bachelor.iam",
+        name={"service-provider"}, havingValue = "db", matchIfMissing = true)
 public class RoleService implements RoleServiceStub {
 
     @Autowired

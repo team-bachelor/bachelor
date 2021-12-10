@@ -22,8 +22,14 @@ public class OrgVo {
     @JsonProperty("name")
     private String name;
 
+    @JsonProperty("fullname")
+    private String fullname;
+
     @JsonProperty("pid")
     private String parentId;
+
+    @JsonProperty("uscCode")
+    private String uscCode;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private OrgVo parent;
@@ -100,5 +106,21 @@ public class OrgVo {
 
     public void setHold(boolean hold) {
         this.hold = hold;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getUscCode() {
+        return uscCode;
+    }
+
+    public void setUscCode(String uscCode) {
+        this.uscCode = uscCode;
     }
 }

@@ -1,13 +1,12 @@
 package cn.org.bachelor.iam.acm.controller;
 
 import cn.org.bachelor.iam.acm.domain.Role;
+import cn.org.bachelor.iam.acm.service.RoleServiceStub;
 import cn.org.bachelor.iam.vo.UserVo;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import cn.org.bachelor.iam.acm.service.RoleService;
 import cn.org.bachelor.web.json.JsonResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +24,8 @@ import java.util.List;
 @RequestMapping("/acm/role")
 public class RoleController {
 
-    @Resource(name = "dbRoleService")
-    private RoleService roleService;
+    @Resource
+    private RoleServiceStub roleService;
 
 
     /**

@@ -97,8 +97,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <scope>compile</scope>
+            <artifactId>spring-cloud-starter-feign</artifactId>
         </dependency>
     </dependencies>
 

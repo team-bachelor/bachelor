@@ -83,7 +83,8 @@ management:
         include: "*"
 bachelor:
   iam:
-    enable_user_access_control: false
+    enable-user-access-control: false
+    service-provider: db
     ########################################↓权限配置↓########################################
     client:
       id: 8872cb73cb054676aeeadfe97f0ba400
