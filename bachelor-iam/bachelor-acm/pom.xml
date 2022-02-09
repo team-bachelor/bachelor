@@ -13,8 +13,9 @@
     <name>bachelor-acm</name>
     <packaging>pom</packaging>
     <modules>
+        <module>bachelor-acm-common</module>
         <module>bachelor-acm-biz</module>
-        <module>bachelor-acm-web</module>
+        <module>bachelor-acm-service</module>
     </modules>
 
     <dependencyManagement>

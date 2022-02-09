@@ -50,19 +50,19 @@ public class PageInterceptor extends ManagedInterceptor {
                                   HttpServletResponse response, Object obj) {
         try {
 
-            String startIndexStr = request.getParameter("start");
-            String pageStr = request.getParameter("page");
-            if (StringUtils.isEmpty(startIndexStr) && StringUtils.isEmpty(pageStr)) {
+            String pageNum = request.getParameter("pageNum");
+            String pageSize = request.getParameter("pageSize");
+            if (StringUtils.isEmpty(pageNum) && StringUtils.isEmpty(pageSize)) {
                 log.debug("找不到分页标志，不开始分页处理。");
                 return true;
             }
 
-            Integer startIndex = Integer.parseInt(startIndexStr);
-            Integer pageNum = Integer.parseInt(pageStr);
+            Integer pageNumInt = Integer.parseInt(pageNum);
+            Integer pageSizeInt = Integer.parseInt(pageSize);
 
             log.debug("找到分页标志，开始分页处理。");
 
-            PageHelper.startPage(startIndex, pageNum);
+            PageHelper.startPage(pageNumInt, pageSizeInt);
         } catch (Exception e) {
             log.error(e);
         }

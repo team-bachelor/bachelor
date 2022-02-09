@@ -13,7 +13,7 @@
     <name>bachelor-idm</name>
     <packaging>pom</packaging>
     <modules>
-        <module>bachelor-idm-web</module>
+        <module>bachelor-idm-service</module>
     </modules>
 
 <!--    <dependencyManagement>-->

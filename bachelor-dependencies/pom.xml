@@ -199,6 +199,16 @@
             </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-acm-common</artifactId>
+                <version>${bachelor-iam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-acm-client</artifactId>
+                <version>${bachelor-iam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
                 <artifactId>bachelor-acm-biz</artifactId>
                 <version>${bachelor-iam.version}</version>
             </dependency>

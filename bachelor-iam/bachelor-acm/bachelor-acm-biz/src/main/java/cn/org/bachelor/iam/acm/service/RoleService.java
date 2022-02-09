@@ -28,8 +28,8 @@ import java.util.*;
  */
 //@Service("dbRoleService")
 @Service
-@ConditionalOnProperty(prefix = "bachelor.iam",
-        name={"service-provider"}, havingValue = "db", matchIfMissing = true)
+//@ConditionalOnProperty(prefix = "bachelor.iam",
+//        name={"service-provider"}, havingValue = "local", matchIfMissing = true)
 public class RoleService implements RoleServiceStub {
 
     @Autowired
@@ -55,8 +55,10 @@ public class RoleService implements RoleServiceStub {
     public List<Role> findViaOrg(String orgCode, String keyWord) {
         Example ex = new Example(Role.class);
         ex.setOrderByClause("NAME ASC");
-        ex.createCriteria()
-                .andEqualTo("orgCode", orgCode);
+        if (StringUtils.isNotEmpty(orgCode)) {
+            ex.createCriteria()
+                    .andEqualTo("orgCode", orgCode);
+        }
         if (StringUtils.isNotEmpty(keyWord)) {
             keyWord = "%" + keyWord + "%";
             ex.or().orLike("name", keyWord)

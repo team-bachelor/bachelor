@@ -3,8 +3,6 @@ package cn.org.bachelor.web.json;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Date;
-
 public class JsonResponse<T> {
 
     private ResponseStatus status;
@@ -26,11 +24,13 @@ public class JsonResponse<T> {
         this(data);
         this.msg = msg;
     }
-    public JsonResponse(T data, String code, String msg, ResponseStatus status){
+
+    public JsonResponse(T data, String code, String msg, ResponseStatus status) {
         this(data, msg);
         this.setCode(code);
         this.setStatus(status);
     }
+
     public ResponseStatus getStatus() {
         return status;
     }
@@ -64,15 +64,17 @@ public class JsonResponse<T> {
     }
 
     public void setCode(String code) {
+        if ("null".equals(code)) code = null;
         this.code = code;
+
     }
 
     public static <K> ResponseEntity<JsonResponse> createHttpEntity(K data) {
-        return createHttpEntity(data,HttpStatus.OK);
+        return createHttpEntity(data, HttpStatus.OK);
     }
 
     public static <K> ResponseEntity<JsonResponse> createHttpEntity(K data, String msg) {
-        return createHttpEntity(data,msg,HttpStatus.OK);
+        return createHttpEntity(data, msg, HttpStatus.OK);
     }
 
     public static <K> ResponseEntity<JsonResponse> createHttpEntity(K data, HttpStatus status) {
@@ -95,6 +97,7 @@ public class JsonResponse<T> {
 
     /**
      * 指定返回编码，消息提示，状态码
+     *
      * @param code
      * @param msg
      * @param status
@@ -110,11 +113,11 @@ public class JsonResponse<T> {
 
     private static JsonResponse setJsonResponseStatus(JsonResponse response, HttpStatus status) {
         int s = status.value();
-        if (s < 300){
+        if (s < 300) {
             response.setStatus(ResponseStatus.OK);
-        }else if(s < 500){
+        } else if (s < 500) {
             response.setStatus(ResponseStatus.BIZ_ERR);
-        }else if(s < 600){
+        } else if (s < 600) {
             response.setStatus(ResponseStatus.SYS_ERR);
         }
         return response;

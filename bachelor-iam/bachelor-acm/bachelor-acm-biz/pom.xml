@@ -38,6 +38,10 @@
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-generator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.org.bachelor</groupId>
+            <artifactId>bachelor-acm-common</artifactId>
+        </dependency>
         <!--<dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper</artifactId>
