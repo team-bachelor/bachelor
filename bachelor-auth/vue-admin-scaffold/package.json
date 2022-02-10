@@ -17,7 +17,7 @@
     "js-base64": "^2.6.3",
     "lodash": "^4.17.19",
     "mockjs": "^1.1.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "rxjs": "^6.6.0",
     "velocity-animate": "^1.5.2",
     "vue": "^2.6.11",
