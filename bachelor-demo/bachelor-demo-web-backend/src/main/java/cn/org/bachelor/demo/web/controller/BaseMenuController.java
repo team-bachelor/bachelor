@@ -2,7 +2,6 @@ package cn.org.bachelor.demo.web.controller;
 
 import cn.org.bachelor.demo.web.domain.BaseMenu;
 import cn.org.bachelor.demo.web.service.BaseMenuService;
-import cn.org.bachelor.iam.acm.controller.MenuController;
 import cn.org.bachelor.demo.web.common.annotation.AppointLog;
 import cn.org.bachelor.web.json.JsonResponse;
 import io.swagger.annotations.Api;
@@ -29,7 +28,7 @@ import java.util.List;
 @Api(tags = {"动态菜单服务"})
 public class BaseMenuController {
 
-    private static final Logger logger = LoggerFactory.getLogger(MenuController.class);
+    private static final Logger logger = LoggerFactory.getLogger(BaseMenuController.class);
 
     @Resource
     BaseMenuService baseMenuService;

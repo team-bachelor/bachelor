@@ -10,8 +10,8 @@ import java.util.Map;
 
 /**
  * @描述 鉴权相关的服务
- * @创建人 liuzhuo
  * @创建时间 2018/10/22
+ * @author liuzhuo
  */
 public interface AuthorizeServiceStub {
     /**
@@ -19,9 +19,10 @@ public interface AuthorizeServiceStub {
      *
      * @param objCode  对象编码
      * @param userCode 用户编码
+     * @param accessType 访问资源类型
      * @return 是否能访问
      */
-    boolean isAuthorized(String objCode, String userCode);
+//    boolean isAuthorized(String objCode, String userCode);
 
     boolean isAuthorized(String objCode, String userCode, PermissionOptions.AccessType accessType);
 

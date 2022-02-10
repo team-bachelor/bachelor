@@ -17,10 +17,10 @@ import java.util.Map;
 @Service
 public class AuthorizeServiceClientFallback implements AuthorizeServiceClient {
 
-    @Override
-    public boolean isAuthorized(String objCode, String userCode) {
-        return false;
-    }
+//    @Override
+//    public boolean isAuthorized(String objCode, String userCode) {
+//        return false;
+//    }
 
     @Override
     public boolean isAuthorized(String objCode, String userCode, PermissionOptions.AccessType accessType) {
