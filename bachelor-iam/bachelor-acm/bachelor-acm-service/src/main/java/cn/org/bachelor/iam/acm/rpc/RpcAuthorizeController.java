@@ -1,23 +1,16 @@
 package cn.org.bachelor.iam.acm.rpc;
 
-import cn.org.bachelor.iam.acm.domain.*;
 import cn.org.bachelor.iam.acm.permission.PermissionGroup;
-import cn.org.bachelor.iam.acm.permission.PermissionModel;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.permission.PermissionPoint;
 import cn.org.bachelor.iam.acm.service.AuthorizeServiceStub;
-import cn.org.bachelor.iam.acm.service.RoleServiceStub;
-import cn.org.bachelor.iam.vo.UserVo;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.*;
-import tk.mybatis.mapper.entity.Example;
-import tk.mybatis.mapper.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author liuzhuo
@@ -58,11 +51,11 @@ public class RpcAuthorizeController {
     }
 
     /**
-     * @描述 取得备选权限列表（按组分开）
      * @param orgID 组织机构ID
+     * @return 权限组列表
+     * @描述 取得备选权限列表（按组分开）
      * @author liuzhuo
      * @创建时间 2018/10/27 11:16
-     * @return 权限组列表
      */
     public List<PermissionGroup> getPermissionGroupList(String orgID) {
         return authorizeService.getPermissionGroupList(orgID);
@@ -76,7 +69,7 @@ public class RpcAuthorizeController {
      * @Return:
      */
     public List<String> getRolePermission(String roleCode) {
-        return authorizeService.getRolePermission( roleCode);
+        return authorizeService.getRolePermission(roleCode);
     }
 
     /**
@@ -85,7 +78,7 @@ public class RpcAuthorizeController {
      * @author liuzhuo
      */
     public void setRolePermission(String roleCode, List<PermissionPoint> perms) {
-        authorizeService.setRolePermission( roleCode,  perms);
+        authorizeService.setRolePermission(roleCode, perms);
     }
 
     /**
@@ -105,7 +98,7 @@ public class RpcAuthorizeController {
      * @author liuzhuo
      */
     public void setOrgPermission(String orgId, List<PermissionPoint> perms) {
-        authorizeService.setOrgPermission( orgId,  perms);
+        authorizeService.setOrgPermission(orgId, perms);
     }
 
 }

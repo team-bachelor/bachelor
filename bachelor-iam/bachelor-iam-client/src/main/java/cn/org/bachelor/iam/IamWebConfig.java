@@ -2,6 +2,7 @@ package cn.org.bachelor.iam;
 
 import cn.org.bachelor.iam.acm.interceptor.UserAccessControlInterceptor;
 import cn.org.bachelor.iam.idm.interceptor.UserIdentifyInterceptor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
@@ -20,6 +21,13 @@ public class IamWebConfig implements WebMvcConfigurer {
 
     @Resource
     private IamConfig config;
+
+//    @Value(":")
+//    private static String iamServiceName;
+//
+//    public static String getIamServiceName(){
+//        return iamServiceName;
+//    }
 
     /**
      * @return 访问控制拦截器

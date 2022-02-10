@@ -4,6 +4,7 @@ package cn.org.bachelor.iam.service;
 import cn.org.bachelor.iam.IamValueHolderService;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.service.AuthorizeService;
+import cn.org.bachelor.iam.acm.service.AuthorizeServiceStub;
 import cn.org.bachelor.iam.vo.UserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,7 @@ public class ServiceACInterceptor extends HandlerInterceptorAdapter {
     private IamValueHolderService valueHolder;
 
     @Autowired
-    private AuthorizeService authorizeService;
+    private AuthorizeServiceStub authorizeService;
 
     //private Set<String> urlCache;
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {

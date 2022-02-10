@@ -12,6 +12,7 @@
     <artifactId>bachelor-iam</artifactId>
     <name>bachelor-iam</name>
     <packaging>pom</packaging>
+    <version>2.1-SNAPSHOT</version>
     <description></description>
 
     <modules>

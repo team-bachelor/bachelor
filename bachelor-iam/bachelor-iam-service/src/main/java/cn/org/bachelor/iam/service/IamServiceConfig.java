@@ -1,6 +1,8 @@
 package cn.org.bachelor.iam.service;
 
 import cn.org.bachelor.iam.IamConfig;
+import cn.org.bachelor.iam.acm.service.AuthorizeService;
+import cn.org.bachelor.iam.acm.service.AuthorizeServiceStub;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;

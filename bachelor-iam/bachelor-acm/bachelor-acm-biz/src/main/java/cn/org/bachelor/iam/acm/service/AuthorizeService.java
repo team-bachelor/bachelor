@@ -26,7 +26,7 @@ import java.util.*;
  * @创建时间 2018/10/22
  */
 @Service
-public class AuthorizeService {
+public class AuthorizeService implements AuthorizeServiceStub {
     private static final Logger logger = LoggerFactory.getLogger(AuthorizeService.class);
 
     @Autowired
