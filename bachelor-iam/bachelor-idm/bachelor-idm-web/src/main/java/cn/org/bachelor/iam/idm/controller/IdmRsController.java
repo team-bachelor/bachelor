@@ -34,7 +34,7 @@ import java.util.List;
  */
 @RestController
 /**
- * 将原auth-login合并，原/user/接口一并归到/dim/
+ * 将原auth-login合并，原/user/接口一并归到/idm/
  */
 @RequestMapping("/idm/rs")
 public class IdmRsController {

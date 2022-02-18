@@ -30,11 +30,11 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * @描述 默认的用户平台服务提供类，如果不加载UP相关包则该类也不加载。
- *       若更换用户平台则需要实现UserSysService中的接口。
  * @author liuzhuo
+ * @描述 默认的用户平台服务提供类，如果不加载UP相关包则该类也不加载。
+ * 若更换用户平台则需要实现UserSysService中的接口。
  * @创建时间 2018/11/9
- * @更新履历  2021/01/20 规范了配置方式，将配置全部转移到OAuth2ClientConfig中。
+ * @更新履历 2021/01/20 规范了配置方式，将配置全部转移到OAuth2ClientConfig中。
  */
 @Service
 @ConditionalOnClass(OAuth2Client.class)
@@ -312,6 +312,7 @@ public class DefaultImSysService implements ImSysService {
             param.put("code", code);
         if (StringUtils.isNotEmpty(name))
             param.put("name", name);
+        param.put("pageSize", "1000");
         String json = callApi(clientConfig.getRsURL().getOrgs(), "GET", param);
         return resolveJsonList(json, OrgVo.class);
     }
@@ -507,7 +508,7 @@ public class DefaultImSysService implements ImSysService {
         return new DataPermVo(treeOrgs, deptMap, userMap);
     }
 
-//    @Autowired
+    //    @Autowired
 //    protected StringRedisTemplate redisTemplate;
     //TODO 要解决redis依赖问题
     // 设置1天有效时间
@@ -616,7 +617,7 @@ public class DefaultImSysService implements ImSysService {
     }
 
     private String callApi(String url, String methodType,
-                          Map<String, String> param, String astoken) {
+                           Map<String, String> param, String astoken) {
         if (param == null) {
             param = new HashMap<>(2);
         }
@@ -637,7 +638,7 @@ public class DefaultImSysService implements ImSysService {
                 UserVo user = valueHolder.getCurrentUser();
                 if (user != null && user.getAccessToken() != null) {
                     token = user.getAccessToken();
-                }else{
+                } else {
                     OAuth2ClientCertification upCC =
                             (OAuth2ClientCertification) valueHolder.getValueHolderService().getSessionAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
                     token = upCC.getAccessToken();
@@ -661,7 +662,7 @@ public class DefaultImSysService implements ImSysService {
     }
 
     private String callApi(String url, String methodType,
-                          Map<String, String> param) {
+                           Map<String, String> param) {
         return callApi(url, methodType, param, null);
     }
 }
