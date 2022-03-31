@@ -2,12 +2,12 @@ package cn.org.bachelor.iam;
 
 import cn.org.bachelor.iam.acm.interceptor.UserAccessControlInterceptor;
 import cn.org.bachelor.iam.idm.interceptor.UserIdentifyInterceptor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.annotation.Resource;
 
@@ -33,7 +33,7 @@ public class IamWebConfig implements WebMvcConfigurer {
      * @return 访问控制拦截器
      */
     @Bean
-    public UserAccessControlInterceptor authInterceptor() {
+    public HandlerInterceptorAdapter authInterceptor() {
         return new UserAccessControlInterceptor();
     }
 
@@ -41,7 +41,7 @@ public class IamWebConfig implements WebMvcConfigurer {
      * @return 用户识别拦截器
      */
     @Bean
-    public UserIdentifyInterceptor userInterceptor() {
+    public HandlerInterceptorAdapter userInterceptor() {
         return new UserIdentifyInterceptor();
     }
 

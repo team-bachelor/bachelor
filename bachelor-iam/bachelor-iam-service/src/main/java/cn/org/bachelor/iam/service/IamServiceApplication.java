@@ -1,6 +1,5 @@
 package cn.org.bachelor.iam.service;
 
-import cn.org.bachelor.iam.acm.service.AuthorizeServiceStub;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;

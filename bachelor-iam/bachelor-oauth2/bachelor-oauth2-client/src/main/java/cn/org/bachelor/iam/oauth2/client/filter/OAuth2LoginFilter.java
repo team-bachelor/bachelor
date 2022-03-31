@@ -58,7 +58,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
  *
  */
 //@Component
-@ServletComponentScan
+//@ServletComponentScan
 @WebFilter(urlPatterns = "/*", filterName = "oauth2LoginFilter")
 public class OAuth2LoginFilter implements Filter {
 
@@ -69,9 +69,8 @@ public class OAuth2LoginFilter implements Filter {
 //    private static String configFileName = defaultConfigFileName;
     private static String EXCEPT_PATTERNS = "";
     private static String EXCEPT_PARAMS = "";
-    private static String serviceString = "serviceAuthenticate";
-    private static String upString = "UpAuthenticate";
-    private static Gson gson;
+//    private static String serviceString = "serviceAuthenticate";
+//    private static String upString = "UpAuthenticate";
 
 //    public static String getConfigFileName() {
 //        return configFileName;
@@ -107,16 +106,6 @@ public class OAuth2LoginFilter implements Filter {
                 logger.debug("isExcluded");
                 chain.doFilter(request, response);
                 logger.info("url匹配成功通过");
-                return;
-            } else if ("zmitiApp".equals(((HttpServletRequest) request).getHeader("X-Requested-By"))) {
-                //防止做ajax请求的静态页面登录超时僵死在那
-                setLogon((HttpServletResponse) response, false);
-                PrintWriter out = response.getWriter();
-                out.print("{\"status\":302,\"msg\":\"登录超时！请重新登录\"}");
-                out.flush();
-                out.close();
-                chain.doFilter(request, response);
-                logger.info("操作平台ajax请求,session 过期");
                 return;
             } else if (client.isCallback()) {
                 logger.info("验证是否服务端返回的地址----url:" + requestURI);
@@ -197,7 +186,6 @@ public class OAuth2LoginFilter implements Filter {
             ClientUtil.config = config;// 放到全局变量里面
             EXCEPT_PATTERNS = filterConfig.getInitParameter("_except_urlpattern");
             EXCEPT_PARAMS = filterConfig.getInitParameter("_except_param");
-            if (gson == null) gson = new Gson();
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServletException(e);

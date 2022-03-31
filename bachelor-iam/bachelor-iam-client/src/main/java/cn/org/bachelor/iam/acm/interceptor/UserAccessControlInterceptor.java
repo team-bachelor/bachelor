@@ -1,9 +1,11 @@
 package cn.org.bachelor.iam.acm.interceptor;
 
 
+import cn.org.bachelor.iam.IamConfig;
 import cn.org.bachelor.iam.IamValueHolderService;
+import cn.org.bachelor.iam.acm.Authorization;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
-import cn.org.bachelor.iam.acm.service.AuthorizeServiceStub;
+import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
 import cn.org.bachelor.iam.vo.UserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,8 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
+import javax.annotation.Resource;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,8 +37,14 @@ public class UserAccessControlInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private IamValueHolderService valueHolder;
 
-    @Autowired
-    private AuthorizeServiceStub authorizeService;
+    @Resource
+    private Authorization authorizeService;
+
+    @Resource
+    private IamConfig iamConfig;
+
+    @Resource
+    private OAuth2CientConfig clientConfig;
 
     //private Set<String> urlCache;
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -72,8 +82,13 @@ public class UserAccessControlInterceptor extends HandlerInterceptorAdapter {
         if (!pass) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             try {
+                if (!iamConfig.isJsonResponse()) {
+                    response.sendRedirect(iamConfig.getLoginURL());
+                    return false;
+                }
                 PrintWriter pw = response.getWriter();
                 pw.append("{\"status\":\"BIZ_ERR\",\"code\":\"UNAUTHORIZED\",\"msg\":\"UNAUTHORIZED\",\"data\":null,\"time\":" + new Date().getTime() + "}");
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -3,7 +3,6 @@ package cn.org.bachelor.iam.service;
 
 import cn.org.bachelor.iam.IamValueHolderService;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
-import cn.org.bachelor.iam.acm.service.AuthorizeService;
 import cn.org.bachelor.iam.acm.service.AuthorizeServiceStub;
 import cn.org.bachelor.iam.vo.UserVo;
 import org.slf4j.Logger;

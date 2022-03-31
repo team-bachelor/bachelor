@@ -21,6 +21,7 @@ public class ClientConstant {
     public static final String COOKIE_SEPERATOR = "|";
     public static final String COOKIE_NAME="RCLOUD";
     public static final String OAUTH_STATE="oauth_state";
+    public static final String OAUTH_CB_STATE="state";
     public static final String TEMPLATE_REPLACE_STRING ="${error}";
     public static final String TEMPLATE_NAME="error-client.html";
     public static final String STATE_ERROR="验证state失败";

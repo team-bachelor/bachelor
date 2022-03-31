@@ -4,7 +4,9 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.org.bachelor.demo.web.domain.UserInfo;
 import cn.org.bachelor.demo.web.service.UserInfoService;
 import cn.org.bachelor.demo.web.service.UserRoleService;
+import cn.org.bachelor.demo.web.vo.UserInfoVO;
 import cn.org.bachelor.iam.oauth2.client.util.ClientUtil;
+import cn.org.bachelor.web.json.JsonResponse;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
@@ -13,9 +15,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import cn.org.bachelor.iam.acm.domain.UserRole;
-import cn.org.bachelor.demo.web.vo.UserInfoVO;
-import cn.org.bachelor.web.json.JsonResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -48,10 +47,12 @@ public class UserInformationController {
     UserInfoService userInfoService;
     @Resource
     UserRoleService userRoleService;
+
     @GetMapping(value = "")
-        public ResponseEntity<JsonResponse> getUsersDetail1(HttpServletRequest request) {
+    public ResponseEntity<JsonResponse> getUsersDetail1(HttpServletRequest request) {
         return JsonResponse.createHttpEntity("ok", HttpStatus.OK);
     }
+
     @ApiOperation(value = "获取用户的详情")
     @GetMapping(value = "getUsersDetail")
     public ResponseEntity<JsonResponse> getUsersDetail(HttpServletRequest request) {

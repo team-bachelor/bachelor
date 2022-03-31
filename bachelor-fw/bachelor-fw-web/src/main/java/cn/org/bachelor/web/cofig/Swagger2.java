@@ -1,9 +1,9 @@
 package cn.org.bachelor.web.cofig;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -23,6 +23,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableSwagger2
+@ConditionalOnProperty(prefix = "bachelor.swagger",
+        name = {"enabled"}, havingValue = "true", matchIfMissing = true)
 public class Swagger2 {
     @Autowired
     SwaggerConfig swaggerConfig;
@@ -32,9 +34,10 @@ public class Swagger2 {
     public Docket createRestApi() {
         ApiSelectorBuilder asb = new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo()).select();
         // 为当前包路径
-        for (String pkg : swaggerConfig.getBasePackages()) {
-            asb.apis(RequestHandlerSelectors.basePackage(pkg));
-        }
+        if (swaggerConfig.getBasePackages() != null && swaggerConfig.getBasePackages().length != 0)
+            for (String pkg : swaggerConfig.getBasePackages()) {
+                asb.apis(RequestHandlerSelectors.basePackage(pkg));
+            }
 
         asb.paths(PathSelectors.any());
         return asb.build();

@@ -1,5 +1,6 @@
 package cn.org.bachelor.web.cofig;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConfigurationProperties(prefix = "bachelor.swagger")
+@ConditionalOnProperty(prefix = "bachelor.swagger",
+        name = {"enabled"}, havingValue = "true", matchIfMissing = true)
 public class SwaggerConfig {
 
   /**

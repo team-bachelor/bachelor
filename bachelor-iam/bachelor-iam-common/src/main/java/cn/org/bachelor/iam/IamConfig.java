@@ -35,6 +35,16 @@ public class IamConfig {
     private boolean enableUserAccessControl = true;
 
     /**
+     * 是否以json返回认证结果（用于认证失败时，true时返回未授权的json结果，false时导向到loginURL配置的地址）
+     */
+    private boolean jsonResponse = true;
+
+    /**
+     * jsonResponse为false时导向到loginURL配置的地址）
+     */
+    private String loginURL;
+
+    /**
      * IAM服务提供方式
      */
     private String serviceProvider = "db";
@@ -96,5 +106,29 @@ public class IamConfig {
 
     public void setEnableUserAccessControl(boolean enableUserAccessControl) {
         this.enableUserAccessControl = enableUserAccessControl;
+    }
+
+    public boolean isJsonResponse() {
+        return jsonResponse;
+    }
+
+    public void setJsonResponse(boolean jsonResponse) {
+        this.jsonResponse = jsonResponse;
+    }
+
+    public String getServiceProvider() {
+        return serviceProvider;
+    }
+
+    public void setServiceProvider(String serviceProvider) {
+        this.serviceProvider = serviceProvider;
+    }
+
+    public String getLoginURL() {
+        return loginURL;
+    }
+
+    public void setLoginURL(String loginURL) {
+        this.loginURL = loginURL;
     }
 }

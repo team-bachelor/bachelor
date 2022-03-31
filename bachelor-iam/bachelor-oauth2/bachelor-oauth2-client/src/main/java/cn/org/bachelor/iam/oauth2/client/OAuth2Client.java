@@ -35,6 +35,8 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
+import static cn.org.bachelor.iam.oauth2.client.util.ClientConstant.OAUTH_CB_STATE;
+
 
 /**
  * @author team bachelor
@@ -128,7 +130,7 @@ public class OAuth2Client {
         url.append("client_id=").append(URLEncoder.encode(config.getId(), "utf-8"));
         url.append("&redirect_uri=").append(URLEncoder.encode(config.getLoginRedirectURL(), "utf-8"));
         url.append("&response_type=code");
-        url.append("&state=").append(URLEncoder.encode(getState(request), "utf-8"));
+        url.append("&").append(OAUTH_CB_STATE).append("=").append(URLEncoder.encode(getState(request), "utf-8"));
         //目标回调地址
         if (request != null) {
             String targetURL = StringUtils.isEmpty(config.getTargetURL()) ?
@@ -579,8 +581,8 @@ public class OAuth2Client {
 	 * @return
 	 */
 	private String getState(HttpServletRequest request) {
-		HttpSession session = request.getSession(true);
 		String state = StateGenerator.genStateCode();
+		HttpSession session = request.getSession(true);
 		session.setAttribute(ClientConstant.OAUTH_STATE, state);
 		return state;
 	}
@@ -595,7 +597,7 @@ public class OAuth2Client {
 		Object so = session.getAttribute(ClientConstant.OAUTH_STATE);
 		if (StringUtils.isEmpty(so)) {
 			return true;
-		} else if (so.toString().equals(request.getParameter(ClientConstant.OAUTH_STATE))) {
+		} else if (so.toString().equals(request.getParameter(OAUTH_CB_STATE))) {
 			session.removeAttribute(ClientConstant.OAUTH_STATE);
 			return true;
 		}
