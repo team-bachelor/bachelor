@@ -3,9 +3,8 @@ package cn.org.bachelor.iam.acm.interceptor;
 
 import cn.org.bachelor.iam.IamConfig;
 import cn.org.bachelor.iam.IamValueHolderService;
-import cn.org.bachelor.iam.acm.Authorization;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
-import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
+import cn.org.bachelor.iam.acm.service.AuthorizeServiceStub;
 import cn.org.bachelor.iam.vo.UserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +16,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -34,17 +32,18 @@ import java.util.Date;
  */
 public class UserAccessControlInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LoggerFactory.getLogger(UserAccessControlInterceptor.class);
+
     @Autowired
     private IamValueHolderService valueHolder;
 
     @Resource
-    private Authorization authorizeService;
+    private AuthorizeServiceStub authorizeService;
 
     @Resource
     private IamConfig iamConfig;
 
-    @Resource
-    private OAuth2CientConfig clientConfig;
+//    @Resource
+//    private OAuth2CientConfig clientConfig;
 
     //private Set<String> urlCache;
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {

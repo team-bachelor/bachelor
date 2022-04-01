@@ -1,7 +1,6 @@
 package cn.org.bachelor.iam.acm.service;
 
 
-import cn.org.bachelor.iam.acm.Authorization;
 import cn.org.bachelor.iam.acm.permission.PermissionGroup;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.permission.PermissionPoint;
@@ -14,7 +13,7 @@ import java.util.Map;
  * @创建时间 2018/10/22
  * @author liuzhuo
  */
-public interface AuthorizeServiceStub extends Authorization {
+public interface AuthorizeServiceStub {
 
     /**
      * 计算当前用户的权限
@@ -64,4 +63,17 @@ public interface AuthorizeServiceStub extends Authorization {
      * @author liuzhuo
      */
     void setOrgPermission(String orgId, List<PermissionPoint> perms);
+
+    /**
+     * 根据用户编码判断用户是否能访问当前对象
+     *
+     * @param objCode  对象编码
+     * @param userCode 用户编码
+     * @param accessType 访问资源类型
+     * @return 是否能访问
+     */
+//    boolean isAuthorized(String objCode, String userCode);
+
+    boolean isAuthorized(String objCode, String userCode, PermissionOptions.AccessType accessType);
+
 }
