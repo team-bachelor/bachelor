@@ -36,7 +36,7 @@ import java.util.*;
  */
 @RestController
 /**
- * 将原auth-login合并，原/user/接口一并归到/dim/
+ * 将原auth-login合并，原/user/接口一并归到/idm/
  * /user/accesstoken  -> /idm/as/accesstoken
  * /user/refreshToken -> /idm/as/refreshToken
  * /user/logout       -> /idm/as/logout

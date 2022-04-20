@@ -373,6 +373,11 @@ public class OAuth2CientConfig {
         private String base = "";
 
         /**
+         * 认证服务的根接口地址,用于跳转
+         */
+        private String apiBase = "";
+
+        /**
          * 授权的接口地址
          */
         private String authorize = "/authorize";
@@ -392,21 +397,55 @@ public class OAuth2CientConfig {
          */
         private String userInfo = "/userInfo";
 
+        public String getApiBase() {
+            return this.apiBase;
+        }
+
+        public void setApiBase(String apiBase) {
+            this.apiBase = apiBase;
+            if(!this.apiBase.equals(this.base)){
+                accessToken = accessToken.replace(this.base, "");
+                userInfo = userInfo.replace(this.base, "");
+            }
+            accessToken = prefixApi(accessToken);
+            userInfo = prefixApi(userInfo);
+        }
 
         public String getBase() {
             return base;
         }
 
         public void setBase(String base) {
+            if (this.base.equals(this.apiBase)) {
+                this.setApiBase(base);
+            }
             this.base = base;
-            authorize = prefix(authorize);
-            accessToken = prefix(accessToken);
+            if(!this.base.equals(this.apiBase)){
+                logout = logout.replace(this.apiBase, "");
+                authorize = authorize.replace(this.apiBase, "");
+            }
             logout = prefix(logout);
-            userInfo = prefix(userInfo);
+            authorize = prefix(authorize);
         }
 
         private String prefix(String url) {
+            if(url == null ){
+                return "";
+            }
+            if(url.startsWith("http://") || url.startsWith("https://")){
+                return url;
+            }
             return this.getBase() + url;
+        }
+
+        private String prefixApi(String url) {
+            if(url == null ){
+                return "";
+            }
+            if(url.startsWith("http://") || url.startsWith("https://")){
+                return url;
+            }
+            return this.getApiBase() + url;
         }
 
         public String getAuthorize() {
@@ -422,7 +461,7 @@ public class OAuth2CientConfig {
         }
 
         public void setAccessToken(String accessToken) {
-            this.accessToken = prefix(accessToken);
+            this.accessToken = prefixApi(accessToken);
         }
 
         public String getLogout() {
@@ -438,7 +477,7 @@ public class OAuth2CientConfig {
         }
 
         public void setUserInfo(String userInfo) {
-            this.userInfo = prefix(userInfo);
+            this.userInfo = prefixApi(userInfo);
         }
 
         public String toString() {

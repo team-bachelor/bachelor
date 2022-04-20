@@ -1,17 +1,12 @@
 /**
- * 
+ *
  */
 package cn.org.bachelor.iam.oauth2.client.filter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +16,7 @@ import cn.org.bachelor.iam.oauth2.client.exception.GetAccessTokenException;
 import cn.org.bachelor.iam.oauth2.client.exception.GetUserInfoException;
 import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
 import cn.org.bachelor.iam.oauth2.client.util.ClientUtil;
+import jdk.nashorn.internal.objects.annotations.Constructor;
 import org.apache.commons.lang3.StringUtils;
 import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
 import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
@@ -30,6 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 
 /**
@@ -37,18 +35,18 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
  * <pre>
  * 1.在web.xml中注册此Filter,对需要获取到当前用户的url进行拦截，注意:filter-mapping的拦截要在转码Filter的后面，其他Filter的前面
  * 2.编辑WEB-INF/class/sso.properties文件(或通过增加Filter参数configFileName指定配置文件名称),内容如下：
-	#应用ID
-	client_id=TEST-APP
-	#应用凭证
-	client_secret=8d42ee5e-d1ab-4d60-abf0-499457a11579
-	#应用注册的回调地址
-	redirect_url=http://localhost:8080/R1AuthricationServer/client.jsp
-	#授权请求的URL
-	authorize_url=http://localhost:8080/R1AuthricationServer/oauth2/authorize
-	#获取令牌的URL
-	access_token_url=http://localhost:8080/R1AuthricationServer/oauth2/access_token
-	#获取用户信息的API调用地址
-	api_url=http://localhost:8080/R1AuthricationServer/api/user
+ #应用ID
+ client_id=TEST-APP
+ #应用凭证
+ client_secret=8d42ee5e-d1ab-4d60-abf0-499457a11579
+ #应用注册的回调地址
+ redirect_url=http://localhost:8080/R1AuthricationServer/client.jsp
+ #授权请求的URL
+ authorize_url=http://localhost:8080/R1AuthricationServer/oauth2/authorize
+ #获取令牌的URL
+ access_token_url=http://localhost:8080/R1AuthricationServer/oauth2/access_token
+ #获取用户信息的API调用地址
+ api_url=http://localhost:8080/R1AuthricationServer/api/user
  *3.获取当前用户的方式：
  *	1)通过request当前用户id：request.getRemoterUser()
  *	2)当前用户id：SSO.getUserId()
@@ -62,11 +60,10 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 @WebFilter(urlPatterns = "/*", filterName = "oauth2LoginFilter")
 public class OAuth2LoginFilter implements Filter {
 
-    @Autowired
-    private OAuth2CientConfig config;
-//    private static final String defaultConfigFileName = UpClient.defaultConfigFileName;
+    //    private OAuth2CientConfig config;
+    //    private static final String defaultConfigFileName = UpClient.defaultConfigFileName;
     private static final Logger logger = LoggerFactory.getLogger(OAuth2LoginFilter.class);
-//    private static String configFileName = defaultConfigFileName;
+    //    private static String configFileName = defaultConfigFileName;
     private static String EXCEPT_PATTERNS = "";
     private static String EXCEPT_PARAMS = "";
 //    private static String serviceString = "serviceAuthenticate";
@@ -81,9 +78,16 @@ public class OAuth2LoginFilter implements Filter {
 
     }
 
+    private OAuth2CientConfig getConfig(ServletContext context) {
+        WebApplicationContext applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
+
+        return applicationContext.getBean(OAuth2CientConfig.class);
+    }
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
+        OAuth2CientConfig config = getConfig(request.getServletContext());
         if (!config.isLoginFilterEnable()) {
             chain.doFilter(request, response);
             return;
@@ -121,18 +125,18 @@ public class OAuth2LoginFilter implements Filter {
             if (code == null) {
                 logger.info("code为空时 从服务端获取code----url:" + requestURI);
 //				client.toGetAuthrizationCode();
-				client.toGetAuthrizationCode((HttpServletRequest)request);
-				return;
-			}
-			
-			if (!client.isValidState((HttpServletRequest) request)) {
-				logger.info("验证state失败");
-				String result = returnResourceFile(ClientConstant.TEMPLATE_NAME, ClientConstant.STATE_ERROR);
-				response.getWriter().write(result);
-				return;
-			}
-			logger.info("去调用用户信息接口方法----url:"+requestURI);
-			client.bindUserInfo(code);
+                client.toGetAuthrizationCode((HttpServletRequest) request);
+                return;
+            }
+
+            if (!client.isValidState((HttpServletRequest) request)) {
+                logger.info("验证state失败");
+                String result = returnResourceFile(ClientConstant.TEMPLATE_NAME, ClientConstant.STATE_ERROR);
+                response.getWriter().write(result);
+                return;
+            }
+            logger.info("去调用用户信息接口方法----url:" + requestURI);
+            client.bindUserInfo(code);
 
 //				if(!client.toOriginalURL()){//如果直接敲有code的url地址
 //					chain.doFilter(client.request(), response);
@@ -142,29 +146,29 @@ public class OAuth2LoginFilter implements Filter {
 			}*/
 
 
-			if(client.toTargetURL()) {
-				return;
-			}
-			logger.info("====执行完毕，接着执行其他的filter！");
-			
-			chain.doFilter(request, response);
-		}catch (GetAccessTokenException gte){
-			logger.error("客户端拦截器获取令牌失败===========>",gte);
-			String result = returnResourceFile(ClientConstant.TEMPLATE_NAME, ClientConstant.GET_ACCESSTOKEN_ERROR + "," + gte.getMessage());
-			response.setContentType("text/html;charset=utf-8");
-			response.getWriter().write(result);
-		}catch (GetUserInfoException gue){
-			logger.error("客户端拦截器获取用户信息失败===========>",gue);
-			String result = returnResourceFile(ClientConstant.TEMPLATE_NAME, ClientConstant.GET_USERINFO_ERROR);
-			response.setContentType("text/html;charset=utf-8");
-			response.getWriter().write(result);
-		}catch(Exception e){
-			logger.error("客户端拦截器执行异常===========>",e);
+            if (client.toTargetURL()) {
+                return;
+            }
+            logger.info("====执行完毕，接着执行其他的filter！");
+
+            chain.doFilter(request, response);
+        } catch (GetAccessTokenException gte) {
+            logger.error("客户端拦截器获取令牌失败===========>", gte);
+            String result = returnResourceFile(ClientConstant.TEMPLATE_NAME, ClientConstant.GET_ACCESSTOKEN_ERROR + "," + gte.getMessage());
+            response.setContentType("text/html;charset=utf-8");
+            response.getWriter().write(result);
+        } catch (GetUserInfoException gue) {
+            logger.error("客户端拦截器获取用户信息失败===========>", gue);
+            String result = returnResourceFile(ClientConstant.TEMPLATE_NAME, ClientConstant.GET_USERINFO_ERROR);
+            response.setContentType("text/html;charset=utf-8");
+            response.getWriter().write(result);
+        } catch (Exception e) {
+            logger.error("客户端拦截器执行异常===========>", e);
 //			throw new ServletException(e.getMessage());
-			response.setContentType("text/html;charset=utf-8");
-			response.getWriter().write("执行异常，请联系管理员");
-		}
-	}
+            response.setContentType("text/html;charset=utf-8");
+            response.getWriter().write("执行异常，请联系管理员");
+        }
+    }
 
     private void setLogon(HttpServletResponse response, boolean logon) {
         Cookie cookie = new Cookie("logon_flag", logon ? "1" : "0");//创建新cookie
@@ -176,6 +180,7 @@ public class OAuth2LoginFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        OAuth2CientConfig config = getConfig(filterConfig.getServletContext());
         if (!config.isLoginFilterEnable()) return;
         try {
 //            configFileName = filterConfig.getInitParameter("configFileName");
@@ -201,6 +206,6 @@ public class OAuth2LoginFilter implements Filter {
             return StringUtils.replace(text, ClientConstant.TEMPLATE_REPLACE_STRING, info);
         }
 
-	}
+    }
 
 }

@@ -5,6 +5,7 @@ import cn.org.bachelor.demo.web.domain.UserInfo;
 import cn.org.bachelor.demo.web.service.UserInfoService;
 import cn.org.bachelor.demo.web.service.UserRoleService;
 import cn.org.bachelor.demo.web.vo.UserInfoVO;
+import cn.org.bachelor.iam.acm.domain.UserRole;
 import cn.org.bachelor.iam.oauth2.client.util.ClientUtil;
 import cn.org.bachelor.web.json.JsonResponse;
 import com.github.pagehelper.PageHelper;

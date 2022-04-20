@@ -313,6 +313,7 @@ public class DefaultImSysService implements ImSysService {
             param.put("code", code);
         if (StringUtils.isNotEmpty(name))
             param.put("name", name);
+        param.put("pageSize", "1000");
         String json = callApi(clientConfig.getRsURL().getOrgs(), "GET", param);
         return resolveJsonList(json, OrgVo.class);
     }
@@ -641,6 +642,9 @@ public class DefaultImSysService implements ImSysService {
                 }else{
                     OAuth2ClientCertification upCC =
                             (OAuth2ClientCertification) valueHolder.getValueHolderService().getSessionAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
+                    if(upCC == null){
+                        throw new BusinessException("access token can not be null!");
+                    }
                     token = upCC.getAccessToken();
                 }
             } else {
