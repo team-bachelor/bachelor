@@ -13,7 +13,7 @@ import java.util.List;
  */
 //@Component("remoteRoleService")
 @Component
-@FeignClient(value = "bachelor-ms-iam-service", contextId = "RoleServiceClient", path = "/acm/rpc/role", fallback = RoleServiceClientFallback.class)
+@FeignClient(value = "${bachelor.iam.service-name.role-service:bachelor-ms-iam-service}", contextId = "RoleServiceClient", path = "/acm/rpc/role", fallback = RoleServiceClientFallback.class)
 public interface RoleServiceClient extends RoleServiceStub {
 
 

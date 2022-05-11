@@ -20,7 +20,7 @@ import java.util.Map;
  * @创建时间 2018/10/22
  */
 @Component
-@FeignClient(value = "bachelor-ms-iam-service", contextId = "AuthorizeServiceClient", path = "/acm/rpc/role", fallback = AuthorizeServiceClientFallback.class)
+@FeignClient(value = "${bachelor.iam.service-name.authorize-service:bachelor-ms-iam-service}", contextId = "AuthorizeServiceClient", path = "/acm/rpc/role", fallback = AuthorizeServiceClientFallback.class)
 public interface AuthorizeServiceClient extends AuthorizeServiceStub {
     /**
      * 根据用户编码判断用户是否能访问当前对象
