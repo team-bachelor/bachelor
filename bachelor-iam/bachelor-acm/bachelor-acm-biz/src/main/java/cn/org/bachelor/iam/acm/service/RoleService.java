@@ -15,10 +15,10 @@ import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
 import cn.org.bachelor.iam.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -94,6 +94,7 @@ public class RoleService implements RoleServiceStub {
 //    }
 
     /**
+     *
      * @param roleID
      */
     @Override
@@ -152,18 +153,24 @@ public class RoleService implements RoleServiceStub {
         List<UserVo> result = new ArrayList<>();
         userRoles.forEach(i -> {
             //访问用户服务调用查询
-            UserVo u = rMap.get(i.getUserCode());
-            if (u == null) {
+            if (rMap.containsKey(i.getUserCode())) {
+                result.add(rMap.get(i.getUserCode()));
+                return;
+            }
+            String id = i.getUserId();
+            UserVo u = null;
+            if (!StringUtils.isEmpty(id)) {
+                List<UserVo> ul = imSysService.findUsersDetail(id);
+                if(ul != null && ul.size() > 0) {
+                    u= ul.get(0);
+                }
+            }
+            if(u == null){
                 u = new UserVo();
                 u.setCode(i.getUserCode());
-                result.add(u);
-            } else {
-                String id = i.getUserId();
-                if (StringUtils.isEmpty(id)) {
-                    id = u.getId();
-                }
-                result.addAll(imSysService.findUsersDetail(id));
+
             }
+            result.add(u);
         });
         return result;
     }
