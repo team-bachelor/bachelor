@@ -9,12 +9,14 @@ import cn.org.bachelor.iam.acm.domain.Menu;
 import cn.org.bachelor.iam.acm.domain.OrgMenu;
 import cn.org.bachelor.iam.acm.domain.RoleMenu;
 import cn.org.bachelor.iam.acm.permission.PermissionModel;
+import cn.org.bachelor.iam.acm.vo.ISMenuVo;
 import cn.org.bachelor.iam.acm.vo.MenuVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -31,7 +33,7 @@ public class MenuService {
     @Autowired
     private OrgMenuMapper orgMenuMapper;
 
-    @Autowired
+    @Resource
     private MenuMapper menuMapper;
 
     @Autowired
@@ -95,8 +97,7 @@ public class MenuService {
         }
         boolean isAdmin;
         //如果是管理员则取全部菜单
-        isAdmin = userCode.equals(valueHolder.getCurrentUser().getCode())
-                && valueHolder.getCurrentUser().isAdministrator();
+        isAdmin = userCode.equals(valueHolder.getCurrentUser().getCode()) && valueHolder.getCurrentUser().isAdministrator();
         if (isAdmin) {
             return getAllMenu(group);
         } else {
@@ -119,6 +120,42 @@ public class MenuService {
             menuCodes.add(p.getMenuCode());
         }
         return getMenuVoListWithCodes(owner, type, groupName, menuCodes);
+    }
+
+    public List<ISMenuVo> getUserISMenu(String userCode, String group) {
+        List<MenuVo> originMenus = calUserMenu(userCode, group);
+        return convert2ISMenu(originMenus, true);
+    }
+
+    private List<ISMenuVo> convert2ISMenu(List<MenuVo> originMenus, boolean isSubSys) {
+        List<ISMenuVo> menus = new ArrayList<>(originMenus.size());
+        originMenus.forEach(m -> {
+            menus.add(convert2ISMenu(m, isSubSys));
+        });
+        return menus;
+    }
+
+    private ISMenuVo convert2ISMenu(MenuVo originMenu, boolean isSubSys) {
+        if (originMenu == null) {
+            return null;
+        }
+        ISMenuVo m = new ISMenuVo();
+        m.setId(originMenu.getId());
+        m.setName(originMenu.getName());
+        m.setIcon(originMenu.getIcon());
+        m.setParentId(originMenu.getParentId());
+        m.setSeqOrder(originMenu.getSeqOrder());
+        m.setComment(originMenu.getComment());
+        m.setHas(originMenu.isHas());
+        m.setGroupName(originMenu.getGroupName());
+        m.setActivePath(originMenu.getCode());
+        m.setEntry(isSubSys ? originMenu.getUri() : null);
+        m.setTitle(originMenu.getName());
+        m.setComponent(isSubSys ? null : originMenu.getUri());
+        m.setType(originMenu.getType());
+        m.setOwner(originMenu.getOwner());
+        m.setChildren(convert2ISMenu(originMenu.getSubMenus(), false));
+        return m;
     }
 
     /**
@@ -155,8 +192,7 @@ public class MenuService {
             menu.setOrgCode(roleCode);
             menu.setMenuCode(m);
             menu.setUpdateTime(new Date());
-            menu.setUpdateUser(valueHolder.getCurrentUser() == null ?
-                    "unknown" : valueHolder.getCurrentUser().getCode());
+            menu.setUpdateUser(valueHolder.getCurrentUser() == null ? "unknown" : valueHolder.getCurrentUser().getCode());
             orgMenuMapper.insert(menu);
         }
     }
@@ -197,8 +233,7 @@ public class MenuService {
             rmenu.setRoleCode(roleCode);
             rmenu.setMenuCode(m);
             rmenu.setUpdateTime(new Date());
-            rmenu.setUpdateUser(valueHolder.getCurrentUser() == null ?
-                    "unknown" : valueHolder.getCurrentUser().getCode());
+            rmenu.setUpdateUser(valueHolder.getCurrentUser() == null ? "unknown" : valueHolder.getCurrentUser().getCode());
             roleMenuMapper.insert(rmenu);
         }
     }
@@ -214,7 +249,7 @@ public class MenuService {
             checkForParentMenu(adds, mmap, code);
         });
         adds.forEach(m -> {
-            if(!menuCode.contains(m)){
+            if (!menuCode.contains(m)) {
                 menuCode.add(m);
             }
         });
@@ -308,15 +343,7 @@ public class MenuService {
     }
 
     private MenuVo toMenuVo(String owner, PermissionModel type, boolean has, Menu m, MenuVo parent) {
-        MenuVo mv = new MenuVo(
-                m.getId(),
-                m.getCode(),
-                m.getUri(),
-                m.getIcon(),
-                m.getComment(),
-                type,
-                parent,
-                new ArrayList<>());
+        MenuVo mv = new MenuVo(m.getId(), m.getCode(), m.getUri(), m.getIcon(), m.getComment(), type, parent, new ArrayList<>());
         mv.setName(m.getName());
         mv.setParentId(m.getParentId());
         mv.setSeqOrder(m.getSeqOrder());

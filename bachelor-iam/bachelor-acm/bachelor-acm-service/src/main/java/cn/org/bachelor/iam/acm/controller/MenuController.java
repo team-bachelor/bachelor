@@ -1,11 +1,11 @@
 package cn.org.bachelor.iam.acm.controller;
 
 import cn.org.bachelor.iam.acm.domain.Menu;
+import cn.org.bachelor.iam.acm.service.MenuService;
+import cn.org.bachelor.web.json.JsonResponse;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import cn.org.bachelor.iam.acm.service.MenuService;
-import cn.org.bachelor.web.json.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
+ * @author liuzhuo
  * @描述 用户角色controller
  * @创建人 liuzhuo
  * @创建时间 2018/10/22
- * @author liuzhuo
  */
 @RestController
 @RequestMapping("/acm")
@@ -30,7 +30,7 @@ public class MenuController {
     /**
      * 设置角色的菜单
      *
-     * @param role 角色的编码
+     * @param role  角色的编码
      * @param menus 要设置给角色的菜单code
      * @return OK
      * @更新履历 2021.1.28 访问路径 /role_menu/{role} => /role/menu/{role}
@@ -174,13 +174,27 @@ public class MenuController {
 
     /**
      * 获得用户的菜单(分组）
+     *
      * @param userCode 用户的编码
-     * @param group 菜单分组
+     * @param group    菜单分组
      * @return
      */
     @RequestMapping(value = "/user/menu/{userCode}/{group}", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUserMenu(@PathVariable String userCode, @PathVariable String group) {
         List menus = menuService.calUserMenu(userCode, group);
+        return JsonResponse.createHttpEntity(menus);
+    }
+
+    /**
+     * 获得用户的菜单(分组）
+     *
+     * @param userCode 用户的编码
+     * @param group    菜单分组
+     * @return
+     */
+    @RequestMapping(value = "/user/menu/is/{userCode}/{group}", method = RequestMethod.GET)
+    public HttpEntity<JsonResponse> getIsUserMenu(@PathVariable String userCode, @PathVariable String group) {
+        List menus = menuService.getUserISMenu(userCode, group);
         return JsonResponse.createHttpEntity(menus);
     }
 }
