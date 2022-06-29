@@ -4,20 +4,19 @@ package cn.org.bachelor.iam.acm.service;
 import cn.org.bachelor.iam.IamValueHolderService;
 import cn.org.bachelor.iam.acm.dao.*;
 import cn.org.bachelor.iam.acm.domain.*;
-import cn.org.bachelor.iam.acm.domain.ObjPermission;
+import cn.org.bachelor.iam.acm.permission.PermissionGroup;
+import cn.org.bachelor.iam.acm.permission.PermissionModel;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.permission.PermissionPoint;
 import cn.org.bachelor.iam.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
-import cn.org.bachelor.iam.acm.permission.PermissionGroup;
-import cn.org.bachelor.iam.acm.permission.PermissionModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -29,25 +28,25 @@ import java.util.*;
 public class AuthorizeService implements AuthorizeServiceStub {
     private static final Logger logger = LoggerFactory.getLogger(AuthorizeService.class);
 
-    @Autowired
+    @Resource
     private RolePermissionMapper rolePermissionMapper;
 
-    @Autowired
+    @Resource
     private UserPermissionMapper userPermissionMapper;
 
-    @Autowired
+    @Resource
     private OrgPermissionMapper orgPermissionMapper;
 
-    @Autowired
+    @Resource
     private ObjPermissionMapper permissionMapper;
 
-    @Autowired
+    @Resource
     private ObjDomainMapper objDomainMapper;
 
-    @Autowired
+    @Resource
     private ObjOperationMapper objOperationMapper;
 
-    @Autowired
+    @Resource
     private IamValueHolderService valueHolder;
 
     private static final String DEF_AUTH_OP_ALLOW = PermissionOptions.CheckLevel.NONE.toString();
@@ -73,10 +72,10 @@ public class AuthorizeService implements AuthorizeServiceStub {
         example.setCode(objCode);
         example = permissionMapper.selectOne(example);
         //不需要验证则通过
-        if (example == null ) {
-            if(accessType == PermissionOptions.AccessType.INTERFACE) {
+        if (example == null) {
+            if (accessType == PermissionOptions.AccessType.INTERFACE) {
                 return false;
-            }else{
+            } else {
                 return true;
             }
         }
@@ -148,11 +147,11 @@ public class AuthorizeService implements AuthorizeServiceStub {
     }
 
     /**
-     * @描述 取得备选权限列表（按组分开）
      * @param orgID 组织机构ID
+     * @return 权限组列表
+     * @描述 取得备选权限列表（按组分开）
      * @author liuzhuo
      * @创建时间 2018/10/27 11:16
-     * @return 权限组列表
      */
     public List<PermissionGroup> getPermissionGroupList(String orgID) {
         Example example = new Example(ObjDomain.class);
