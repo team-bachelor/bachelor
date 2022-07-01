@@ -46,7 +46,7 @@ public class Swagger2 {
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<>();
         tokenPar.name("bachelor_authorization").description("token of user platform").modelRef(new ModelRef("string"))
-                .parameterType("header").required(true).build();
+                .required(false).parameterType("header").required(true).build();
         pars.add(tokenPar.build());
         ApiSelectorBuilder asb = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
