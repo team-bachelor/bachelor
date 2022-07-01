@@ -12,9 +12,14 @@ import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.cloud.gateway.filter.ratelimit.RateLimiter;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.env.Environment;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * @ClassName GatewayApplication
@@ -29,16 +34,25 @@ import org.springframework.context.annotation.Primary;
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableHystrix
 public class GatewayApplication {
-    private static Logger log = LoggerFactory.getLogger(GatewayApplication.class);
+    private static Logger logger = LoggerFactory.getLogger(GatewayApplication.class);
 
-    public static void main(String[] args) {
-        log.info("gateway starting");
-        SpringApplication.run(GatewayApplication.class, args);
+    public static void main(String[] args) throws UnknownHostException {
+        ConfigurableApplicationContext application = SpringApplication.run(GatewayApplication.class, args);
+        Environment env = application.getEnvironment();
+        logger.info("\n----------------------------------------------------------\n\t" +
+                        "Application '{}' is running! Access URLs:\n\t" +
+                        "Local: \t\thttp://localhost:{}\n\t" +
+                        "External: \thttp://{}:{}\n\t" +
+                        "----------------------------------------------------------",
+                env.getProperty("spring.application.name"),
+                env.getProperty("server.port"),
+                InetAddress.getLocalHost().getHostAddress(),
+                env.getProperty("server.port"));
     }
 
     @Bean
     @Primary
-    public RateLimiter inMemoryRateLimiter(){
+    public RateLimiter inMemoryRateLimiter() {
         return new InMemoryRateLimiter();
     }
 
@@ -47,7 +61,7 @@ public class GatewayApplication {
         return new IpAddressKeyResolver();
     }
 
-//    @Bean(name = TokenKeyResolver.BEAN_NAME)
+    //    @Bean(name = TokenKeyResolver.BEAN_NAME)
     public KeyResolver tokenKeyResolver() {
         return new TokenKeyResolver();
     }

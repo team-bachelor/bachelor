@@ -5,11 +5,13 @@ eureka:
     hostname: localhost
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    metadata-map:
+      swagger-hidden: true
   client:
 #    registerWithEureka: false
 #    fetchRegistry: true
     serviceUrl:
-      defaultZone: http://127.0.0.1:8740/eureka
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
   server:
     response-cache-update-interval-ms: 3000
     response-cache-auto-expiration-in-seconds: 180

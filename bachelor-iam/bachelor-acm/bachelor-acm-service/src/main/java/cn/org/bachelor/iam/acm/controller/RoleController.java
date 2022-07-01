@@ -22,6 +22,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/acm/role")
+@CrossOrigin
 public class RoleController {
 
     @Resource

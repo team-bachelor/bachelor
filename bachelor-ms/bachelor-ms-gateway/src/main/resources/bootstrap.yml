@@ -46,6 +46,8 @@ eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    metadata-map:
+      swagger-hidden: true
 management:
   endpoints:
     web:
