@@ -24,6 +24,7 @@ import java.util.Map;
  * @version 2.0
  */
 @RestController
+//@CrossOrigin
 @RequestMapping("/acm/permission")
 public class PermissionController {
     @Autowired

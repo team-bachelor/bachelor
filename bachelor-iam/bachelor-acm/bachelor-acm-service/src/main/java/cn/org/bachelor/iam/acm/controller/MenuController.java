@@ -22,7 +22,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/acm")
-@CrossOrigin
+//@CrossOrigin
 public class MenuController {
 
     @Autowired
