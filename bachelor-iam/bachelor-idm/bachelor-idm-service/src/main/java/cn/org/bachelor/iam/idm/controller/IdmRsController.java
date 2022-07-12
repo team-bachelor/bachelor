@@ -19,10 +19,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,6 +33,7 @@ import java.util.List;
 /**
  * 将原auth-login合并，原/user/接口一并归到/dim/
  */
+//@CrossOrigin
 @RequestMapping("/idm/rs")
 public class IdmRsController {
 

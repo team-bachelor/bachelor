@@ -41,6 +41,7 @@ import java.util.*;
  * /user/refreshToken -> /idm/as/refreshToken
  * /user/logout       -> /idm/as/logout
  */
+//@CrossOrigin
 @RequestMapping("/idm/as")
 public class IdmAsController {
 
