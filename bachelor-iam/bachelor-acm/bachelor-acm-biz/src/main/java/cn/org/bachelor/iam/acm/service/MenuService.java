@@ -176,20 +176,20 @@ public class MenuService {
     }
 
     /**
-     * @param roleCode 角色编码
+     * @param orgCode 组织编码
      * @param menuCode 当前角色拥有的所有菜单列表
      * @author liuzhuo
      */
-    public void setOrgMenu(String roleCode, List<String> menuCode) {
+    public void setOrgMenu(String orgCode, List<String> menuCode) {
         //设置查询的样例
         menuCode = sortMenuCode(menuCode);
         OrgMenu om = new OrgMenu();
-        om.setOrgCode(roleCode);
+        om.setOrgCode(orgCode);
         orgMenuMapper.delete(om);
         for (String m : menuCode) {
             OrgMenu menu = new OrgMenu();
             menu.setId(UUID.randomUUID().toString());
-            menu.setOrgCode(roleCode);
+            menu.setOrgCode(orgCode);
             menu.setMenuCode(m);
             menu.setUpdateTime(new Date());
             menu.setUpdateUser(valueHolder.getCurrentUser() == null ? "unknown" : valueHolder.getCurrentUser().getCode());

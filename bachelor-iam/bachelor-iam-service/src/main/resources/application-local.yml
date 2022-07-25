@@ -1,13 +1,18 @@
 spring:
   application:
-      name: bachelor-ms-iam-service
-      id: "8872cb73cb054676aeeadfe97f0ba400"
+#    name: bachelor-ms-iam-service
+    name: bachelor-web-cmn-acm
+    #    name: bachelor-ms-iam-service
+    id: "6cfdf00b54d441bbb7889dc62cd5079b"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     ##测试服
-    url: jdbc:mysql://localhost:3306/fbyq_acm?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/auth_test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
     username: root
     password: Aa123456
+#    url: jdbc:mysql://10.0.160.19:3306/dy_eoas_acm?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8
+#    username: root
+#    password: root
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -56,6 +61,7 @@ eureka:
     lease-renewal-interval-in-seconds: 2
     metadata-map:
       api-url: swagger-ui.html
+      service-name: ${bachelor.swagger.title} - v.${bachelor.swagger.version}
 logging:
   level:
     org.bachelor.architecture.eureka: debug
@@ -86,8 +92,8 @@ bachelor:
     service-provider: db
   ########################################↓权限配置↓########################################
     client:
-      id: 8872cb73cb054676aeeadfe97f0ba400
-      secret: 01bd345836644d3780cb0d4db17689af
+      id: 933b976e95134c8bac99f6e7d80a6feb
+      secret: 18ee1e6f395b4b2dad8609bd220dd7e9
       logoutRedirectURL: https://wfw.dygzhyq.cn/app-logistics/index.html
       loginRedirectURL: http://localhost:8080
       as_url:
@@ -100,6 +106,7 @@ bachelor:
     title: "权限中台组件"
     version: "1.0"
     description: ""
+
 
 
 

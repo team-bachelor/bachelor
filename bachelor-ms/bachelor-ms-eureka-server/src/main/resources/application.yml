@@ -11,7 +11,7 @@ eureka:
 #    registerWithEureka: false
 #    fetchRegistry: true
     serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
+      defaultZone: http://${spring.cloud.client.ip-address}:${server.port}/eureka
   server:
     response-cache-update-interval-ms: 3000
     response-cache-auto-expiration-in-seconds: 180
