@@ -1,4 +1,4 @@
-package cn.org.bachelor.web.cofig;
+package cn.org.bachelor.web.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnResource;

@@ -1,12 +1,11 @@
-package cn.org.bachelor.web.cofig;
+package cn.org.bachelor.web.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
-import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
+//import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -34,7 +33,7 @@ import java.util.List;
 @ConditionalOnProperty(prefix = "bachelor.swagger",
         name = {"enabled"}, havingValue = "true", matchIfMissing = true)
 @EnableSwagger2WebMvc
-@Import(BeanValidatorPluginsConfiguration.class)
+//@Import(BeanValidatorPluginsConfiguration.class)
 public class Swagger2 {
     @Autowired
     SwaggerConfig swaggerConfig;
@@ -45,8 +44,8 @@ public class Swagger2 {
     public Docket createRestApi() {
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<>();
-        tokenPar.name("bachelor_authorization").description("token of user platform").modelRef(new ModelRef("string"))
-                .required(false).parameterType("header").required(true).build();
+        tokenPar.name("bachelor_authorization").description("jwt").modelRef(new ModelRef("string"))
+                .required(false).parameterType("header").required(false).build();
         pars.add(tokenPar.build());
         ApiSelectorBuilder asb = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())

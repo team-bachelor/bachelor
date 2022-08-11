@@ -1,4 +1,4 @@
-package cn.org.bachelor.web.cofig;
+package cn.org.bachelor.web.config;
 
 import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
 import cn.org.bachelor.web.paging.PageInterceptor;

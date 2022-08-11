@@ -5,15 +5,16 @@
  */
 package cn.org.bachelor.web.paging;
 
-import cn.org.bachelor.web.context.interceptor.ManagedInterceptor;
+import cn.org.bachelor.web.context.WebVLService;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,18 +24,12 @@ import javax.servlet.http.HttpServletResponse;
  * @author Team Bachelor
  */
 @Component
-public class PageInterceptor extends ManagedInterceptor {
+public class PageInterceptor extends HandlerInterceptorAdapter {
 
     private Log log = LogFactory.getLog(this.getClass());
 
-    /* (non-Javadoc)
-     * @see org.springframework.core.Ordered#getOrder()
-     */
-
-    @Override
-    protected int initOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
-    }
+    @Resource
+    private WebVLService vlService;
 
     /**
      * 添加分页处理的拦截器
@@ -46,10 +41,10 @@ public class PageInterceptor extends ManagedInterceptor {
      * @return
      */
     @Override
-    protected boolean doPreHandle(HttpServletRequest request,
-                                  HttpServletResponse response, Object obj) {
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response, Object obj) {
         try {
-
+            PageHelper.clearPage();
             String pageNum = request.getParameter("pageNum");
             String pageSize = request.getParameter("pageSize");
             if (StringUtils.isEmpty(pageNum) && StringUtils.isEmpty(pageSize)) {
@@ -61,7 +56,6 @@ public class PageInterceptor extends ManagedInterceptor {
             Integer pageSizeInt = Integer.parseInt(pageSize);
 
             log.debug("找到分页标志，开始分页处理。");
-
             PageHelper.startPage(pageNumInt, pageSizeInt);
         } catch (Exception e) {
             log.error(e);
@@ -69,17 +63,4 @@ public class PageInterceptor extends ManagedInterceptor {
         return true;
     }
 
-    /* (non-Javadoc)
-     * @see cn.org.bachelor.core.interceptor.ControllerInterceptor#doAfterCompletion(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object, java.lang.Exception)
-     */
-    @Override
-    protected void doAfterCompletion(HttpServletRequest request,
-                                     HttpServletResponse response, Object obj, Exception e) {
-
-    }
-
-    @Override
-    protected void doPostHandle(HttpServletRequest request, HttpServletResponse response, Object obj, ModelAndView mav) {
-
-    }
 }
