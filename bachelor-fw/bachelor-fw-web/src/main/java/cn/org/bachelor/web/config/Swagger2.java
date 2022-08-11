@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-//import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -16,7 +15,7 @@ import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.ApiSelectorBuilder;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,7 @@ import java.util.List;
 @Configuration
 @ConditionalOnProperty(prefix = "bachelor.swagger",
         name = {"enabled"}, havingValue = "true", matchIfMissing = true)
-@EnableSwagger2WebMvc
+@EnableSwagger2
 //@Import(BeanValidatorPluginsConfiguration.class)
 public class Swagger2 {
     @Autowired
@@ -87,49 +86,4 @@ public class Swagger2 {
                 // 描述
                 .description(swaggerConfig.getDescription()).build();
     }
-
-//
-//
-//
-//    private ApiKey apiKey() {
-//        return new ApiKey("BearerToken", "Authorization", "header");
-//    }
-//    private ApiKey apiKey1() {
-//        return new ApiKey("BearerToken1", "Authorization-x", "header");
-//    }
-//
-//    private SecurityContext securityContext() {
-//        return SecurityContext.builder()
-//                .securityReferences(defaultAuth())
-//                .forPaths(PathSelectors.regex("/.*"))
-//                .build();
-//    }
-//    private SecurityContext securityContext1() {
-//        return SecurityContext.builder()
-//                .securityReferences(defaultAuth1())
-//                .forPaths(PathSelectors.regex("/.*"))
-//                .build();
-//    }
-//
-//    List<SecurityReference> defaultAuth() {
-//        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-//        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-//        authorizationScopes[0] = authorizationScope;
-//        return newArrayList(new SecurityReference("BearerToken", authorizationScopes));
-//    }
-//    List<SecurityReference> defaultAuth1() {
-//        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-//        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-//        authorizationScopes[0] = authorizationScope;
-//        return newArrayList(new SecurityReference("BearerToken1", authorizationScopes));
-//    }
-//
-//    public static <T> List<T> newArrayList(T... ts) {
-//        List<T> list = new ArrayList();
-//        if (ts != null && ts.length > 0) {
-//            list.addAll(Arrays.asList(ts));
-//        }
-//
-//        return list;
-//    }
 }
