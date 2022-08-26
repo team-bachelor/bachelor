@@ -12,7 +12,6 @@
     <artifactId>bachelor-iam-client</artifactId>
     <packaging>jar</packaging>
     <name>bachelor-iam-client</name>
-    <description></description>
     <properties>
         <skipTests>true</skipTests>
     </properties>
@@ -25,7 +24,6 @@
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-iam-common</artifactId>
-            <version>2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

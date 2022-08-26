@@ -3,10 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.org.bachelor</groupId>
+        <artifactId>bachelor-dependencies</artifactId>
+        <version>2.1-SNAPSHOT</version>
+    </parent>
 
-    <groupId>cn.org.bachelor</groupId>
+<!--    <groupId>cn.org.bachelor</groupId>-->
     <artifactId>bachelor-ms</artifactId>
-    <version>2.0-SNAPSHOT</version>
     <modules>
         <module>bachelor-ms-eureka-server</module>
         <module>bachelor-ms-eureka-client</module>
@@ -22,10 +26,5 @@
     </modules>
     <packaging>pom</packaging>
     <name>bachelor-ms</name>
-    <parent>
-        <groupId>cn.org.bachelor</groupId>
-        <artifactId>bachelor-dependencies</artifactId>
-        <version>2.0-SNAPSHOT</version>
-    </parent>
 
 </project>

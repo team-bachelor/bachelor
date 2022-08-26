@@ -55,7 +55,7 @@
         <feign.version>1.4.4.RELEASE</feign.version>
         <bachelor-fw.version>2.1-SNAPSHOT</bachelor-fw.version>
         <bachelor-iam.version>2.1-SNAPSHOT</bachelor-iam.version>
-        <bachelor-oauth2.version>2.0-SNAPSHOT</bachelor-oauth2.version>
+        <bachelor-oauth2.version>2.1-SNAPSHOT</bachelor-oauth2.version>
     </properties>
 
     <dependencyManagement>

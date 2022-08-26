@@ -8,12 +8,10 @@
         <artifactId>bachelor-dependencies</artifactId>
         <version>2.1-SNAPSHOT</version>
     </parent>
-    <groupId>cn.org.bachelor</groupId>
+<!--    <groupId>cn.org.bachelor</groupId>-->
     <artifactId>bachelor-iam</artifactId>
     <name>bachelor-iam</name>
     <packaging>pom</packaging>
-    <version>2.1-SNAPSHOT</version>
-    <description></description>
 
     <modules>
         <module>bachelor-iam-common</module>
