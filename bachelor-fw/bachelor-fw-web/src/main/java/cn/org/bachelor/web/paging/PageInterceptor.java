@@ -5,8 +5,6 @@
  */
 package cn.org.bachelor.web.paging;
 
-import cn.org.bachelor.web.context.WebVLService;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -14,7 +12,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,9 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 public class PageInterceptor extends HandlerInterceptorAdapter {
 
     private Log log = LogFactory.getLog(this.getClass());
-
-    @Resource
-    private WebVLService vlService;
 
     /**
      * 添加分页处理的拦截器
