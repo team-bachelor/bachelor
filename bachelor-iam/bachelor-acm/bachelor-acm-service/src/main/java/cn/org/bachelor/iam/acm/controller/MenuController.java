@@ -181,8 +181,8 @@ public class MenuController {
      * @return
      */
     @RequestMapping(value = "/user/menu/{userCode}/{group}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getUserMenu(@PathVariable String userCode, @PathVariable String group) {
-        List menus = menuService.calUserMenu(userCode, group);
+    public HttpEntity<JsonResponse> getUserMenu(@PathVariable String userCode, @PathVariable String group, @RequestParam("parent") String parentId) {
+        List menus = menuService.calUserMenu(userCode, group, parentId);
         return JsonResponse.createHttpEntity(menus);
     }
 
@@ -194,8 +194,8 @@ public class MenuController {
      * @return
      */
     @RequestMapping(value = "/user/menu/is/{userCode}/{group}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getIsUserMenu(@PathVariable String userCode, @PathVariable String group) {
-        List menus = menuService.getUserISMenu(userCode, group);
+    public HttpEntity<JsonResponse> getIsUserMenu(@PathVariable String userCode, @PathVariable String group, @RequestParam(value = "parent", required = false) String parentId) {
+        List menus = menuService.getUserISMenu(userCode, group, parentId);
         return JsonResponse.createHttpEntity(menus);
     }
 }
