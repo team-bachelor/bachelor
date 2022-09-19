@@ -1,4 +1,4 @@
-package cn.org.bachelor.core.exception;
+package cn.org.bachelor.exception;
 
 /**
  * 远程（非本地）异常。

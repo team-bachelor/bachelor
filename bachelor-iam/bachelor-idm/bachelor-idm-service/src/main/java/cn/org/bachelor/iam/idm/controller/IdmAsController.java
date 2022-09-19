@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.idm.controller;
 
-import cn.org.bachelor.core.exception.BusinessException;
+import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.IamConfig;
 import cn.org.bachelor.iam.idm.service.DefaultImSysService;

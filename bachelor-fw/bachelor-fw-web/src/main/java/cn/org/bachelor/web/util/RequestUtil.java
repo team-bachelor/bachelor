@@ -19,7 +19,7 @@ import java.net.UnknownHostException;
  * @author Team Bachelor
  * liuzhuo 2021.1.11 last updated
  */
-public class RequestUtils {
+public class RequestUtil {
 	
 	private static ServletContext servletContext = null;
 	private static ServletConfig servletConfig = null;
@@ -29,9 +29,7 @@ public class RequestUtils {
 		if(ra == null){
 			return null;
 		}
-
-		HttpServletRequest request = ra.getRequest();
-		return request;
+		return ra.getRequest();
 	}
 	
 	
@@ -58,7 +56,7 @@ public class RequestUtils {
 		return getIpAddr(getRequest());
 	}
 	public static String getIpAddr(HttpServletRequest request) {
-		String ipAddress = null;
+		String ipAddress;
 		try {
 			ipAddress = request.getHeader("x-forwarded-for");
 			if ("0:0:0:0:0:0:0:1".equals(ipAddress)) { //服务端和客户端在一台机器
@@ -75,13 +73,12 @@ public class RequestUtils {
 				ipAddress = request.getRemoteAddr();
 				if (ipAddress.equals("127.0.0.1")) {
 					// 根据网卡取本机配置的IP
-					InetAddress inet = null;
 					try {
-						inet = InetAddress.getLocalHost();
+						InetAddress inet = InetAddress.getLocalHost();
+						ipAddress = inet.getHostAddress();
 					} catch (UnknownHostException e) {
 						e.printStackTrace();
 					}
-					ipAddress = inet.getHostAddress();
 				}
 			}
 			// 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割

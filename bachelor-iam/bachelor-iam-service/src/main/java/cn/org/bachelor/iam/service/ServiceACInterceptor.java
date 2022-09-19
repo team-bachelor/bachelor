@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.service;
 
 
-import cn.org.bachelor.iam.IamValueHolderService;
+import cn.org.bachelor.iam.IamDataContext;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.service.AuthorizeServiceStub;
 import cn.org.bachelor.iam.vo.UserVo;
@@ -31,7 +31,7 @@ import java.util.Date;
 public class ServiceACInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LoggerFactory.getLogger(ServiceACInterceptor.class);
     @Autowired
-    private IamValueHolderService valueHolder;
+    private IamDataContext valueHolder;
 
     @Autowired
     private AuthorizeServiceStub authorizeService;

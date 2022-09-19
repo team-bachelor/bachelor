@@ -5,7 +5,7 @@ import com.jcraft.jsch.Session;
 import org.apache.commons.lang3.StringUtils;
 import cn.org.bachelor.microservice.console.utils.GitUtil;
 import cn.org.bachelor.microservice.console.vo.CommitLogVO;
-import cn.org.bachelor.core.exception.SystemException;
+import cn.org.bachelor.exception.SystemException;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;

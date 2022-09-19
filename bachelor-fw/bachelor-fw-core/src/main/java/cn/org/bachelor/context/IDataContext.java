@@ -10,14 +10,14 @@ package cn.org.bachelor.context;
  *
  * @author Team Bachelor
  */
-public interface IVLService {
+public interface IDataContext {
 
 
-    void setGloableAttribute(String key, Object value);
+    void setApplicationAttribute(String key, Object value);
 
-    Object getGloableAttribute(String key);
+    Object getApplicationAttribute(String key);
 
-    Object removeGloableAttribute(String key);
+    Object removeApplicationAttribute(String key);
 
     void setSessionAttribute(String key, Object value);
 

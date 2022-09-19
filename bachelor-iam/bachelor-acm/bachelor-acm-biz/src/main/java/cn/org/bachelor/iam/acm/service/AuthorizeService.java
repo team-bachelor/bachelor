@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.acm.service;
 
 
-import cn.org.bachelor.iam.IamValueHolderService;
+import cn.org.bachelor.iam.IamDataContext;
 import cn.org.bachelor.iam.acm.dao.*;
 import cn.org.bachelor.iam.acm.domain.*;
 import cn.org.bachelor.iam.acm.permission.PermissionGroup;
@@ -47,7 +47,7 @@ public class AuthorizeService implements AuthorizeServiceStub {
     private ObjOperationMapper objOperationMapper;
 
     @Resource
-    private IamValueHolderService valueHolder;
+    private IamDataContext valueHolder;
 
     private static final String DEF_AUTH_OP_ALLOW = PermissionOptions.CheckLevel.NONE.toString();
     private static final String DEF_AUTH_OP_CHECK = PermissionOptions.CheckLevel.Authorized.toString();
@@ -73,11 +73,7 @@ public class AuthorizeService implements AuthorizeServiceStub {
         example = permissionMapper.selectOne(example);
         //不需要验证则通过
         if (example == null) {
-            if (accessType == PermissionOptions.AccessType.INTERFACE) {
-                return false;
-            } else {
-                return true;
-            }
+            return accessType != PermissionOptions.AccessType.INTERFACE;
         }
         if (logger.isDebugEnabled()) {
             logger.debug("obj=[" + objCode + "],user=[" + userCode + "],defAuthOp=[" + example.getDefAuthOp() + "];");
@@ -113,7 +109,7 @@ public class AuthorizeService implements AuthorizeServiceStub {
                 && valueHolder.getCurrentUser().isAdministrator()) {
             isadmin = true;
         }
-        List<RolePermission> rpList = null;
+        List<RolePermission> rpList;
         if (isadmin) {
             List<PermissionGroup> pglist = getPermissionGroupList(null);
             for (PermissionGroup pg : pglist) {
@@ -181,7 +177,7 @@ public class AuthorizeService implements AuthorizeServiceStub {
                 for (ObjPermission o : objPermissions) {
                     PermissionPoint p = forPermission(o, PermissionModel.ROLE);
                     String op = p.getObjOperate();
-                    p.setOperateName(opsMap.containsKey(op) ? opsMap.get(op) : op);
+                    p.setOperateName(opsMap.getOrDefault(op, op));
                     permList.add(p);
                 }
             }
@@ -190,11 +186,11 @@ public class AuthorizeService implements AuthorizeServiceStub {
     }
 
     /**
-     * @param roleCode
-     * @Description:取得备选权限列表
-     * @Author: liuzhuo
-     * @Date: 2018/10/27 11:16
-     * @Return:
+     * @param roleCode 角色编码
+     * @Description 取得备选权限列表
+     * @Author liuzhuo
+     * @Date 2018/10/27 11:16
+     * @Return
      */
     public List<String> getRolePermission(String roleCode) {
         RolePermission rp = new RolePermission();

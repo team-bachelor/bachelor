@@ -2,9 +2,9 @@ package cn.org.bachelor.microservice.gateway;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import cn.org.bachelor.core.exception.BusinessException;
-import cn.org.bachelor.core.exception.RemoteException;
-import cn.org.bachelor.core.exception.SystemException;
+import cn.org.bachelor.exception.BusinessException;
+import cn.org.bachelor.exception.RemoteException;
+import cn.org.bachelor.exception.SystemException;
 import cn.org.bachelor.web.json.JsonResponse;
 import cn.org.bachelor.web.json.ResponseStatus;
 import org.springframework.context.NoSuchMessageException;

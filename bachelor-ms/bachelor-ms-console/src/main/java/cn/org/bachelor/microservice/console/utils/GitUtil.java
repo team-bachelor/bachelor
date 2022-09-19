@@ -1,6 +1,6 @@
 package cn.org.bachelor.microservice.console.utils;
 
-import cn.org.bachelor.core.exception.SystemException;
+import cn.org.bachelor.exception.SystemException;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.LogCommand;
 import org.eclipse.jgit.api.ResetCommand;

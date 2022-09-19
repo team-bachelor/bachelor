@@ -6,7 +6,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.lang3.StringUtils;
 import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.token.JwtToken;
-import cn.org.bachelor.core.exception.BusinessException;
+import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.web.json.JsonResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -7,7 +7,7 @@ import com.netflix.appinfo.InstanceInfo;
 import org.apache.commons.lang3.StringUtils;
 import cn.org.bachelor.microservice.console.cache.InMemoryServiceCache;
 import cn.org.bachelor.microservice.console.vo.ServiceVo;
-import cn.org.bachelor.core.exception.BusinessException;
+import cn.org.bachelor.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class DiscoveryService {
     private DiscoveryClient eurekaClient;
 
 
-    private InMemoryServiceCache serviceCache = new InMemoryServiceCache();
+    private final InMemoryServiceCache serviceCache = new InMemoryServiceCache();
 
     public DiscoveryService() {
     }
@@ -46,10 +46,8 @@ public class DiscoveryService {
     public Map<String, List<String>> getEurekaService() {
         Map<String, String> zonesMap = eurekaConfigBean.getAvailabilityZones();
         Set<String> zones = new HashSet<>(zonesMap.size());
-        zonesMap.keySet().forEach(z -> {
-            zones.add(z);
-        });
-        if (zones.size() == 0) {
+        zonesMap.keySet().forEach(z -> zones.add(z));
+        if (0 == zones.size()) {
             zones.add(EurekaClientConfigBean.DEFAULT_ZONE);
         }
         Map<String, List<String>> services = new LinkedHashMap<>(zones.size());

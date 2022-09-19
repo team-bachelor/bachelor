@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.oauth2.utils;
 
 
-import cn.org.bachelor.core.exception.BusinessException;
+import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.iam.oauth2.OAuthConstant;
 import cn.org.bachelor.iam.oauth2.exception.OAuthBusinessException;
 import com.fasterxml.jackson.core.JsonProcessingException;

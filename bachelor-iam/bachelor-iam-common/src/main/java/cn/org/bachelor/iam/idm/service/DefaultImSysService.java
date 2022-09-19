@@ -1,9 +1,9 @@
 package cn.org.bachelor.iam.idm.service;
 
-import cn.org.bachelor.core.exception.BusinessException;
-import cn.org.bachelor.core.exception.RemoteException;
-import cn.org.bachelor.core.exception.SystemException;
-import cn.org.bachelor.iam.IamValueHolderService;
+import cn.org.bachelor.exception.BusinessException;
+import cn.org.bachelor.exception.RemoteException;
+import cn.org.bachelor.exception.SystemException;
+import cn.org.bachelor.iam.IamDataContext;
 import cn.org.bachelor.iam.idm.exception.ImSysException;
 import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
 import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.util.Assert;
 
 import java.io.IOException;
 import java.util.*;
@@ -44,16 +43,16 @@ public class DefaultImSysService implements ImSysService {
     private static final Logger logger = LoggerFactory.getLogger(DefaultImSysService.class);
     private ObjectMapper jsonMapper = new ObjectMapper();
     @Autowired
-    private IamValueHolderService valueHolder;
+    private IamDataContext valueHolder;
 
     @Autowired
     private OAuth2CientConfig clientConfig;
 
     /**
      * @param valueHolder AuthValueHolderService
-     * @see IamValueHolderService
+     * @see IamDataContext
      */
-    public DefaultImSysService(IamValueHolderService valueHolder) {
+    public DefaultImSysService(IamDataContext valueHolder) {
         this.valueHolder = valueHolder;
     }
 
@@ -641,7 +640,7 @@ public class DefaultImSysService implements ImSysService {
                     token = user.getAccessToken();
                 }else{
                     OAuth2ClientCertification upCC =
-                            (OAuth2ClientCertification) valueHolder.getValueHolderService().getSessionAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
+                            (OAuth2ClientCertification) valueHolder.getDataContext().getSessionAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
                     if(upCC == null){
                         throw new BusinessException("access token can not be null!");
                     }

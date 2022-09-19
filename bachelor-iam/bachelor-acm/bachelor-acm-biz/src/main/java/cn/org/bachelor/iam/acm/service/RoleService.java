@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.acm.service;
 
-import cn.org.bachelor.core.exception.BusinessException;
+import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.iam.acm.dao.RoleMapper;
 import cn.org.bachelor.iam.acm.dao.RoleMenuMapper;
 import cn.org.bachelor.iam.acm.dao.RolePermissionMapper;
@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
-import javax.annotation.Resource;
 import java.util.*;
 
 /**

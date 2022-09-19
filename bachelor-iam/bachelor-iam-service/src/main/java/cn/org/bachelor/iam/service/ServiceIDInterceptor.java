@@ -1,13 +1,13 @@
 package cn.org.bachelor.iam.service;
 
 
-import cn.org.bachelor.iam.IamValueHolderService;
+import cn.org.bachelor.iam.IamDataContext;
 import cn.org.bachelor.iam.idm.service.ImSysService;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
 import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.vo.UserVo;
-import cn.org.bachelor.web.util.RequestUtils;
+import cn.org.bachelor.web.util.RequestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +32,7 @@ import java.net.URLDecoder;
 public class ServiceIDInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LoggerFactory.getLogger(ServiceIDInterceptor.class);
     @Autowired
-    private IamValueHolderService valueHolder;
+    private IamDataContext valueHolder;
     @Autowired
     private ImSysService imSysService;
 
@@ -52,11 +52,7 @@ public class ServiceIDInterceptor extends HandlerInterceptorAdapter {
         user.setDeptName(request.getHeader(JwtToken.PayloadKey.DEPT_NAME));
         user.setAccessToken(request.getHeader(JwtToken.PayloadKey.ACCESS_TOKEN));
         Object o = request.getAttribute(ACCESS_BACKEND);
-        if (o != null && "N".equals(o.toString())) {
-            user.setAccessBackend(false);
-        } else {
-            user.setAccessBackend(true);
-        }
+        user.setAccessBackend(!(o != null && "N".equals(o.toString())));
 
         if (logger.isDebugEnabled()) {
             ObjectMapper m = new ObjectMapper();
@@ -98,7 +94,7 @@ public class ServiceIDInterceptor extends HandlerInterceptorAdapter {
         }
         valueHolder.setCurrentUser(user);
 
-        valueHolder.setRemoteIP(RequestUtils.getIpAddr(request));
+        valueHolder.setRemoteIP(RequestUtil.getIpAddr(request));
         return true;
     }
 

@@ -4,8 +4,7 @@ package cn.org.bachelor.iam.utils;
 import cn.org.bachelor.iam.oauth2.OAuthConstant;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cn.org.bachelor.core.exception.BusinessException;
-import cn.org.bachelor.iam.oauth2.OAuthConstant;
+import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.iam.oauth2.exception.OAuthBusinessException;
 
 import java.io.IOException;
@@ -31,8 +30,7 @@ public final class JSONParser {
     public static Map<String, Object> parseJSON(String jsonBody) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            Map<String, Object> tokenMap = mapper.readValue(jsonBody, Map.class);
-            return tokenMap;
+            return mapper.readValue(jsonBody, Map.class);
         } catch (IOException e) {
             throw new OAuthBusinessException(OAuthConstant.CodeResponse.UNSUPPORTED_RESPONSE_TYPE,
                     "Invalid response! Response body is not " + OAuthConstant.ContentType.JSON + " encoded");

@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.idm.exception;
 
-import cn.org.bachelor.core.exception.BaseException;
+import cn.org.bachelor.exception.BaseException;
 
 /**
  * @描述 IM系统引发的错误

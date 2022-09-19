@@ -1,13 +1,13 @@
 package cn.org.bachelor.iam.idm.interceptor;
 
 
-import cn.org.bachelor.iam.IamValueHolderService;
+import cn.org.bachelor.iam.IamDataContext;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.iam.idm.service.ImSysService;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
 import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
-import cn.org.bachelor.web.util.RequestUtils;
+import cn.org.bachelor.web.util.RequestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +32,7 @@ import java.net.URLDecoder;
 public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LoggerFactory.getLogger(UserIdentifyInterceptor.class);
     @Autowired
-    private IamValueHolderService valueHolder;
+    private IamDataContext valueHolder;
     @Autowired
     private ImSysService imSysService;
 
@@ -98,7 +98,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
         }
         valueHolder.setCurrentUser(user);
 
-        valueHolder.setRemoteIP(RequestUtils.getIpAddr(request));
+        valueHolder.setRemoteIP(RequestUtil.getIpAddr(request));
         return true;
     }
 

@@ -1,4 +1,4 @@
-package cn.org.bachelor.core.exception;
+package cn.org.bachelor.exception;
 
 public class BusinessException extends BaseException{
 

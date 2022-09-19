@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.acm.service;
 
-import cn.org.bachelor.core.exception.BusinessException;
-import cn.org.bachelor.iam.IamValueHolderService;
+import cn.org.bachelor.exception.BusinessException;
+import cn.org.bachelor.iam.IamDataContext;
 import cn.org.bachelor.iam.acm.dao.MenuMapper;
 import cn.org.bachelor.iam.acm.dao.OrgMenuMapper;
 import cn.org.bachelor.iam.acm.dao.RoleMenuMapper;
@@ -37,7 +37,7 @@ public class MenuService {
     private MenuMapper menuMapper;
 
     @Autowired
-    private IamValueHolderService valueHolder;
+    private IamDataContext valueHolder;
 
 
     /**
@@ -115,7 +115,7 @@ public class MenuService {
         if (rmList.size() == 0) {
             return Collections.emptyList();
         }
-        List<String> menuCodes = new ArrayList<String>(rmList.size());
+        List<String> menuCodes = new ArrayList<>(rmList.size());
         for (RoleMenu p : rmList) {
             menuCodes.add(p.getMenuCode());
         }
@@ -136,9 +136,7 @@ public class MenuService {
         if(originMenus == null){
             return menus;
         }
-        originMenus.forEach(m -> {
-            menus.add(convert2ISMenu(m, isSubSys));
-        });
+        originMenus.forEach(m -> menus.add(convert2ISMenu(m, isSubSys)));
         return menus;
     }
 
@@ -189,7 +187,6 @@ public class MenuService {
      */
     public void setOrgMenu(String orgCode, List<String> menuCode) {
         //设置查询的样例
-        menuCode = sortMenuCode(menuCode);
         OrgMenu om = new OrgMenu();
         om.setOrgCode(orgCode);
         orgMenuMapper.delete(om);
@@ -230,7 +227,7 @@ public class MenuService {
      */
     public void setRoleMenu(String roleCode, List<String> menuCode) {
         //设置查询的样例
-        menuCode = sortMenuCode(menuCode);
+        sortMenuCode(menuCode);
         RoleMenu rm = new RoleMenu();
         rm.setRoleCode(roleCode);
         roleMenuMapper.delete(rm);
@@ -248,13 +245,9 @@ public class MenuService {
     private List<String> sortMenuCode(List<String> menuCode) {
         List<MenuVo> fullMenu = getMenuList(true, null);
         Map<String, MenuVo> mmap = new HashMap<>(fullMenu.size());
-        fullMenu.forEach(menu -> {
-            mmap.put(menu.getCode(), menu);
-        });
+        fullMenu.forEach(menu -> mmap.put(menu.getCode(), menu));
         List<String> adds = new ArrayList<>();
-        menuCode.forEach(code -> {
-            checkForParentMenu(adds, mmap, code);
-        });
+        menuCode.forEach(code -> checkForParentMenu(adds, mmap, code));
         adds.forEach(m -> {
             if (!menuCode.contains(m)) {
                 menuCode.add(m);
@@ -266,9 +259,7 @@ public class MenuService {
     private void checkForParentMenu(List<String> adds, Map<String, MenuVo> mmap, String code) {
         MenuVo m = mmap.get(code);
         if (m == null) return;
-        if (m.getParent() == null) {
-            return;
-        } else {
+        if (m.getParent() != null) {
             if (!adds.contains(m.getParent().getCode())) {
                 adds.add(m.getParent().getCode());
             }

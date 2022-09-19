@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2013, Team Bachelor. All rights reserved.
  */
-package cn.org.bachelor.core.exception;
+package cn.org.bachelor.exception;
 
 /**
  * 开发平台基础异常类

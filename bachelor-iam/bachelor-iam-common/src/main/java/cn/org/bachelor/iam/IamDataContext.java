@@ -6,7 +6,7 @@
 package cn.org.bachelor.iam;
 
 import cn.org.bachelor.iam.vo.UserVo;
-import cn.org.bachelor.context.IVLService;
+import cn.org.bachelor.context.IDataContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,23 +14,23 @@ import org.springframework.stereotype.Service;
  * @author Team Bachelor
  */
 @Service
-public class IamValueHolderService {
+public class IamDataContext {
 
     @Autowired
-    private IVLService valueHolderService;
+    private IDataContext dataContext;
 
     private String remoteIP;
 
-    public IVLService getValueHolderService() {
-        return valueHolderService;
+    public IDataContext getDataContext() {
+        return dataContext;
     }
 
     public void setCurrentUser(UserVo user) {
-        valueHolderService.setRequestAttribute(IamConstant.USER_KEY, user);
+        dataContext.setRequestAttribute(IamConstant.USER_KEY, user);
     }
 
     public UserVo getCurrentUser() {
-        Object uo = valueHolderService.getRequestAttribute(IamConstant.USER_KEY);
+        Object uo = dataContext.getRequestAttribute(IamConstant.USER_KEY);
         UserVo user = null;
         if (uo != null) {
             user = (UserVo) uo;
@@ -58,7 +58,7 @@ public class IamValueHolderService {
         this.remoteIP = remoteIP;
     }
 
-    public void setValueHolderService(IVLService valueHolderService) {
-        this.valueHolderService = valueHolderService;
+    public void setDataContext(IDataContext dataContext) {
+        this.dataContext = dataContext;
     }
 }

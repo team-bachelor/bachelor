@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.acm.controller;
 
-import cn.org.bachelor.iam.IamValueHolderService;
+import cn.org.bachelor.iam.IamDataContext;
 import cn.org.bachelor.iam.acm.annotation.AcmDomain;
 import cn.org.bachelor.iam.acm.annotation.AcmPermission;
 import cn.org.bachelor.iam.acm.domain.ObjDomain;
@@ -47,7 +47,7 @@ public class AcmInitController {
     @Resource
     ObjDomainService domainService;
     @Autowired
-    private IamValueHolderService valueHolder;
+    private IamDataContext valueHolder;
 
 
     @ApiOperation(value = "初始化权限点")
@@ -234,10 +234,7 @@ public class AcmInitController {
     }
 
     private boolean isEmptyString(String s) {
-        if (s == null || "".equals(s)) {
-            return true;
-        }
-        return false;
+        return s == null || "".equals(s);
     }
 }
 

@@ -2,7 +2,7 @@ package cn.org.bachelor.iam.acm.interceptor;
 
 
 import cn.org.bachelor.iam.IamConfig;
-import cn.org.bachelor.iam.IamValueHolderService;
+import cn.org.bachelor.iam.IamDataContext;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.service.AuthorizeServiceStub;
 import cn.org.bachelor.iam.vo.UserVo;
@@ -34,7 +34,7 @@ public class UserAccessControlInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LoggerFactory.getLogger(UserAccessControlInterceptor.class);
 
     @Autowired
-    private IamValueHolderService valueHolder;
+    private IamDataContext valueHolder;
 
     @Resource
     private AuthorizeServiceStub authorizeService;
