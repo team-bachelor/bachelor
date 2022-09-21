@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.org.bachelor</groupId>
     <artifactId>bachelor-dependencies</artifactId>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.2.0.SNAPSHOT</version>
     <name>bachelor-dependencies</name>
     <description>bachelor-dependencies</description>
     <packaging>pom</packaging>
@@ -13,7 +13,7 @@
             <name>bachelor</name>
             <email>liuzhuo84@hotmail.com</email>
             <organization>bachelor</organization>
-            <organizationUrl>http://www.bachelor.org.cn</organizationUrl>
+            <organizationUrl>www.bachelor.org.cn</organizationUrl>
         </developer>
     </developers>
     <distributionManagement>
@@ -33,29 +33,37 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>2.3.2.RELEASE</spring-boot.version>
-        <spring-cloud.version>Hoxton.SR10</spring-cloud.version>
+        <spring-boot.version>2.3.12.RELEASE</spring-boot.version>
+        <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
+        <!--Spring Boot 应用的管理和监控-->
+        <spring-boot-admin.version>2.7.5</spring-boot-admin.version>
+        <!--spring jwt组件-->
+        <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
+        <!--springboot 打包插件-->
+        <spring-boot-plugin.version>2.3.1.RELEASE</spring-boot-plugin.version>
+        <!--api 文档工具-->
         <swagger2.version>2.9.2</swagger2.version>
         <knife4j.version>2.0.8</knife4j.version>
-        <github-pagehelper.version>1.2.13</github-pagehelper.version>
-        <tk-mybatis.version>2.1.5</tk-mybatis.version>
-        <tk-mapperbase.version>1.1.5</tk-mapperbase.version>
-        <tk-mappergenerator.version>1.1.5</tk-mappergenerator.version>
-        <spring-boot-admin.version>2.2.3</spring-boot-admin.version>
-        <mybatis.version>2.1.3</mybatis.version>
-        <fastjson.version>1.2.68</fastjson.version>
-        <spring-json.version>1.0.2</spring-json.version>
-        <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
-        <mybatis-generator-core.version>1.4.0</mybatis-generator-core.version>
-        <bucket4j-core.version>4.9.0</bucket4j-core.version>
-        <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
-        <spring-boot-plugin.version>2.3.1.RELEASE</spring-boot-plugin.version>
-        <jettison.version>1.2</jettison.version>
-        <sbcp.version>2.4.1</sbcp.version>
-        <feign.version>1.4.4.RELEASE</feign.version>
-        <bachelor-fw.version>2.2-SNAPSHOT</bachelor-fw.version>
-        <bachelor-iam.version>2.2-SNAPSHOT</bachelor-iam.version>
-        <bachelor-oauth2.version>2.2-SNAPSHOT</bachelor-oauth2.version>
+        <!--api 文档工具-->
+        <tk-mybatis.version>4.2.1</tk-mybatis.version>
+        <mybatis-pagehelper.version>1.4.1</mybatis-pagehelper.version>
+        <mybatis-generator-core.version>1.4.1</mybatis-generator-core.version>
+        <!--json处理-->
+        <fastjson.version>2.0.14</fastjson.version>
+        <!--实现漏桶算法-->
+        <bucket4j-core.version>8.1.0</bucket4j-core.version>
+        <!--版本管理的maven插件-->
+        <versions-maven-plugin.version>2.12.0</versions-maven-plugin.version>
+        <!--XML转换为JSON-->
+        <jettison.version>1.5.0</jettison.version>
+        <!--为springboot添加配置说明和自动完成-->
+        <sbcp.version>2.7.3</sbcp.version>
+        <!--远程调用-->
+        <feign.version>1.4.7.RELEASE</feign.version>
+        <nacos.version>2.2.9.RELEASE</nacos.version>
+        <bachelor-fw.version>2.2.0.SNAPSHOT</bachelor-fw.version>
+        <bachelor-iam.version>2.2.0.SNAPSHOT</bachelor-iam.version>
+        <bachelor-oauth2.version>2.2.0.SNAPSHOT</bachelor-oauth2.version>
     </properties>
 
     <dependencyManagement>
@@ -92,22 +100,12 @@
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
-                <version>${github-pagehelper.version}</version>
+                <version>${mybatis-pagehelper.version}</version>
             </dependency>
             <dependency>
                 <groupId>tk.mybatis</groupId>
                 <artifactId>mapper-spring-boot-starter</artifactId>
                 <version>${tk-mybatis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>tk.mybatis</groupId>
-                <artifactId>mapper-generator</artifactId>
-                <version>${tk-mappergenerator.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>tk.mybatis</groupId>
-                <artifactId>mapper-base</artifactId>
-                <version>${tk-mapperbase.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.codecentric</groupId>
@@ -120,11 +118,6 @@
                 <version>${spring-boot-admin.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.mybatis.spring.boot</groupId>
-                <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>${mybatis.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-core</artifactId>
                 <version>${mybatis-generator-core.version}</version>
@@ -134,19 +127,14 @@
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>net.sf.json-lib</groupId>-->
-<!--                <artifactId>json-lib-ext-spring</artifactId>-->
-<!--                <version>${spring-json.version}</version>-->
-<!--            </dependency>-->
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-jwt</artifactId>
                 <version>${spring-security-jwt.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.vladimir-bukhtoyarov</groupId>
-                <artifactId>bucket4j-core</artifactId>
+                <groupId>com.bucket4j</groupId>
+                <artifactId>bucket4j_jdk8-core</artifactId>
                 <version>${bucket4j-core.version}</version>
             </dependency>
             <dependency>
@@ -179,11 +167,11 @@
                 <artifactId>bachelor-iam</artifactId>
                 <version>${bachelor-iam.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>cn.org.bachelor</groupId>-->
-<!--                <artifactId>bachelor-usermanage</artifactId>-->
-<!--                <version>${bachelor-iam.version}</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>cn.org.bachelor</groupId>-->
+            <!--                <artifactId>bachelor-usermanage</artifactId>-->
+            <!--                <version>${bachelor-iam.version}</version>-->
+            <!--            </dependency>-->
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
                 <artifactId>bachelor-oauth2-client</artifactId>
@@ -238,6 +226,14 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-feign</artifactId>
                 <version>${feign.version}</version>
+            </dependency>
+            <!--            spring cloud alibaba nacos-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${nacos.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
