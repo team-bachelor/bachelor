@@ -43,7 +43,7 @@
         <spring-boot-plugin.version>2.3.1.RELEASE</spring-boot-plugin.version>
         <!--api 文档工具-->
         <swagger2.version>2.9.2</swagger2.version>
-        <knife4j.version>2.0.8</knife4j.version>
+        <knife4j.version>2.0.9</knife4j.version>
         <!--api 文档工具-->
         <tk-mybatis.version>4.2.1</tk-mybatis.version>
         <mybatis-pagehelper.version>1.4.1</mybatis-pagehelper.version>
@@ -95,6 +95,11 @@
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-micro-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
                 <version>${knife4j.version}</version>
             </dependency>
             <dependency>

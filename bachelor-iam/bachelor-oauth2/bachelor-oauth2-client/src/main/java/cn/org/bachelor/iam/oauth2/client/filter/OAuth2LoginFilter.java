@@ -177,11 +177,6 @@ public class OAuth2LoginFilter implements Filter {
         OAuth2CientConfig config = getConfig(filterConfig.getServletContext());
         if (!config.isLoginFilterEnable()) return;
         try {
-//            configFileName = filterConfig.getInitParameter("configFileName");
-//            if (configFileName == null || configFileName.equals("")) {
-//                configFileName = defaultConfigFileName;
-//            }
-//            config = new OAuth2CientConfig(configFileName);
             ClientUtil.config = config;// 放到全局变量里面
             EXCEPT_PATTERNS = filterConfig.getInitParameter("_except_urlpattern");
             EXCEPT_PARAMS = filterConfig.getInitParameter("_except_param");

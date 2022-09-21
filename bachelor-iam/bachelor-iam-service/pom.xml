@@ -30,6 +30,14 @@
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-idm-service</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-openfeign-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-commons</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

@@ -20,6 +20,16 @@
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-acm-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis.generator</groupId>
+            <artifactId>mybatis-generator-core</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

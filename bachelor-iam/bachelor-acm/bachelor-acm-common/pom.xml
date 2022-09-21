@@ -20,6 +20,10 @@
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-iam-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
