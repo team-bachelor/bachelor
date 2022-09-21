@@ -3,31 +3,25 @@
  */
 package cn.org.bachelor.iam.oauth2.client.filter;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
+import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
+import cn.org.bachelor.iam.oauth2.client.exception.GetAccessTokenException;
+import cn.org.bachelor.iam.oauth2.client.exception.GetUserInfoException;
+import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
+import cn.org.bachelor.iam.oauth2.client.util.ClientUtil;
+import cn.org.bachelor.iam.oauth2.utils.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import cn.org.bachelor.iam.oauth2.client.exception.GetAccessTokenException;
-import cn.org.bachelor.iam.oauth2.client.exception.GetUserInfoException;
-import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
-import cn.org.bachelor.iam.oauth2.client.util.ClientUtil;
-import jdk.nashorn.internal.objects.annotations.Constructor;
-import org.apache.commons.lang3.StringUtils;
-import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
-import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
-import cn.org.bachelor.iam.oauth2.utils.IOUtils;
-import com.google.gson.Gson;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import java.io.IOException;
 
 
 /**

@@ -14,21 +14,4 @@
     <modules>
         <module>bachelor-idm-service</module>
     </modules>
-
-<!--    <dependencyManagement>-->
-<!--        <dependencies>-->
-<!--            <dependency>-->
-<!--                <groupId>cn.org.bachelor</groupId>-->
-<!--                <artifactId>bachelor-oauth2-client</artifactId>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>cn.org.bachelor</groupId>-->
-<!--                <artifactId>bachelor-fw-core</artifactId>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>cn.org.bachelor</groupId>-->
-<!--                <artifactId>bachelor-fw-web</artifactId>-->
-<!--            </dependency>-->
-<!--        </dependencies>-->
-<!--    </dependencyManagement>-->
 </project>

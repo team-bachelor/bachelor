@@ -5,8 +5,7 @@ import javax.servlet.http.HttpSession;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
 import cn.org.bachelor.iam.oauth2.client.model.MJsonObject;
 import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * 登录工具类
@@ -15,7 +14,7 @@ import com.google.gson.JsonParser;
  * @since 1.0
  */
 public class ClientUtil {
-	public static ThreadLocal<HttpSession> sessions = new ThreadLocal<HttpSession>();//存放session
+	public static ThreadLocal<HttpSession> sessions = new ThreadLocal<>();//存放session
 	
 	public static OAuth2CientConfig config;//OAuth2LoginFilter.init的时候初始化
 	
@@ -85,7 +84,7 @@ public class ClientUtil {
 		if(personStr == null){
 			return null;
 		}
-		JsonObject personJson = JsonParser.parseString(personStr).getAsJsonObject();
+		JSONObject personJson = JSONObject.parseObject(personStr);
 		return new MJsonObject(personJson);
 	}
 	

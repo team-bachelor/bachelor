@@ -11,7 +11,6 @@
 
     <artifactId>bachelor-idm-service</artifactId>
     <packaging>jar</packaging>
-<!--    <name>bachelor-idm-service</name>-->
 
     <dependencies>
         <dependency>

@@ -20,9 +20,7 @@ import cn.org.bachelor.iam.oauth2.request.types.GrantType;
 import cn.org.bachelor.iam.oauth2.response.OAuthAccessTokenResponse;
 import cn.org.bachelor.iam.oauth2.response.OAuthResourceResponse;
 import cn.org.bachelor.iam.oauth2.utils.StringUtils;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +45,7 @@ public class OAuth2Client {
     private HttpServletResponse response;
     private HttpServletRequest request;
     private OAuth2CientConfig config;
-    private JsonObject person;
+    private JSONObject person;
     private String url;
     public static final String defaultConfigFileName = "OAuth2-config.properties";
     private static Logger logger = LoggerFactory.getLogger(OAuth2Client.class);
@@ -199,7 +197,7 @@ public class OAuth2Client {
 			userInfoRequest.setAccessToken(accessToken);
 			OAuthResourceResponse resourceResponse = oAuthClient.resource(userInfoRequest, OAuthResourceResponse.class);
 			personStr = resourceResponse.getBody();
-			person = JsonParser.parseString(personStr).getAsJsonObject();
+			person = JSONObject.parseObject(personStr);
 			logger.info("去调用用户信息接口方法  person:" + person);
 			openId = this.getJsonValue(person, "openId");
 			userId = this.getJsonValue(person, "userId");
@@ -268,7 +266,7 @@ public class OAuth2Client {
             OAuthResourceResponse resourceResponse = oAuthClient.resource(userInfoRequest, OAuthResourceResponse.class);
             personStr = resourceResponse.getBody();
             logger.info("======返回的user_info:" + personStr);
-            person = JsonParser.parseString(personStr).getAsJsonObject();
+            person = JSONObject.parseObject(personStr);
 
 
 			logger.info("去调用用户信息接口方法  person:" + person);
@@ -545,12 +543,12 @@ public class OAuth2Client {
     	return false;
     }
     
-    private String getJsonValue(JsonObject json,String key){
-    	JsonElement ele = json.get(key);
+    private String getJsonValue(JSONObject json,String key){
+		JSONObject ele = json.getJSONObject(key);
     	if(ele==null) {
 			return "";
 		}
-    	return ele.isJsonNull()?"":ele.getAsString();
+    	return ele.isEmpty()?"":ele.toJSONString();
     }
 
 	/*
