@@ -31,7 +31,7 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
       config:
-        file-extension: yaml
+        file-extension: yml
 server:
   port: 9003
 logging:
@@ -86,7 +86,7 @@ bachelor:
         base: https://yhty.dygzhyq.cn/user/api
   ########################################↑权限配置↑########################################
   swagger:
-    base-packages: "cn.org.bachelor.ms.contacts.controller"
+    base-packages: cn.org.bachelor.iam.acm.controller,cn.org.bachelor.iam.idm.controller
     title: ""
     version: "1.0"
     description: ""
