@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.service;
 
 
-import cn.org.bachelor.iam.IamDataContext;
+import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.idm.service.ImSysService;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
 import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
@@ -29,10 +29,10 @@ import java.net.URLDecoder;
  * @author liuzhuo
  * @version 1.0
  */
-public class ServiceIDInterceptor extends HandlerInterceptorAdapter {
-    private static final Logger logger = LoggerFactory.getLogger(ServiceIDInterceptor.class);
+public class IdentifyInterceptor extends HandlerInterceptorAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(IdentifyInterceptor.class);
     @Autowired
-    private IamDataContext valueHolder;
+    private IamContext valueHolder;
     @Autowired
     private ImSysService imSysService;
 
@@ -51,6 +51,7 @@ public class ServiceIDInterceptor extends HandlerInterceptorAdapter {
         user.setDeptId(request.getHeader(JwtToken.PayloadKey.DEPT_ID));
         user.setDeptName(request.getHeader(JwtToken.PayloadKey.DEPT_NAME));
         user.setAccessToken(request.getHeader(JwtToken.PayloadKey.ACCESS_TOKEN));
+        user.setTenantId(request.getHeader(JwtToken.PayloadKey.TENANT_ID));
         Object o = request.getAttribute(ACCESS_BACKEND);
         user.setAccessBackend(!(o != null && "N".equals(o.toString())));
 

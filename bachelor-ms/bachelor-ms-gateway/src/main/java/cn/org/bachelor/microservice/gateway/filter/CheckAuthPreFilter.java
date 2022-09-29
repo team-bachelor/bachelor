@@ -1,13 +1,13 @@
 package cn.org.bachelor.microservice.gateway.filter;
 
+import cn.org.bachelor.iam.IamConstant;
+import cn.org.bachelor.iam.token.JwtToken;
+import cn.org.bachelor.microservice.gateway.service.ITenantIdProvider;
+import cn.org.bachelor.web.json.JsonResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.lang3.StringUtils;
-import cn.org.bachelor.iam.IamConstant;
-import cn.org.bachelor.iam.token.JwtToken;
-import cn.org.bachelor.exception.BusinessException;
-import cn.org.bachelor.web.json.JsonResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -26,6 +26,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Resource;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -41,6 +42,8 @@ import java.util.Map;
 public class CheckAuthPreFilter implements GlobalFilter {
     private static final Logger logger = LoggerFactory.getLogger(CheckAuthPreFilter.class);
 
+    @Resource
+    private ITenantIdProvider tenantIdProvider;
 //    @Autowired
 //    private AuthorizeService authorizeService;
 
@@ -77,20 +80,21 @@ public class CheckAuthPreFilter implements GlobalFilter {
         logger.info("access with token=[" + token + "]");
         //解析token获取用户信息
 //        String user = null;
-        if (token == null || "".equals(token)){
+        if (token == null || "".equals(token)) {
             return chain.filter(exchange);
         }
 
         ServerHttpRequest host = request;
         boolean pass = true;
         boolean isValidToekn = false;
+        JwtToken jwtToken = null;
+        try {
+            jwtToken = JwtToken.decode(token);
+        } catch (IllegalArgumentException e) {
+//            throw new BusinessException("invalid_authorization");
+            logger.warn("invalid_authorization", token);
+        }
         if (token != null && !"".equals(token)) {
-            JwtToken jwtToken = null;
-            try {
-                jwtToken = JwtToken.decode(token);
-            } catch (IllegalArgumentException e) {
-                throw new BusinessException("invalid_authorization");
-            }
             isValidToekn = isValidToken(jwtToken);
             if (jwtToken != null && isValidToekn) {
                 //TODO 安全性有待提高
@@ -125,7 +129,11 @@ public class CheckAuthPreFilter implements GlobalFilter {
 
 
 //        logger.info("access user=[" + user + "], is authorized=[" + pass + "]");
-//        //如果有权限,则可以访问
+//
+        if(tenantIdProvider != null) {
+            host.mutate().header(JwtToken.PayloadKey.TENANT_ID, tenantIdProvider.getTenantId(request));
+        }
+        // 如果有权限,则可以访问
         if (pass) {
             //将现在的request 变成 change对象
             ServerWebExchange build = exchange.mutate().request(host).build();
@@ -135,7 +143,7 @@ public class CheckAuthPreFilter implements GlobalFilter {
         //如果没权限则返回401
         ServerHttpResponse response = exchange.getResponse();
         JsonResponse<String> jr = null;
-        if(isValidToekn){
+        if (isValidToekn) {
             response.setStatusCode(HttpStatus.LOCKED);
             //构造返回内容的body
             jr = new JsonResponse();
@@ -143,7 +151,7 @@ public class CheckAuthPreFilter implements GlobalFilter {
             jr.setData("INVALID_TOKEN");
             jr.setMsg("INVALID_TOKEN");
             jr.setStatus(cn.org.bachelor.web.json.ResponseStatus.BIZ_ERR);
-        }else {
+        } else {
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             //构造返回内容的body
             jr = new JsonResponse();

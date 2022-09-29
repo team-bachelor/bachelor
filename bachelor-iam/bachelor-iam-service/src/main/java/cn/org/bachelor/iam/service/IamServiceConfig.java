@@ -24,16 +24,16 @@ public class IamServiceConfig implements WebMvcConfigurer {
      * @return 访问控制拦截器
      */
     @Bean
-    public ServiceACInterceptor authInterceptor() {
-        return new ServiceACInterceptor();
+    public AccessControlInterceptor authInterceptor() {
+        return new AccessControlInterceptor();
     }
 
     /**
      * @return 用户识别拦截器
      */
     @Bean
-    public ServiceIDInterceptor userInterceptor() {
-        return new ServiceIDInterceptor();
+    public IdentifyInterceptor userInterceptor() {
+        return new IdentifyInterceptor();
     }
 
     private static final String[] excludePath = {

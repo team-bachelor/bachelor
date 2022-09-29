@@ -3,9 +3,10 @@
  *
  * Copyright (c) 2013, Team Bachelor. All rights reserved.
  */
-package cn.org.bachelor.microservice.gateway;
+package cn.org.bachelor.web.context;
 
-import cn.org.bachelor.context.IDataContext;
+import cn.org.bachelor.context.IContext;
+import cn.org.bachelor.web.util.RequestUtil;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
@@ -17,16 +18,18 @@ import java.util.Map;
  * @author Team Bachelor
  */
 @Component
-public class WebDataContext implements IDataContext {
+public class WebContext implements IContext {
+
+    public static final String WEB_CONTEXT_NAME = "bachelor_context_name";
+    public static final String WEB_DOC_ROOT = "bachelor_context_doc_root";
+    public static final String WEB_PAGE_INFO_KEY = "bachelor_page_info";
 
     private static final ThreadLocal<Map<String, Object>> tls = new ThreadLocal<>();
 
-    /* (non-Javadoc)
-     * @see cn.org.bachelor.vl.service.IVariableLifecycleService#setGloableAttribute(java.lang.String, java.lang.Object)
-     */
+
     @Override
     public void setApplicationAttribute(String key, Object value) {
-        ServletContext sc = RequestUtils.getServletContext();
+        ServletContext sc = RequestUtil.getServletContext();
         if (sc != null) {
             sc.setAttribute(key, value);
         }
@@ -38,7 +41,7 @@ public class WebDataContext implements IDataContext {
      */
     @Override
     public Object getApplicationAttribute(String key) {
-        ServletContext sc = RequestUtils.getServletContext();
+        ServletContext sc = RequestUtil.getServletContext();
         if (sc != null) {
             return sc.getAttribute(key);
         }
@@ -50,7 +53,7 @@ public class WebDataContext implements IDataContext {
      */
     @Override
     public Object removeApplicationAttribute(String key) {
-        ServletContext sc = RequestUtils.getServletContext();
+        ServletContext sc = RequestUtil.getServletContext();
         if (sc != null) {
             Object obj = sc.getAttribute(key);
             sc.removeAttribute(key);
@@ -64,7 +67,7 @@ public class WebDataContext implements IDataContext {
      */
     @Override
     public void setSessionAttribute(String key, Object value) {
-        HttpServletRequest request = RequestUtils.getRequest();
+        HttpServletRequest request = RequestUtil.getRequest();
 
         if (request == null) {
             return;
@@ -77,7 +80,7 @@ public class WebDataContext implements IDataContext {
      */
     @Override
     public Object getSessionAttribute(String key) {
-        HttpServletRequest request = RequestUtils.getRequest();
+        HttpServletRequest request = RequestUtil.getRequest();
         if (request != null && request.getSession(false) != null && request.getSession().getAttribute(key) != null) {
             return request.getSession().getAttribute(key);
         } else {
@@ -93,7 +96,7 @@ public class WebDataContext implements IDataContext {
      */
     @Override
     public Object removeSessionAttribute(String key) {
-        HttpServletRequest request = RequestUtils.getRequest();
+        HttpServletRequest request = RequestUtil.getRequest();
         if (request != null) {
             Object obj = request.getSession().getAttribute(key);
             request.getSession().removeAttribute(key);
@@ -107,7 +110,7 @@ public class WebDataContext implements IDataContext {
      */
     @Override
     public void setRequestAttribute(String key, Object value) {
-        HttpServletRequest request = RequestUtils.getRequest();
+        HttpServletRequest request = RequestUtil.getRequest();
         if (request != null) {
             request.setAttribute(key, value);
         } else {
@@ -126,7 +129,7 @@ public class WebDataContext implements IDataContext {
      */
     @Override
     public Object getRequestAttribute(String key) {
-        HttpServletRequest request = RequestUtils.getRequest();
+        HttpServletRequest request = RequestUtil.getRequest();
         if (request != null) {
             return request.getAttribute(key);
         } else {
@@ -144,7 +147,7 @@ public class WebDataContext implements IDataContext {
      */
     @Override
     public Object removeRequestAttribute(String key) {
-        HttpServletRequest request = RequestUtils.getRequest();
+        HttpServletRequest request = RequestUtil.getRequest();
         if (request != null) {
             Object obj = request.getAttribute(key);
             request.removeAttribute(key);

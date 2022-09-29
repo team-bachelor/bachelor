@@ -9,7 +9,6 @@ import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Team Bachelor
  */
-@Component
 public class PageInterceptor extends HandlerInterceptorAdapter {
 
     private Log log = LogFactory.getLog(this.getClass());

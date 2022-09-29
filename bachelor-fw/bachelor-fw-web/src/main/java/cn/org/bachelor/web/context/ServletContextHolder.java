@@ -1,5 +1,6 @@
 package cn.org.bachelor.web.context;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
@@ -10,13 +11,13 @@ import org.springframework.web.context.ServletConfigAware;
 import org.springframework.web.context.ServletContextAware;
 
 
-import cn.org.bachelor.context.IDataContext;
+import cn.org.bachelor.context.IContext;
 
 @Service
 public class ServletContextHolder implements ServletContextAware,ServletConfigAware{
 
-	@Autowired
-	private IDataContext dataContext;
+	@Resource
+	private IContext dataContext;
 	
 	@Override
 	public void setServletConfig(ServletConfig servletConfig) {
@@ -27,7 +28,7 @@ public class ServletContextHolder implements ServletContextAware,ServletConfigAw
 	public void setServletContext(ServletContext servletContext) {
 		RequestUtil.setServletContext(servletContext);
 		//vlService.setGloableAttribute(ContextConstant.WEB_CONTEXT_NAME, servletContext.get);
-		dataContext.setApplicationAttribute(WebDataContext.WEB_DOC_ROOT,servletContext.getRealPath("/"));
+		dataContext.setApplicationAttribute(WebContext.WEB_DOC_ROOT,servletContext.getRealPath("/"));
 	}
 
 }

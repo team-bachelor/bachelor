@@ -3,7 +3,7 @@ package cn.org.bachelor.iam.idm.service;
 import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.exception.RemoteException;
 import cn.org.bachelor.exception.SystemException;
-import cn.org.bachelor.iam.IamDataContext;
+import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.idm.exception.ImSysException;
 import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
 import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
@@ -43,16 +43,16 @@ public class DefaultImSysService implements ImSysService {
     private static final Logger logger = LoggerFactory.getLogger(DefaultImSysService.class);
     private ObjectMapper jsonMapper = new ObjectMapper();
     @Autowired
-    private IamDataContext valueHolder;
+    private IamContext valueHolder;
 
     @Autowired
     private OAuth2CientConfig clientConfig;
 
     /**
      * @param valueHolder AuthValueHolderService
-     * @see IamDataContext
+     * @see IamContext
      */
-    public DefaultImSysService(IamDataContext valueHolder) {
+    public DefaultImSysService(IamContext valueHolder) {
         this.valueHolder = valueHolder;
     }
 
@@ -640,7 +640,7 @@ public class DefaultImSysService implements ImSysService {
                     token = user.getAccessToken();
                 }else{
                     OAuth2ClientCertification upCC =
-                            (OAuth2ClientCertification) valueHolder.getDataContext().getSessionAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
+                            (OAuth2ClientCertification) valueHolder.getBaseContext().getSessionAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
                     if(upCC == null){
                         throw new BusinessException("access token can not be null!");
                     }

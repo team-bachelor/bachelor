@@ -10,7 +10,7 @@ package cn.org.bachelor.context;
  *
  * @author Team Bachelor
  */
-public interface IDataContext {
+public interface IContext {
 
 
     void setApplicationAttribute(String key, Object value);

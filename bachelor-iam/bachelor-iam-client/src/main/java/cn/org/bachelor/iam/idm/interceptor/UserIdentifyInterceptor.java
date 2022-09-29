@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.idm.interceptor;
 
 
-import cn.org.bachelor.iam.IamDataContext;
+import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.iam.idm.service.ImSysService;
@@ -32,7 +32,7 @@ import java.net.URLDecoder;
 public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LoggerFactory.getLogger(UserIdentifyInterceptor.class);
     @Autowired
-    private IamDataContext valueHolder;
+    private IamContext iamContext;
     @Autowired
     private ImSysService imSysService;
 
@@ -51,6 +51,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
         user.setDeptId(request.getHeader(JwtToken.PayloadKey.DEPT_ID));
         user.setDeptName(request.getHeader(JwtToken.PayloadKey.DEPT_NAME));
         user.setAccessToken(request.getHeader(JwtToken.PayloadKey.ACCESS_TOKEN));
+        user.setTenantId(request.getHeader(JwtToken.PayloadKey.TENANT_ID));
         Object o = request.getAttribute(ACCESS_BACKEND);
         if (o != null && "N".equals(o.toString())) {
             user.setAccessBackend(false);
@@ -96,9 +97,9 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
             user.setAdministrator(imSysService.checkUserIsAdmin(user));
             user.setAccessBackend(false);
         }
-        valueHolder.setCurrentUser(user);
+        iamContext.setCurrentUser(user);
 
-        valueHolder.setRemoteIP(RequestUtil.getIpAddr(request));
+        iamContext.setRemoteIP(RequestUtil.getIpAddr(request));
         return true;
     }
 

@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.acm.controller;
 
-import cn.org.bachelor.iam.IamDataContext;
+import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.acm.annotation.AcmDomain;
 import cn.org.bachelor.iam.acm.annotation.AcmPermission;
 import cn.org.bachelor.iam.acm.domain.ObjDomain;
@@ -47,7 +47,7 @@ public class AcmInitController {
     @Resource
     ObjDomainService domainService;
     @Autowired
-    private IamDataContext valueHolder;
+    private IamContext valueHolder;
 
 
     @ApiOperation(value = "初始化权限点")

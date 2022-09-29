@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.service;
 
 
-import cn.org.bachelor.iam.IamDataContext;
+import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.service.AuthorizeServiceStub;
 import cn.org.bachelor.iam.vo.UserVo;
@@ -28,10 +28,10 @@ import java.util.Date;
  * @author liuzhuo
  * @version 2.0
  */
-public class ServiceACInterceptor extends HandlerInterceptorAdapter {
-    private static final Logger logger = LoggerFactory.getLogger(ServiceACInterceptor.class);
+public class AccessControlInterceptor extends HandlerInterceptorAdapter {
+    private static final Logger logger = LoggerFactory.getLogger(AccessControlInterceptor.class);
     @Autowired
-    private IamDataContext valueHolder;
+    private IamContext valueHolder;
 
     @Autowired
     private AuthorizeServiceStub authorizeService;

@@ -167,7 +167,7 @@ public class RoleService implements RoleServiceStub {
             if(u == null){
                 u = new UserVo();
                 u.setCode(i.getUserCode());
-
+                u.setName("该用户已不存在，请删除！");
             }
             result.add(u);
         });

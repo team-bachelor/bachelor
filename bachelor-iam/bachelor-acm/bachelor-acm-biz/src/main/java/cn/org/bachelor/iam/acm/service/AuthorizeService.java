@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.acm.service;
 
 
-import cn.org.bachelor.iam.IamDataContext;
+import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.acm.dao.*;
 import cn.org.bachelor.iam.acm.domain.*;
 import cn.org.bachelor.iam.acm.permission.PermissionGroup;
@@ -47,7 +47,7 @@ public class AuthorizeService implements AuthorizeServiceStub {
     private ObjOperationMapper objOperationMapper;
 
     @Resource
-    private IamDataContext valueHolder;
+    private IamContext valueHolder;
 
     private static final String DEF_AUTH_OP_ALLOW = PermissionOptions.CheckLevel.NONE.toString();
     private static final String DEF_AUTH_OP_CHECK = PermissionOptions.CheckLevel.Authorized.toString();

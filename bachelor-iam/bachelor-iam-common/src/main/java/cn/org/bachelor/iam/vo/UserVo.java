@@ -27,6 +27,7 @@ public class UserVo {
     @JsonProperty("account")
     private String code;
 
+    //20161027新增orgId
     /**
      * 用户所在组织
      */
@@ -53,16 +54,16 @@ public class UserVo {
     private String usertypeId;
     //20190328 lz 新增↓
     @JsonProperty("usertype")
-    private String usertype;
+    private String userType;
 
     @JsonProperty("usedname")
     private String usedname;
 
     @JsonProperty("idcard")
-    private String idcard;
+    private String idCard;
 
     @JsonProperty("telphone")
-    private String telphone;
+    private String telephone;
 
     @JsonProperty("email")
     private String email;
@@ -92,27 +93,22 @@ public class UserVo {
     //20190328 lz 新增↓
     private String education;
     private String degreeId;
-    //20190328 lz 新增↓
     private String degree;
     private String rankId;
-    //20190328 lz 新增↓
     private String rank;
     private String rank2Id;
-    //20190328 lz 新增↓
     private String rank2;
     private String rank3Id;
-    //20190328 lz 新增↓
     private String rank3;
     private String comment3;
     private String secretaryFlag;
     private String leaderId;
     private String positionId;
-    //20190328 lz 新增↓
     private String position;
-    private String createtime;
+    private String createTime;
 
-    //20161027新增orgId
-    private String qyUserid;
+
+    private String qyUserId;
     private String political;
     private String age;
     //base64编码的字符串，需要自己反解。
@@ -124,6 +120,18 @@ public class UserVo {
 
     @JsonProperty(value = "access_backend", access = JsonProperty.Access.WRITE_ONLY)
     private boolean accessBackend = true;
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    //2022092 lz 新增租户ID
+    @JsonProperty("tenantId")
+    private String tenantId;
 
     public boolean isAdministrator() {
         return isAdministrator;
@@ -238,20 +246,20 @@ public class UserVo {
         this.usedname = usedname;
     }
 
-    public String getIdcard() {
-        return idcard;
+    public String getIdCard() {
+        return idCard;
     }
 
-    public void setIdcard(String idcard) {
-        this.idcard = idcard;
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 
-    public String getTelphone() {
-        return telphone;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public void setTelphone(String telphone) {
-        this.telphone = telphone;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     public String getEmail() {
@@ -294,12 +302,12 @@ public class UserVo {
         this.sexName = sexName;
     }
 
-    public String getUsertype() {
-        return usertype;
+    public String getUserType() {
+        return userType;
     }
 
-    public void setUsertype(String usertype) {
-        this.usertype = usertype;
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     public String getComment1() {
@@ -430,20 +438,20 @@ public class UserVo {
         this.position = position;
     }
 
-    public String getCreatetime() {
-        return createtime;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatetime(String createtime) {
-        this.createtime = createtime;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
     public String getQyUserid() {
-        return qyUserid;
+        return qyUserId;
     }
 
-    public void setQyUserid(String qyUserid) {
-        this.qyUserid = qyUserid;
+    public void setQyUserid(String qyUserId) {
+        this.qyUserId = qyUserId;
     }
 
     public String getPolitical() {

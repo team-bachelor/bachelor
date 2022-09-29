@@ -39,6 +39,7 @@ public class JwtToken {
         public static final String ORG_CODE = "org_code";
         public static final String ACCESS_TOKEN = "accesstoken";
         public static final String IS_ADMINISTRATOR = "is_administrator";
+        public static final String TENANT_ID = "tenant_id";
     }
 
     /**

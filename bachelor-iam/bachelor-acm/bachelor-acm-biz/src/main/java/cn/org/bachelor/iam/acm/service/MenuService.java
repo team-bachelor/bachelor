@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.acm.service;
 
 import cn.org.bachelor.exception.BusinessException;
-import cn.org.bachelor.iam.IamDataContext;
+import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.acm.dao.MenuMapper;
 import cn.org.bachelor.iam.acm.dao.OrgMenuMapper;
 import cn.org.bachelor.iam.acm.dao.RoleMenuMapper;
@@ -37,7 +37,7 @@ public class MenuService {
     private MenuMapper menuMapper;
 
     @Autowired
-    private IamDataContext valueHolder;
+    private IamContext valueHolder;
 
 
     /**
