@@ -1,11 +1,11 @@
 package cn.org.bachelor.iam.acm.controller;
 
 import cn.org.bachelor.iam.acm.permission.PermissionPoint;
+import cn.org.bachelor.iam.acm.service.AuthorizeService;
+import cn.org.bachelor.web.json.JsonResponse;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import cn.org.bachelor.iam.acm.service.AuthorizeService;
-import cn.org.bachelor.web.json.JsonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;

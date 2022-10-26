@@ -120,9 +120,5 @@
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-acm-common</artifactId>
-        </dependency>
     </dependencies>
 </project>
