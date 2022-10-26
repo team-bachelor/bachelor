@@ -108,12 +108,11 @@ public class TenantSqlInterceptor implements Interceptor {
             }
         }
 
-
         String tenantId = context.getTenantId();
         setParam(tenantId, "tenantId", parameterObject, paramMap);
 
         String orgId = context.getOrgId();
-        setParam(orgId, "orgId", parameterObject, paramMap);
+        setParam(orgId, "orgCode", parameterObject, paramMap);
         return paramMap;
     }
 

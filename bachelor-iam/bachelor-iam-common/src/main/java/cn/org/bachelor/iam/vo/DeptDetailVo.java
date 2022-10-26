@@ -12,6 +12,7 @@ public class DeptDetailVo {
     private String pid;
     private String orgId;
     private String depttypeId;
+    private String areaId;
     private String depttype;
     private String postcode;
     private String telphone;
@@ -123,5 +124,13 @@ public class DeptDetailVo {
 
     public void setDepttype(String depttype) {
         this.depttype = depttype;
+    }
+
+    public String getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
     }
 }
