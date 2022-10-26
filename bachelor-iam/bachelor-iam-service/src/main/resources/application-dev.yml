@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    ##测试服
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+    username: root
+    password: Aa123456
+bachelor:
+  iam:
+  ########################################↓权限配置↓########################################
+    client:
+      id: 8872cb73cb054676aeeadfe97f0ba400
+      secret: 01bd345836644d3780cb0d4db17689af
+  ########################################↑权限配置↑########################################

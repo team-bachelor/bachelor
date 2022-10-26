@@ -1,0 +1,2 @@
+ALTER TABLE `cmn_acm_menu` 
+ADD COLUMN `GROUP_NAME` varchar(10) NULL COMMENT '菜单分组' AFTER `PARENT_ID`;

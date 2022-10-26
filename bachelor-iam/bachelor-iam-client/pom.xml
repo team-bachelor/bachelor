@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.org.bachelor</groupId>
+        <artifactId>bachelor-iam</artifactId>
+        <version>2.2.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>bachelor-iam-client</artifactId>
+    <packaging>jar</packaging>
+    <name>bachelor-iam-client</name>
+    <properties>
+        <skipTests>true</skipTests>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>cn.org.bachelor</groupId>
+            <artifactId>bachelor-acm-common</artifactId>
+            <version>2.2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.org.bachelor</groupId>
+            <artifactId>bachelor-iam-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.org.bachelor</groupId>
+            <artifactId>bachelor-fw-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-openfeign-core</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory><!--所在的目录-->
+                <includes><!--包括目录下的.properties,.xml文件都会扫描到-->
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+    </build>
+
+
+</project>
