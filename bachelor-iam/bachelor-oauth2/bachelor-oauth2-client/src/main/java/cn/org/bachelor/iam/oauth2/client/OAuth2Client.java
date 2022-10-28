@@ -544,11 +544,11 @@ public class OAuth2Client {
     }
     
     private String getJsonValue(JSONObject json,String key){
-		JSONObject ele = json.getJSONObject(key);
-    	if(ele==null) {
+		String ele = json.getString(key);
+    	if(ele==null || ele.isEmpty()) {
 			return "";
 		}
-    	return ele.isEmpty()?"":ele.toJSONString();
+    	return ele;
     }
 
 	/*

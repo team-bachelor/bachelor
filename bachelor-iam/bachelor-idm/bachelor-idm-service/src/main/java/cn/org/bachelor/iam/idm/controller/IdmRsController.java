@@ -133,6 +133,13 @@ public class IdmRsController {
         return JsonResponse.createHttpEntity(permg);
     }
 
+    @ApiOperation(value = "为当前用户登出系统")
+    @RequestMapping(value = "/dept/detail", method = RequestMethod.GET)
+    public ResponseEntity<JsonResponse> searchDept(@RequestParam("id") String deptId) {
+        logger.info("deptId {}", deptId);
+        return JsonResponse.createHttpEntity(userSysService.findDeptDetail(deptId), HttpStatus.OK);
+    }
+
     @ApiOperation(value = "获得机构列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "机构ID", paramType = "query", required = true),

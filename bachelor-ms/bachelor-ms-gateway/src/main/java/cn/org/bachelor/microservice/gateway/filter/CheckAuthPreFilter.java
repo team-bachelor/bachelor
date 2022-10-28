@@ -10,6 +10,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.annotation.Order;
@@ -26,7 +27,6 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.annotation.Resource;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -42,7 +42,7 @@ import java.util.Map;
 public class CheckAuthPreFilter implements GlobalFilter {
     private static final Logger logger = LoggerFactory.getLogger(CheckAuthPreFilter.class);
 
-    @Resource
+    @Autowired(required = false)
     private ITenantIdProvider tenantIdProvider;
 //    @Autowired
 //    private AuthorizeService authorizeService;
