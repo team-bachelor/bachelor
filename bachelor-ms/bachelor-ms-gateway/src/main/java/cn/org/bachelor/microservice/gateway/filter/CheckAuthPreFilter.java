@@ -4,6 +4,7 @@ import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.microservice.gateway.service.ITenantIdProvider;
 import cn.org.bachelor.web.json.JsonResponse;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
@@ -119,6 +120,7 @@ public class CheckAuthPreFilter implements GlobalFilter {
                         .header(JwtToken.PayloadKey.ACCESS_TOKEN,
                                 getTokenClaim(tokenClaims, JwtToken.PayloadKey.ACCESS_TOKEN, false))
                         .build();
+                logger.info("build header complete: " + JSONObject.toJSONString(request.getHeaders()));
             } else {
                 pass = false;
             }

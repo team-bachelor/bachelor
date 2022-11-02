@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package cn.org.bachelor.iam.oauth2.client;
 
@@ -50,69 +50,69 @@ public class OAuth2Client {
     public static final String defaultConfigFileName = "OAuth2-config.properties";
     private static Logger logger = LoggerFactory.getLogger(OAuth2Client.class);
 
-	private SignSecurityOAuthClient oAuthClient;
+    private SignSecurityOAuthClient oAuthClient;
 
-	public OAuth2Client(OAuth2CientConfig config, HttpServletRequest request2,
-						HttpServletResponse response2) {
-		this.config=config;
-		this.request=request2;
-		this.response=response2;
-		this.url=request.getRequestURL().toString();
-		this.oAuthClient = new SignSecurityOAuthClient(new URLConnectionClient());
-	}
+    public OAuth2Client(OAuth2CientConfig config, HttpServletRequest request2,
+                        HttpServletResponse response2) {
+        this.config = config;
+        this.request = request2;
+        this.response = response2;
+        this.url = request.getRequestURL().toString();
+        this.oAuthClient = new SignSecurityOAuthClient(new URLConnectionClient());
+    }
 
-	/**
-	 * 获取授权码
-	 * @return
-	 */
-	public String getAuthrizationCode() {
+    /**
+     * 获取授权码
+     * @return
+     */
+    public String getAuthrizationCode() {
 //		logger.info("进入getAuthrizationCode");
-		String code=request.getParameter("code");
-		boolean isRedirectURL = isRedirectURL();
-		logger.info("进入getAuthrizationCode，code="+code + "，isRedirectURL=" + isRedirectURL);
-		if(!isRedirectURL){
+        String code = request.getParameter("code");
+        boolean isRedirectURL = isRedirectURL();
+        logger.info("进入getAuthrizationCode，code=" + code + "，isRedirectURL=" + isRedirectURL);
+        if (!isRedirectURL) {
 //			return null;
-		}
-		return code;
-	}
+        }
+        return code;
+    }
 
-	/**
-	 * 获取phone_id
-	 * @return
-	 */
-	public String getPhoneId() {
+    /**
+     * 获取phone_id
+     * @return
+     */
+    public String getPhoneId() {
 //		logger.info("getPhoneId");
-		String phoneId=request.getParameter("phone_id");
-		logger.info("getPhoneId，phone_id="+phoneId);
-		return phoneId;
-	}
+        String phoneId = request.getParameter("phone_id");
+        logger.info("getPhoneId，phone_id=" + phoneId);
+        return phoneId;
+    }
 
-	private boolean isRedirectURL() {
-		logger.info("isRedirectURL()  url=" + url + ", config.redirecturl=" + config.getLoginRedirectURL());
-		if(url.equals(config.getLoginRedirectURL())){
-			return true;
-		}else if(!config.getLoginRedirectURL().endsWith("/")){
-			return url.equals(config.getLoginRedirectURL()+"/");
-		}
-		return false;
-	}
+    private boolean isRedirectURL() {
+        logger.info("isRedirectURL()  url=" + url + ", config.redirecturl=" + config.getLoginRedirectURL());
+        if (url.equals(config.getLoginRedirectURL())) {
+            return true;
+        } else if (!config.getLoginRedirectURL().endsWith("/")) {
+            return url.equals(config.getLoginRedirectURL() + "/");
+        }
+        return false;
+    }
 
 
-	/**
-	 * 引导用户授权
-	 * @throws IOException 
-	 */
-	public void toGetAuthrizationCode() throws IOException {
-		toGetAuthrizationCode(null);
-	}
+    /**
+     * 引导用户授权
+     * @throws IOException
+     */
+    public void toGetAuthrizationCode() throws IOException {
+        toGetAuthrizationCode(null);
+    }
 
-	/**
-	 * 引导用户授权
-	 * @throws IOException 
-	 */
-	public void toGetAuthrizationCode(HttpServletRequest request) throws IOException {
-		logger.info("进入toGetAuthrizationCode");
-		String phoneId = getPhoneId();
+    /**
+     * 引导用户授权
+     * @throws IOException
+     */
+    public void toGetAuthrizationCode(HttpServletRequest request) throws IOException {
+        logger.info("进入toGetAuthrizationCode");
+        String phoneId = getPhoneId();
 //		StringBuffer originalURL=new StringBuffer(url);
 //		String quering=getParamUrl(request,request.getCharacterEncoding(),null);
 //		if(quering.length()>0){
@@ -161,81 +161,81 @@ public class OAuth2Client {
         logger.info("退出toGetAuthrizationCode，url=" + _url);
     }
 
-	public String refreshAccessToken(String currentRefreshToken){
-		String accessToken = "";
-		String refreshToken = "";
-		String expiration = "";
-		logger.info("refresh accesstoken,{}",refreshToken);
-		try {
-			TokenRequestBuilder builder = DefaultOAuthRequest
-							.tokenLocation(config.getAsURL().getAccessToken())
-							.setGrantType(GrantType.REFRESH_TOKEN)
-							.setClientId(config.getId())
-							.setClientSecret(config.getSecret())
-							.setRefreshToken(currentRefreshToken)
-							.setRedirectURI(config.getLoginRedirectURL());
-			DefaultOAuthRequest accessTokenRequest = builder.buildQueryMessage();
-			logger.info("call access_token_url to refreshtoken接口" + builder);
-			OAuthAccessTokenResponse oAuthResponse = oAuthClient.accessToken(accessTokenRequest, OAuthConstant.HttpMethod.POST);
-			accessToken = oAuthResponse.getAccessToken();
-			refreshToken = oAuthResponse.getRefreshToken();
-			expiration = oAuthResponse.getExpiration();
-		}catch (OAuthBusinessException e) {
-			logger.error("获取令牌信息错误=======>",e);
-			throw new GetAccessTokenException(e.getDescription());
-		} catch (Exception e) {
-			logger.error("获取令牌信息错误=======>",e);
-			throw new GetAccessTokenException(e);
-		}
+    public String refreshAccessToken(String currentRefreshToken) {
+        String accessToken = "";
+        String refreshToken = "";
+        String expiration = "";
+        logger.info("refresh accesstoken,{}", refreshToken);
+        try {
+            TokenRequestBuilder builder = DefaultOAuthRequest
+                    .tokenLocation(config.getAsURL().getAccessToken())
+                    .setGrantType(GrantType.REFRESH_TOKEN)
+                    .setClientId(config.getId())
+                    .setClientSecret(config.getSecret())
+                    .setRefreshToken(currentRefreshToken)
+                    .setRedirectURI(config.getLoginRedirectURL());
+            DefaultOAuthRequest accessTokenRequest = builder.buildQueryMessage();
+            logger.info("call access_token_url to refreshtoken接口" + builder);
+            OAuthAccessTokenResponse oAuthResponse = oAuthClient.accessToken(accessTokenRequest, OAuthConstant.HttpMethod.POST);
+            accessToken = oAuthResponse.getAccessToken();
+            refreshToken = oAuthResponse.getRefreshToken();
+            expiration = oAuthResponse.getExpiration();
+        } catch (OAuthBusinessException e) {
+            logger.error("获取令牌信息错误=======>", e);
+            throw new GetAccessTokenException(e.getDescription());
+        } catch (Exception e) {
+            logger.error("获取令牌信息错误=======>", e);
+            throw new GetAccessTokenException(e);
+        }
 
-		String openId = "";
-		String userId = "";
-		String personStr;
-		try{
-			String userInfoUrl = config.getAsURL().getUserInfo();
-			DefaultOAuthResourceRequest userInfoRequest = new DefaultOAuthResourceRequest(userInfoUrl, OAuthConstant.HttpMethod.GET);
-			userInfoRequest.setAccessToken(accessToken);
-			OAuthResourceResponse resourceResponse = oAuthClient.resource(userInfoRequest, OAuthResourceResponse.class);
-			personStr = resourceResponse.getBody();
-			person = JSONObject.parseObject(personStr);
-			logger.info("去调用用户信息接口方法  person:" + person);
-			openId = this.getJsonValue(person, "openId");
-			userId = this.getJsonValue(person, "userId");
-		} catch (Exception e) {
-			logger.error("获取用户基本信息错误=======>", e);
-			throw new GetUserInfoException(e);
-		}
-		request.getSession().setAttribute(ClientConstant.UP_USER, personStr);
-		request.getSession().setAttribute(ClientConstant.UP_USER_ID, userId);
-		request.getSession().setAttribute(ClientConstant.UP_OPEN_ID, openId);
-		request.getSession().setAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY, new OAuth2ClientCertification(userId, accessToken, refreshToken, expiration));
-		ClientUtil.setSession(request.getSession());
+        String openId = "";
+        String userId = "";
+        String personStr;
+        try {
+            String userInfoUrl = config.getAsURL().getUserInfo();
+            DefaultOAuthResourceRequest userInfoRequest = new DefaultOAuthResourceRequest(userInfoUrl, OAuthConstant.HttpMethod.GET);
+            userInfoRequest.setAccessToken(accessToken);
+            OAuthResourceResponse resourceResponse = oAuthClient.resource(userInfoRequest, OAuthResourceResponse.class);
+            personStr = resourceResponse.getBody();
+            person = JSONObject.parseObject(personStr);
+            logger.info("去调用用户信息接口方法  person:" + person);
+            openId = this.getJsonValue(person, "openId");
+            userId = this.getJsonValue(person, "userId");
+        } catch (Exception e) {
+            logger.error("获取用户基本信息错误=======>", e);
+            throw new GetUserInfoException(e);
+        }
+        request.getSession().setAttribute(ClientConstant.UP_USER, personStr);
+        request.getSession().setAttribute(ClientConstant.UP_USER_ID, userId);
+        request.getSession().setAttribute(ClientConstant.UP_OPEN_ID, openId);
+        request.getSession().setAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY, new OAuth2ClientCertification(userId, accessToken, refreshToken, expiration));
+        ClientUtil.setSession(request.getSession());
 
-		logger.info("当前登录用户 userId:"+ ClientUtil.getCurrentUserId());
-		logger.info("登录后的令牌信息：" + request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY));
-		return person.toString();
-	}
+        logger.info("当前登录用户 userId:" + ClientUtil.getCurrentUserId());
+        logger.info("登录后的令牌信息：" + request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY));
+        return person.toString();
+    }
 
-	/**
-	 * 调用API获取用户信息并将用户信息绑定到会话中
-	 * @param authrizationCode
-	 * @return
-	 * @throws Exception 
-	 */
-	public String bindUserInfo(String authrizationCode) {
-		logger.info("去调用用户信息接口方法");
-		String accessToken = "";
-		String refreshToken = "";
-		String expiration = "";
-		try {
-			TokenRequestBuilder builder = DefaultOAuthRequest
-				.tokenLocation(config.getAsURL().getAccessToken())
-				.setGrantType(GrantType.AUTHORIZATION_CODE)
-				.setClientId(config.getId())
-				.setClientSecret(config.getSecret())
-				.setCode(authrizationCode)
-				.setRedirectURI(config.getLoginRedirectURL());
-			DefaultOAuthRequest accessTokenRequest = builder.buildQueryMessage();
+    /**
+     * 调用API获取用户信息并将用户信息绑定到会话中
+     * @param authrizationCode
+     * @return
+     * @throws Exception
+     */
+    public String bindUserInfo(String authrizationCode) {
+        logger.info("去调用用户信息接口方法");
+        String accessToken = "";
+        String refreshToken = "";
+        String expiration = "";
+        try {
+            TokenRequestBuilder builder = DefaultOAuthRequest
+                    .tokenLocation(config.getAsURL().getAccessToken())
+                    .setGrantType(GrantType.AUTHORIZATION_CODE)
+                    .setClientId(config.getId())
+                    .setClientSecret(config.getSecret())
+                    .setCode(authrizationCode)
+                    .setRedirectURI(config.getLoginRedirectURL());
+            DefaultOAuthRequest accessTokenRequest = builder.buildQueryMessage();
 
             logger.info("======去调用access_token_url接口，参数：" + builder);
             OAuthAccessTokenResponse oAuthResponse = oAuthClient.accessToken(accessTokenRequest, OAuthConstant.HttpMethod.POST);
@@ -269,7 +269,7 @@ public class OAuth2Client {
             person = JSONObject.parseObject(personStr);
 
 
-			logger.info("去调用用户信息接口方法  person:" + person);
+            logger.info("去调用用户信息接口方法  person:" + person);
 
             openId = this.getJsonValue(person, "openId");
             userId = this.getJsonValue(person, "userId");
@@ -307,7 +307,7 @@ public class OAuth2Client {
 			logger.error("获取用户邮箱 电话 错误=======>",e);
 			throw new GetUserInfoException(e);
 		}*/
-		//检验 email  and  tel   ------------end
+        //检验 email  and  tel   ------------end
 //		request.getSession().setAttribute(UpClientConstant.UPUSER, new MJsonObject(person));
         request.getSession().setAttribute(ClientConstant.UP_USER, personStr);
         request.getSession().setAttribute(ClientConstant.UP_USER_ID, userId);
@@ -320,55 +320,55 @@ public class OAuth2Client {
         request.getSession().setAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY, new OAuth2ClientCertification(userId, accessToken, refreshToken, expiration));
         ClientUtil.setSession(request.getSession());
 
-		logger.info("当前登录用户 userId:"+ ClientUtil.getCurrentUserId());
-		logger.info("登录后的令牌信息：" + request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY));
-		return person.toString();
-	}
+        logger.info("当前登录用户 userId:" + ClientUtil.getCurrentUserId());
+        logger.info("登录后的令牌信息：" + request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY));
+        return person.toString();
+    }
 
-	/**
-	 * 获取当前用户ID
-	 * @return
-	 */
-	public String getUserId() {
-		return (String)request.getSession().getAttribute(ClientConstant.UP_USER_ID);
-	}
+    /**
+     * 获取当前用户ID
+     * @return
+     */
+    public String getUserId() {
+        return (String) request.getSession().getAttribute(ClientConstant.UP_USER_ID);
+    }
 
-	/**
-	 * 是否从OAuth2认证服务器返回的请求，一般情况为出错了
-	 * @return
-	 */
-	public boolean isCallback() {
-		if(isRedirectURL()){
-			String error=request.getParameter("error");
-			if(error!=null){
-				return true;
-			}
-		}
-		return false;
-	}
+    /**
+     * 是否从OAuth2认证服务器返回的请求，一般情况为出错了
+     * @return
+     */
+    public boolean isCallback() {
+        if (isRedirectURL()) {
+            String error = request.getParameter("error");
+            if (error != null) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public HttpServletRequest request() {
-		return new OAuth2RequestWrapper(request);
-	}
+    public HttpServletRequest request() {
+        return new OAuth2RequestWrapper(request);
+    }
 
-	class OAuth2RequestWrapper extends HttpServletRequestWrapper {
-	    public OAuth2RequestWrapper(HttpServletRequest request) {
-	        super(request);
-	    }
+    class OAuth2RequestWrapper extends HttpServletRequestWrapper {
+        public OAuth2RequestWrapper(HttpServletRequest request) {
+            super(request);
+        }
 
-	    @Override
-		public String getRemoteUser() {
-	        return getUserId();
-	    }
-	}
+        @Override
+        public String getRemoteUser() {
+            return getUserId();
+        }
+    }
 
-	private String getParamUrl(HttpServletRequest request, String encoding, List exceptPramList){
+    private String getParamUrl(HttpServletRequest request, String encoding, List exceptPramList) {
         Enumeration paramNames = request.getParameterNames();
         StringBuffer query = new StringBuffer();
         try {
             while (paramNames.hasMoreElements()) {
                 String param = (String) paramNames.nextElement();
-                if(exceptPramList!=null && exceptPramList.contains(param)){
+                if (exceptPramList != null && exceptPramList.contains(param)) {
                     continue;
                 }
                 String[] values = request.getParameterValues(param);
@@ -398,32 +398,32 @@ public class OAuth2Client {
         return query.toString();
     }
 
-	public boolean toOriginalURL() throws Exception {
-		String originalURL=(String) request.getSession().getAttribute(ClientConstant.ORIGINAL_URL);
-		logger.debug("SSOClient toOriginalURL:"+originalURL);
-		if(originalURL!=null){
-			response.sendRedirect(originalURL);
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	public boolean toTargetURL() throws Exception {
-		if(config.isToLoginRedirectURL()){
-			response.sendRedirect(config.getLoginRedirectURL());
-			return true;
-		}
-		String targetURL = (String) request.getParameter("target_url");
-		logger.info("去访问targetURL:" + targetURL);
-		if (targetURL != null) {
-			response.sendRedirect(targetURL);
-			return true;
-		}
-		return false;
-	}
+    public boolean toOriginalURL() throws Exception {
+        String originalURL = (String) request.getSession().getAttribute(ClientConstant.ORIGINAL_URL);
+        logger.debug("SSOClient toOriginalURL:" + originalURL);
+        if (originalURL != null) {
+            response.sendRedirect(originalURL);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	//新增跳转代码-----------star
+    public boolean toTargetURL() throws Exception {
+        if (config.isToLoginRedirectURL()) {
+            response.sendRedirect(config.getLoginRedirectURL());
+            return true;
+        }
+        String targetURL = (String) request.getParameter("target_url");
+        logger.info("去访问targetURL:" + targetURL);
+        if (targetURL != null) {
+            response.sendRedirect(targetURL);
+            return true;
+        }
+        return false;
+    }
+
+    //新增跳转代码-----------star
 	/*public boolean prefect() throws Exception{
 		String prefect = (String) request.getAttribute("prefect");
 		if(prefect != null){
@@ -432,40 +432,40 @@ public class OAuth2Client {
 		}
 		return false;
 	}*/
-	//新增跳转代码-----------end
+    //新增跳转代码-----------end
 
 
-	public boolean isExcluded(String patterns) {
-		if(urlExpProcessor==null){
-			urlExpProcessor=new UrlExpProcessor(patterns);
-		}
-		boolean result = urlExpProcessor.match(this.url);
-		logger.info("进入isExcluded()========>" + urlExpProcessor.getPattern() + ", " + result);
-		return result;
-	}
-	
-	public boolean isExcluded(String except_urlpattern, String except_param, HttpServletRequest request) {
-		logger.info("进入isExcluded()========>");
-		if(except_param != null && !"".equals(except_param)) {
-			int idx = except_param.indexOf("=");
-			if(idx > 0) {
-				String name = except_param.substring(0,idx);
-				String value = except_param.substring(idx+1);
-				String value_param = request.getParameter(name);
-				logger.info("name=" + name + ",value=" + value + ",request:" + value_param);
-				if(value.equals(value_param)) {
-					return true;
-				}
-			}
-		}
-		
-		if(urlExpProcessor==null){
-			urlExpProcessor=new UrlExpProcessor(except_urlpattern);
-		}
-		boolean result = urlExpProcessor.match(this.url);
-		logger.info(urlExpProcessor.getPattern() + ", " + result);
-		return result;
-	}
+    public boolean isExcluded(String patterns) {
+        if (urlExpProcessor == null) {
+            urlExpProcessor = new UrlExpProcessor(patterns);
+        }
+        boolean result = urlExpProcessor.match(this.url);
+        logger.info("进入isExcluded()========>" + urlExpProcessor.getPattern() + ", " + result);
+        return result;
+    }
+
+    public boolean isExcluded(String except_urlpattern, String except_param, HttpServletRequest request) {
+        logger.info("进入isExcluded()========>");
+        if (except_param != null && !"".equals(except_param)) {
+            int idx = except_param.indexOf("=");
+            if (idx > 0) {
+                String name = except_param.substring(0, idx);
+                String value = except_param.substring(idx + 1);
+                String value_param = request.getParameter(name);
+                logger.info("name=" + name + ",value=" + value + ",request:" + value_param);
+                if (value.equals(value_param)) {
+                    return true;
+                }
+            }
+        }
+
+        if (urlExpProcessor == null) {
+            urlExpProcessor = new UrlExpProcessor(except_urlpattern);
+        }
+        boolean result = urlExpProcessor.match(this.url);
+        logger.info(urlExpProcessor.getPattern() + ", " + result);
+        return result;
+    }
 
     public boolean isLogin() {
         boolean flag = false;
@@ -513,8 +513,8 @@ public class OAuth2Client {
                 }
             }
             if (my == null) {
-				return null;
-			}
+                return null;
+            }
             byte[] b = my.getValue().getBytes(ClientConstant.DEFAULT_CHARSET);
             b = new Base64().decode(b);
             String access = new String(b, ClientConstant.DEFAULT_CHARSET);
@@ -537,69 +537,66 @@ public class OAuth2Client {
             try {
                 req.getSession(false).invalidate();
             } catch (IllegalStateException e) {
-            	logger.debug("tockens invalid,please login again!");
+                logger.debug("tockens invalid,please login again!");
             }
-    	}
-    	return false;
-    }
-    
-    private String getJsonValue(JSONObject json,String key){
-		String ele = json.getString(key);
-    	if(ele==null || ele.isEmpty()) {
-			return "";
-		}
-    	return ele;
+        }
+        return false;
     }
 
-	/*
-	 * 判断访问令牌是否过期
-	 * @param accessToken
-	 * @return
-	 */
-	private boolean accessTokenValid(OAuth2ClientCertification my) {
+    private String getJsonValue(JSONObject json, String key) {
+        String ele = json.getString(key);
+        return ele == null ? "" : ele;
+    }
 
-		String expiration = my.getExpiresTime();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date expirateionDate = null;
-		try {
-			expirateionDate = sdf.parse(expiration);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+    /*
+     * 判断访问令牌是否过期
+     * @param accessToken
+     * @return
+     */
+    private boolean accessTokenValid(OAuth2ClientCertification my) {
 
-		if(my.getAccessToken()!=null && !my.getAccessToken().equals("") && (expirateionDate.getTime()-System.currentTimeMillis()>0)){
-			return true;
-		}
-		return false;
-	}
+        String expiration = my.getExpiresTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date expirateionDate = null;
+        try {
+            expirateionDate = sdf.parse(expiration);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-	/**
-	 * 获取state
-	 * @param request
-	 * @return
-	 */
-	private String getState(HttpServletRequest request) {
-		String state = StateGenerator.genStateCode();
-		HttpSession session = request.getSession(true);
-		session.setAttribute(ClientConstant.OAUTH_STATE, state);
-		return state;
-	}
+        if (my.getAccessToken() != null && !my.getAccessToken().equals("") && (expirateionDate.getTime() - System.currentTimeMillis() > 0)) {
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * 验证state是否相同
-	 * @param request
-	 * @return
-	 */
-	public boolean isValidState(HttpServletRequest request) {
-		HttpSession session = request.getSession(true);
-		Object so = session.getAttribute(ClientConstant.OAUTH_STATE);
-		if (StringUtils.isEmpty(so)) {
-			return true;
-		} else if (so.toString().equals(request.getParameter(OAUTH_CB_STATE))) {
-			session.removeAttribute(ClientConstant.OAUTH_STATE);
-			return true;
-		}
-		return false;
-	}
+    /**
+     * 获取state
+     * @param request
+     * @return
+     */
+    private String getState(HttpServletRequest request) {
+        String state = StateGenerator.genStateCode();
+        HttpSession session = request.getSession(true);
+        session.setAttribute(ClientConstant.OAUTH_STATE, state);
+        return state;
+    }
+
+    /**
+     * 验证state是否相同
+     * @param request
+     * @return
+     */
+    public boolean isValidState(HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
+        Object so = session.getAttribute(ClientConstant.OAUTH_STATE);
+        if (StringUtils.isEmpty(so)) {
+            return true;
+        } else if (so.toString().equals(request.getParameter(OAUTH_CB_STATE))) {
+            session.removeAttribute(ClientConstant.OAUTH_STATE);
+            return true;
+        }
+        return false;
+    }
 
 }

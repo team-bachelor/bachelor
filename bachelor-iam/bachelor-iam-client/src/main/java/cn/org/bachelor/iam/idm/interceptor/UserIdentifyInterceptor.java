@@ -1,6 +1,5 @@
 package cn.org.bachelor.iam.idm.interceptor;
 
-
 import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.vo.UserVo;
@@ -62,7 +61,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
         if (logger.isDebugEnabled()) {
             ObjectMapper m = new ObjectMapper();
             try {
-                logger.debug("HEADER用户登录信息：" + m.writeValueAsString(user));
+                logger.debug("user info assembly: " + m.writeValueAsString(user));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -86,7 +85,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
                 if (logger.isDebugEnabled()) {
                     ObjectMapper m = new ObjectMapper();
                     try {
-                        logger.debug("SESSION用户登录信息：" + m.writeValueAsString(user));
+                        logger.debug("user info in session: " + m.writeValueAsString(user));
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
                     }

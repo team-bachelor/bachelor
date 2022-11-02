@@ -55,10 +55,10 @@ public class IdentifyInterceptor extends HandlerInterceptorAdapter {
         Object o = request.getAttribute(ACCESS_BACKEND);
         user.setAccessBackend(!(o != null && "N".equals(o.toString())));
 
-        if (logger.isDebugEnabled()) {
+        if (logger.isInfoEnabled()) {
             ObjectMapper m = new ObjectMapper();
             try {
-                logger.debug("HEADER用户登录信息：" + m.writeValueAsString(user));
+                logger.info("user info assembly: " + m.writeValueAsString(user));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -79,10 +79,10 @@ public class IdentifyInterceptor extends HandlerInterceptorAdapter {
                 user.setOrgName(orgName);
                 user.setDeptId(deptId);
                 user.setDeptName(deptName);
-                if (logger.isDebugEnabled()) {
+                if (logger.isInfoEnabled()) {
                     ObjectMapper m = new ObjectMapper();
                     try {
-                        logger.debug("SESSION用户登录信息：" + m.writeValueAsString(user));
+                        logger.info("user info in session: " + m.writeValueAsString(user));
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
                     }

@@ -1,13 +1,13 @@
 spring:
   datasource:
     ##测试服
-    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://10.0.139.239:3306/eprs_acm?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
     username: root
-    password: Aa123456
+    password: root
 bachelor:
   iam:
   ########################################↓权限配置↓########################################
     client:
-      id: 8872cb73cb054676aeeadfe97f0ba400
-      secret: 01bd345836644d3780cb0d4db17689af
+      id: 933b976e95134c8bac99f6e7d80a6feb
+      secret: 18ee1e6f395b4b2dad8609bd220dd7e9
   ########################################↑权限配置↑########################################
