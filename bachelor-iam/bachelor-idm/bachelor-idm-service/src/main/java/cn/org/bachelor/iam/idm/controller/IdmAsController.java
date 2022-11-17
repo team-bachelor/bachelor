@@ -2,7 +2,7 @@ package cn.org.bachelor.iam.idm.controller;
 
 import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.iam.IamConstant;
-import cn.org.bachelor.iam.IamConfig;
+import cn.org.bachelor.iam.IamProperties;
 import cn.org.bachelor.iam.idm.service.DefaultImSysService;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
 import cn.org.bachelor.iam.oauth2.utils.StringUtils;
@@ -51,7 +51,7 @@ public class IdmAsController {
     private DefaultImSysService userSysService;
 
     @Autowired
-    private IamConfig authConfig;
+    private IamProperties authConfig;
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 

@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.acm.interceptor;
 
 
-import cn.org.bachelor.iam.IamConfig;
+import cn.org.bachelor.iam.IamProperties;
 import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.service.AuthorizeServiceStub;
@@ -40,7 +40,7 @@ public class UserAccessControlInterceptor extends HandlerInterceptorAdapter {
     private AuthorizeServiceStub authorizeService;
 
     @Resource
-    private IamConfig iamConfig;
+    private IamProperties iamProperties;
 
 //    @Resource
 //    private OAuth2CientConfig clientConfig;
@@ -81,8 +81,8 @@ public class UserAccessControlInterceptor extends HandlerInterceptorAdapter {
         if (!pass) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             try {
-                if (!iamConfig.isJsonResponse()) {
-                    response.sendRedirect(iamConfig.getLoginURL());
+                if (!iamProperties.isJsonResponse()) {
+                    response.sendRedirect(iamProperties.getLoginURL());
                     return false;
                 }
                 PrintWriter pw = response.getWriter();

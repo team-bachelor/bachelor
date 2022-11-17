@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.service;
 
-import cn.org.bachelor.iam.IamConfig;
+import cn.org.bachelor.iam.IamProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 public class IamServiceConfig implements WebMvcConfigurer {
 
     @Resource
-    private IamConfig config;
+    private IamProperties config;
 
     /**
      * @return 访问控制拦截器

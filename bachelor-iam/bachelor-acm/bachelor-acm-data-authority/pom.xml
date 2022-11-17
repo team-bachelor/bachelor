@@ -15,6 +15,12 @@
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-fw-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-autoconfigure</artifactId>
+            <version>2.2.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <properties>
