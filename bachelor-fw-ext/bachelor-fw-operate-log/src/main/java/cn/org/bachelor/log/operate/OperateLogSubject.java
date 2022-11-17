@@ -7,6 +7,11 @@ public class OperateLogSubject {
     private String dataBase;
     private String subject;
 
+    public OperateLogSubject(String dataBase, String subject) {
+        this.dataBase = dataBase;
+        this.subject = subject;
+    }
+
     public String getDataBase() {
         return dataBase;
     }
