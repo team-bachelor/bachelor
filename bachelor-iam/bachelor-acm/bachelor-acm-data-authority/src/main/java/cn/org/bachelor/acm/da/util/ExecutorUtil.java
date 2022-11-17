@@ -1,7 +1,7 @@
-package cn.org.bachelor.idm.tenant.util;
+package cn.org.bachelor.acm.da.util;
 
 import cn.org.bachelor.exception.SystemException;
-import cn.org.bachelor.idm.tenant.Dialect;
+import cn.org.bachelor.acm.da.Dialect;
 //import com.github.pagehelper.BoundSqlInterceptor.Chain;
 //import com.github.pagehelper.BoundSqlInterceptor.Type;
 import java.lang.reflect.Field;

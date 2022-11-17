@@ -1,4 +1,4 @@
-package cn.org.bachelor.idm.tenant.util;
+package cn.org.bachelor.acm.da.util;
 
 import cn.org.bachelor.exception.SystemException;
 import org.apache.ibatis.reflection.MetaObject;

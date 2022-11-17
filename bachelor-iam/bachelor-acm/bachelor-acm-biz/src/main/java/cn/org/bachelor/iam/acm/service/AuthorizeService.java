@@ -105,8 +105,8 @@ public class AuthorizeService implements AuthorizeServiceStub {
 
         Map<String, PermissionPoint> result = new HashMap<>();
         boolean isadmin = false;
-        if (userCode.equals(valueHolder.getCurrentUser().getCode())
-                && valueHolder.getCurrentUser().isAdministrator()) {
+        if (userCode.equals(valueHolder.getLogonUser().getCode())
+                && valueHolder.getLogonUser().isAdministrator()) {
             isadmin = true;
         }
         List<RolePermission> rpList;
@@ -241,7 +241,7 @@ public class AuthorizeService implements AuthorizeServiceStub {
             } else {
                 //如果不存在则插入数据库
                 String userId = "system";
-                UserVo userVo = valueHolder.getCurrentUser();
+                UserVo userVo = valueHolder.getLogonUser();
                 if (userVo != null && StringUtils.isNotEmpty(userVo.getCode())) {
                     userId = userVo.getCode();
                 }
@@ -313,7 +313,7 @@ public class AuthorizeService implements AuthorizeServiceStub {
             } else {
                 //如果不存在则插入数据库
                 String userId = "system";
-                UserVo userVo = valueHolder.getCurrentUser();
+                UserVo userVo = valueHolder.getLogonUser();
                 if (userVo == null || StringUtils.isEmpty(userVo.getCode())) {
                     userId = userVo.getCode();
                 }

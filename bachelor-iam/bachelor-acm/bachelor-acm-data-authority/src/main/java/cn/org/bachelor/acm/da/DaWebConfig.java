@@ -1,6 +1,6 @@
-package cn.org.bachelor.idm.tenant;
+package cn.org.bachelor.acm.da;
 
-import cn.org.bachelor.context.ITenantContext;
+import cn.org.bachelor.context.ILogonUserContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tk.mybatis.mapper.autoconfigure.ConfigurationCustomizer;
@@ -8,17 +8,17 @@ import tk.mybatis.mapper.autoconfigure.ConfigurationCustomizer;
 import javax.annotation.Resource;
 
 @Configuration
-public class TenantWebConfig {
+public class DaWebConfig {
 
     @Resource
-    private ITenantContext context;
+    private ILogonUserContext context;
 
     @Bean
     ConfigurationCustomizer mybatisConfigurationCustomizer() {
         return new ConfigurationCustomizer() {
             @Override
             public void customize(org.apache.ibatis.session.Configuration configuration) {
-                configuration.addInterceptor(new TenantSqlInterceptor(context));
+                configuration.addInterceptor(new DaSqlInterceptor(context));
             }
         };
     }

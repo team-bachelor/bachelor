@@ -5,9 +5,10 @@
  */
 package cn.org.bachelor.iam;
 
-import cn.org.bachelor.context.ITenantContext;
-import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.context.IContext;
+import cn.org.bachelor.context.ILogonUserContext;
+import cn.org.bachelor.iam.utils.StringUtils;
+import cn.org.bachelor.iam.vo.UserVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -16,7 +17,7 @@ import javax.annotation.Resource;
  * @author Team Bachelor
  */
 @Service
-public class IamContext implements ITenantContext {
+public class IamContext implements ILogonUserContext {
 
     @Resource
     private IContext baseContext;
@@ -27,11 +28,26 @@ public class IamContext implements ITenantContext {
         return baseContext;
     }
 
+    @Deprecated
     public void setCurrentUser(UserVo user) {
+        setLogonUser(user);
+    }
+
+    @Deprecated
+    public UserVo getCurrentUser() {
+        return getLogonUser();
+    }
+
+    public boolean isUserLogon() {
+        UserVo user = getLogonUser();
+        return user == null ? false : StringUtils.isEmpty(user.getAccessToken()) ? false : true;
+    }
+
+    public void setLogonUser(UserVo user) {
         baseContext.setRequestAttribute(IamConstant.USER_KEY, user);
     }
 
-    public UserVo getCurrentUser() {
+    public UserVo getLogonUser() {
         Object uo = baseContext.getRequestAttribute(IamConstant.USER_KEY);
         if (uo != null) {
             return (UserVo) uo;
@@ -39,8 +55,8 @@ public class IamContext implements ITenantContext {
         return null;
     }
 
-    public String getCurrentUserCode(){
-        UserVo user = getCurrentUser();
+    public String getCurrentUserCode() {
+        UserVo user = getLogonUser();
         String name = "user_unknown";
         if (user != null && user.getCode() != null) {
             name = user.getCode();
@@ -60,23 +76,5 @@ public class IamContext implements ITenantContext {
 
     public void setBaseContext(IContext baseContext) {
         this.baseContext = baseContext;
-    }
-
-    @Override
-    public String getTenantId() {
-        UserVo user = getCurrentUser();
-        if(user != null){
-            return user.getTenantId();
-        }
-        return null;
-    }
-
-    @Override
-    public String getOrgId() {
-        UserVo user = getCurrentUser();
-        if(user != null){
-            return user.getOrgId();
-        }
-        return null;
     }
 }

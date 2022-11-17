@@ -17,7 +17,7 @@ public class MockAuthValueHolderService extends IamContext {
         this.user = user;
     }
 
-    public UserVo getCurrentUser() {
+    public UserVo getLogonUser() {
         return this.user;
     }
 

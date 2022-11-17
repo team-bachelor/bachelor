@@ -124,7 +124,7 @@ public class AcmInitController {
     }
 
 //    private String getUserName() {
-//        UserVo user = valueHolder.getCurrentUser();
+//        UserVo user = valueHolder.getLogonUser();
 //        String name = "system_unknow";
 //        if (user != null && user.getCode() != null) {
 //            name = user.getCode();

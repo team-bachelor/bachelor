@@ -1,4 +1,4 @@
-package cn.org.bachelor.idm.tenant;
+package cn.org.bachelor.acm.da;
 
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.mapping.BoundSql;

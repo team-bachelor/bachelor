@@ -1,5 +1,6 @@
 package cn.org.bachelor.iam.vo;
 
+import cn.org.bachelor.context.ILogonUser;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @创建时间: 2018/11/1
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserVo {
+public class UserVo implements ILogonUser {
     /**
      * 用户ID
      */
@@ -88,6 +89,23 @@ public class UserVo {
      * 用户系统对应的用户token
      */
     private String accessToken;
+
+
+    //20220902 lz 新增租户ID
+    @JsonProperty("tenantId")
+    private String tenantId;
+
+    /**
+     * 是否是超级管理员
+     */
+    private boolean isAdministrator = false;
+
+    @JsonProperty(value = "access_backend", access = JsonProperty.Access.WRITE_ONLY)
+    private boolean accessBackend = true;
+
+    private String administrativeLevel;
+
+    /**---------------下面是扩展字段--------------------- */
     private String comment1;
     private String educationId;
     //20190328 lz 新增↓
@@ -106,20 +124,20 @@ public class UserVo {
     private String positionId;
     private String position;
     private String createTime;
-
-
     private String qyUserId;
     private String political;
     private String age;
     //base64编码的字符串，需要自己反解。
     private String picture;
-    /**
-     * 是否是超级管理员
-     */
-    private boolean isAdministrator = false;
 
-    @JsonProperty(value = "access_backend", access = JsonProperty.Access.WRITE_ONLY)
-    private boolean accessBackend = true;
+
+    public String getAdministrativeLevel() {
+        return administrativeLevel;
+    }
+
+    public void setAdministrativeLevel(String administrativeLevel) {
+        this.administrativeLevel = administrativeLevel;
+    }
 
     public String getTenantId() {
         return tenantId;
@@ -128,10 +146,6 @@ public class UserVo {
     public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
     }
-
-    //2022092 lz 新增租户ID
-    @JsonProperty("tenantId")
-    private String tenantId;
 
     public boolean isAdministrator() {
         return isAdministrator;

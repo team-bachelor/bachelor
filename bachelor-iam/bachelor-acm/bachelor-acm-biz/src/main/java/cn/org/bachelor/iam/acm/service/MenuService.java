@@ -97,7 +97,7 @@ public class MenuService {
         }
         boolean isAdmin;
         //如果是管理员则取全部菜单
-        isAdmin = userCode.equals(valueHolder.getCurrentUser().getCode()) && valueHolder.getCurrentUser().isAdministrator();
+        isAdmin = userCode.equals(valueHolder.getLogonUser().getCode()) && valueHolder.getLogonUser().isAdministrator();
         if (isAdmin) {
             return getAllMenu(group, parentId);
         } else {
@@ -196,7 +196,7 @@ public class MenuService {
             menu.setOrgCode(orgCode);
             menu.setMenuCode(m);
             menu.setUpdateTime(new Date());
-            menu.setUpdateUser(valueHolder.getCurrentUser() == null ? "unknown" : valueHolder.getCurrentUser().getCode());
+            menu.setUpdateUser(valueHolder.getLogonUser() == null ? "unknown" : valueHolder.getLogonUser().getCode());
             orgMenuMapper.insert(menu);
         }
     }
@@ -237,7 +237,7 @@ public class MenuService {
             rmenu.setRoleCode(roleCode);
             rmenu.setMenuCode(m);
             rmenu.setUpdateTime(new Date());
-            rmenu.setUpdateUser(valueHolder.getCurrentUser() == null ? "unknown" : valueHolder.getCurrentUser().getCode());
+            rmenu.setUpdateUser(valueHolder.getLogonUser() == null ? "unknown" : valueHolder.getLogonUser().getCode());
             roleMenuMapper.insert(rmenu);
         }
     }

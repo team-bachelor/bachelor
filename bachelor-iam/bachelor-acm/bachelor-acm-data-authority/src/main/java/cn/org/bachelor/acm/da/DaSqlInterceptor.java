@@ -1,8 +1,8 @@
-package cn.org.bachelor.idm.tenant;
+package cn.org.bachelor.acm.da;
 
-import cn.org.bachelor.context.ITenantContext;
-import cn.org.bachelor.idm.tenant.util.ExecutorUtil;
-import cn.org.bachelor.idm.tenant.util.MetaObjectUtil;
+import cn.org.bachelor.acm.da.util.ExecutorUtil;
+import cn.org.bachelor.acm.da.util.MetaObjectUtil;
+import cn.org.bachelor.context.ILogonUserContext;
 import org.apache.ibatis.builder.annotation.ProviderSqlSource;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
@@ -29,12 +29,12 @@ import java.util.Properties;
                 @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),
         }
 )
-public class TenantSqlInterceptor implements Interceptor {
+public class DaSqlInterceptor implements Interceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(TenantSqlInterceptor.class);
-    private ITenantContext context;
+    private static final Logger logger = LoggerFactory.getLogger(DaSqlInterceptor.class);
+    private ILogonUserContext context;
 
-    public TenantSqlInterceptor(ITenantContext context) {
+    public DaSqlInterceptor(ILogonUserContext context) {
         this.context = context;
     }
 
@@ -108,10 +108,10 @@ public class TenantSqlInterceptor implements Interceptor {
             }
         }
 
-        String tenantId = context.getTenantId();
+        String tenantId = context.getLogonUser().getTenantId();
         setParam(tenantId, "tenantId", parameterObject, paramMap);
 
-        String orgId = context.getOrgId();
+        String orgId = context.getLogonUser().getOrgId();
         setParam(orgId, "orgCode", parameterObject, paramMap);
         return paramMap;
     }

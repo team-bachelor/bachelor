@@ -96,7 +96,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
             user.setAdministrator(imSysService.checkUserIsAdmin(user));
             user.setAccessBackend(false);
         }
-        iamContext.setCurrentUser(user);
+        iamContext.setLogonUser(user);
 
         iamContext.setRemoteIP(RequestUtil.getIpAddr(request));
         return true;

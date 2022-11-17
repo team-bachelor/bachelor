@@ -39,13 +39,13 @@ public class DefaultImSysServiceTest {
                 "b6Vun3JYuUjZXMxSl1SpSA8aKRBcRT1D3hbr1ToWWNhswljgy2AolOFqfsVB2B/BvDgcaPZM2Be9qiPldqofLXMhqkFCB2BFqLTMMBVUArf4zdw8FXROLookwgRxCiM4ptkkXSLYSZEoFZVr/vyf/Xs1apL91j94h35V3yYX54aPgk="
                 //"jqdUSI0Y7Ty6eNwWIpsbyDggkyVzDjCO37jngH2BZzlCHmBqqzuSaDssoA0U8EK7ekpd2B3H8K2BpZm5pzG1L6Sd2BndGl9qdoWSeiKGjnsBIOn1WqD99AYvJAbzn57eviXI1nesP3aBkNdt2BdLzdmplhYLZFeX9p9l2BxB/SP/713k8="
         );
-        valueHolder.setCurrentUser(user);
+        valueHolder.setLogonUser(user);
 //        userSysService = new DefaultUserSysService(valueHolder);
     }
 
     //    @Test
 //    public void getUserDetail(){
-//        userSysService.findUserDetail(valueHolder.getCurrentUser().getId());
+//        userSysService.findUserDetail(valueHolder.getLogonUser().getId());
 //    }
 //
 //    @Test

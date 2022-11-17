@@ -124,7 +124,7 @@ public class DefaultImSysService implements ImSysService {
 
     @Override
     public List<RoleVo> findUserRolesInClient(String clientID, String userID, String orgID) {
-        UserVo user = valueHolder.getCurrentUser();
+        UserVo user = valueHolder.getLogonUser();
         String token = null;
         if (user != null && user.getAccessToken() != null) {
             token = user.getAccessToken();
@@ -635,7 +635,7 @@ public class DefaultImSysService implements ImSysService {
 
             String token = "";
             if (astoken == null) {
-                UserVo user = valueHolder.getCurrentUser();
+                UserVo user = valueHolder.getLogonUser();
                 if (user != null && user.getAccessToken() != null) {
                     token = user.getAccessToken();
                 }else{

@@ -13,6 +13,5 @@
     <packaging>pom</packaging>
     <modules>
         <module>bachelor-idm-service</module>
-        <module>bachelor-idm-tenant-helper</module>
     </modules>
 </project>

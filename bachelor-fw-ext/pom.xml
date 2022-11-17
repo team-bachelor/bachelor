@@ -15,5 +15,6 @@
     <modules>
         <module>bachelor-fw-cache-redis</module>
         <module>bachelor-fw-jms-rabbit</module>
+        <module>bachelor-fw-operate-log</module>
     </modules>
 </project>

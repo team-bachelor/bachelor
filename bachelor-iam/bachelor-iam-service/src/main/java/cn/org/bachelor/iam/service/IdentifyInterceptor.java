@@ -93,7 +93,7 @@ public class IdentifyInterceptor extends HandlerInterceptorAdapter {
             user.setAdministrator(imSysService.checkUserIsAdmin(user));
             user.setAccessBackend(false);
         }
-        valueHolder.setCurrentUser(user);
+        valueHolder.setLogonUser(user);
 
         valueHolder.setRemoteIP(RequestUtil.getIpAddr(request));
         return true;

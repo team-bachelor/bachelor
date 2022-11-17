@@ -32,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 
 import static cn.org.bachelor.iam.oauth2.client.util.ClientConstant.OAUTH_CB_STATE;
 
@@ -269,8 +270,8 @@ public class OAuth2Client {
             person = JSONObject.parseObject(personStr);
 
 
-            logger.info("去调用用户信息接口方法  person:" + person);
-
+            logger.info("去调用用户信息接口方法  person:" + person.toJSONString());
+//            person = JSONObject.parseObject(person.toJSONString());
             openId = this.getJsonValue(person, "openId");
             userId = this.getJsonValue(person, "userId");
             orgId = this.getJsonValue(person, "orgId");
@@ -537,13 +538,29 @@ public class OAuth2Client {
             try {
                 req.getSession(false).invalidate();
             } catch (IllegalStateException e) {
-                logger.debug("tockens invalid,please login again!");
+                logger.debug("tokens invalid,please login again!");
             }
         }
         return false;
     }
 
-    private String getJsonValue(JSONObject json, String key) {
+    public static void main(String[] args) {
+        String i = "{\"openId\":\"ZDc5NTQ3MzMzN2Q5NDlmZWIyODA0OWI5MjQxMzQxZTFANmNmZGYwMGI1NGQ0NDFiYmI3ODg5ZGM2MmNkNTA3OWI=\",\"userId\":\"d795473337d949feb28049b9241341e1\",\"username\":\"工业互联网管理员\",\"account\":\"dy_ii\"}";
+        JSONObject person = JSONObject.parseObject(i);
+
+
+        logger.info("去调用用户信息接口方法  person:" + person);
+
+        getJsonValue(person, "openId");
+        getJsonValue(person, "userId");
+        getJsonValue(person, "orgId");
+        getJsonValue(person, "userName");
+        getJsonValue(person, "orgName");
+        getJsonValue(person, "deptId");
+        getJsonValue(person, "deptName");
+    }
+
+    private static String getJsonValue(JSONObject json, String key) {
         String ele = json.getString(key);
         return ele == null ? "" : ele;
     }

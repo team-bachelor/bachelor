@@ -71,7 +71,7 @@ public class UserAccessControlInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        UserVo user = valueHolder.getCurrentUser();
+        UserVo user = valueHolder.getLogonUser();
         String usercode = "";
         if (user != null) {
             usercode = user.getCode();
