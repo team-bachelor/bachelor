@@ -170,6 +170,11 @@
             </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-fw-operate-log</artifactId>
+                <version>${bachelor-fw.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
                 <artifactId>bachelor-iam</artifactId>
                 <version>${bachelor-iam.version}</version>
             </dependency>
@@ -226,6 +231,11 @@
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
                 <artifactId>bachelor-acm-service</artifactId>
+                <version>${bachelor-iam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-acm-data-authority</artifactId>
                 <version>${bachelor-iam.version}</version>
             </dependency>
             <dependency>
