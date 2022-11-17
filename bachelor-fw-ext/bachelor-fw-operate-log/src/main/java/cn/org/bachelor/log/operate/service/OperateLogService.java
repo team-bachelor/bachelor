@@ -71,19 +71,29 @@ public class OperateLogService {
         return logMapper.insertSelective(whiteLog);
     }
 
-    public int writeLog(OperateLogSubject subject, Operate operate, OperateLogObject data) {
-        return writeLog(createWhiteLog(subject, null, operate.getOpName(), null, data));
+    public int writeLog(OperateLogSubject subject, String predicate, OperateLogObject data) {
+        return writeLog(createWhiteLog(subject, null, predicate, data, null));
     }
 
-    public int writeLog(OperateLogSubject subject, String attribute, Operate operate, OperateLogObject data) {
-        return writeLog(createWhiteLog(subject, attribute, operate.getOpName(), null, data));
+    public int writeLog(OperateLogSubject subject, String attribute, String predicate, OperateLogObject data) {
+        return writeLog(createWhiteLog(subject, attribute, predicate, data, null));
+    }
+    public int writeLog(OperateLogSubject subject, String attribute, String predicate, String result, OperateLogObject data){
+        return writeLog(createWhiteLog(subject, attribute, predicate, data, result));
+    }
+    public int writeLog(OperateLogSubject subject, DefaultPredicate predicate, OperateLogObject data) {
+        return writeLog(createWhiteLog(subject, null, predicate.getOpName(), data, null));
     }
 
-    public int writeLog(OperateLogSubject subject, String attribute, Operate operate, String result, OperateLogObject data) {
-        return writeLog(createWhiteLog(subject, attribute, operate.getOpName(), result, data));
+    public int writeLog(OperateLogSubject subject, String attribute, DefaultPredicate predicate, OperateLogObject data) {
+        return writeLog(createWhiteLog(subject, attribute, predicate.getOpName(), data, null));
     }
 
-    private OperateLog createWhiteLog(OperateLogSubject subject, String attribute, String operate, String result, OperateLogObject data) {
+    public int writeLog(OperateLogSubject subject, String attribute, DefaultPredicate predicate, OperateLogObject data, String result) {
+        return writeLog(createWhiteLog(subject, attribute, predicate.getOpName(), data, result));
+    }
+
+    private OperateLog createWhiteLog(OperateLogSubject subject, String attribute, String predicate, OperateLogObject data, String result) {
         if (data == null) {
             return null;
         }
@@ -92,7 +102,7 @@ public class OperateLogService {
         ol.setId(UUIDUtil.getUUID());
         ol.setDataBase(subject.getDataBase());
         ol.setSubject(subject.getSubject());
-        ol.setPredicate(operate);
+        ol.setPredicate(predicate);
         String detail = JSON.toJSONStringWithDateFormat(data, LOG_TIME_FORMAT);
         ol.setDetail(detail);
         ol.setIdentify(data.getIdentify());
@@ -107,11 +117,11 @@ public class OperateLogService {
 
     private static final String LOG_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-    public enum Operate {
-        ADD("添加"), MOD("修改"), DEL("删除"), AUDIT("审批"), CANCEL("取消"), DEL_REMOTE("删除关联系统");
+    public enum DefaultPredicate {
+        ADD("添加"), MOD("修改"), DEL("删除"), AUDIT("审批"), CANCEL("取消"), DEL_REMOTE("关联删除");
         private String opName;
 
-        Operate(String op) {
+        DefaultPredicate(String op) {
             this.opName = op;
         }
 
