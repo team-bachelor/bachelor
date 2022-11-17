@@ -1,5 +1,6 @@
 package cn.org.bachelor.log.operate.service;
 
+import cn.org.bachelor.context.ILogonUser;
 import cn.org.bachelor.context.ILogonUserContext;
 import cn.org.bachelor.log.operate.domain.OperateLog;
 import cn.org.bachelor.log.operate.OperateLogObject;
@@ -9,6 +10,8 @@ import cn.org.bachelor.log.operate.dao.OperateLogMapper;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Condition;
@@ -19,7 +22,7 @@ import java.util.List;
 
 @Service
 public class OperateLogService {
-
+    private static Logger logger = LoggerFactory.getLogger(OperateLogService.class);
     @Autowired
     private OperateLogMapper logMapper;
 
@@ -37,8 +40,8 @@ public class OperateLogService {
         if (StringUtils.isNotEmpty(logParams.getOpAccount())) {
             criteria.andLike("operatorAccount", "%" + logParams.getOpAccount() + "%");
         }
-        if (StringUtils.isNotEmpty(logParams.getOpOrg())) {
-            criteria.andLike("operatorOrgan", "%" + logParams.getOpOrg() + "%");
+        if (StringUtils.isNotEmpty(logParams.getOpOrgId())) {
+            criteria.andLike("operatorOrgan", "%" + logParams.getOpOrgId() + "%");
         }
         if (StringUtils.isNotEmpty(logParams.getDataBase())) {
             criteria.andEqualTo("dataBase", logParams.getDataBase());
@@ -108,8 +111,15 @@ public class OperateLogService {
         ol.setIdentify(data.getIdentify());
         ol.setAttribute(attribute);
         ol.setResult(result);
-        ol.setOpAccount(logonUserContext.getLogonUser().getCode());
-        ol.setOpOrg(logonUserContext.getLogonUser().getOrgId());
+        ILogonUser user = logonUserContext.getLogonUser();
+        if(user == null){
+            logger.warn("操作日志未获取到操作用户，可以尝试在工程中引入bachelor-iam-client模块，并通过网关访问当前操作。");
+            ol.setOpAccount("未获取");
+            ol.setOpOrgId("未获取");
+        }else {
+            ol.setOpAccount(user.getCode());
+            ol.setOpOrgId(user.getOrgId());
+        }
         ol.setOpTime(new Date());
         ol.setSeriesNumber(data.getSerialNumber());
         return ol;

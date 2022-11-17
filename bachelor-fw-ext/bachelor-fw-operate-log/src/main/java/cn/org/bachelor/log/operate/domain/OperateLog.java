@@ -17,7 +17,7 @@ public class OperateLog implements Serializable {
     @ApiModelProperty("操作人账号")
     private String opAccount;
     @ApiModelProperty("操作人所属机构")
-    private String opOrg;
+    private String opOrgId;
     @ApiModelProperty("操作时间")
     private Date opTime;
     @ApiModelProperty("操作库名称")
@@ -60,12 +60,12 @@ public class OperateLog implements Serializable {
         this.opAccount = opAccount;
     }
 
-    public String getOpOrg() {
-        return opOrg;
+    public String getOpOrgId() {
+        return opOrgId;
     }
 
-    public void setOpOrg(String opOrg) {
-        this.opOrg = opOrg;
+    public void setOpOrgId(String opOrgId) {
+        this.opOrgId = opOrgId;
     }
 
     public Date getOpTime() {
