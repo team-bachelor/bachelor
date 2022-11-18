@@ -235,7 +235,7 @@
             </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
-                <artifactId>bachelor-acm-data-authority</artifactId>
+                <artifactId>bachelor-acm-data-access</artifactId>
                 <version>${bachelor-iam.version}</version>
             </dependency>
             <dependency>
