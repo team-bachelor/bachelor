@@ -22,27 +22,27 @@
  * THE SOFTWARE.
  */
 
-package cn.org.bachelor.acm.da;
+package cn.org.bachelor.acm.dac;
 
 import cn.org.bachelor.exception.SystemException;
 
 /**
  * 数据访问控制插件异常
  */
-public class DataAccessException extends SystemException {
-    public DataAccessException() {
+public class DataAccessControlException extends SystemException {
+    public DataAccessControlException() {
         super();
     }
 
-    public DataAccessException(String message) {
+    public DataAccessControlException(String message) {
         super(message);
     }
 
-    public DataAccessException(String message, Throwable cause) {
+    public DataAccessControlException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public DataAccessException(Throwable cause) {
+    public DataAccessControlException(Throwable cause) {
         super(cause);
     }
 }

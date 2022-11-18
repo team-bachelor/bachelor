@@ -1,6 +1,6 @@
-package cn.org.bachelor.acm.da;
+package cn.org.bachelor.acm.dac;
 
-import cn.org.bachelor.acm.da.util.ExecutorUtil;
+import cn.org.bachelor.acm.dac.util.ExecutorUtil;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.logging.Log;
@@ -12,20 +12,12 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import tk.mybatis.mapper.util.StringUtil;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 /**
- * Mybatis - 通用分页拦截器
- * <p>
- * GitHub: https://github.com/pagehelper/Mybatis-PageHelper
- * <p>
- * Gitee : https://gitee.com/free/Mybatis_PageHelper
- *
- * @author liuzh/abel533/isea533
- * @version 5.0.0
+ * 参考 Mybatis - 通用分页拦截器
+ * 数据访问控制拦截器
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 @Intercepts(
@@ -34,15 +26,15 @@ import java.util.Properties;
                 @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),
         }
 )
-public class DataAccessInterceptor implements Interceptor {
-    private static final Log log = LogFactory.getLog(DataAccessInterceptor.class);
+public class DacInterceptor implements Interceptor {
+    private static final Log log = LogFactory.getLog(DacInterceptor.class);
 
     private volatile Dialect                        dialect;
     private          String                         countSuffix           = "_COUNT";
 //    protected        Cache<String, MappedStatement> msCountMap            = null;
-    private          String                         default_dialect_class = "cn.org.bachelor.acm.da.DataAccessHelper";
+    private          String                         default_dialect_class = "cn.org.bachelor.acm.dac.DacHelper";
 
-    public DataAccessInterceptor() {
+    public DacInterceptor() {
     }
 
     @Override

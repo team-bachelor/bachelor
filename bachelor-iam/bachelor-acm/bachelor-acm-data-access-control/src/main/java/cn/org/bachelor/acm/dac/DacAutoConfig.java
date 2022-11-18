@@ -1,4 +1,4 @@
-package cn.org.bachelor.acm.da;
+package cn.org.bachelor.acm.dac;
 
 import com.github.pagehelper.autoconfigure.PageHelperAutoConfiguration;
 import org.apache.ibatis.plugin.Interceptor;
@@ -21,24 +21,24 @@ import java.util.List;
  */
 @Configuration
 @ConditionalOnBean(SqlSessionFactory.class)
-@EnableConfigurationProperties(DataAccessProperties.class)
+@EnableConfigurationProperties(DacProperties.class)
 @AutoConfigureAfter(MybatisAutoConfiguration.class)
 @AutoConfigureBefore(PageHelperAutoConfiguration.class)
 @Lazy(false)
-public class DaAutoConfig implements InitializingBean {
+public class DacAutoConfig implements InitializingBean {
 
     private final List<SqlSessionFactory> sqlSessionFactoryList;
 
-    private final DataAccessProperties properties;
+    private final DacProperties properties;
 
-    public DaAutoConfig(List<SqlSessionFactory> sqlSessionFactoryList, DataAccessProperties properties) {
+    public DacAutoConfig(List<SqlSessionFactory> sqlSessionFactoryList, DacProperties properties) {
         this.sqlSessionFactoryList = sqlSessionFactoryList;
         this.properties = properties;
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        DataAccessInterceptor interceptor = new DataAccessInterceptor();
+        DacInterceptor interceptor = new DacInterceptor();
         interceptor.setProperties(this.properties);
         for (SqlSessionFactory sqlSessionFactory : sqlSessionFactoryList) {
             org.apache.ibatis.session.Configuration configuration = sqlSessionFactory.getConfiguration();

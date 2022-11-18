@@ -1,4 +1,4 @@
-package cn.org.bachelor.acm.da;
+package cn.org.bachelor.acm.dac;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -7,5 +7,5 @@ import java.util.Properties;
 @ConfigurationProperties(
         prefix = "bachelor.da"
 )
-public class DataAccessProperties extends Properties {
+public class DacProperties extends Properties {
 }

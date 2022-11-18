@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>bachelor-acm-data-access</artifactId>
+    <artifactId>bachelor-acm-data-access-control</artifactId>
     <dependencies>
         <dependency>
             <groupId>cn.org.bachelor</groupId>

@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 
-package cn.org.bachelor.acm.da.util;
+package cn.org.bachelor.acm.dac.util;
 
 
-import cn.org.bachelor.acm.da.BoundSqlInterceptor;
-import cn.org.bachelor.acm.da.DataAccessException;
-import cn.org.bachelor.acm.da.Dialect;
+import cn.org.bachelor.acm.dac.BoundSqlInterceptor;
+import cn.org.bachelor.acm.dac.DataAccessControlException;
+import cn.org.bachelor.acm.dac.Dialect;
 import org.apache.ibatis.builder.annotation.ProviderSqlSource;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
@@ -56,7 +56,7 @@ public abstract class ExecutorUtil {
             additionalParametersField = BoundSql.class.getDeclaredField("additionalParameters");
             additionalParametersField.setAccessible(true);
         } catch (NoSuchFieldException e) {
-            throw new DataAccessException("获取 BoundSql 属性 additionalParameters 失败: " + e, e);
+            throw new DataAccessControlException("获取 BoundSql 属性 additionalParameters 失败: " + e, e);
         }
         try {
             //兼容低版本
@@ -76,7 +76,7 @@ public abstract class ExecutorUtil {
         try {
             return (Map<String, Object>) additionalParametersField.get(boundSql);
         } catch (IllegalAccessException e) {
-            throw new DataAccessException("获取 BoundSql 属性值 additionalParameters 失败: " + e, e);
+            throw new DataAccessControlException("获取 BoundSql 属性值 additionalParameters 失败: " + e, e);
         }
     }
 
@@ -90,7 +90,7 @@ public abstract class ExecutorUtil {
         try {
             return providerMethodArgumentNamesField != null ? (String[]) providerMethodArgumentNamesField.get(providerSqlSource) : null;
         } catch (IllegalAccessException e) {
-            throw new DataAccessException("获取 ProviderSqlSource 属性值 providerMethodArgumentNames: " + e, e);
+            throw new DataAccessControlException("获取 ProviderSqlSource 属性值 providerMethodArgumentNames: " + e, e);
         }
     }
 

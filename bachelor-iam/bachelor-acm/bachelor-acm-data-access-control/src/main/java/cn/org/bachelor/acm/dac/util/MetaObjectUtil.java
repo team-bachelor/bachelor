@@ -1,4 +1,4 @@
-package cn.org.bachelor.acm.da.util;
+package cn.org.bachelor.acm.dac.util;
 
 import cn.org.bachelor.exception.SystemException;
 import org.apache.ibatis.reflection.MetaObject;

@@ -15,7 +15,7 @@
         <module>bachelor-acm-common</module>
         <module>bachelor-acm-biz</module>
         <module>bachelor-acm-service</module>
-        <module>bachelor-acm-data-access</module>
+        <module>bachelor-acm-data-access-control</module>
     </modules>
 
     <dependencyManagement>
