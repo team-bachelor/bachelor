@@ -20,7 +20,7 @@ import java.util.List;
  * @author liuzhuo
  */
 @Configuration
-@ConditionalOnBean(SqlSessionFactory.class)
+//@ConditionalOnBean(SqlSessionFactory.class)
 @EnableConfigurationProperties(DacProperties.class)
 @AutoConfigureAfter(MybatisAutoConfiguration.class)
 @AutoConfigureBefore(PageHelperAutoConfiguration.class)

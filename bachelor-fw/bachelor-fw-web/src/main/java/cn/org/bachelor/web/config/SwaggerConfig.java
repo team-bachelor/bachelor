@@ -2,6 +2,7 @@ package cn.org.bachelor.web.config;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @Date: Created in 2018/11/5 13:58
  * @Modified By:
  */
-@Component
+@Configuration
 @ConfigurationProperties(prefix = "bachelor.swagger")
 @ConditionalOnProperty(prefix = "bachelor.swagger",
         name = {"enabled"}, havingValue = "true", matchIfMissing = true)
