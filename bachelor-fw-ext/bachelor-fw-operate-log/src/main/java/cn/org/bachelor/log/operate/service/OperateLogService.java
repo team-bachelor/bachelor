@@ -113,7 +113,7 @@ public class OperateLogService {
         ol.setDetail(detail);
         ol.setIdentify(data.getIdentify());
         ol.setAttribute(StringUtils.isEmpty(attribute) ? data.getAttribute() : attribute);
-        ol.setResult(result);
+        ol.setResult(StringUtils.isEmpty(result) ? "成功" : result);
         ILogonUser user = logonUserContext == null ? null : logonUserContext.getLogonUser();
         if (user == null) {
             logger.warn("操作日志未获取到操作用户，可以尝试在工程中引入bachelor-iam-client模块，并通过网关访问当前操作。");
