@@ -131,7 +131,7 @@ public class OperateLogService {
     private static final String LOG_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     public enum DefaultPredicate {
-        ADD("添加"), MOD("修改"), DEL("删除"), AUDIT("审批"), CANCEL("取消"), DEL_REMOTE("关联删除");
+        ADD("添加"), MOD("修改"), DEL("删除"), AUDIT("审批"), CANCEL("取消"), DEL_CASCADE("关联删除");
         private String opName;
 
         DefaultPredicate(String op) {
