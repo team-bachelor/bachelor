@@ -27,7 +27,7 @@ public class OperateLogService {
     @Autowired
     private OperateLogMapper logMapper;
 
-    @Autowired
+    @Autowired(required = false)
     private ILogonUserContext logonUserContext;
 
     public List<OperateLog> getOperateLog(OperateLog logParams) {
@@ -114,7 +114,7 @@ public class OperateLogService {
         ol.setIdentify(data.getIdentify());
         ol.setAttribute(StringUtils.isEmpty(attribute) ? data.getAttribute() : attribute);
         ol.setResult(result);
-        ILogonUser user = logonUserContext.getLogonUser();
+        ILogonUser user = logonUserContext == null ? null : logonUserContext.getLogonUser();
         if (user == null) {
             logger.warn("操作日志未获取到操作用户，可以尝试在工程中引入bachelor-iam-client模块，并通过网关访问当前操作。");
             ol.setOpAccount("未获取");
