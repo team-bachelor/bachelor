@@ -2,11 +2,12 @@ package cn.org.bachelor.log.operate.service;
 
 import cn.org.bachelor.context.ILogonUser;
 import cn.org.bachelor.context.ILogonUserContext;
-import cn.org.bachelor.log.operate.domain.OperateLog;
+import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.log.operate.OperateLogObject;
 import cn.org.bachelor.log.operate.OperateLogSubject;
-import cn.org.bachelor.log.operate.util.UUIDUtil;
 import cn.org.bachelor.log.operate.dao.OperateLogMapper;
+import cn.org.bachelor.log.operate.domain.OperateLog;
+import cn.org.bachelor.log.operate.util.UUIDUtil;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -81,9 +82,11 @@ public class OperateLogService {
     public int writeLog(OperateLogSubject subject, String attribute, String predicate, OperateLogObject data) {
         return writeLog(createWhiteLog(subject, attribute, predicate, data, null));
     }
-    public int writeLog(OperateLogSubject subject, String attribute, String predicate, String result, OperateLogObject data){
+
+    public int writeLog(OperateLogSubject subject, String attribute, String predicate, String result, OperateLogObject data) {
         return writeLog(createWhiteLog(subject, attribute, predicate, data, result));
     }
+
     public int writeLog(OperateLogSubject subject, DefaultPredicate predicate, OperateLogObject data) {
         return writeLog(createWhiteLog(subject, null, predicate.getOpName(), data, null));
     }
@@ -98,7 +101,7 @@ public class OperateLogService {
 
     private OperateLog createWhiteLog(OperateLogSubject subject, String attribute, String predicate, OperateLogObject data, String result) {
         if (data == null) {
-            return null;
+            throw new BusinessException("log object cat not be null!");
         }
         OperateLog ol = new OperateLog();
 
@@ -109,14 +112,14 @@ public class OperateLogService {
         String detail = JSON.toJSONStringWithDateFormat(data, LOG_TIME_FORMAT);
         ol.setDetail(detail);
         ol.setIdentify(data.getIdentify());
-        ol.setAttribute(attribute);
+        ol.setAttribute(StringUtils.isEmpty(attribute) ? data.getAttribute() : attribute);
         ol.setResult(result);
         ILogonUser user = logonUserContext.getLogonUser();
-        if(user == null){
+        if (user == null) {
             logger.warn("操作日志未获取到操作用户，可以尝试在工程中引入bachelor-iam-client模块，并通过网关访问当前操作。");
             ol.setOpAccount("未获取");
             ol.setOpOrgId("未获取");
-        }else {
+        } else {
             ol.setOpAccount(user.getCode());
             ol.setOpOrgId(user.getOrgId());
         }
