@@ -40,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-idm-tenant-helper</artifactId>
+            <artifactId>bachelor-acm-data-access-control</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

@@ -22,5 +22,5 @@ public interface ILogonUser {
 
     boolean isAdministrator();
 
-    String getAdministrativeLevel();
+    String getAreaId();
 }

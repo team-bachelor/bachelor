@@ -1,13 +1,12 @@
 package cn.org.bachelor.acm.dac;
 
+import cn.org.bachelor.context.ILogonUserContext;
 import com.github.pagehelper.autoconfigure.PageHelperAutoConfiguration;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -20,18 +19,23 @@ import java.util.List;
  * @author liuzhuo
  */
 @Configuration
+@ConditionalOnProperty(prefix = "bachelor.dac",
+        name = {"enabled"}, havingValue = "true", matchIfMissing = true)
 //@ConditionalOnBean(SqlSessionFactory.class)
-@EnableConfigurationProperties(DacProperties.class)
-@AutoConfigureAfter(MybatisAutoConfiguration.class)
-@AutoConfigureBefore(PageHelperAutoConfiguration.class)
+@EnableConfigurationProperties(DacConfiguration.class)
+//@AutoConfigureAfter(MybatisAutoConfiguration.class)
+//@AutoConfigureBefore(PageHelperAutoConfiguration.class)
+@AutoConfigureAfter(PageHelperAutoConfiguration.class)
 @Lazy(false)
 public class DacAutoConfig implements InitializingBean {
 
     private final List<SqlSessionFactory> sqlSessionFactoryList;
 
-    private final DacProperties properties;
+    private final DacConfiguration properties;
 
-    public DacAutoConfig(List<SqlSessionFactory> sqlSessionFactoryList, DacProperties properties) {
+    private ILogonUserContext logonUserContext;
+
+    public DacAutoConfig(List<SqlSessionFactory> sqlSessionFactoryList, DacConfiguration properties) {
         this.sqlSessionFactoryList = sqlSessionFactoryList;
         this.properties = properties;
     }
@@ -39,7 +43,8 @@ public class DacAutoConfig implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         DacInterceptor interceptor = new DacInterceptor();
-        interceptor.setProperties(this.properties);
+//        interceptor.setProperties(this.properties);
+        interceptor.setDacProperties(properties);
         for (SqlSessionFactory sqlSessionFactory : sqlSessionFactoryList) {
             org.apache.ibatis.session.Configuration configuration = sqlSessionFactory.getConfiguration();
             if (!containsInterceptor(configuration, interceptor)) {

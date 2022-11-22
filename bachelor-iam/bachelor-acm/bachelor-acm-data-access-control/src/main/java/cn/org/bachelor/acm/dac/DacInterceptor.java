@@ -24,22 +24,27 @@
 
 package cn.org.bachelor.acm.dac;
 
+import cn.org.bachelor.acm.dac.parser.DacSqlParser;
+import cn.org.bachelor.context.ILogonUserContext;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.statement.Statement;
+import net.sf.jsqlparser.statement.select.*;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.logging.Log;
+import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import tk.mybatis.mapper.util.StringUtil;
-import org.apache.ibatis.logging.Log;
-import org.apache.ibatis.logging.LogFactory;
 
 import java.util.Properties;
 
 /**
  * QueryInterceptor 规范
- *
+ * <p>
  * 详细说明见文档：https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/Interceptor.md
  *
  * @author liuzh/abel533/isea533
@@ -54,6 +59,10 @@ import java.util.Properties;
 public class DacInterceptor implements Interceptor {
 
     private static final Log log = LogFactory.getLog(DacInterceptor.class);
+
+    private DacConfiguration properties;
+
+    private ILogonUserContext logonUserContext;
 
     public DacInterceptor() {
         String bannerEnabled = System.getProperty("bachelor.dac.banner");
@@ -77,7 +86,7 @@ public class DacInterceptor implements Interceptor {
         CacheKey cacheKey;
         BoundSql boundSql;
         //由于逻辑关系，只会进入一次
-        if(args.length == 4){
+        if (args.length == 4) {
             //4 个参数时
             boundSql = ms.getBoundSql(parameter);
             cacheKey = executor.createCacheKey(ms, parameter, rowBounds, boundSql);
@@ -86,9 +95,10 @@ public class DacInterceptor implements Interceptor {
             cacheKey = (CacheKey) args[4];
             boundSql = (BoundSql) args[5];
         }
-        //TODO 自己要进行的各种处理
-        //注：下面的方法可以根据自己的逻辑调用多次，在分页插件中，count 和 page 各调用了一次
-        return executor.query(ms, parameter, rowBounds, resultHandler, cacheKey, boundSql);
+        DacSqlParser sqlParser = new DacSqlParser();
+        String dacSql = sqlParser.getSmartDacSql(boundSql.getSql());
+        BoundSql dacBoundSql = new BoundSql(ms.getConfiguration(), dacSql, boundSql.getParameterMappings(), parameter);
+        return executor.query(ms, parameter, rowBounds, resultHandler, cacheKey, dacBoundSql);
     }
 
     @Override
@@ -98,6 +108,15 @@ public class DacInterceptor implements Interceptor {
 
     @Override
     public void setProperties(Properties properties) {
+//        this.properties = (DacProperties) properties;
+    }
+
+    public void setDacProperties(DacConfiguration properties) {
+        this.properties = properties;
+    }
+
+    public void setLogonUserContext(ILogonUserContext context) {
+        this.logonUserContext = context;
     }
 
 }

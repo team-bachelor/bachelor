@@ -17,7 +17,7 @@ import java.io.InputStreamReader;
  */
 @Configuration
 @ConfigurationProperties(prefix = "bachelor.iam")
-public class IamProperties {
+public class IamConfiguration {
 
     /**
      * 用户拦截器和访问控制拦截器要拦截的地址

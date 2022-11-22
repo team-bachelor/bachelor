@@ -20,7 +20,7 @@ import javax.annotation.Resource;
 public class IamWebConfig implements WebMvcConfigurer {
 
     @Resource
-    private IamProperties config;
+    private IamConfiguration config;
 
 //    @Value(":")
 //    private static String iamServiceName;

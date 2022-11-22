@@ -8,6 +8,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 @Documented
-public @interface DacForm {
+public @interface DacIndexForm {
     String[] name() default {};
 }

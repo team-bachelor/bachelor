@@ -103,7 +103,7 @@ public class UserVo implements ILogonUser {
     @JsonProperty(value = "access_backend", access = JsonProperty.Access.WRITE_ONLY)
     private boolean accessBackend = true;
 
-    private String administrativeLevel;
+    private String areaId;
 
     /**---------------下面是扩展字段--------------------- */
     private String comment1;
@@ -131,12 +131,13 @@ public class UserVo implements ILogonUser {
     private String picture;
 
 
-    public String getAdministrativeLevel() {
-        return administrativeLevel;
+    @Override
+    public String getAreaId() {
+        return areaId;
     }
 
-    public void setAdministrativeLevel(String administrativeLevel) {
-        this.administrativeLevel = administrativeLevel;
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
     }
 
     public String getTenantId() {
