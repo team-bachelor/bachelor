@@ -1,15 +1,13 @@
 package cn.org.bachelor.acm.dac.parser;
 
 import cn.org.bachelor.acm.dac.util.StringUtil;
-import com.sun.xml.internal.bind.v2.TODO;
 import net.sf.jsqlparser.expression.Alias;
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.Function;
-import net.sf.jsqlparser.expression.Parenthesis;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
-import net.sf.jsqlparser.schema.Column;
+import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.select.*;
+import org.apache.ibatis.logging.Log;
+import org.apache.ibatis.logging.LogFactory;
 
 import java.util.*;
 
@@ -19,6 +17,7 @@ import java.util.*;
  * @author liuzh
  */
 public class DacSqlParser {
+    private static final Log log = LogFactory.getLog(DacSqlParser.class);
     private static final Alias TABLE_ALIAS;
 
     //<editor-fold desc="聚合函数">
@@ -95,7 +94,8 @@ public class DacSqlParser {
             stmt = CCJSqlParserUtil.parse(sql);
         } catch (Throwable e) {
             //无法解析的用一般方法返回count语句
-            return getSimpleCountSql(sql);
+            log.warn("sql解析失败，将返回全部数据");
+            return sql;
         }
         Select select = (Select) stmt;
         SelectBody selectBody = select.getSelectBody();
@@ -103,114 +103,20 @@ public class DacSqlParser {
             //处理body-去order by
             processSelectBody(selectBody);
         } catch (Exception e) {
-            //当 sql 包含 group by 时，不去除 order by
-            return getSimpleCountSql(sql);
+            log.warn("sql处理失败，将返回全部数据");
+            return sql;
         }
         //处理with-去order by
         processWithItemsList(select.getWithItemsList());
-        //处理为count查询
-        sqlToCount(select);
+//        //处理为count查询
+//        sqlToCount(select);
         String result = select.toString();
         return result;
     }
 
-    /**
-     * 获取普通的Count-sql
-     *
-     * @param sql 原查询sql
-     * @return 返回count查询sql
-     */
-    //TODO 无法解析时候怎么办？
-    public String getSimpleCountSql(final String sql) {
-        StringBuilder stringBuilder = new StringBuilder(sql.length() + 40);
-        stringBuilder.append("select count(");
-        stringBuilder.append("0");
-        stringBuilder.append(") from ( \n");
-        stringBuilder.append(sql);
-        stringBuilder.append("\n ) tmp_count");
-        return stringBuilder.toString();
-    }
 
     /**
-     * 将sql转换为count查询
-     *
-     * @param select
-     */
-    public void sqlToCount(Select select) {
-        SelectBody selectBody = select.getSelectBody();
-        // 是否能简化count查询
-        List<SelectItem> COUNT_ITEM = new ArrayList<SelectItem>();
-        COUNT_ITEM.add(new SelectExpressionItem(new Column("count(0)")));
-        if (selectBody instanceof PlainSelect && isSimpleCount((PlainSelect) selectBody)) {
-            ((PlainSelect) selectBody).setSelectItems(COUNT_ITEM);
-        } else {
-            PlainSelect plainSelect = new PlainSelect();
-            SubSelect subSelect = new SubSelect();
-            subSelect.setSelectBody(selectBody);
-            subSelect.setAlias(TABLE_ALIAS);
-            plainSelect.setFromItem(subSelect);
-            plainSelect.setSelectItems(COUNT_ITEM);
-            select.setSelectBody(plainSelect);
-        }
-    }
-
-    /**
-     * 是否可以用简单的count查询方式
-     *
-     * @param select
-     * @return
-     */
-    public boolean isSimpleCount(PlainSelect select) {
-        //包含group by的时候不可以
-        if (select.getGroupBy() != null) {
-            return false;
-        }
-        //包含distinct的时候不可以
-        if (select.getDistinct() != null) {
-            return false;
-        }
-        //#606,包含having时不可以
-        if (select.getHaving() != null) {
-            return false;
-        }
-        for (SelectItem item : select.getSelectItems()) {
-            //select列中包含参数的时候不可以，否则会引起参数个数错误
-            if (item.toString().contains("?")) {
-                return false;
-            }
-            //如果查询列中包含函数，也不可以，函数可能会聚合列
-            if (item instanceof SelectExpressionItem) {
-                Expression expression = ((SelectExpressionItem) item).getExpression();
-                if (expression instanceof Function) {
-                    String name = ((Function) expression).getName();
-                    if (name != null) {
-                        String NAME = name.toUpperCase();
-                        if(skipFunctions.contains(NAME)){
-                            //go on
-                        } else if(falseFunctions.contains(NAME)){
-                            return false;
-                        } else {
-                            for (String aggregateFunction : AGGREGATE_FUNCTIONS) {
-                                if (NAME.startsWith(aggregateFunction)) {
-                                    falseFunctions.add(NAME);
-                                    return false;
-                                }
-                            }
-                            skipFunctions.add(NAME);
-                        }
-                    }
-                } else if (expression instanceof Parenthesis && ((SelectExpressionItem) item).getAlias() != null) {
-                    //#555，当存在 (a+b) as c 时，c 如果出现了 order by 或者 having 中时，会找不到对应的列，
-                    // 这里想要更智能，需要在整个SQL中查找别名出现的位置，暂时不考虑，直接排除
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 处理selectBody去除Order by
+     * 处理selectBody
      *
      * @param selectBody
      */
@@ -231,9 +137,6 @@ public class DacSqlParser {
                         processSelectBody(plainSelect);
                     }
                 }
-                if (!orderByHashParameters(operationList.getOrderByElements())) {
-                    operationList.setOrderByElements(null);
-                }
             }
         }
     }
@@ -244,12 +147,11 @@ public class DacSqlParser {
      * @param plainSelect
      */
     public void processPlainSelect(PlainSelect plainSelect) {
-        if (!orderByHashParameters(plainSelect.getOrderByElements())) {
-            plainSelect.setOrderByElements(null);
-        }
+
         if (plainSelect.getFromItem() != null) {
             processFromItem(plainSelect.getFromItem());
         }
+
         if (plainSelect.getJoins() != null && plainSelect.getJoins().size() > 0) {
             List<Join> joins = plainSelect.getJoins();
             for (Join join : joins) {
@@ -308,6 +210,8 @@ public class DacSqlParser {
                     processSelectBody(subSelect.getSelectBody());
                 }
             }
+        } else if (fromItem instanceof Table){
+            log.debug(fromItem.toString());
         }
         //Table时不用处理
     }

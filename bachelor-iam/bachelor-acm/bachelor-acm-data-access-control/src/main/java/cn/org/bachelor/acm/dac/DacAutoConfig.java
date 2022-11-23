@@ -35,9 +35,10 @@ public class DacAutoConfig implements InitializingBean {
 
     private ILogonUserContext logonUserContext;
 
-    public DacAutoConfig(List<SqlSessionFactory> sqlSessionFactoryList, DacConfiguration properties) {
+    public DacAutoConfig(List<SqlSessionFactory> sqlSessionFactoryList, DacConfiguration properties, ILogonUserContext logonUserContext) {
         this.sqlSessionFactoryList = sqlSessionFactoryList;
         this.properties = properties;
+        this.logonUserContext = logonUserContext;
     }
 
     @Override
@@ -45,6 +46,7 @@ public class DacAutoConfig implements InitializingBean {
         DacInterceptor interceptor = new DacInterceptor();
 //        interceptor.setProperties(this.properties);
         interceptor.setDacProperties(properties);
+        interceptor.setLogonUserContext(logonUserContext);
         for (SqlSessionFactory sqlSessionFactory : sqlSessionFactoryList) {
             org.apache.ibatis.session.Configuration configuration = sqlSessionFactory.getConfiguration();
             if (!containsInterceptor(configuration, interceptor)) {

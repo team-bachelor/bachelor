@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "bachelor.dac", ignoreInvalidFields = true)
 public class DacConfiguration {
 
-    private boolean enabled = false;
+    private boolean enabled = true;
 
     private DacField[] fields;
 

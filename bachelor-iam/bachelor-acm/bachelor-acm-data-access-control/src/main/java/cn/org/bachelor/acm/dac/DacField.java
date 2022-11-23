@@ -10,7 +10,6 @@ public class DacField {
 
     private boolean enable = true;
     private String name;
-    private String beanName;
     private boolean deep = false;
     private String pattern = "00000000";
 
@@ -44,16 +43,5 @@ public class DacField {
 
     public void setName(String name) {
         this.name = name;
-        if(this.beanName == null){
-            this.beanName = name;
-        }
-    }
-
-    public String getBeanName() {
-        return beanName;
-    }
-
-    public void setBeanName(String beanName) {
-        this.beanName = beanName;
     }
 }

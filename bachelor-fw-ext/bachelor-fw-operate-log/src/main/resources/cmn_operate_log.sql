@@ -7,7 +7,7 @@ CREATE TABLE `cmn_operate_log`
 (
     `ID`            char(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
     `OP_ACCOUNT`    varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作人账号',
-    `OP_ORG_ID`        varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作人所属机构',
+    `OP_ORG_ID`     varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作人所属机构',
     `OP_TIME`       datetime(0) NULL DEFAULT NULL COMMENT '操作时间',
     `DATA_BASE`     varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作库',
     `SUBJECT`       varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作主题',
@@ -25,7 +25,7 @@ CREATE TABLE `cmn_operate_log_history`
 (
     `ID`            char(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
     `OP_ACCOUNT`    varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作人账号',
-    `OP_ORG_ID`        varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作人所属机构',
+    `OP_ORG_ID`     varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作人所属机构',
     `OP_TIME`       datetime(0) NULL DEFAULT NULL COMMENT '操作时间',
     `DATA_BASE`     varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作库',
     `SUBJECT`       varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作主题',
