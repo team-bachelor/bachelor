@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface RoleMenuMapper extends Mapper<RoleMenu> {
-    @Select("SELECT DISTINCTROW rm.MENU_CODE " +
+    @Select("SELECT DISTINCTROW MENU_CODE " +
             "FROM cmn_acm_role_menu rm " +
             "JOIN cmn_acm_user_role ur " +
             "ON rm.ROLE_CODE = ur.ROLE_CODE " +

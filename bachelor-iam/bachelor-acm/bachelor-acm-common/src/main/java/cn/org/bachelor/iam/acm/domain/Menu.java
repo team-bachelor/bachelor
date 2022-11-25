@@ -1,5 +1,6 @@
 package cn.org.bachelor.iam.acm.domain;
 
+import cn.org.bachelor.acm.dac.annotation.DacEnabled;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @Data
 @Table(name = "cmn_acm_menu")
+@DacEnabled
 public class Menu {
     /**
      * ID
@@ -77,4 +79,6 @@ public class Menu {
     @Column(name = "UPDATE_USER")
     private String updateUser;
 
+    @Column(name = "TENANT_ID")
+    private String tenantId;
 }

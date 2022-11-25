@@ -1,7 +1,9 @@
 package cn.org.bachelor.acm.dac.parser;
 
 import cn.org.bachelor.acm.dac.util.StringUtil;
-import net.sf.jsqlparser.expression.Alias;
+import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.Statement;
@@ -12,59 +14,97 @@ import org.apache.ibatis.logging.LogFactory;
 import java.util.*;
 
 /**
- * sql解析类，提供更智能的count查询sql
+ * sql解析类，提供更智能的数据访问权限查询sql
  *
  * @author liuzh
  */
 public class DacSqlParser {
     private static final Log log = LogFactory.getLog(DacSqlParser.class);
-    private static final Alias TABLE_ALIAS;
 
     //<editor-fold desc="聚合函数">
-    private final Set<String> skipFunctions = Collections.synchronizedSet(new HashSet<String>());
-    private final Set<String> falseFunctions = Collections.synchronizedSet(new HashSet<String>());
+//    private final Set<String> skipFunctions = Collections.synchronizedSet(new HashSet<String>());
+//    private final Set<String> falseFunctions = Collections.synchronizedSet(new HashSet<String>());
 
     /**
      * 聚合函数，以下列函数开头的都认为是聚合函数
      */
     private static final Set<String> AGGREGATE_FUNCTIONS = new HashSet<String>(Arrays.asList(
             ("APPROX_COUNT_DISTINCT," +
-            "ARRAY_AGG," +
-            "AVG," +
-            "BIT_," +
-            "BOOL_," +
-            "CHECKSUM_AGG," +
-            "COLLECT," +
-            "CORR," +
-            "COUNT," +
-            "COVAR," +
-            "CUME_DIST," +
-            "DENSE_RANK," +
-            "EVERY," +
-            "FIRST," +
-            "GROUP," +
-            "JSON_," +
-            "LAST," +
-            "LISTAGG," +
-            "MAX," +
-            "MEDIAN," +
-            "MIN," +
-            "PERCENT_," +
-            "RANK," +
-            "REGR_," +
-            "SELECTIVITY," +
-            "STATS_," +
-            "STD," +
-            "STRING_AGG," +
-            "SUM," +
-            "SYS_OP_ZONE_ID," +
-            "SYS_XMLAGG," +
-            "VAR," +
-            "XMLAGG").split(",")));
+                    "ARRAY_AGG," +
+                    "AVG," +
+                    "BIT_," +
+                    "BOOL_," +
+                    "CHECKSUM_AGG," +
+                    "COLLECT," +
+                    "CORR," +
+                    "COUNT," +
+                    "COVAR," +
+                    "CUME_DIST," +
+                    "DENSE_RANK," +
+                    "EVERY," +
+                    "FIRST," +
+                    "GROUP," +
+                    "JSON_," +
+                    "LAST," +
+                    "LISTAGG," +
+                    "MAX," +
+                    "MEDIAN," +
+                    "MIN," +
+                    "PERCENT_," +
+                    "RANK," +
+                    "REGR_," +
+                    "SELECTIVITY," +
+                    "STATS_," +
+                    "STD," +
+                    "STRING_AGG," +
+                    "SUM," +
+                    "SYS_OP_ZONE_ID," +
+                    "SYS_XMLAGG," +
+                    "VAR," +
+                    "XMLAGG").split(",")));
 
-    static {
-        TABLE_ALIAS = new Alias("table_count");
-        TABLE_ALIAS.setUseAs(false);
+    private List<String> dacTables = new ArrayList<>(0);
+
+    public static void main(String[] args) throws JSQLParserException {
+//        String sql = "select * from DRILL_YEAR_PLAN where 1=1 \n" +
+//                " and NAME like ? \n" +
+//                " and YEAR = ? \n" +
+//                " and MAKE_UNIT like ? \n" +
+//                " order by UPDATE_TIME desc ";
+        String sql = "SELECT DISTINCT " +
+                "rm.MENU_CODE as MENU_CODE FROM cmn_acm_role_menu as rm " +
+                "JOIN cmn_acm_user_role ur ON " +
+                "rm.ROLE_CODE = ur.ROLE_CODE AND ur.USER_CODE = ?";
+//        String sql = "SELECT " +
+//                " `t_tmp`.`scenariosId` AS `scenariosId`, " +
+//                " ifnull( `t1`.`planCount`, 0 ) AS `planCount`, " +
+//                " ifnull( `t2`.`recordCount`, 0 ) AS `recordCount` " +
+//                "FROM " +
+//                " (((( " +
+//                "  SELECT " +
+//                "     `SCENARIOS_ID` AS `scenariosId` " +
+//                "   FROM " +
+//                "     `DRILL_DETAIL_PLAN` " +
+//                "   WHERE " +
+//                "     ( `SCENARIOS_ID` IS NOT NULL )) UNION (" +
+//                "  SELECT " +
+//                "    `SCENARIOS_ID` AS `scenariosId` " +
+//                "   FROM " +
+//                "    `DRILL_DRILL_RECORD` " +
+//                "   WHERE " +
+//                "    ( `SCENARIOS_ID` IS NOT NULL ))) `t_tmp` " +
+//                "   LEFT JOIN ( SELECT `SCENARIOS_ID` AS `scenariosId`, count( 1 ) AS `planCount` FROM `DRILL_DETAIL_PLAN` GROUP BY `SCENARIOS_ID` ) `t1` ON (( " +
+//                "     `t_tmp`.`scenariosId` = `t1`.`scenariosId` " +
+//                "    ))) " +
+//                "  LEFT JOIN ( SELECT `SCENARIOS_ID` AS `scenariosId`, count( 1 ) AS `recordCount` FROM `DRILL_DRILL_RECORD` GROUP BY `SCENARIOS_ID` ) `t2` ON (( " +
+//                "   `t_tmp`.`scenariosId` = `t2`.`scenariosId` " +
+//                " ))) ";
+        System.out.print("原SQL：");
+        System.out.println(sql);
+        DacSqlParser parser = new DacSqlParser();
+        System.out.print("隔离后：");
+        sql = parser.getSmartDacSql(sql);
+        System.out.println(sql);
     }
 
     /**
@@ -72,8 +112,8 @@ public class DacSqlParser {
      *
      * @param functions
      */
-    public static void addAggregateFunctions(String functions){
-        if(StringUtil.isNotEmpty(functions)){
+    public static void addAggregateFunctions(String functions) {
+        if (StringUtil.isNotEmpty(functions)) {
             String[] funs = functions.split(",");
             for (int i = 0; i < funs.length; i++) {
                 AGGREGATE_FUNCTIONS.add(funs[i].toUpperCase());
@@ -94,7 +134,7 @@ public class DacSqlParser {
             stmt = CCJSqlParserUtil.parse(sql);
         } catch (Throwable e) {
             //无法解析的用一般方法返回count语句
-            log.warn("sql解析失败，将返回全部数据");
+            log.error("sql解析失败，将返回全部数据", e);
             return sql;
         }
         Select select = (Select) stmt;
@@ -149,16 +189,31 @@ public class DacSqlParser {
     public void processPlainSelect(PlainSelect plainSelect) {
 
         if (plainSelect.getFromItem() != null) {
-            processFromItem(plainSelect.getFromItem());
+            processFromItem(plainSelect, plainSelect.getFromItem());
         }
 
         if (plainSelect.getJoins() != null && plainSelect.getJoins().size() > 0) {
             List<Join> joins = plainSelect.getJoins();
             for (Join join : joins) {
                 if (join.getRightItem() != null) {
-                    processFromItem(join.getRightItem());
+                    processFromItem(join, join.getRightItem());
                 }
             }
+        }
+    }
+
+    private void appendAndWhere(PlainSelect plainSelect, String addWhere) {
+        try {
+            Expression where = plainSelect.getWhere();
+            Expression additionWhere = CCJSqlParserUtil.parseCondExpression(addWhere);
+            if (where == null) {
+                where = additionWhere;
+            } else {
+                where = new AndExpression(where, additionWhere);
+            }
+            plainSelect.setWhere(where);
+        } catch (JSQLParserException e) {
+            e.printStackTrace();
         }
     }
 
@@ -182,18 +237,21 @@ public class DacSqlParser {
      *
      * @param fromItem
      */
-    public void processFromItem(FromItem fromItem) {
+    private void processFromItem(Object node, FromItem fromItem) {
         if (fromItem instanceof SubJoin) {
             SubJoin subJoin = (SubJoin) fromItem;
             if (subJoin.getJoinList() != null && subJoin.getJoinList().size() > 0) {
                 for (Join join : subJoin.getJoinList()) {
                     if (join.getRightItem() != null) {
-                        processFromItem(join.getRightItem());
+                        processFromItem(join, join.getRightItem());
                     }
                 }
             }
+//            new SubSelect().getSelectBody()
+//            CCJSqlParserUtil.parseCondExpression()
+//            subJoin.setl
             if (subJoin.getLeft() != null) {
-                processFromItem(subJoin.getLeft());
+                processFromItem(subJoin, subJoin.getLeft());
             }
         } else if (fromItem instanceof SubSelect) {
             SubSelect subSelect = (SubSelect) fromItem;
@@ -210,14 +268,41 @@ public class DacSqlParser {
                     processSelectBody(subSelect.getSelectBody());
                 }
             }
-        } else if (fromItem instanceof Table){
-            log.debug(fromItem.toString());
+        } else if (fromItem instanceof Table) {
+            Table t = (Table) fromItem;
+//            fromItem.getAlias().getName();
+//            String addWhere = "rm.tenant_id=''";
+//            appendAndWhere(plainSelect, addWhere);
+            if (!isDacTable(t)) {
+                return;
+            }
+            if (node instanceof PlainSelect) {
+                PlainSelect select = (PlainSelect) node;
+
+            } else if (node instanceof Join) {
+                Join join = (Join) node;
+            } else if (node instanceof SubJoin) {
+                SubJoin subJoin = (SubJoin) node;
+            }
         }
-        //Table时不用处理
+    }
+
+    private boolean isDacTable(Table t) {
+        boolean isDac = dacTables.contains(t.getName());
+        if (isDac) {
+            return true;
+        }
+        for (String dacTable : dacTables) {
+            String[] tableArray = dacTable.split(".");
+            if (tableArray.length > 1 && tableArray[1].equals(t.getName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
-     * 判断Orderby是否包含参数，有参数的不能去
+     * 判断Order by是否包含参数，有参数的不能去
      *
      * @param orderByElements
      * @return

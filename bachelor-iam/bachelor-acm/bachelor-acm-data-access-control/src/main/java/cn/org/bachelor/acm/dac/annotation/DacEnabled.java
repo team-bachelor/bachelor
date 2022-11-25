@@ -8,9 +8,9 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Documented
 public @interface DacEnabled {
-    @AliasFor("enable")
-    boolean value();
-    
+    @AliasFor("enabled")
+    boolean value() default true;
+
     @AliasFor("value")
     boolean enabled() default true;
 }

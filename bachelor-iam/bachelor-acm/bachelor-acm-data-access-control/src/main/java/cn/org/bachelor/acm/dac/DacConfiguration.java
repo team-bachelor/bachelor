@@ -9,6 +9,8 @@ public class DacConfiguration {
 
     private DacField[] fields;
 
+    private String[] packages;
+
     public DacField[] getFields() {
         return fields;
     }
@@ -23,5 +25,13 @@ public class DacConfiguration {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String[] getPackages() {
+        return packages;
+    }
+
+    public void setPackages(String[] packages) {
+        this.packages = packages;
     }
 }

@@ -44,10 +44,7 @@ import tk.mybatis.mapper.util.StringUtil;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * QueryInterceptor 规范
@@ -65,6 +62,8 @@ public class DacInterceptor implements Interceptor {
     private DacConfiguration properties;
 
     private ILogonUserContext logonUserContext;
+
+    private List<String> dacTables;
 
     public DacInterceptor() {
         String bannerEnabled = System.getProperty("bachelor.dac.banner");
@@ -273,4 +272,7 @@ public class DacInterceptor implements Interceptor {
         this.logonUserContext = context;
     }
 
+    public void setDacTables(List<String> dacTables) {
+        this.dacTables = dacTables;
+    }
 }

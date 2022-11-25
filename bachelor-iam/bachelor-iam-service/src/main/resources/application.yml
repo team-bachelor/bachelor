@@ -75,6 +75,8 @@ management:
 bachelor:
   dac:
 #    enabled: false
+    packages:
+      - "cn.**."
     fields:
       - name: "tenant_id"
   iam:

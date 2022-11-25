@@ -1,7 +1,7 @@
 spring:
   datasource:
     ##测试服
-    url: jdbc:mysql://localhost:3306/auth_test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/auth_dac?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
     username: root
     password: Aa123456
 bachelor:

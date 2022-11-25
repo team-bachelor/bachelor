@@ -24,6 +24,10 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.org.bachelor</groupId>
+            <artifactId>bachelor-acm-data-access-control</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,21 +1,29 @@
 package cn.org.bachelor.acm.dac;
 
+import cn.org.bachelor.acm.dac.annotation.DacEnabled;
+import cn.org.bachelor.acm.dac.util.AopTargetUtils;
+import cn.org.bachelor.acm.dac.util.ClassUtils;
+import cn.org.bachelor.acm.dac.util.StringUtil;
 import cn.org.bachelor.context.ILogonUserContext;
 import com.github.pagehelper.autoconfigure.PageHelperAutoConfiguration;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
+import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
- *
- *
  * @author liuzhuo
  */
 @Configuration
@@ -23,29 +31,29 @@ import java.util.List;
         name = {"enabled"}, havingValue = "true", matchIfMissing = true)
 //@ConditionalOnBean(SqlSessionFactory.class)
 @EnableConfigurationProperties(DacConfiguration.class)
-//@AutoConfigureAfter(MybatisAutoConfiguration.class)
-//@AutoConfigureBefore(PageHelperAutoConfiguration.class)
-@AutoConfigureAfter(PageHelperAutoConfiguration.class)
+@AutoConfigureAfter(MybatisAutoConfiguration.class)
+@AutoConfigureBefore(PageHelperAutoConfiguration.class)
+//@AutoConfigureAfter(PageHelperAutoConfiguration.class)
 @Lazy(false)
 public class DacAutoConfig implements InitializingBean {
 
     private final List<SqlSessionFactory> sqlSessionFactoryList;
 
-    private final DacConfiguration properties;
+    private final DacConfiguration configuration;
 
     private ILogonUserContext logonUserContext;
 
-    public DacAutoConfig(List<SqlSessionFactory> sqlSessionFactoryList, DacConfiguration properties, ILogonUserContext logonUserContext) {
+    public DacAutoConfig(List<SqlSessionFactory> sqlSessionFactoryList, DacConfiguration configuration, ILogonUserContext logonUserContext) {
         this.sqlSessionFactoryList = sqlSessionFactoryList;
-        this.properties = properties;
+        this.configuration = configuration;
         this.logonUserContext = logonUserContext;
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         DacInterceptor interceptor = new DacInterceptor();
 //        interceptor.setProperties(this.properties);
-        interceptor.setDacProperties(properties);
+        interceptor.setDacProperties(configuration);
         interceptor.setLogonUserContext(logonUserContext);
         for (SqlSessionFactory sqlSessionFactory : sqlSessionFactoryList) {
             org.apache.ibatis.session.Configuration configuration = sqlSessionFactory.getConfiguration();
@@ -53,6 +61,27 @@ public class DacAutoConfig implements InitializingBean {
                 configuration.addInterceptor(interceptor);
             }
         }
+        List<String> dacTables = new ArrayList<>();
+        for (String aPackage : configuration.getPackages()) {
+            aPackage = aPackage.endsWith(".") ? aPackage : aPackage + ".";
+            dacTables.addAll(getDacTables(aPackage));
+        }
+        interceptor.setDacTables(dacTables);
+    }
+
+    public List<String> getDacTables(String pack) {
+        List<Class<?>> classes = ClassUtils.getClasses(pack);
+        List<String> dacTables = new ArrayList<>();
+        for (Class<?> clazz : classes) {
+            DacEnabled dacEnabled = clazz.getAnnotation(DacEnabled.class);
+            if (dacEnabled != null) {
+                Table table = clazz.getAnnotation(Table.class);
+                if (table != null) {
+                    dacTables.add((StringUtil.isEmpty(table.catalog()) ? "" : table.catalog() + ".") + table.name());
+                }
+            }
+        }
+        return dacTables;
     }
 
     /**
