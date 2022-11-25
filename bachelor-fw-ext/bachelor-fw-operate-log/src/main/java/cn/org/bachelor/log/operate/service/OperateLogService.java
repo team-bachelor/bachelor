@@ -39,10 +39,10 @@ public class OperateLogService {
             criteria.andEqualTo("id", logParams.getId());
         }
         if (StringUtils.isNotEmpty(logParams.getOpAccount())) {
-            criteria.andLike("operatorAccount", "%" + logParams.getOpAccount() + "%");
+            criteria.andLike("opAccount", "%" + logParams.getOpAccount() + "%");
         }
         if (StringUtils.isNotEmpty(logParams.getOpOrgId())) {
-            criteria.andLike("operatorOrgan", "%" + logParams.getOpOrgId() + "%");
+            criteria.andLike("opOrg", "%" + logParams.getOpOrgId() + "%");
         }
         if (StringUtils.isNotEmpty(logParams.getDataBase())) {
             criteria.andEqualTo("dataBase", logParams.getDataBase());
