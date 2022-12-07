@@ -1,5 +1,6 @@
 package cn.org.bachelor.acm.dac.parser;
 
+import cn.org.bachelor.acm.dac.DacField;
 import cn.org.bachelor.acm.dac.util.StringUtil;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
@@ -64,6 +65,11 @@ public class DacSqlParser {
                     "XMLAGG").split(",")));
 
     private List<String> dacTables = new ArrayList<>(0);
+    private List<DacField> dacFields = new ArrayList<>(0);
+    public DacSqlParser(List<String> dacTables, List<DacField> dacFields){
+        this.dacTables = dacTables;
+        this.dacFields = dacFields;
+    }
 
     public static void main(String[] args) throws JSQLParserException {
 //        String sql = "select * from DRILL_YEAR_PLAN where 1=1 \n" +
@@ -99,12 +105,12 @@ public class DacSqlParser {
 //                "  LEFT JOIN ( SELECT `SCENARIOS_ID` AS `scenariosId`, count( 1 ) AS `recordCount` FROM `DRILL_DRILL_RECORD` GROUP BY `SCENARIOS_ID` ) `t2` ON (( " +
 //                "   `t_tmp`.`scenariosId` = `t2`.`scenariosId` " +
 //                " ))) ";
-        System.out.print("原SQL：");
-        System.out.println(sql);
-        DacSqlParser parser = new DacSqlParser();
-        System.out.print("隔离后：");
-        sql = parser.getSmartDacSql(sql);
-        System.out.println(sql);
+//        System.out.print("原SQL：");
+//        System.out.println(sql);
+//        DacSqlParser parser = new DacSqlParser(dacTables, dacFields);
+//        System.out.print("隔离后：");
+//        sql = parser.getSmartDacSql(sql);
+//        System.out.println(sql);
     }
 
     /**

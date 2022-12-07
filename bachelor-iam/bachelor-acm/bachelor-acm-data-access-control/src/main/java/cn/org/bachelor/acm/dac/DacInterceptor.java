@@ -59,7 +59,7 @@ public class DacInterceptor implements Interceptor {
 
     private static final Log log = LogFactory.getLog(DacInterceptor.class);
 
-    private DacConfiguration properties;
+    private DacConfiguration configuration;
 
     private ILogonUserContext logonUserContext;
 
@@ -97,7 +97,7 @@ public class DacInterceptor implements Interceptor {
             cacheKey = (CacheKey) args[4];
             boundSql = (BoundSql) args[5];
         }
-        DacField[] dacFields = properties.getFields();
+        DacField[] dacFields = configuration.getFields();
         //如果配置为不启用，或者方法/类上设置了不启用，或是未设置访问控制的字段，则当前查询不进行处理
         if (skip(invocation) || dacFields.length == 0) {
             return executor.query(ms, parameter, rowBounds, resultHandler, cacheKey, boundSql);
@@ -129,7 +129,7 @@ public class DacInterceptor implements Interceptor {
             });
             boundSql = ms.getBoundSql(parameter);
         } else {
-            DacSqlParser sqlParser = new DacSqlParser();
+            DacSqlParser sqlParser = new DacSqlParser(this.dacTables, Arrays.asList(this.configuration.getFields()));
             String dacSql = sqlParser.getSmartDacSql(boundSql.getSql());
             boundSql = new BoundSql(ms.getConfiguration(), dacSql, boundSql.getParameterMappings(), parameter);
         }
@@ -159,7 +159,7 @@ public class DacInterceptor implements Interceptor {
                 return !enabled.enabled();
             }
         }
-        return !properties.isEnabled();
+        return !configuration.isEnabled();
     }
 
     private int getMatchIndex(DacField key, Object value) {
@@ -265,7 +265,7 @@ public class DacInterceptor implements Interceptor {
     }
 
     public void setDacProperties(DacConfiguration properties) {
-        this.properties = properties;
+        this.configuration = properties;
     }
 
     public void setLogonUserContext(ILogonUserContext context) {
