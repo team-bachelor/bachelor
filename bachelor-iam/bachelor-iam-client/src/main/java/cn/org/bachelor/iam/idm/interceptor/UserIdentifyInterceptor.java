@@ -6,6 +6,7 @@ import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.iam.idm.service.ImSysService;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
 import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
+import cn.org.bachelor.service.ApplicationContextHolder;
 import cn.org.bachelor.web.util.RequestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +29,7 @@ import java.net.URLDecoder;
  * @author liuzhuo
  * @version 1.0
  */
+
 public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LoggerFactory.getLogger(UserIdentifyInterceptor.class);
     @Autowired
@@ -51,6 +53,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
         user.setDeptName(request.getHeader(JwtToken.PayloadKey.DEPT_NAME));
         user.setAccessToken(request.getHeader(JwtToken.PayloadKey.ACCESS_TOKEN));
         user.setTenantId(request.getHeader(JwtToken.PayloadKey.TENANT_ID));
+        user.setAreaId(request.getHeader(JwtToken.PayloadKey.AREA_ID));
         Object o = request.getAttribute(ACCESS_BACKEND);
         if (o != null && "N".equals(o.toString())) {
             user.setAccessBackend(false);

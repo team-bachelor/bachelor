@@ -32,7 +32,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
 
 import static cn.org.bachelor.iam.oauth2.client.util.ClientConstant.OAUTH_CB_STATE;
 
@@ -66,11 +65,11 @@ public class OAuth2Client {
      * 获取授权码
      * @return
      */
-    public String getAuthrizationCode() {
-//		logger.info("进入getAuthrizationCode");
+    public String getAuthorizationCode() {
+//		logger.info("进入getAuthorizationCode");
         String code = request.getParameter("code");
         boolean isRedirectURL = isRedirectURL();
-        logger.info("进入getAuthrizationCode，code=" + code + "，isRedirectURL=" + isRedirectURL);
+        logger.info("进入getAuthorizationCode，code=" + code + "，isRedirectURL=" + isRedirectURL);
         if (!isRedirectURL) {
 //			return null;
         }
@@ -103,16 +102,16 @@ public class OAuth2Client {
      * 引导用户授权
      * @throws IOException
      */
-    public void toGetAuthrizationCode() throws IOException {
-        toGetAuthrizationCode(null);
+    public void toGetAuthorizationCode() throws IOException {
+        toGetAuthorizationCode(null);
     }
 
     /**
      * 引导用户授权
      * @throws IOException
      */
-    public void toGetAuthrizationCode(HttpServletRequest request) throws IOException {
-        logger.info("进入toGetAuthrizationCode");
+    public void toGetAuthorizationCode(HttpServletRequest request) throws IOException {
+        logger.info("进入toGetAuthorizationCode");
         String phoneId = getPhoneId();
 //		StringBuffer originalURL=new StringBuffer(url);
 //		String quering=getParamUrl(request,request.getCharacterEncoding(),null);
@@ -159,7 +158,7 @@ public class OAuth2Client {
         }
         String _url = url.toString();
         response.sendRedirect(_url);
-        logger.info("退出toGetAuthrizationCode，url=" + _url);
+        logger.info("退出toGetAuthorizationCode，url=" + _url);
     }
 
     public String refreshAccessToken(String currentRefreshToken) {
@@ -219,11 +218,11 @@ public class OAuth2Client {
 
     /**
      * 调用API获取用户信息并将用户信息绑定到会话中
-     * @param authrizationCode
+     * @param authorizationCode
      * @return
      * @throws Exception
      */
-    public String bindUserInfo(String authrizationCode) {
+    public JSONObject bindUserInfo(String authorizationCode) {
         logger.info("去调用用户信息接口方法");
         String accessToken = "";
         String refreshToken = "";
@@ -234,7 +233,7 @@ public class OAuth2Client {
                     .setGrantType(GrantType.AUTHORIZATION_CODE)
                     .setClientId(config.getId())
                     .setClientSecret(config.getSecret())
-                    .setCode(authrizationCode)
+                    .setCode(authorizationCode)
                     .setRedirectURI(config.getLoginRedirectURL());
             DefaultOAuthRequest accessTokenRequest = builder.buildQueryMessage();
 
@@ -323,7 +322,7 @@ public class OAuth2Client {
 
         logger.info("当前登录用户 userId:" + ClientUtil.getCurrentUserId());
         logger.info("登录后的令牌信息：" + request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY));
-        return person.toString();
+        return person;
     }
 
     /**
@@ -491,7 +490,7 @@ public class OAuth2Client {
         if (obj instanceof OAuth2ClientCertification) {
             OAuth2ClientCertification my = (OAuth2ClientCertification) obj;
             String userid = my.getUserid();
-            boolean tokenValid = tockenValid(req);
+            boolean tokenValid = tokenValid(req);
             logger.info("isLogin(), userid:" + userid + ",tokenVlid=:" + tokenValid);
             if (userid != null && !userid.equals("") && tokenValid) {
                 ClientUtil.setSession(req.getSession());
@@ -526,7 +525,7 @@ public class OAuth2Client {
         }
     }
 
-    private boolean tockenValid(HttpServletRequest req) {
+    private boolean tokenValid(HttpServletRequest req) {
         Object obj = request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
         if (!(obj instanceof OAuth2ClientCertification)) {
             return false;

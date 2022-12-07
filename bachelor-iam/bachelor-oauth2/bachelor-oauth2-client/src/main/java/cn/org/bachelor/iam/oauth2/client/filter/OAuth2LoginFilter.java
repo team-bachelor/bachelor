@@ -114,12 +114,12 @@ public class OAuth2LoginFilter implements Filter {
                 return;
             }
             setLogon((HttpServletResponse) response, false);
-            String code = client.getAuthrizationCode();
+            String code = client.getAuthorizationCode();
             logger.info("code:" + code);
             if (code == null) {
                 logger.info("code为空时 从服务端获取code----url:" + requestURI);
 //				client.toGetAuthrizationCode();
-                client.toGetAuthrizationCode((HttpServletRequest) request);
+                client.toGetAuthorizationCode((HttpServletRequest) request);
                 return;
             }
 
