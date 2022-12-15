@@ -32,7 +32,7 @@ import java.net.URLDecoder;
 public class IdentifyInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LoggerFactory.getLogger(IdentifyInterceptor.class);
     @Autowired
-    private IamContext valueHolder;
+    private IamContext iamContext;
     @Autowired
     private ImSysService imSysService;
 
@@ -94,9 +94,9 @@ public class IdentifyInterceptor extends HandlerInterceptorAdapter {
             user.setAdministrator(imSysService.checkUserIsAdmin(user));
             user.setAccessBackend(false);
         }
-        valueHolder.setLogonUser(user);
+        iamContext.setLogonUser(user);
 
-        valueHolder.setRemoteIP(RequestUtil.getIpAddr(request));
+        iamContext.setRemoteIP(RequestUtil.getIpAddr(request));
         return true;
     }
 

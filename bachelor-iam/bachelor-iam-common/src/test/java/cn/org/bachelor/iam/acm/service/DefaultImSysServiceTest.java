@@ -19,7 +19,7 @@ import java.util.Set;
  * @创建时间: 2019/3/28
  */
 public class DefaultImSysServiceTest {
-    private MockAuthValueHolderService valueHolder = new MockAuthValueHolderService();
+    private MockIamContext iamContext = new MockIamContext();
 
     @Autowired
     private ImSysService imSysService;
@@ -30,7 +30,7 @@ public class DefaultImSysServiceTest {
     }
 
     @Before
-    public void setUP() {
+    public void setUp() {
         UserVo user = new UserVo();
         //csuser.setId("99cf4d4160ab41088cea773fd9839675");
         user.setId("d75fb9754ecd48f79845873840faa0d0");
@@ -39,45 +39,8 @@ public class DefaultImSysServiceTest {
                 "b6Vun3JYuUjZXMxSl1SpSA8aKRBcRT1D3hbr1ToWWNhswljgy2AolOFqfsVB2B/BvDgcaPZM2Be9qiPldqofLXMhqkFCB2BFqLTMMBVUArf4zdw8FXROLookwgRxCiM4ptkkXSLYSZEoFZVr/vyf/Xs1apL91j94h35V3yYX54aPgk="
                 //"jqdUSI0Y7Ty6eNwWIpsbyDggkyVzDjCO37jngH2BZzlCHmBqqzuSaDssoA0U8EK7ekpd2B3H8K2BpZm5pzG1L6Sd2BndGl9qdoWSeiKGjnsBIOn1WqD99AYvJAbzn57eviXI1nesP3aBkNdt2BdLzdmplhYLZFeX9p9l2BxB/SP/713k8="
         );
-        valueHolder.setLogonUser(user);
-//        userSysService = new DefaultUserSysService(valueHolder);
+        iamContext.setLogonUser(user);
     }
-
-    //    @Test
-//    public void getUserDetail(){
-//        userSysService.findUserDetail(valueHolder.getLogonUser().getId());
-//    }
-//
-//    @Test
-//    public void getUsers(){
-//        UserSysParam param = new UserSysParam();
-//        param.setOrgId("bcbc3664b35d473aab01d1876f255311");
-//        param.setDeptId("f10570f12fa9463884ac634fd7d91c63");
-//        param.setUserName("刘");
-//        param.setPageSize("1");
-//        param.setPage("2");
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        try {
-//            String s = objectMapper.writeValueAsString(userSysService.findUsers(param)) ;
-//            System.out.println(s);
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @Test
-//    public void getDeptDetail(){
-//        userSysService.findDeptDetail("740a06be1ac74273ba09380c52028c1f");
-//    }
-//    @Test
-//    public void getDeptDetail(){
-//        //"68a99ef178e34d10a53b66e7a98316c9","07d2a7ded91d466aa7ded2b33c2a197b",true,-1,"07d2a7ded91d466aa7ded2b33c2a197b"
-//        List l = userSysService.findDepts(
-//                "68a99ef178e34d10a53b66e7a98316c9",
-//                "07d2a7ded91d466aa7ded2b33c2a197b",
-//                true,
-//                0);
-//    }
     @Test
     public void getAppUsers() {
         ImSysParam param = new ImSysParam();

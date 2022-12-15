@@ -47,7 +47,7 @@ public class AuthorizeService implements AuthorizeServiceStub {
     private ObjOperationMapper objOperationMapper;
 
     @Resource
-    private IamContext valueHolder;
+    private IamContext iamContext;
 
     private static final String DEF_AUTH_OP_ALLOW = PermissionOptions.CheckLevel.NONE.toString();
     private static final String DEF_AUTH_OP_CHECK = PermissionOptions.CheckLevel.Authorized.toString();
@@ -105,8 +105,8 @@ public class AuthorizeService implements AuthorizeServiceStub {
 
         Map<String, PermissionPoint> result = new HashMap<>();
         boolean isadmin = false;
-        if (userCode.equals(valueHolder.getLogonUser().getCode())
-                && valueHolder.getLogonUser().isAdministrator()) {
+        if (userCode.equals(iamContext.getUser().getCode())
+                && iamContext.getUser().isAdministrator()) {
             isadmin = true;
         }
         List<RolePermission> rpList;
@@ -241,7 +241,7 @@ public class AuthorizeService implements AuthorizeServiceStub {
             } else {
                 //如果不存在则插入数据库
                 String userId = "system";
-                UserVo userVo = valueHolder.getLogonUser();
+                UserVo userVo = iamContext.getUser();
                 if (userVo != null && StringUtils.isNotEmpty(userVo.getCode())) {
                     userId = userVo.getCode();
                 }
@@ -313,7 +313,7 @@ public class AuthorizeService implements AuthorizeServiceStub {
             } else {
                 //如果不存在则插入数据库
                 String userId = "system";
-                UserVo userVo = valueHolder.getLogonUser();
+                UserVo userVo = iamContext.getUser();
                 if (userVo == null || StringUtils.isEmpty(userVo.getCode())) {
                     userId = userVo.getCode();
                 }

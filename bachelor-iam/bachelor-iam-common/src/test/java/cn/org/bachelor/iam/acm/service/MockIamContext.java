@@ -8,7 +8,7 @@ import cn.org.bachelor.iam.vo.UserVo;
  * @创建人: liuzhuo
  * @创建时间: 2019/3/28
  */
-public class MockAuthValueHolderService extends IamContext {
+public class MockIamContext extends IamContext {
 
     private String remoteIP;
     private UserVo user;
@@ -17,7 +17,7 @@ public class MockAuthValueHolderService extends IamContext {
         this.user = user;
     }
 
-    public UserVo getLogonUser() {
+    public UserVo getUser() {
         return this.user;
     }
 

@@ -47,14 +47,14 @@ public class AcmInitController {
     @Resource
     ObjDomainService domainService;
     @Autowired
-    private IamContext valueHolder;
+    private IamContext iamContext;
 
 
     @ApiOperation(value = "初始化权限点")
     @GetMapping(value = "/init")
     public ResponseEntity<JsonResponse> initPermissions() {
         List<ObjPermissionVo> list = getObjPermissionVos();
-        String userCode = valueHolder.getCurrentUserCode();
+        String userCode = iamContext.getCurrentUserCode();
         Map<String, ObjOperation> opMap = new HashMap<>();
         Map<String, ObjDomain> domainMap = new HashMap<>();
         List<ObjPermission> permissions = new ArrayList<>(list.size());
@@ -122,17 +122,6 @@ public class AcmInitController {
         newPermission.setUpdateUser(userCode);//获取当前用户
         permissions.add(newPermission);
     }
-
-//    private String getUserName() {
-//        UserVo user = valueHolder.getLogonUser();
-//        String name = "system_unknow";
-//        if (user != null && user.getCode() != null) {
-//            name = user.getCode();
-//        } else if (valueHolder.getRemoteIP() != null) {
-//            name = valueHolder.getRemoteIP();
-//        }
-//        return name;
-//    }
 
     private List<ObjPermissionVo> getObjPermissionVos() {
         // 获取springmvc处理器映射器组件对象 RequestMappingHandlerMapping无法直接注入

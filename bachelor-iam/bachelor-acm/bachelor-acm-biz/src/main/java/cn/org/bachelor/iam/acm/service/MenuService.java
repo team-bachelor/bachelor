@@ -37,7 +37,7 @@ public class MenuService {
     private MenuMapper menuMapper;
 
     @Autowired
-    private IamContext valueHolder;
+    private IamContext iamContext;
 
 
     /**
@@ -48,8 +48,8 @@ public class MenuService {
     public void insert(Menu m) {
         m.setId(UUID.randomUUID().toString());
         m.setUpdateTime(new Date());
-        String userCode = valueHolder.getCurrentUserCode();
-        m.setUpdateUser(userCode == null ? valueHolder.getRemoteIP() : userCode);
+        String userCode = iamContext.getCurrentUserCode();
+        m.setUpdateUser(userCode == null ? iamContext.getRemoteIP() : userCode);
         menuMapper.insert(m);
     }
 
@@ -60,8 +60,8 @@ public class MenuService {
      */
     public void update(Menu m) {
         m.setUpdateTime(new Date());
-        String userCode = valueHolder.getCurrentUserCode();
-        m.setUpdateUser(userCode == null ? valueHolder.getRemoteIP() : userCode);
+        String userCode = iamContext.getCurrentUserCode();
+        m.setUpdateUser(userCode == null ? iamContext.getRemoteIP() : userCode);
         menuMapper.updateByPrimaryKey(m);
     }
 
@@ -97,7 +97,7 @@ public class MenuService {
         }
         boolean isAdmin;
         //如果是管理员则取全部菜单
-        isAdmin = userCode.equals(valueHolder.getLogonUser().getCode()) && valueHolder.getLogonUser().isAdministrator();
+        isAdmin = userCode.equals(iamContext.getUser().getCode()) && iamContext.getUser().isAdministrator();
         if (isAdmin) {
             return getAllMenu(group, parentId);
         } else {
@@ -196,7 +196,7 @@ public class MenuService {
             menu.setOrgCode(orgCode);
             menu.setMenuCode(m);
             menu.setUpdateTime(new Date());
-            menu.setUpdateUser(valueHolder.getLogonUser() == null ? "unknown" : valueHolder.getLogonUser().getCode());
+            menu.setUpdateUser(iamContext.getUser() == null ? "unknown" : iamContext.getUser().getCode());
             orgMenuMapper.insert(menu);
         }
     }
@@ -237,7 +237,7 @@ public class MenuService {
             rmenu.setRoleCode(roleCode);
             rmenu.setMenuCode(m);
             rmenu.setUpdateTime(new Date());
-            rmenu.setUpdateUser(valueHolder.getLogonUser() == null ? "unknown" : valueHolder.getLogonUser().getCode());
+            rmenu.setUpdateUser(iamContext.getUser() == null ? "unknown" : iamContext.getUser().getCode());
             roleMenuMapper.insert(rmenu);
         }
     }

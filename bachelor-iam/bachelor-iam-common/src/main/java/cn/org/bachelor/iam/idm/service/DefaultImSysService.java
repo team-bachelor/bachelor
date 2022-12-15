@@ -43,17 +43,17 @@ public class DefaultImSysService implements ImSysService {
     private static final Logger logger = LoggerFactory.getLogger(DefaultImSysService.class);
     private ObjectMapper jsonMapper = new ObjectMapper();
     @Autowired
-    private IamContext valueHolder;
+    private IamContext iamContext;
 
     @Autowired
     private OAuth2CientConfig clientConfig;
 
     /**
-     * @param valueHolder AuthValueHolderService
+     * @param iamContext IamContext
      * @see IamContext
      */
-    public DefaultImSysService(IamContext valueHolder) {
-        this.valueHolder = valueHolder;
+    public DefaultImSysService(IamContext iamContext) {
+        this.iamContext = iamContext;
     }
 
     private class AdminCache {
@@ -124,7 +124,7 @@ public class DefaultImSysService implements ImSysService {
 
     @Override
     public List<RoleVo> findUserRolesInClient(String clientID, String userID, String orgID) {
-        UserVo user = valueHolder.getLogonUser();
+        UserVo user = iamContext.getUser();
         String token = null;
         if (user != null && user.getAccessToken() != null) {
             token = user.getAccessToken();
@@ -635,12 +635,12 @@ public class DefaultImSysService implements ImSysService {
 
             String token = "";
             if (astoken == null) {
-                UserVo user = valueHolder.getLogonUser();
+                UserVo user = iamContext.getUser();
                 if (user != null && user.getAccessToken() != null) {
                     token = user.getAccessToken();
                 }else{
                     OAuth2ClientCertification upCC =
-                            (OAuth2ClientCertification) valueHolder.getBaseContext().getSessionAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
+                            (OAuth2ClientCertification) iamContext.getBaseContext().getSessionAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
                     if(upCC == null){
                         throw new BusinessException("access token can not be null!");
                     }

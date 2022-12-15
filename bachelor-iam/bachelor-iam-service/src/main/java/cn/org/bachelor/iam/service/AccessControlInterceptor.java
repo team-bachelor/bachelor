@@ -31,7 +31,7 @@ import java.util.Date;
 public class AccessControlInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LoggerFactory.getLogger(AccessControlInterceptor.class);
     @Autowired
-    private IamContext valueHolder;
+    private IamContext iamContext;
 
     @Autowired
     private AuthorizeServiceStub authorizeService;
@@ -62,13 +62,13 @@ public class AccessControlInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        UserVo user = valueHolder.getLogonUser();
+        UserVo user = iamContext.getUser();
         String usercode = "";
         if (user != null) {
             usercode = user.getCode();
         }
         boolean pass = isPass(permCode, accessType, user, usercode);
-        logger.info("access path=[" + requestPath + "], from=[" + valueHolder.getRemoteIP() + "], user=[" + usercode + "], is authorized=[" + pass + "]");
+        logger.info("access path=[" + requestPath + "], from=[" + iamContext.getRemoteIP() + "], user=[" + usercode + "], is authorized=[" + pass + "]");
         if (!pass) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             try {
