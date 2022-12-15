@@ -1,7 +1,7 @@
 package cn.org.bachelor.log.operate.service;
 
-import cn.org.bachelor.context.ILogonUser;
-import cn.org.bachelor.context.ILogonUserContext;
+import cn.org.bachelor.context.IUser;
+import cn.org.bachelor.context.IUserContext;
 import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.log.operate.OperateLogObject;
 import cn.org.bachelor.log.operate.OperateLogSubject;
@@ -28,7 +28,7 @@ public class OperateLogService {
     private OperateLogMapper logMapper;
 
     @Autowired(required = false)
-    private ILogonUserContext logonUserContext;
+    private IUserContext logonUserContext;
 
     public List<OperateLog> getOperateLog(OperateLog logParams) {
 
@@ -114,7 +114,7 @@ public class OperateLogService {
         ol.setIdentify(data.getIdentify());
         ol.setAttribute(StringUtils.isEmpty(attribute) ? data.getAttribute() : attribute);
         ol.setResult(StringUtils.isEmpty(result) ? "成功" : result);
-        ILogonUser user = logonUserContext == null ? null : logonUserContext.getLogonUser();
+        IUser user = logonUserContext == null ? null : logonUserContext.getUser();
         if (user == null) {
             logger.warn("操作日志未获取到操作用户，可以尝试在工程中引入bachelor-iam-client模块，并通过网关访问当前操作。");
             ol.setOpAccount("未获取");

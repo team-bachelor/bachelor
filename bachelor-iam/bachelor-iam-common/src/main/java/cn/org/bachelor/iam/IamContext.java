@@ -6,7 +6,7 @@
 package cn.org.bachelor.iam;
 
 import cn.org.bachelor.context.IContext;
-import cn.org.bachelor.context.ILogonUserContext;
+import cn.org.bachelor.context.IUserContext;
 import cn.org.bachelor.iam.utils.StringUtils;
 import cn.org.bachelor.iam.vo.UserVo;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  * @author Team Bachelor
  */
 @Service
-public class IamContext implements ILogonUserContext {
+public class IamContext implements IUserContext {
 
     @Resource
     private IContext baseContext;
@@ -35,11 +35,11 @@ public class IamContext implements ILogonUserContext {
 
     @Deprecated
     public UserVo getCurrentUser() {
-        return getLogonUser();
+        return getUser();
     }
 
     public boolean isUserLogon() {
-        UserVo user = getLogonUser();
+        UserVo user = getUser();
         return user == null ? false : StringUtils.isEmpty(user.getAccessToken()) ? false : true;
     }
 
@@ -47,7 +47,7 @@ public class IamContext implements ILogonUserContext {
         baseContext.setRequestAttribute(IamConstant.USER_KEY, user);
     }
 
-    public UserVo getLogonUser() {
+    public UserVo getUser() {
         Object uo = baseContext.getRequestAttribute(IamConstant.USER_KEY);
         if (uo != null) {
             return (UserVo) uo;
@@ -56,7 +56,7 @@ public class IamContext implements ILogonUserContext {
     }
 
     public String getCurrentUserCode() {
-        UserVo user = getLogonUser();
+        UserVo user = getUser();
         String name = "user_unknown";
         if (user != null && user.getCode() != null) {
             name = user.getCode();

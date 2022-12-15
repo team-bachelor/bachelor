@@ -1,10 +1,9 @@
 package cn.org.bachelor.acm.dac;
 
-import cn.org.bachelor.acm.dac.annotation.DacEnabled;
-import cn.org.bachelor.acm.dac.util.AopTargetUtils;
+import cn.org.bachelor.acm.dac.annotation.DacTable;
 import cn.org.bachelor.acm.dac.util.ClassUtils;
 import cn.org.bachelor.acm.dac.util.StringUtil;
-import cn.org.bachelor.context.ILogonUserContext;
+import cn.org.bachelor.context.IUserContext;
 import com.github.pagehelper.autoconfigure.PageHelperAutoConfiguration;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -14,14 +13,12 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author liuzhuo
@@ -41,9 +38,9 @@ public class DacAutoConfig implements InitializingBean {
 
     private final DacConfiguration configuration;
 
-    private ILogonUserContext logonUserContext;
+    private IUserContext logonUserContext;
 
-    public DacAutoConfig(List<SqlSessionFactory> sqlSessionFactoryList, DacConfiguration configuration, ILogonUserContext logonUserContext) {
+    public DacAutoConfig(List<SqlSessionFactory> sqlSessionFactoryList, DacConfiguration configuration, IUserContext logonUserContext) {
         this.sqlSessionFactoryList = sqlSessionFactoryList;
         this.configuration = configuration;
         this.logonUserContext = logonUserContext;
@@ -52,7 +49,6 @@ public class DacAutoConfig implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
         DacInterceptor interceptor = new DacInterceptor();
-//        interceptor.setProperties(this.properties);
         interceptor.setDacProperties(configuration);
         interceptor.setLogonUserContext(logonUserContext);
         for (SqlSessionFactory sqlSessionFactory : sqlSessionFactoryList) {
@@ -73,8 +69,8 @@ public class DacAutoConfig implements InitializingBean {
         List<Class<?>> classes = ClassUtils.getClasses(pack);
         List<String> dacTables = new ArrayList<>();
         for (Class<?> clazz : classes) {
-            DacEnabled dacEnabled = clazz.getAnnotation(DacEnabled.class);
-            if (dacEnabled != null) {
+            DacTable dacTable = clazz.getAnnotation(DacTable.class);
+            if (dacTable != null) {
                 Table table = clazz.getAnnotation(Table.class);
                 if (table != null) {
                     dacTables.add((StringUtil.isEmpty(table.catalog()) ? "" : table.catalog() + ".") + table.name());

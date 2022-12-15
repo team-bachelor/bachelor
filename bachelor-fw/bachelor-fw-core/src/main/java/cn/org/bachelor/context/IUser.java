@@ -6,7 +6,7 @@ package cn.org.bachelor.context;
  * @创建人: liuzhuo
  * @创建时间: 2022/11/10
  */
-public interface ILogonUser {
+public interface IUser {
 
     String getId();
 

@@ -1,10 +1,10 @@
 package cn.org.bachelor.acm.dac;
 
-public class DacField {
+public class DacFieldConfig {
 
-    public DacField(){
+    public DacFieldConfig(){
     }
-    public DacField(String name){
+    public DacFieldConfig(String name){
         this.name = name;
     }
 

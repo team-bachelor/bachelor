@@ -7,15 +7,15 @@ public class DacConfiguration {
 
     private boolean enabled = true;
 
-    private DacField[] fields;
+    private DacFieldConfig[] fields;
 
     private String[] packages;
 
-    public DacField[] getFields() {
+    public DacFieldConfig[] getFields() {
         return fields;
     }
 
-    public void setFields(DacField[] fields) {
+    public void setFields(DacFieldConfig[] fields) {
         this.fields = fields;
     }
 

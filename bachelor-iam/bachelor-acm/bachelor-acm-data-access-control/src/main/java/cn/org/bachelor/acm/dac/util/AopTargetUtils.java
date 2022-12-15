@@ -6,7 +6,7 @@ import org.springframework.aop.support.AopUtils;
 
 import java.lang.reflect.Field;
 
-public class AopTargetUtils {
+public abstract class AopTargetUtils {
 
 
     public static Object getTarget(Object obj ){

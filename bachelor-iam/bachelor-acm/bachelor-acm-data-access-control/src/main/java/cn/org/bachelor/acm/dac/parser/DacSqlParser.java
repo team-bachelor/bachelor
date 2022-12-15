@@ -1,8 +1,11 @@
 package cn.org.bachelor.acm.dac.parser;
 
-import cn.org.bachelor.acm.dac.DacField;
+import cn.org.bachelor.acm.dac.DacFieldConfig;
 import cn.org.bachelor.acm.dac.util.StringUtil;
+import cn.org.bachelor.context.IUser;
+import cn.org.bachelor.exception.SystemException;
 import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.expression.Alias;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
@@ -11,7 +14,10 @@ import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.select.*;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
-
+import tk.mybatis.mapper.entity.Example;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -64,11 +70,172 @@ public class DacSqlParser {
                     "VAR," +
                     "XMLAGG").split(",")));
 
+    /**
+     * 需要进行数据权限拦截的表
+     */
     private List<String> dacTables = new ArrayList<>(0);
-    private List<DacField> dacFields = new ArrayList<>(0);
-    public DacSqlParser(List<String> dacTables, List<DacField> dacFields){
+    /**
+     * 要进行数据权限拦截的字段
+     */
+    private List<DacFieldConfig> dacFieldConfigs = new ArrayList<>(0);
+    /**
+     * 进行权限匹配的用户
+     */
+    private IUser user;
+    /**
+     * 要进行数据权限拦截的字段
+     */
+    private Map<DacFieldConfig, Object> fieldAndValueMap = new HashMap<DacFieldConfig, Object>(0);
+
+    public DacSqlParser(List<String> dacTables, List<DacFieldConfig> dacFieldConfigs, IUser user) {
         this.dacTables = dacTables;
-        this.dacFields = dacFields;
+        this.dacFieldConfigs = dacFieldConfigs;
+        this.user = user;
+        this.fieldAndValueMap = getFieldValueMap(this.dacFieldConfigs);
+    }
+
+    /**
+     * 处理Example型条件
+     *
+     * @param e example
+     */
+    public void getDacExample(Example e) {
+        fieldAndValueMap.keySet().forEach(key -> {
+            Object value = fieldAndValueMap.get(key);
+            String targetFieldName = getTarget(e.getEntityClass(), key.getName());
+            if (targetFieldName == null) {
+                throw new SystemException("目标拦截对象：["
+                        + e.getEntityClass().getTypeName() +
+                        "]不包含属性：[" + key.getName() + "]" +
+                        ",建议在类定义中增加对应的属性。");
+            }
+//                key.setDeep(true);
+            if (key.isDeep() && value instanceof String && value != null && key.getPattern() != null && key.getPattern().length() == value.toString().length()) {
+                // TODO 先不用dialect
+                int index = getMatchIndex(key, value);
+                String condition = value.toString().substring(0, index + 1) + "%";
+                e.and(e.createCriteria().andLike(targetFieldName, condition));
+            } else {
+                e.and(e.createCriteria().andEqualTo(targetFieldName, value));
+            }
+        });
+    }
+
+    /**
+     * 获取目标类型
+     *
+     * @param entityClass
+     * @param key
+     * @return
+     */
+    private String getTarget(Class<?> entityClass, String key) {
+        Field[] fs = entityClass.getDeclaredFields();
+        key = StringUtil.toUppercaseIgnoreUnderscore(key);
+        for (int i = 0; i < fs.length; i++) {
+            String fn = StringUtil.toUppercaseIgnoreUnderscore(fs[i].getName());
+            if (fn.equals(key)) {
+                return fs[i].getName();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 模糊匹配功能
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    private int getMatchIndex(DacFieldConfig key, Object value) {
+        char[] patternArray = key.getPattern().toCharArray();
+        char[] valueArray = value.toString().toCharArray();
+        int i = patternArray.length - 1;
+        for (; i >= 0; i--) {
+            char p = patternArray[i];
+            char v = valueArray[i];
+            if (p != v) {
+                return i;
+            }
+        }
+        return patternArray.length - 1;
+    }
+
+    /**
+     * -----------以上是example相关处理，下面是SQL的处理--------------
+     */
+    private Map<DacFieldConfig, Object> getFieldValueMap(List<DacFieldConfig> dacFieldConfigs) {
+        Map<DacFieldConfig, Object> colAndValue = new HashMap<>(dacFieldConfigs.size());
+        if (user == null) {
+            return colAndValue;
+        }
+        Class<?> clazz = user.getClass();
+        Map<String, Field> fields = getClassFieldsMap(clazz.getDeclaredFields());
+        Map<String, Method> methods = getClassGetMethodMap(clazz.getDeclaredMethods());
+        for (int i = 0; i < dacFieldConfigs.size(); i++) {
+            DacFieldConfig dacFieldConfig = dacFieldConfigs.get(i);
+            String dfName = dacFieldConfig.getName();
+            if (dfName == null || dfName.isEmpty()) {
+                continue;
+            }
+            Object value = getValue(user, dacFieldConfig, methods, fields);
+            colAndValue.put(dacFieldConfig, value);
+        }
+        return colAndValue;
+    }
+
+    private Map<String, Method> getClassGetMethodMap(Method[] declaredMethods) {
+        Map<String, Method> map = new HashMap<>(declaredMethods.length);
+        for (int i = 0; i < declaredMethods.length; i++) {
+            String mName = StringUtil.toUppercaseIgnoreUnderscore(declaredMethods[i].getName());
+            if (mName.startsWith("GET")) {
+                map.put(mName, declaredMethods[i]);
+            }
+        }
+        return map;
+    }
+
+    private Map<String, Field> getClassFieldsMap(Field[] declaredFields) {
+        Map<String, Field> map = new HashMap<>(declaredFields.length);
+        for (int i = 0; i < declaredFields.length; i++) {
+            map.put(StringUtil.toUppercaseIgnoreUnderscore(declaredFields[i].getName()), declaredFields[i]);
+        }
+        return map;
+    }
+
+    private Object getValue(IUser user, DacFieldConfig dacFieldConfig, Map<String, Method> methods, Map<String, Field> fields) {
+        String dfName = dacFieldConfig.getName();
+        dfName = StringUtil.toUppercaseIgnoreUnderscore(dfName);
+        String dfGetMethodName = "GET" + dfName;
+        Method m = methods.get(dfGetMethodName);
+        if (m != null) {
+            m.setAccessible(true);
+            try {
+                return m.invoke(user);
+            } catch (IllegalAccessException e) {
+                throw new SystemException("方法不能访问：" +
+                        m.getDeclaringClass().getTypeName() +
+                        ":" + m.getName());
+            } catch (InvocationTargetException e) {
+                throw new SystemException("方法访问错误：" +
+                        m.getDeclaringClass().getTypeName() +
+                        ":" + m.getName() +
+                        "-" + e);
+            }
+        }
+        Field f = fields.get(dfName);
+        if (f != null) {
+            f.setAccessible(true);
+            try {
+                return f.get(user);
+            } catch (IllegalAccessException e) {
+                throw new SystemException("属性访问错误：" +
+                        m.getDeclaringClass().getTypeName() +
+                        ":" + m.getName() +
+                        "-" + e);
+            }
+        }
+        return null;
     }
 
     public static void main(String[] args) throws JSQLParserException {
@@ -77,40 +244,92 @@ public class DacSqlParser {
 //                " and YEAR = ? \n" +
 //                " and MAKE_UNIT like ? \n" +
 //                " order by UPDATE_TIME desc ";
-        String sql = "SELECT DISTINCT " +
-                "rm.MENU_CODE as MENU_CODE FROM cmn_acm_role_menu as rm " +
-                "JOIN cmn_acm_user_role ur ON " +
-                "rm.ROLE_CODE = ur.ROLE_CODE AND ur.USER_CODE = ?";
-//        String sql = "SELECT " +
-//                " `t_tmp`.`scenariosId` AS `scenariosId`, " +
-//                " ifnull( `t1`.`planCount`, 0 ) AS `planCount`, " +
-//                " ifnull( `t2`.`recordCount`, 0 ) AS `recordCount` " +
-//                "FROM " +
-//                " (((( " +
-//                "  SELECT " +
-//                "     `SCENARIOS_ID` AS `scenariosId` " +
-//                "   FROM " +
-//                "     `DRILL_DETAIL_PLAN` " +
-//                "   WHERE " +
-//                "     ( `SCENARIOS_ID` IS NOT NULL )) UNION (" +
-//                "  SELECT " +
-//                "    `SCENARIOS_ID` AS `scenariosId` " +
-//                "   FROM " +
-//                "    `DRILL_DRILL_RECORD` " +
-//                "   WHERE " +
-//                "    ( `SCENARIOS_ID` IS NOT NULL ))) `t_tmp` " +
-//                "   LEFT JOIN ( SELECT `SCENARIOS_ID` AS `scenariosId`, count( 1 ) AS `planCount` FROM `DRILL_DETAIL_PLAN` GROUP BY `SCENARIOS_ID` ) `t1` ON (( " +
-//                "     `t_tmp`.`scenariosId` = `t1`.`scenariosId` " +
-//                "    ))) " +
-//                "  LEFT JOIN ( SELECT `SCENARIOS_ID` AS `scenariosId`, count( 1 ) AS `recordCount` FROM `DRILL_DRILL_RECORD` GROUP BY `SCENARIOS_ID` ) `t2` ON (( " +
-//                "   `t_tmp`.`scenariosId` = `t2`.`scenariosId` " +
-//                " ))) ";
-//        System.out.print("原SQL：");
-//        System.out.println(sql);
-//        DacSqlParser parser = new DacSqlParser(dacTables, dacFields);
-//        System.out.print("隔离后：");
-//        sql = parser.getSmartDacSql(sql);
-//        System.out.println(sql);
+//        String sql = "SELECT DISTINCT " +
+//                "rm.MENU_CODE as MENU_CODE FROM cmn_acm_role_menu as rm " +
+//                "JOIN cmn_acm_user_role ur ON " +
+//                "rm.ROLE_CODE = ur.ROLE_CODE AND ur.USER_CODE = ? and 1=1";
+        String sql = "SELECT " +
+                " `t_tmp`.`scenariosId` AS `scenariosId`, " +
+                " ifnull( `t1`.`planCount`, 0 ) AS `planCount`, " +
+                " ifnull( `t2`.`recordCount`, 0 ) AS `recordCount` " +
+                "FROM " +
+                " (((( " +
+                "  SELECT " +
+                "     `SCENARIOS_ID` AS `scenariosId` " +
+                "   FROM " +
+                "     `DRILL_DETAIL_PLAN` " +
+                "   WHERE " +
+                "     ( `SCENARIOS_ID` IS NOT NULL )) UNION (" +
+                "  SELECT " +
+                "    `SCENARIOS_ID` AS `scenariosId` " +
+                "   FROM " +
+                "    `DRILL_DRILL_RECORD` " +
+                "   WHERE " +
+                "    ( `SCENARIOS_ID` IS NOT NULL ))) `t_tmp` " +
+                "   LEFT JOIN ( SELECT `SCENARIOS_ID` AS `scenariosId`, count( 1 ) AS `planCount` FROM `DRILL_DETAIL_PLAN` GROUP BY `SCENARIOS_ID` ) `t1` ON (( " +
+                "     `t_tmp`.`scenariosId` = `t1`.`scenariosId` " +
+                "    ))) " +
+                "  LEFT JOIN ( SELECT `SCENARIOS_ID` AS `scenariosId`, count( 1 ) AS `recordCount` FROM `DRILL_DRILL_RECORD` GROUP BY `SCENARIOS_ID` ) `t2` ON (( " +
+                "   `t_tmp`.`scenariosId` = `t2`.`scenariosId` " +
+                " ))) ";
+        List<String> dacTables = new ArrayList<>(1);
+        dacTables.add("DRILL_DRILL_RECORD");
+        dacTables.add("DRILL_DETAIL_PLAN");
+        List<DacFieldConfig> dacFieldConfigs = new ArrayList<>(1);
+        DacFieldConfig field = new DacFieldConfig();
+        field.setName("area_id");
+        field.setDeep(false);
+        dacFieldConfigs.add(field);
+        field = new DacFieldConfig();
+        field.setName("tenant_id");
+        field.setDeep(true);
+        dacFieldConfigs.add(field);
+        System.out.print("原SQL：");
+        System.out.println(sql);
+        DacSqlParser parser = new DacSqlParser(dacTables, dacFieldConfigs, new IUser() {
+            @Override
+            public String getId() {
+                return "getId";
+            }
+
+            @Override
+            public String getCode() {
+                return "getCode";
+            }
+
+            @Override
+            public String getOrgId() {
+                return "getOrgId";
+            }
+
+            @Override
+            public String getDeptId() {
+                return "getDeptId";
+            }
+
+            @Override
+            public String getAccessToken() {
+                return "getAccessToken";
+            }
+
+            @Override
+            public String getTenantId() {
+                return "11111100";
+            }
+
+            @Override
+            public boolean isAdministrator() {
+                return false;
+            }
+
+            @Override
+            public String getAreaId() {
+                return "22000000";
+            }
+        });
+        System.out.print("隔离后：");
+        sql = parser.getSmartDacSql(sql);
+        System.out.println(sql);
     }
 
     /**
@@ -149,7 +368,7 @@ public class DacSqlParser {
             //处理body-去order by
             processSelectBody(selectBody);
         } catch (Exception e) {
-            log.warn("sql处理失败，将返回全部数据");
+            log.error("sql处理失败，将返回全部数据", e);
             return sql;
         }
         //处理with-去order by
@@ -208,19 +427,18 @@ public class DacSqlParser {
         }
     }
 
-    private void appendAndWhere(PlainSelect plainSelect, String addWhere) {
+    private Expression appendAndExpression(Expression where, String addWhere) {
         try {
-            Expression where = plainSelect.getWhere();
             Expression additionWhere = CCJSqlParserUtil.parseCondExpression(addWhere);
             if (where == null) {
                 where = additionWhere;
             } else {
                 where = new AndExpression(where, additionWhere);
             }
-            plainSelect.setWhere(where);
         } catch (JSQLParserException e) {
             e.printStackTrace();
         }
+        return where;
     }
 
     /**
@@ -253,9 +471,6 @@ public class DacSqlParser {
                     }
                 }
             }
-//            new SubSelect().getSelectBody()
-//            CCJSqlParserUtil.parseCondExpression()
-//            subJoin.setl
             if (subJoin.getLeft() != null) {
                 processFromItem(subJoin, subJoin.getLeft());
             }
@@ -276,25 +491,61 @@ public class DacSqlParser {
             }
         } else if (fromItem instanceof Table) {
             Table t = (Table) fromItem;
-//            fromItem.getAlias().getName();
-//            String addWhere = "rm.tenant_id=''";
-//            appendAndWhere(plainSelect, addWhere);
             if (!isDacTable(t)) {
                 return;
             }
             if (node instanceof PlainSelect) {
                 PlainSelect select = (PlainSelect) node;
-
+                select.setWhere(appendDacConditions(t, select.getWhere()));
             } else if (node instanceof Join) {
                 Join join = (Join) node;
+                join.addOnExpression(appendDacConditions(t, null));
             } else if (node instanceof SubJoin) {
                 SubJoin subJoin = (SubJoin) node;
+                subJoin.getJoinList().forEach(join -> {
+                    processFromItem(join, join.getRightItem());
+                });
             }
         }
     }
 
+    private Expression appendDacConditions(Table t, Expression where) {
+        String alias = aliasPrefix(t.getAlias());
+        for (DacFieldConfig key : fieldAndValueMap.keySet()) {
+            Object value = fieldAndValueMap.get(key);
+            StringBuilder addWhere = new StringBuilder();
+            addWhere
+                    .append(alias)
+                    .append(key.getName());
+            String condition = value == null ? null : value.toString();
+            if (key.isDeep() && value instanceof String && value != null && key.getPattern() != null && key.getPattern().length() == value.toString().length()) {
+                // TODO 先不用dialect
+                int index = getMatchIndex(key, value);
+                condition = value.toString().substring(0, index + 1) + "%";
+                addWhere.append(" like ");
+            } else {
+                addWhere.append(" = ");
+            }
+            addWhere.append("'")
+                    .append(condition)
+                    .append("'");
+            where = appendAndExpression(where, addWhere.toString());
+        }
+        return where;
+    }
+
+    private String aliasPrefix(Alias alias) {
+        return alias == null? "" : StringUtil.isEmpty(alias.getName()) ? "" : alias + ".";
+    }
+
     private boolean isDacTable(Table t) {
-        boolean isDac = dacTables.contains(t.getName());
+        String tableName = t.getName();
+        tableName = tableName.replace("`", "");
+        boolean isDac = dacTables.contains(tableName.toLowerCase(Locale.ENGLISH));
+        if (isDac) {
+            return true;
+        }
+        isDac = dacTables.contains(tableName.toUpperCase(Locale.ENGLISH));
         if (isDac) {
             return true;
         }

@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.vo;
 
-import cn.org.bachelor.context.ILogonUser;
+import cn.org.bachelor.context.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @创建时间: 2018/11/1
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserVo implements ILogonUser {
+public class UserVo implements IUser {
     /**
      * 用户ID
      */

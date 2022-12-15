@@ -1,31 +1,32 @@
 package cn.org.bachelor.acm.dac;
 
-import java.util.List;
-
 public abstract class DacHelper {
-    protected static final ThreadLocal<DacInfo> LOCAL_PAGE = new ThreadLocal();
-    protected static boolean DEFAULT_COUNT = true;
+    protected static final ThreadLocal<DacInfo> LOCAL_DAC = new ThreadLocal();
 
     private DacHelper() {
     }
 
-    protected static void setLocalDac(DacInfo dacInfo) {
-        LOCAL_PAGE.set(dacInfo);
+    protected static void setLocalDacInfo(DacInfo dacInfo) {
+        LOCAL_DAC.set(dacInfo);
     }
 
-    public static DacInfo getLocalDac() {
-        return (DacInfo)LOCAL_PAGE.get();
+    public static DacInfo getLocalDacInfo() {
+        return (DacInfo) LOCAL_DAC.get();
     }
 
     public static void enableDac() {
-
+        getLocalDacInfo().setEnable(true);
     }
-    public static DacInfo enableDac(List<Class<?>> params) {
 
-        return getLocalDac();
-    }
+//    public static DacInfo enableDac(List<Class<?>> params) {
+//        return getLocalDacInfo();
+//    }
 
     public static void disableDac() {
+        getLocalDacInfo().setEnable(false);
     }
 
+    public static boolean isEnable() {
+        return getLocalDacInfo().isEnable();
+    }
 }

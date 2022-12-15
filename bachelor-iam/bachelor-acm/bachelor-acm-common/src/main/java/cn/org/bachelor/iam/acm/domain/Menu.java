@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.acm.domain;
 
-import cn.org.bachelor.acm.dac.annotation.DacEnabled;
+import cn.org.bachelor.acm.dac.annotation.DacTable;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Data
 @Table(name = "cmn_acm_menu")
-@DacEnabled
+@DacTable
 public class Menu {
     /**
      * ID
