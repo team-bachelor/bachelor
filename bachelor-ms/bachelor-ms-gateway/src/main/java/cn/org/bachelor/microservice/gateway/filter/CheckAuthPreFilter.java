@@ -31,6 +31,7 @@ import reactor.core.publisher.Mono;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -99,27 +100,33 @@ public class CheckAuthPreFilter implements GlobalFilter {
             isValidToekn = isValidToken(jwtToken);
             if (jwtToken != null && isValidToekn) {
                 //TODO 安全性有待提高
-                Map<String, Object> tokenClaims = jwtToken.getClaims();
-                host = request.mutate()
+                Map<String, Object> tokenClaims = new HashMap<>(jwtToken.getClaims().size());
+                tokenClaims.putAll(jwtToken.getClaims());
+                ServerHttpRequest.Builder builder = request.mutate()
                         .header(JwtToken.PayloadKey.ORG_ID,
-                                getTokenClaim(tokenClaims, JwtToken.PayloadKey.ORG_ID, false))
+                                getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.ORG_ID, false))
                         .header(JwtToken.PayloadKey.ORG_CODE,
-                                getTokenClaim(tokenClaims, JwtToken.PayloadKey.ORG_CODE, false))
+                                getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.ORG_CODE, false))
                         .header(JwtToken.PayloadKey.USER_CODE,
-                                getTokenClaim(tokenClaims, JwtToken.PayloadKey.USER_CODE, false))
+                                getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.USER_CODE, false))
                         .header(JwtToken.PayloadKey.USER_ID,
-                                getTokenClaim(tokenClaims, JwtToken.PayloadKey.USER_ID, false))
+                                getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.USER_ID, false))
                         .header(JwtToken.PayloadKey.USER_NAME,
-                                getTokenClaim(tokenClaims, JwtToken.PayloadKey.USER_NAME, true))
+                                getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.USER_NAME, true))
                         .header(JwtToken.PayloadKey.DEPT_ID,
-                                getTokenClaim(tokenClaims, JwtToken.PayloadKey.DEPT_ID, false))
+                                getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.DEPT_ID, false))
                         .header(JwtToken.PayloadKey.DEPT_NAME,
-                                getTokenClaim(tokenClaims, JwtToken.PayloadKey.DEPT_NAME, true))
+                                getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.DEPT_NAME, true))
                         .header(JwtToken.PayloadKey.ORG_NAME,
-                                getTokenClaim(tokenClaims, JwtToken.PayloadKey.ORG_NAME, true))
+                                getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.ORG_NAME, true))
                         .header(JwtToken.PayloadKey.ACCESS_TOKEN,
-                                getTokenClaim(tokenClaims, JwtToken.PayloadKey.ACCESS_TOKEN, false))
-                        .build();
+                                getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.ACCESS_TOKEN, false));
+
+                tokenClaims.keySet().forEach(key ->{
+                    builder.header(key,getAndTokenClaim(tokenClaims, key, false, false));
+                });
+
+                host = builder.build();
                 logger.info("build header complete: " + JSONObject.toJSONString(request.getHeaders()));
             } else {
                 pass = false;
@@ -132,7 +139,7 @@ public class CheckAuthPreFilter implements GlobalFilter {
 
 //        logger.info("access user=[" + user + "], is authorized=[" + pass + "]");
 //
-        if(tenantIdProvider != null) {
+        if (tenantIdProvider != null) {
             host.mutate().header(JwtToken.PayloadKey.TENANT_ID, tenantIdProvider.getTenantId(request));
         }
         // 如果有权限,则可以访问
@@ -179,12 +186,18 @@ public class CheckAuthPreFilter implements GlobalFilter {
 //            }));
     }
 
-    private String getTokenClaim(Map<String, Object> tokenClaims, String payload, boolean urlencode) {
+    private String getAndTokenClaim(Map<String, Object> tokenClaims, String payload, boolean urlencode, boolean remove) {
         String value = tokenClaims.getOrDefault(payload, "").toString();
+        if(remove) {
+            tokenClaims.remove(payload);
+        }
         if (urlencode) {
             value = urlEncode(value);
         }
         return value;
+    }
+    private String getAndRemoveTokenClaim(Map<String, Object> tokenClaims, String payload, boolean urlencode) {
+        return getAndTokenClaim(tokenClaims, payload, urlencode , true);
     }
 
     private boolean isValidToken(JwtToken jwtToken) {

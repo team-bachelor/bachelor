@@ -19,7 +19,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @EnableDiscoveryClient
 @RefreshScope
 @EnableScheduling
-@MapperScan(basePackages = {"cn.org.bachelor.iam.acm.dao"})
+@MapperScan(basePackages = {"cn.org.bachelor.iam.**.dao"})
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 @EnableTransactionManagement
 @SpringBootApplication(scanBasePackages = {"cn.org.bachelor"})
