@@ -7,7 +7,6 @@ import cn.org.bachelor.iam.oauth2.utils.StringUtils;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.vo.UserVo;
 import com.alibaba.fastjson.JSONObject;
-import com.sun.javafx.collections.UnmodifiableObservableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,15 +117,14 @@ public class IdmService {
     }
 
     public Map<? extends String, ? extends Object> getUserExtInfo(JSONObject user) {
-//        String userCode = user.getString("account");
-//
-//        Map m = new HashMap<String, Object>(1);
-//        m.put("area_id", "12345");
         Map umMap = Collections.unmodifiableMap(user);
         Map<? extends String, ? extends Object> result = new LinkedHashMap();
-        userExtendInfoProviders.forEach( p ->{
+        if (userExtendInfoProviders == null) {
+            return result;
+        }
+        userExtendInfoProviders.forEach(p -> {
             Map r = p.invoke(umMap);
-            if(r != null && r.size() > 0){
+            if (r != null && r.size() > 0) {
                 result.putAll(r);
             }
         });

@@ -73,12 +73,6 @@ management:
       exposure:
         include: "*"
 bachelor:
-  dac:
-#    enabled: false
-    packages:
-      - "cn.**."
-    fields:
-      - name: "tenant_id"
   iam:
     enable-user-access-control: false
     service-provider: db

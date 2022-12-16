@@ -1,5 +1,6 @@
 package cn.org.bachelor.iam.idm.controller;
 
+import cn.org.bachelor.context.IUser;
 import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.iam.IamConfiguration;
 import cn.org.bachelor.iam.IamConstant;

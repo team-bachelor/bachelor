@@ -19,6 +19,7 @@
         <module>bachelor-iam-client</module>
         <module>bachelor-idm</module>
         <module>bachelor-acm</module>
+        <module>bachelor-dac</module>
         <module>bachelor-oauth2</module>
     </modules>
 </project>

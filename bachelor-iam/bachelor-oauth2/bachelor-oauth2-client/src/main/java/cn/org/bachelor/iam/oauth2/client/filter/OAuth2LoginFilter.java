@@ -148,7 +148,7 @@ public class OAuth2LoginFilter implements Filter {
             chain.doFilter(request, response);
         } catch (GetAccessTokenException gte) {
             logger.error("客户端拦截器获取令牌失败===========>", gte);
-            String result = returnResourceFile(ClientConstant.TEMPLATE_NAME, ClientConstant.GET_ACCESSTOKEN_ERROR + "," + gte.getMessage());
+            String result = returnResourceFile(ClientConstant.TEMPLATE_NAME, ClientConstant.GET_ACCESS_TOKEN_ERROR + "," + gte.getMessage());
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().write(result);
         } catch (GetUserInfoException gue) {

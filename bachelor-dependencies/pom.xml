@@ -235,7 +235,12 @@
             </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
-                <artifactId>bachelor-acm-data-access-control</artifactId>
+                <artifactId>bachelor-dac-client</artifactId>
+                <version>${bachelor-iam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-dac-service</artifactId>
                 <version>${bachelor-iam.version}</version>
             </dependency>
             <dependency>
