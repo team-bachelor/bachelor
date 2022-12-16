@@ -71,9 +71,15 @@ public class DacAutoConfig implements InitializingBean {
         for (Class<?> clazz : classes) {
             DacTable dacTable = clazz.getAnnotation(DacTable.class);
             if (dacTable != null) {
-                Table table = clazz.getAnnotation(Table.class);
-                if (table != null) {
-                    dacTables.add((StringUtil.isEmpty(table.catalog()) ? "" : table.catalog() + ".") + table.name());
+                if(StringUtil.isNotEmpty(dacTable.name())){
+                    dacTables.add(dacTable.name());
+                }else {
+                    Table table = clazz.getAnnotation(Table.class);
+                    if (table != null) {
+                        dacTables.add((StringUtil.isEmpty(table.catalog()) ? "" : table.catalog() + ".") + table.name());
+                    }else{
+                        throw new InvalidDacConfigException("DacTable必须设置name或者设置DacTable注解的同时设置Table注解");
+                    }
                 }
             }
         }
@@ -81,7 +87,7 @@ public class DacAutoConfig implements InitializingBean {
     }
 
     /**
-     * 是否已经存在相同的拦截器
+     * 是否已经存在相同拦截器
      *
      * @param configuration
      * @param interceptor
