@@ -7,7 +7,7 @@ public class DacInfo {
         return isEnable;
     }
 
-    public void setEnable(boolean enable) {
+    void setEnable(boolean enable) {
         isEnable = enable;
     }
 }

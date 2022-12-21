@@ -32,7 +32,7 @@ import java.net.UnknownHostException;
 
 @EnableDiscoveryClient
 @RefreshScope
-@ComponentScan("cn.org.bachelor")
+@ComponentScan("cn.org.bachelor.**.*")
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableHystrix
 public class GatewayApplication {

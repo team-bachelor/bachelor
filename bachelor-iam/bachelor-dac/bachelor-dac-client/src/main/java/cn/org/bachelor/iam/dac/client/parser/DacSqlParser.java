@@ -238,7 +238,7 @@ public class DacSqlParser {
         return null;
     }
 
-    public static void main(String[] args) throws JSQLParserException {
+//    public static void main(String[] args) throws JSQLParserException {
 //        String sql = "select * from DRILL_YEAR_PLAN where 1=1 \n" +
 //                " and NAME like ? \n" +
 //                " and YEAR = ? \n" +
@@ -248,89 +248,90 @@ public class DacSqlParser {
 //                "rm.MENU_CODE as MENU_CODE FROM cmn_acm_role_menu as rm " +
 //                "JOIN cmn_acm_user_role ur ON " +
 //                "rm.ROLE_CODE = ur.ROLE_CODE AND ur.USER_CODE = ? and 1=1";
-        String sql = "SELECT " +
-                " `t_tmp`.`scenariosId` AS `scenariosId`, " +
-                " ifnull( `t1`.`planCount`, 0 ) AS `planCount`, " +
-                " ifnull( `t2`.`recordCount`, 0 ) AS `recordCount` " +
-                "FROM " +
-                " (((( " +
-                "  SELECT " +
-                "     `SCENARIOS_ID` AS `scenariosId` " +
-                "   FROM " +
-                "     `DRILL_DETAIL_PLAN` " +
-                "   WHERE " +
-                "     ( `SCENARIOS_ID` IS NOT NULL )) UNION (" +
-                "  SELECT " +
-                "    `SCENARIOS_ID` AS `scenariosId` " +
-                "   FROM " +
-                "    `DRILL_DRILL_RECORD` " +
-                "   WHERE " +
-                "    ( `SCENARIOS_ID` IS NOT NULL ))) `t_tmp` " +
-                "   LEFT JOIN ( SELECT `SCENARIOS_ID` AS `scenariosId`, count( 1 ) AS `planCount` FROM `DRILL_DETAIL_PLAN` GROUP BY `SCENARIOS_ID` ) `t1` ON (( " +
-                "     `t_tmp`.`scenariosId` = `t1`.`scenariosId` " +
-                "    ))) " +
-                "  LEFT JOIN ( SELECT `SCENARIOS_ID` AS `scenariosId`, count( 1 ) AS `recordCount` FROM `DRILL_DRILL_RECORD` GROUP BY `SCENARIOS_ID` ) `t2` ON (( " +
-                "   `t_tmp`.`scenariosId` = `t2`.`scenariosId` " +
-                " ))) ";
-        List<String> dacTables = new ArrayList<>(1);
-        dacTables.add("DRILL_DRILL_RECORD");
-        dacTables.add("DRILL_DETAIL_PLAN");
-        List<DacFieldConfig> dacFieldConfigs = new ArrayList<>(1);
-        DacFieldConfig field = new DacFieldConfig();
-        field.setName("area_id");
-        field.setDeep(false);
-        dacFieldConfigs.add(field);
-        field = new DacFieldConfig();
-        field.setName("tenant_id");
-        field.setDeep(true);
-        dacFieldConfigs.add(field);
-        System.out.print("原SQL：");
-        System.out.println(sql);
-        DacSqlParser parser = new DacSqlParser(dacTables, dacFieldConfigs, new IUser() {
-            @Override
-            public String getId() {
-                return "getId";
-            }
-
-            @Override
-            public String getCode() {
-                return "getCode";
-            }
-
-            @Override
-            public String getOrgId() {
-                return "getOrgId";
-            }
-
-            @Override
-            public String getDeptId() {
-                return "getDeptId";
-            }
-
-            @Override
-            public String getAccessToken() {
-                return "getAccessToken";
-            }
-
-            @Override
-            public String getTenantId() {
-                return "11111100";
-            }
-
-            @Override
-            public boolean isAdministrator() {
-                return false;
-            }
-
-            @Override
-            public String getAreaId() {
-                return "22000000";
-            }
-        });
-        System.out.print("隔离后：");
-        sql = parser.getSmartDacSql(sql);
-        System.out.println(sql);
-    }
+//        String sql = "SELECT " +
+//                " `t_tmp`.`scenariosId` AS `scenariosId`, " +
+//                " ifnull( `t1`.`planCount`, 0 ) AS `planCount`, " +
+//                " ifnull( `t2`.`recordCount`, 0 ) AS `recordCount` " +
+//                "FROM " +
+//                " (((( " +
+//                "  SELECT " +
+//                "     `SCENARIOS_ID` AS `scenariosId` " +
+//                "   FROM " +
+//                "     `DRILL_DETAIL_PLAN` " +
+//                "   WHERE " +
+//                "     ( `SCENARIOS_ID` IS NOT NULL )) UNION (" +
+//                "  SELECT " +
+//                "    `SCENARIOS_ID` AS `scenariosId` " +
+//                "   FROM " +
+//                "    `DRILL_DRILL_RECORD` " +
+//                "   WHERE " +
+//                "    ( `SCENARIOS_ID` IS NOT NULL ))) `t_tmp` " +
+//                "   LEFT JOIN ( SELECT `SCENARIOS_ID` AS `scenariosId`, count( 1 ) AS `planCount` FROM `DRILL_DETAIL_PLAN` GROUP BY `SCENARIOS_ID` ) `t1` ON (( " +
+//                "     `t_tmp`.`scenariosId` = `t1`.`scenariosId` " +
+//                "    ))) " +
+//                "  LEFT JOIN ( SELECT `SCENARIOS_ID` AS `scenariosId`, count( 1 ) AS `recordCount` FROM `DRILL_DRILL_RECORD` GROUP BY `SCENARIOS_ID` ) `t2` ON (( " +
+//                "   `t_tmp`.`scenariosId` = `t2`.`scenariosId` " +
+//                " ))) ";
+//        String sql = "SELECT count(0) FROM DRILL_DETAIL_PLAN WHERE 1 = 1 AND YEAR_PLAN_ID = ?";
+//        List<String> dacTables = new ArrayList<>(1);
+//        dacTables.add("DRILL_DRILL_RECORD");
+//        dacTables.add("DRILL_DETAIL_PLAN");
+//        List<DacFieldConfig> dacFieldConfigs = new ArrayList<>(1);
+//        DacFieldConfig field = new DacFieldConfig();
+//        field.setName("area_id");
+//        field.setDeep(true);
+//        dacFieldConfigs.add(field);
+//        field = new DacFieldConfig();
+//        field.setName("tenant_id");
+//        field.setDeep(true);
+//        dacFieldConfigs.add(field);
+//        System.out.print("原SQL：");
+//        System.out.println(sql);
+//        DacSqlParser parser = new DacSqlParser(dacTables, dacFieldConfigs, new IUser() {
+//            @Override
+//            public String getId() {
+//                return "getId";
+//            }
+//
+//            @Override
+//            public String getCode() {
+//                return "getCode";
+//            }
+//
+//            @Override
+//            public String getOrgId() {
+//                return "getOrgId";
+//            }
+//
+//            @Override
+//            public String getDeptId() {
+//                return "getDeptId";
+//            }
+//
+//            @Override
+//            public String getAccessToken() {
+//                return "getAccessToken";
+//            }
+//
+//            @Override
+//            public String getTenantId() {
+//                return "11111100";
+//            }
+//
+//            @Override
+//            public boolean isAdministrator() {
+//                return false;
+//            }
+//
+//            @Override
+//            public String getAreaId() {
+//                return "22000000";
+//            }
+//        });
+//        System.out.print("隔离后：");
+//        sql = parser.getSmartDacSql(sql);
+//        System.out.println(sql);
+//    }
 
     /**
      * 添加到聚合函数，可以是逗号隔开的多个函数前缀

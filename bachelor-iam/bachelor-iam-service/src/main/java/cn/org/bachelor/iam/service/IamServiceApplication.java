@@ -22,7 +22,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @MapperScan(basePackages = {"cn.org.bachelor.iam.**.dao"})
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 @EnableTransactionManagement
-@SpringBootApplication(scanBasePackages = {"cn.org.bachelor"})
+@SpringBootApplication(scanBasePackages = {"cn.org.bachelor.**.*"})
 public class IamServiceApplication {
 
 	public static void main(String[] args) {

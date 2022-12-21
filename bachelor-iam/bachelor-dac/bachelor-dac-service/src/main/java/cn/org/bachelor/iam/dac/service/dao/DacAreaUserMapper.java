@@ -45,4 +45,9 @@ public interface DacAreaUserMapper extends Mapper<DacAreaUser> {
             "SELECT AREA_ID FROM cmn_dac_area_user where USER_CODE = #{userCode} limit 1" +
             "</script>")
     String getAreaIdByUserCode(String userCode);
+
+    @Select("<script>" +
+            "SELECT AREA_CODE FROM cmn_dac_area_user where USER_CODE = #{userCode} limit 1" +
+            "</script>")
+    String getAreaCodeByUserCode(String userCode);
 }

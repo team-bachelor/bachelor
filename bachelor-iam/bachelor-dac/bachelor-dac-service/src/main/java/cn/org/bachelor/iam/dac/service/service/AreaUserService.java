@@ -5,6 +5,7 @@ import cn.org.bachelor.iam.dac.service.dao.DacAreaUserMapper;
 import cn.org.bachelor.iam.dac.service.domain.DacAreaUser;
 import cn.org.bachelor.iam.dac.service.pojo.dto.QueryAreaUserDTO;
 import cn.org.bachelor.iam.idm.service.UserExtendInfoProvider;
+import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.web.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -75,7 +76,7 @@ public class AreaUserService implements UserExtendInfoProvider {
         Map<String, Object> result = new HashMap<>(1);
         Object o = userInfo.get("account");
         if (o != null) {
-            result.put("areaId", getAreaIdByUserCode(o.toString()));
+            result.put(JwtToken.PayloadKey.AREA_ID, areaUserMapper.getAreaCodeByUserCode(o.toString()));
         }
         return result;
     }

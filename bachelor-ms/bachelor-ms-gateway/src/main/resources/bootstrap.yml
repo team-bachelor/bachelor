@@ -13,7 +13,7 @@ spring:
         args:
 #          keyResolver: '#{@tokenKeyResolver}'
           in-memory-rate-limiter:
-            replenish-rate: 100
+            replenish-rate: 10000
             burst-capacity: 2000
       discovery:
         locator:
