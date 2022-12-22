@@ -77,6 +77,6 @@ public class Menu {
     @Column(name = "UPDATE_USER")
     private String updateUser;
 
-    @Column(name = "TENANT_ID")
-    private String tenantId;
+//    @Column(name = "TENANT_ID")
+//    private String tenantId;
 }
