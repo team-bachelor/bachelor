@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: dev
   application:
     name: bachelor-web-cmn-acm
     id: ${bachelor.iam.client.id}

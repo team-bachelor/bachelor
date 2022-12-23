@@ -110,10 +110,9 @@ public class DacSqlParser {
                         ",建议在类定义中增加对应的属性。");
             }
 //                key.setDeep(true);
-            if (key.isDeep() && value instanceof String && value != null && key.getPattern() != null && key.getPattern().length() == value.toString().length()) {
+            if (key.isDeep() && value instanceof String && value != null && key.getPattern() != null) {
                 // TODO 先不用dialect
-                int index = getMatchIndex(key, value);
-                String condition = value.toString().substring(0, index + 1) + "%";
+                String condition = getLikeCondition(key, value);
                 e.and(e.createCriteria().andLike(targetFieldName, condition));
             } else {
                 e.and(e.createCriteria().andEqualTo(targetFieldName, value));
@@ -147,18 +146,17 @@ public class DacSqlParser {
      * @param value
      * @return
      */
-    private int getMatchIndex(DacFieldConfig key, Object value) {
+    private String getLikeCondition(DacFieldConfig key, Object value) {
         char[] patternArray = key.getPattern().toCharArray();
         char[] valueArray = value.toString().toCharArray();
-        int i = patternArray.length - 1;
-        for (; i >= 0; i--) {
+        for (int i = patternArray.length - 1; i >= 0; i--) {
             char p = patternArray[i];
             char v = valueArray[i];
             if (p != v) {
-                return i;
+                return value.toString().substring(0, i + 1) + "%";
             }
         }
-        return patternArray.length - 1;
+        return value + "%";
     }
 
     /**
@@ -238,7 +236,7 @@ public class DacSqlParser {
         return null;
     }
 
-//    public static void main(String[] args) throws JSQLParserException {
+    public static void main(String[] args) throws JSQLParserException {
 //        String sql = "select * from DRILL_YEAR_PLAN where 1=1 \n" +
 //                " and NAME like ? \n" +
 //                " and YEAR = ? \n" +
@@ -272,66 +270,67 @@ public class DacSqlParser {
 //                "  LEFT JOIN ( SELECT `SCENARIOS_ID` AS `scenariosId`, count( 1 ) AS `recordCount` FROM `DRILL_DRILL_RECORD` GROUP BY `SCENARIOS_ID` ) `t2` ON (( " +
 //                "   `t_tmp`.`scenariosId` = `t2`.`scenariosId` " +
 //                " ))) ";
-//        String sql = "SELECT count(0) FROM DRILL_DETAIL_PLAN WHERE 1 = 1 AND YEAR_PLAN_ID = ?";
-//        List<String> dacTables = new ArrayList<>(1);
-//        dacTables.add("DRILL_DRILL_RECORD");
-//        dacTables.add("DRILL_DETAIL_PLAN");
-//        List<DacFieldConfig> dacFieldConfigs = new ArrayList<>(1);
-//        DacFieldConfig field = new DacFieldConfig();
-//        field.setName("area_id");
-//        field.setDeep(true);
-//        dacFieldConfigs.add(field);
-//        field = new DacFieldConfig();
-//        field.setName("tenant_id");
-//        field.setDeep(true);
-//        dacFieldConfigs.add(field);
-//        System.out.print("原SQL：");
-//        System.out.println(sql);
-//        DacSqlParser parser = new DacSqlParser(dacTables, dacFieldConfigs, new IUser() {
-//            @Override
-//            public String getId() {
-//                return "getId";
-//            }
-//
-//            @Override
-//            public String getCode() {
-//                return "getCode";
-//            }
-//
-//            @Override
-//            public String getOrgId() {
-//                return "getOrgId";
-//            }
-//
-//            @Override
-//            public String getDeptId() {
-//                return "getDeptId";
-//            }
-//
-//            @Override
-//            public String getAccessToken() {
-//                return "getAccessToken";
-//            }
-//
-//            @Override
-//            public String getTenantId() {
-//                return "11111100";
-//            }
-//
-//            @Override
-//            public boolean isAdministrator() {
-//                return false;
-//            }
-//
-//            @Override
-//            public String getAreaId() {
-//                return "22000000";
-//            }
-//        });
-//        System.out.print("隔离后：");
-//        sql = parser.getSmartDacSql(sql);
-//        System.out.println(sql);
-//    }
+        String sql = "SELECT count(0) FROM DRILL_DETAIL_PLAN WHERE 1 = 1 AND YEAR_PLAN_ID = ?";
+        List<String> dacTables = new ArrayList<>(1);
+        dacTables.add("DRILL_DRILL_RECORD");
+        dacTables.add("DRILL_DETAIL_PLAN");
+        List<DacFieldConfig> dacFieldConfigs = new ArrayList<>(1);
+        DacFieldConfig field = new DacFieldConfig();
+        field.setName("area_id");
+        field.setDeep(true);
+        dacFieldConfigs.add(field);
+        field = new DacFieldConfig();
+        field.setName("tenant_id");
+        field.setDeep(true);
+        dacFieldConfigs.add(field);
+        System.out.print("原SQL：");
+        System.out.println(sql);
+        System.out.println("sql".split("."));
+        DacSqlParser parser = new DacSqlParser(dacTables, dacFieldConfigs, new IUser() {
+            @Override
+            public String getId() {
+                return "getId";
+            }
+
+            @Override
+            public String getCode() {
+                return "getCode";
+            }
+
+            @Override
+            public String getOrgId() {
+                return "getOrgId";
+            }
+
+            @Override
+            public String getDeptId() {
+                return "getDeptId";
+            }
+
+            @Override
+            public String getAccessToken() {
+                return "getAccessToken";
+            }
+
+            @Override
+            public String getTenantId() {
+                return "11111100";
+            }
+
+            @Override
+            public boolean isAdministrator() {
+                return false;
+            }
+
+            @Override
+            public String getAreaId() {
+                return "22000000";
+            }
+        });
+        System.out.print("隔离后：");
+        sql = parser.getSmartDacSql(sql);
+        System.out.println(sql);
+    }
 
     /**
      * 添加到聚合函数，可以是逗号隔开的多个函数前缀
@@ -519,10 +518,9 @@ public class DacSqlParser {
                     .append(alias)
                     .append(key.getName());
             String condition = value == null ? null : value.toString();
-            if (key.isDeep() && value instanceof String && value != null && key.getPattern() != null && key.getPattern().length() == value.toString().length()) {
+            if (key.isDeep() && value instanceof String && value != null && key.getPattern() != null) {
                 // TODO 先不用dialect
-                int index = getMatchIndex(key, value);
-                condition = value.toString().substring(0, index + 1) + "%";
+                condition = getLikeCondition(key, value);
                 addWhere.append(" like ");
             } else {
                 addWhere.append(" = ");

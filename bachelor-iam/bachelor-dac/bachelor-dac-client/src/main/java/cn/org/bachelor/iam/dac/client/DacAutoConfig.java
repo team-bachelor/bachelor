@@ -89,9 +89,11 @@ public class DacAutoConfig implements InitializingBean, WebMvcConfigurer {
             }
         }
         List<String> dacTables = new ArrayList<>();
-        for (String aPackage : configuration.getPackages()) {
-            aPackage = aPackage.endsWith(".") ? aPackage : aPackage + ".";
-            dacTables.addAll(getDacTables(aPackage));
+        if(configuration.getPackages() != null && configuration.getPackages().length > 0) {
+            for (String aPackage : configuration.getPackages()) {
+                aPackage = aPackage.endsWith(".") ? aPackage : aPackage + ".";
+                dacTables.addAll(getDacTables(aPackage));
+            }
         }
         interceptor.setDacTables(dacTables);
     }
