@@ -55,7 +55,7 @@
         <!--版本管理的maven插件-->
         <versions-maven-plugin.version>2.12.0</versions-maven-plugin.version>
         <!--XML转换为JSON-->
-        <jettison.version>1.5.0</jettison.version>
+        <jettison.version>1.5.2</jettison.version>
         <!--为springboot添加配置说明和自动完成-->
         <sbcp.version>2.7.3</sbcp.version>
         <!--远程调用-->
