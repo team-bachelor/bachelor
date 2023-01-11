@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -79,7 +81,10 @@ public class AreaUserService implements UserExtendInfoProvider {
             DacAreaUser areaUser = areaUserMapper.getAreaUserByUserCode(o.toString());
             if(areaUser != null) {
                 result.put(JwtToken.PayloadKey.AREA_ID, areaUser.getAreaCode());
-                result.put(JwtToken.PayloadKey.AREA_NAME, areaUser.getAreaName());
+                try {
+                    result.put(JwtToken.PayloadKey.AREA_NAME, URLEncoder.encode(areaUser.getAreaName(), "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                }
             }
         }
         return result;
