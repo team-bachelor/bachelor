@@ -54,7 +54,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
         user.setAccessToken(request.getHeader(JwtToken.PayloadKey.ACCESS_TOKEN));
         user.setTenantId(request.getHeader(JwtToken.PayloadKey.TENANT_ID));
         user.setAreaId(request.getHeader(JwtToken.PayloadKey.AREA_ID));
-        user.setAreaName(request.getHeader(JwtToken.PayloadKey.AREA_NAME));
+        user.setAreaName(urlDecode(request.getHeader(JwtToken.PayloadKey.AREA_NAME)));
         Object o = request.getAttribute(ACCESS_BACKEND);
         if (o != null && "N".equals(o.toString())) {
             user.setAccessBackend(false);
