@@ -76,7 +76,11 @@ public class AreaUserService implements UserExtendInfoProvider {
         Map<String, Object> result = new HashMap<>(1);
         Object o = userInfo.get("account");
         if (o != null) {
-            result.put(JwtToken.PayloadKey.AREA_ID, areaUserMapper.getAreaCodeByUserCode(o.toString()));
+            DacAreaUser areaUser = areaUserMapper.getAreaUserByUserCode(o.toString());
+            if(areaUser != null) {
+                result.put(JwtToken.PayloadKey.AREA_ID, areaUser.getAreaCode());
+                result.put(JwtToken.PayloadKey.AREA_NAME, areaUser.getAreaName());
+            }
         }
         return result;
     }

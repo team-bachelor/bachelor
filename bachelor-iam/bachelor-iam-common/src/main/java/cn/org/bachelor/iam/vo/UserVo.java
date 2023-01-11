@@ -104,6 +104,7 @@ public class UserVo implements IUser {
     private boolean accessBackend = true;
 
     private String areaId;
+    private String areaName;
 
     /**---------------下面是扩展字段--------------------- */
     private String comment1;
@@ -499,5 +500,14 @@ public class UserVo implements IUser {
 
     public void setAccessBackend(boolean accessBackend) {
         this.accessBackend = accessBackend;
+    }
+
+    @Override
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
 }

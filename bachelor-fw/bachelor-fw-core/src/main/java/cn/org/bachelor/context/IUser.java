@@ -23,4 +23,6 @@ public interface IUser {
     boolean isAdministrator();
 
     String getAreaId();
+
+    String getAreaName();
 }

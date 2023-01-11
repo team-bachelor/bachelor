@@ -41,6 +41,7 @@ public class JwtToken {
         public static final String IS_ADMINISTRATOR = "is_administrator";
         public static final String TENANT_ID = "tenant_id";
         public static final String AREA_ID = "area_id";
+        public static final String AREA_NAME = "area_name";
     }
 
     /**
