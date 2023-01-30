@@ -1,3 +1,6 @@
+/*
+ Date: 20/02/2021
+*/
 ALTER TABLE cmn_auth_menu RENAME TO cmn_acm_menu;
 ALTER TABLE cmn_auth_obj_domain RENAME TO cmn_acm_obj_domain;
 ALTER TABLE cmn_auth_obj_operation RENAME TO cmn_acm_obj_operation;

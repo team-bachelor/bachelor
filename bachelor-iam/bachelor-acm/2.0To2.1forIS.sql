@@ -1,4 +1,7 @@
-ALTER TABLE `cmn_acm_menu` 
+/*
+ Date: 25/08/2022
+*/
+ALTER TABLE `cmn_acm_menu`
 MODIFY COLUMN `CODE` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '菜单编码' AFTER `NAME`;
 ALTER TABLE `cmn_acm_org_menu` 
 MODIFY COLUMN `MENU_CODE` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单编码' AFTER `ORG_CODE`;
