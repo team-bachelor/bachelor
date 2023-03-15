@@ -181,7 +181,7 @@ public class MenuController {
      * @return
      */
     @RequestMapping(value = "/user/menu/{userCode}/{group}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getUserMenu(@PathVariable String userCode, @PathVariable String group, @RequestParam("parent") String parentId) {
+    public HttpEntity<JsonResponse> getUserMenu(@PathVariable String userCode, @PathVariable String group, @RequestParam(value = "parent", required = false) String parentId) {
         List menus = menuService.calUserMenu(userCode, group, parentId);
         return JsonResponse.createHttpEntity(menus);
     }
