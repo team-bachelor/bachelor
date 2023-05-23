@@ -5,8 +5,6 @@ import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.microservice.gateway.service.ITenantIdProvider;
 import cn.org.bachelor.web.json.JsonResponse;
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -122,8 +120,8 @@ public class CheckAuthPreFilter implements GlobalFilter {
                         .header(JwtToken.PayloadKey.ACCESS_TOKEN,
                                 getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.ACCESS_TOKEN, false));
 
-                tokenClaims.keySet().forEach(key ->{
-                    builder.header(key,getAndTokenClaim(tokenClaims, key, false, false));
+                tokenClaims.keySet().forEach(key -> {
+                    builder.header(key, getAndTokenClaim(tokenClaims, key, false, false));
                 });
 
                 host = builder.build();
@@ -170,16 +168,15 @@ public class CheckAuthPreFilter implements GlobalFilter {
             jr.setStatus(cn.org.bachelor.web.json.ResponseStatus.BIZ_ERR);
         }
         response.getHeaders().set("Location", path.pathWithinApplication().value());
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String responseString = mapper.writeValueAsString(jr);
-            byte[] responseBytes = responseString.getBytes(StandardCharsets.UTF_8);
-            DataBuffer responseBuffer = response.bufferFactory().wrap(responseBytes);
-            return response.writeWith(Flux.just(responseBuffer));
-        } catch (JsonProcessingException e) {
-            logger.info("JsonProcessingException", e);
-        }
-        return response.setComplete();
+//        try {
+        String responseString = JSONObject.toJSONString(jr);
+        byte[] responseBytes = responseString.getBytes(StandardCharsets.UTF_8);
+        DataBuffer responseBuffer = response.bufferFactory().wrap(responseBytes);
+        return response.writeWith(Flux.just(responseBuffer));
+//        } catch (JsonProcessingException e) {
+//            logger.info("JsonProcessingException", e);
+//        }
+//        return response.setComplete();
 
 //            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
 //                logger.info("third post filter");
@@ -188,7 +185,7 @@ public class CheckAuthPreFilter implements GlobalFilter {
 
     private String getAndTokenClaim(Map<String, Object> tokenClaims, String payload, boolean urlencode, boolean remove) {
         String value = tokenClaims.getOrDefault(payload, "").toString();
-        if(remove) {
+        if (remove) {
             tokenClaims.remove(payload);
         }
         if (urlencode) {
@@ -196,8 +193,9 @@ public class CheckAuthPreFilter implements GlobalFilter {
         }
         return value;
     }
+
     private String getAndRemoveTokenClaim(Map<String, Object> tokenClaims, String payload, boolean urlencode) {
-        return getAndTokenClaim(tokenClaims, payload, urlencode , true);
+        return getAndTokenClaim(tokenClaims, payload, urlencode, true);
     }
 
     private boolean isValidToken(JwtToken jwtToken) {

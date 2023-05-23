@@ -8,8 +8,7 @@ import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.web.util.RequestUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,12 +56,7 @@ public class IdentifyInterceptor extends HandlerInterceptorAdapter {
         user.setAccessBackend(!(o != null && "N".equals(o.toString())));
 
         if (logger.isInfoEnabled()) {
-            ObjectMapper m = new ObjectMapper();
-            try {
-                logger.info("user info assembly: " + m.writeValueAsString(user));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+            logger.info("user info assembly: " + JSONObject.toJSONString(user));
         }
         //如果header里面没取到，则尝试从session里面取
         if (user.getAccessToken() == null || "".equals(user.getAccessToken())) {
@@ -70,23 +64,15 @@ public class IdentifyInterceptor extends HandlerInterceptorAdapter {
             if (ucc != null) {
                 user.setAccessToken(ucc.getAccessToken());
                 user.setId(ucc.getUserid());
-                String orgId = (String) request.getSession().getAttribute(ClientConstant.UP_ORG_ID);
-                String userName = (String) request.getSession().getAttribute(ClientConstant.UP_USER_NAME);
-                String orgName = (String) request.getSession().getAttribute(ClientConstant.UP_ORG_NAME);
-                String deptId = (String) request.getSession().getAttribute(ClientConstant.UP_DEPT_ID);
-                String deptName = (String) request.getSession().getAttribute(ClientConstant.UP_DEPT_NAME);
-                user.setName(userName);
-                user.setOrgId(orgId);
-                user.setOrgName(orgName);
-                user.setDeptId(deptId);
-                user.setDeptName(deptName);
+                String personStr = (String) request.getSession().getAttribute(ClientConstant.UP_USER);
+                UserVo userInSession = JSONObject.parseObject(personStr, UserVo.class);
+                user.setName(userInSession.getUsername());
+                user.setOrgId(userInSession.getOrgId());
+                user.setOrgName(userInSession.getOrgName());
+                user.setDeptId(userInSession.getDeptId());
+                user.setDeptName(userInSession.getDeptName());
                 if (logger.isInfoEnabled()) {
-                    ObjectMapper m = new ObjectMapper();
-                    try {
-                        logger.info("user info in session: " + m.writeValueAsString(user));
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
+                    logger.info("user info in session: " + JSONObject.toJSONString(user));
                 }
             }
         }

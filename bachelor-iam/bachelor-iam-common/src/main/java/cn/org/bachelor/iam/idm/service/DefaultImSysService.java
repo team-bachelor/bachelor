@@ -14,18 +14,14 @@ import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
 import cn.org.bachelor.iam.oauth2.request.DefaultOAuthResourceRequest;
 import cn.org.bachelor.iam.oauth2.response.OAuthResourceResponse;
 import cn.org.bachelor.iam.vo.*;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -41,7 +37,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class DefaultImSysService implements ImSysService {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultImSysService.class);
-    private ObjectMapper jsonMapper = new ObjectMapper();
     @Autowired
     private IamContext iamContext;
 
@@ -241,7 +236,8 @@ public class DefaultImSysService implements ImSysService {
     @Override
     public ImSysResult<List<UserVo>> findUsers(ImSysParam param) {
         String json = callApi(clientConfig.getRsURL().getUsers(), "GET", param.toParamMap());
-        return resolveJson2Result(json, UserVo.class, true);
+        ImSysResult<List<UserVo>> users = new ImSysResult<>();
+        return resolveJson2Result(json, UserVo.class, true, users);
     }
 
     @Override
@@ -571,49 +567,42 @@ public class DefaultImSysService implements ImSysService {
         }
     }
 
-    private <T> List<T> resolveJsonList(String json, Class clazz) {
-        return resolveJson(json, clazz, true);
+    private <T> List<T> resolveJsonList(String json, Class<T> clazz) {
+        ImSysResult<List<T>> userSysResult = new ImSysResult<>();
+        return (List<T>) resolveJson2Result(json, clazz, true, userSysResult).getRows();
     }
 
-    private <T> T resolveJsonObject(String json, Class clazz) {
-        return resolveJson(json, clazz, false);
+    private <T> T resolveJsonObject(String json, Class<T> clazz) {
+        ImSysResult<T> userSysResult = new ImSysResult<>();
+        return (T) resolveJson2Result(json, clazz, false, userSysResult).getRows();
     }
+    private JSONObject fillResult(String json, ImSysResult userSysResult){
+        //Map<String, Object> tokenMap = jsonMapper.readValue(json, Map.class);
+        JSONObject node = JSONObject.parseObject(json);
 
-    private <T> T resolveJson(String json, Class clazz, boolean asList) {
-        return (T) resolveJson2Result(json, clazz, asList).getRows();
-    }
-
-    private <T> ImSysResult<T> resolveJson2Result(String json, Class clazz, boolean asList) {
-        try {
-
-            //Map<String, Object> tokenMap = jsonMapper.readValue(json, Map.class);
-            JsonNode node = jsonMapper.readTree(json);
-
-            String result = node.get("result").asText();
-            String message = node.get("message").asText();
-            int total = node.get("total").asInt();
-            if ("1001".equals(result)) {
-                throw new ImSysException("ACCESS_TOKEN_EXPIRED");
-            } else if (!"200".equals(result)) {
-                throw new RemoteException(result + ":" + message);
-            }
-            ImSysResult<T> userSysResult = new ImSysResult();
-            userSysResult.setResult(result);
-            userSysResult.setMessage(message);
-            userSysResult.setTotal(total);
-            String rowsString = node.get("rows").toString();
-            jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            JavaType jvt = null;
-            if (asList) {
-                jvt = jsonMapper.getTypeFactory().constructParametricType(List.class, clazz);
-            } else {
-                jvt = jsonMapper.getTypeFactory().constructType(clazz);
-            }
-            userSysResult.setRows(jsonMapper.readValue(rowsString, jvt));
-            return userSysResult;
-        } catch (IOException e) {
-            throw new BusinessException("invalid return string", e);
+        String result = node.getString("result");
+        String message = node.getString("message");
+        int total = node.getInteger("total");
+        if ("1001".equals(result)) {
+            throw new ImSysException("ACCESS_TOKEN_EXPIRED");
+        } else if (!"200".equals(result)) {
+            throw new RemoteException(result + ":" + message);
         }
+        userSysResult.setResult(result);
+        userSysResult.setMessage(message);
+        userSysResult.setTotal(total);
+        return node;
+    }
+    private <T> ImSysResult resolveJson2Result(String json, Class<T> clazz, boolean asList, ImSysResult imSysResult) {
+            //Map<String, Object> tokenMap = jsonMapper.readValue(json, Map.class);
+            JSONObject node = fillResult(json, imSysResult);
+            String rowsString = node.get("rows").toString();
+            if (asList) {
+                imSysResult.setRows(JSONArray.parseArray(rowsString, clazz));
+            } else {
+                imSysResult.setRows(JSONObject.parseObject(rowsString, clazz));
+            }
+            return imSysResult;
     }
 
     private String callApi(String url, String methodType,

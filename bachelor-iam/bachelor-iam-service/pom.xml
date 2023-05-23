@@ -28,10 +28,6 @@
         <!--基础框架依赖-->
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-acm-biz</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-acm-service</artifactId>
         </dependency>
         <dependency>

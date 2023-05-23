@@ -1,10 +1,10 @@
 package cn.org.bachelor.iam.oauth2.response;
 
 
+import cn.org.bachelor.iam.oauth2.OAuthConstant;
 import cn.org.bachelor.iam.oauth2.token.BasicOAuthToken;
 import cn.org.bachelor.iam.oauth2.token.OAuthToken;
-import cn.org.bachelor.iam.oauth2.OAuthConstant;
-import cn.org.bachelor.iam.oauth2.utils.JSONParser;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * Created by team bachelor on 15/5/20.
@@ -22,13 +22,13 @@ public class OAuthJSONAccessTokenResponse extends OAuthAccessTokenResponse {
     @Override
     public Long getExpiresIn() {
         String value = getParam(OAuthConstant.OAUTH_EXPIRES_IN);
-        return value == null? null: Long.valueOf(value);
+        return value == null ? null : Long.valueOf(value);
     }
 
     @Override
     public String getExpiration() {
         String value = getParam(OAuthConstant.OAUTH_EXPiRATION);
-        return value == null? null: value;
+        return value == null ? null : value;
     }
 
     public String getScope() {
@@ -44,8 +44,8 @@ public class OAuthJSONAccessTokenResponse extends OAuthAccessTokenResponse {
     }
 
     protected void setBody(String body) {
-            this.body = body;
-            parameters = JSONParser.parseJSON(body);
+        this.body = body;
+        parameters = JSONObject.parseObject(body);
     }
 
     protected void setContentType(String contentType) {

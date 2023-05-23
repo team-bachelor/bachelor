@@ -161,82 +161,13 @@ public class OAuth2Client {
         logger.info("退出toGetAuthorizationCode，url=" + _url);
     }
 
-    public String refreshAccessToken(String currentRefreshToken) {
-        String accessToken = "";
-        String refreshToken = "";
-        String expiration = "";
-        logger.info("refresh accesstoken,{}", refreshToken);
-        try {
-            TokenRequestBuilder builder = DefaultOAuthRequest
-                    .tokenLocation(config.getAsURL().getAccessToken())
-                    .setGrantType(GrantType.REFRESH_TOKEN)
-                    .setClientId(config.getId())
-                    .setClientSecret(config.getSecret())
-                    .setRefreshToken(currentRefreshToken)
-                    .setRedirectURI(config.getLoginRedirectURL());
-            DefaultOAuthRequest accessTokenRequest = builder.buildQueryMessage();
-            logger.info("call access_token_url to refreshtoken接口" + builder);
-            OAuthAccessTokenResponse oAuthResponse = oAuthClient.accessToken(accessTokenRequest, OAuthConstant.HttpMethod.POST);
-            accessToken = oAuthResponse.getAccessToken();
-            refreshToken = oAuthResponse.getRefreshToken();
-            expiration = oAuthResponse.getExpiration();
-        } catch (OAuthBusinessException e) {
-            logger.error("获取令牌信息错误=======>", e);
-            throw new GetAccessTokenException(e.getDescription());
-        } catch (Exception e) {
-            logger.error("获取令牌信息错误=======>", e);
-            throw new GetAccessTokenException(e);
-        }
-
-        String openId = "";
-        String userId = "";
-        String personStr;
-        try {
-            String userInfoUrl = config.getAsURL().getUserInfo();
-            DefaultOAuthResourceRequest userInfoRequest = new DefaultOAuthResourceRequest(userInfoUrl, OAuthConstant.HttpMethod.GET);
-            userInfoRequest.setAccessToken(accessToken);
-            OAuthResourceResponse resourceResponse = oAuthClient.resource(userInfoRequest, OAuthResourceResponse.class);
-            personStr = resourceResponse.getBody();
-            person = JSONObject.parseObject(personStr);
-            logger.info("去调用用户信息接口方法  person:" + person);
-            openId = this.getJsonValue(person, "openId");
-            userId = this.getJsonValue(person, "userId");
-        } catch (Exception e) {
-            logger.error("获取用户基本信息错误=======>", e);
-            throw new GetUserInfoException(e);
-        }
-        request.getSession().setAttribute(ClientConstant.UP_USER, personStr);
-        request.getSession().setAttribute(ClientConstant.UP_USER_ID, userId);
-        request.getSession().setAttribute(ClientConstant.UP_OPEN_ID, openId);
-        request.getSession().setAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY, new OAuth2ClientCertification(userId, accessToken, refreshToken, expiration));
-        ClientUtil.setSession(request.getSession());
-
-        logger.info("当前登录用户 userId:" + ClientUtil.getCurrentUserId());
-        logger.info("登录后的令牌信息：" + request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY));
-        return person.toString();
-    }
-
-    /**
-     * 调用API获取用户信息并将用户信息绑定到会话中
-     * @param authorizationCode
-     * @return
-     * @throws Exception
-     */
-    public JSONObject bindUserInfo(String authorizationCode) {
-        logger.info("去调用用户信息接口方法");
+    private JSONObject bindUser(TokenRequestBuilder builder) {
         String accessToken = "";
         String refreshToken = "";
         String expiration = "";
         try {
-            TokenRequestBuilder builder = DefaultOAuthRequest
-                    .tokenLocation(config.getAsURL().getAccessToken())
-                    .setGrantType(GrantType.AUTHORIZATION_CODE)
-                    .setClientId(config.getId())
-                    .setClientSecret(config.getSecret())
-                    .setCode(authorizationCode)
-                    .setRedirectURI(config.getLoginRedirectURL());
+            logger.info("调用用户信息接口方法");
             DefaultOAuthRequest accessTokenRequest = builder.buildQueryMessage();
-
             logger.info("======去调用access_token_url接口，参数：" + builder);
             OAuthAccessTokenResponse oAuthResponse = oAuthClient.accessToken(accessTokenRequest, OAuthConstant.HttpMethod.POST);
             accessToken = oAuthResponse.getAccessToken();
@@ -249,16 +180,11 @@ public class OAuth2Client {
             logger.error("获取令牌信息错误=======>", e);
             throw new GetAccessTokenException(e);
         }
-        String openId;
-        String userId;
-        String personStr;
-        String orgId;
-        String userName;
-        String orgName;
-        String deptId;
-        String deptName;
+        String userId = "";
+        String personStr = "";
+        String openId = "";
         try {
-            logger.info("======去调用user_info_url接口，参数：" + "accessToken=" + accessToken);
+            logger.info("======调用user_info_url接口，参数：" + "accessToken=" + accessToken);
             logger.info("如果user_info_url已经赋值，那么直接读取，否则去配置文件中读取");
             String userInfoUrl = config.getAsURL().getUserInfo();
             DefaultOAuthResourceRequest userInfoRequest = new DefaultOAuthResourceRequest(userInfoUrl, OAuthConstant.HttpMethod.GET);
@@ -267,62 +193,50 @@ public class OAuth2Client {
             personStr = resourceResponse.getBody();
             logger.info("======返回的user_info:" + personStr);
             person = JSONObject.parseObject(personStr);
-
-
-            logger.info("去调用用户信息接口方法  person:" + person.toJSONString());
-//            person = JSONObject.parseObject(person.toJSONString());
-            openId = this.getJsonValue(person, "openId");
             userId = this.getJsonValue(person, "userId");
-            orgId = this.getJsonValue(person, "orgId");
-            userName = this.getJsonValue(person, "userName");
-            orgName = this.getJsonValue(person, "orgName");
-            deptId = this.getJsonValue(person, "deptId");
-            deptName = this.getJsonValue(person, "deptName");
+            openId = this.getJsonValue(person, "openId");
         } catch (Exception e) {
             logger.error("获取用户基本信息错误=======>", e);
             throw new GetUserInfoException(e);
         }
-        //检验email  and  tel   ----------start
-		/*try{
-			logger.info("======获取用户的邮箱 和 电话");
-			OAuthResourceClientRequest userInfoRequest = new OAuthResourceClientRequest("user_info", config.getProperty("asserver_url")+"/emailTel", OAuth.HttpMethod.GET);
-			userInfoRequest.setParameter("userId",userId);
-			OAuthResourceResponse resourceResponse = oAuthClient.resource(userInfoRequest, OAuthResourceResponse.class);
-			String personStr2 = resourceResponse.getBody();
-			logger.info("======返回的user_info:" + personStr2);
-			JsonObject person2 = parser.parse(personStr2).getAsJsonObject();
 
-
-			logger.info("去调用用户  email  和 tel接口方法  person2:" + person2);
-
-			String email = this.getJsonValue(person2, "email");
-			String tel = this.getJsonValue(person2, "tel");
-
-			if(StringUtils.isEmpty(email) && StringUtils.isEmpty(tel)){
-				request.setAttribute("prefect", config.getProperty("asserver_url")+"/prefect?userId="+userId+"&&targetURL="+URLEncoder.encode(request.getParameter("target_url"),"utf-8"));
-				return null;
-			}
-
-		} catch (Exception e) {
-			logger.error("获取用户邮箱 电话 错误=======>",e);
-			throw new GetUserInfoException(e);
-		}*/
-        //检验 email  and  tel   ------------end
-//		request.getSession().setAttribute(UpClientConstant.UPUSER, new MJsonObject(person));
         request.getSession().setAttribute(ClientConstant.UP_USER, personStr);
-        request.getSession().setAttribute(ClientConstant.UP_USER_ID, userId);
         request.getSession().setAttribute(ClientConstant.UP_OPEN_ID, openId);
-        request.getSession().setAttribute(ClientConstant.UP_ORG_ID, orgId);
-        request.getSession().setAttribute(ClientConstant.UP_USER_NAME, userName);
-        request.getSession().setAttribute(ClientConstant.UP_ORG_NAME, orgName);
-        request.getSession().setAttribute(ClientConstant.UP_DEPT_ID, deptId);
-        request.getSession().setAttribute(ClientConstant.UP_DEPT_NAME, deptName);
-        request.getSession().setAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY, new OAuth2ClientCertification(userId, accessToken, refreshToken, expiration));
+        request.getSession().setAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY,
+                new OAuth2ClientCertification(userId, accessToken, refreshToken, expiration));
         ClientUtil.setSession(request.getSession());
 
         logger.info("当前登录用户 userId:" + ClientUtil.getCurrentUserId());
         logger.info("登录后的令牌信息：" + request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY));
         return person;
+    }
+
+    public JSONObject refreshAccessToken(String currentRefreshToken) {
+        TokenRequestBuilder builder = DefaultOAuthRequest
+                .tokenLocation(config.getAsURL().getAccessToken())
+                .setGrantType(GrantType.REFRESH_TOKEN)
+                .setClientId(config.getId())
+                .setClientSecret(config.getSecret())
+                .setRefreshToken(currentRefreshToken)
+                .setRedirectURI(config.getLoginRedirectURL());
+        return bindUser(builder);
+    }
+
+    /**
+     * 调用API获取用户信息并将用户信息绑定到会话中
+     * @param authorizationCode
+     * @return
+     * @throws Exception
+     */
+    public JSONObject bindUser2Session(String authorizationCode) {
+        TokenRequestBuilder builder = DefaultOAuthRequest
+                .tokenLocation(config.getAsURL().getAccessToken())
+                .setGrantType(GrantType.AUTHORIZATION_CODE)
+                .setClientId(config.getId())
+                .setClientSecret(config.getSecret())
+                .setCode(authorizationCode)
+                .setRedirectURI(config.getLoginRedirectURL());
+        return bindUser(builder);
     }
 
     /**
@@ -543,21 +457,21 @@ public class OAuth2Client {
         return false;
     }
 
-    public static void main(String[] args) {
-        String i = "{\"openId\":\"ZDc5NTQ3MzMzN2Q5NDlmZWIyODA0OWI5MjQxMzQxZTFANmNmZGYwMGI1NGQ0NDFiYmI3ODg5ZGM2MmNkNTA3OWI=\",\"userId\":\"d795473337d949feb28049b9241341e1\",\"username\":\"工业互联网管理员\",\"account\":\"dy_ii\"}";
-        JSONObject person = JSONObject.parseObject(i);
-
-
-        logger.info("去调用用户信息接口方法  person:" + person);
-
-        getJsonValue(person, "openId");
-        getJsonValue(person, "userId");
-        getJsonValue(person, "orgId");
-        getJsonValue(person, "userName");
-        getJsonValue(person, "orgName");
-        getJsonValue(person, "deptId");
-        getJsonValue(person, "deptName");
-    }
+//    public static void main(String[] args) {
+//        String i = "{\"openId\":\"ZDc5NTQ3MzMzN2Q5NDlmZWIyODA0OWI5MjQxMzQxZTFANmNmZGYwMGI1NGQ0NDFiYmI3ODg5ZGM2MmNkNTA3OWI=\",\"userId\":\"d795473337d949feb28049b9241341e1\",\"username\":\"工业互联网管理员\",\"account\":\"dy_ii\"}";
+//        JSONObject person = JSONObject.parseObject(i);
+//
+//
+//        logger.info("去调用用户信息接口方法  person:" + person);
+//
+//        getJsonValue(person, "openId");
+//        getJsonValue(person, "userId");
+//        getJsonValue(person, "orgId");
+//        getJsonValue(person, "userName");
+//        getJsonValue(person, "orgName");
+//        getJsonValue(person, "deptId");
+//        getJsonValue(person, "deptName");
+//    }
 
     private static String getJsonValue(JSONObject json, String key) {
         String ele = json.getString(key);

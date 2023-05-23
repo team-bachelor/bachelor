@@ -1,10 +1,7 @@
 package cn.org.bachelor.iam.idm.controller;
 
-import cn.org.bachelor.context.IUser;
-import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.iam.IamConfiguration;
 import cn.org.bachelor.iam.IamConstant;
-import cn.org.bachelor.iam.idm.service.DefaultImSysService;
 import cn.org.bachelor.iam.idm.service.IdmService;
 import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
 import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
@@ -14,13 +11,11 @@ import cn.org.bachelor.iam.oauth2.exception.OAuthBusinessException;
 import cn.org.bachelor.iam.oauth2.utils.StringUtils;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.vo.UserVo;
-import cn.org.bachelor.service.ApplicationContextHolder;
 import cn.org.bachelor.web.json.JsonResponse;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import javafx.application.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +25,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static cn.org.bachelor.iam.token.JwtToken.PayloadKey.USER_ID;
 
 /**
  * @author liuzhuo
@@ -58,6 +53,8 @@ public class IdmAsController {
     @Autowired
     private OAuth2CientConfig clientConfig;
 
+    @Autowired
+    private IamConfiguration authConfig;
 
     /**
      * @param code     授权码
@@ -81,7 +78,7 @@ public class IdmAsController {
         OAuth2Client client = new OAuth2Client(clientConfig, request, response);
         JSONObject user = null;
         try {
-            user = client.bindUserInfo(code);
+            user = client.bindUser2Session(code);
 
         } catch (OAuthBusinessException e) {
             e.printStackTrace();
@@ -107,17 +104,17 @@ public class IdmAsController {
                                                      HttpServletRequest request, HttpServletResponse response) {
         String newToken = idmService.refreshAccessToken(authorization);
         OAuth2Client client = new OAuth2Client(clientConfig, request, response);
-        String userinfo = client.refreshAccessToken(newToken);
+        JSONObject userinfo = client.refreshAccessToken(newToken);
         Map<String, String> token = getToken(request, userinfo);
         return JsonResponse.createHttpEntity(token, HttpStatus.OK);
     }
-    private Map<String, String> getToken(HttpServletRequest request, String userinfo){
-        return getToken(request, JSONObject.parseObject(userinfo));
-    }
+
     private Map<String, String> getToken(HttpServletRequest request, JSONObject userinfo) {
         OAuth2ClientCertification upCC = (OAuth2ClientCertification) request.getSession()
                 .getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
-        String token_s = idmService.getJWTString(upCC, userinfo);
+        String userId = userinfo.getString(USER_ID);
+        UserVo userDetail = idmService.getUserDetail(userId);
+        String token_s = JwtToken.getJWTString(upCC, userinfo, authConfig.getPrivateKey(), userDetail);
         Map<String, String> token = new HashMap<String, String>(1);
         token.put("token", token_s);
         return token;

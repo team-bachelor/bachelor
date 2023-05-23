@@ -23,51 +23,8 @@ public class IdmService {
     @Autowired
     private DefaultImSysService userSysService;
 
-    @Autowired
-    private IamConfiguration authConfig;
-
     @Autowired(required = false)
     private List<UserExtendInfoProvider> userExtendInfoProviders;
-
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    public String getJWTString(OAuth2ClientCertification upCC, JSONObject userinfo) {
-        String accesstoken = upCC.getAccessToken();
-        String refreshToken = upCC.getRefreshToken();
-        Date expTime_Date = parseExpireTime(upCC.getExpiresTime());
-        // 有效期保持与用户系统一致
-        long expTime = expTime_Date.getTime();
-        long currentTime = new Date().getTime();
-//        Map<String, Object> userObject = JSONParser.parseJSON(userinfo);
-        userinfo.put("accesstoken", accesstoken);
-
-        // 存储refreshToken为token有效期的2倍
-        userSysService.saveRefreshToken(userinfo.getString("account"), refreshToken, 2 * (expTime - currentTime));
-        userinfo.put(JwtToken.PayloadKey.EXP, expTime);
-        userinfo.put(JwtToken.PayloadKey.IAT, currentTime);
-
-        userinfo.put(JwtToken.PayloadKey.ISS, ""); // jwt签发者
-        userinfo.put(JwtToken.PayloadKey.SUB, userinfo.get("account")); // jwt所面向的用户
-        userinfo.put(JwtToken.PayloadKey.AUD, ""); // 接收jwt的一方
-        userinfo.put(JwtToken.PayloadKey.NBF, ""); // 接收jwt的一方
-        userinfo.put(JwtToken.PayloadKey.JTI, ""); // jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击
-
-        userinfo.put(JwtToken.PayloadKey.USER_NAME, userinfo.get("username"));
-        userinfo.put(JwtToken.PayloadKey.USER_CODE, userinfo.get("account"));
-        String userId = userinfo.getString("userId");
-        userinfo.put(JwtToken.PayloadKey.USER_ID, userId);
-        UserVo userDetail = getUserDetail(userId);
-        if (userDetail != null) {
-            userinfo.put(JwtToken.PayloadKey.ORG_ID, userDetail.getOrgId());
-            userinfo.put(JwtToken.PayloadKey.ORG_NAME, userDetail.getOrgName());
-            userinfo.put(JwtToken.PayloadKey.DEPT_ID, userDetail.getDeptId());
-            userinfo.put(JwtToken.PayloadKey.DEPT_NAME, userDetail.getDeptName());
-        }
-        logger.info(userinfo.toString());
-        String token = JwtToken.create(userinfo.toJSONString(), authConfig.getPrivateKey());
-        return token;
-    }
-
 
     public UserVo getUserDetail(String userId) {
         List<UserVo> users = userSysService.findUsersDetail(userId);
@@ -75,18 +32,6 @@ public class IdmService {
             return null;
         }
         return users.get(0);
-    }
-
-    public Date parseExpireTime(String expireTime) {
-        Date expTime;
-        try {
-            expTime = sdf.parse(expireTime);
-        } catch (ParseException e) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_MONTH, 1);
-            expTime = calendar.getTime();
-        }
-        return expTime;
     }
 
     private String getUserCode(String token) {

@@ -3,6 +3,7 @@ package cn.org.bachelor.iam.acm;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.token.RSAKeyCreator;
 import cn.org.bachelor.iam.token.RSAKeyPair;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Test;
 
 /**
@@ -27,12 +28,13 @@ public class JwtTest {
                     RSAKeyCreator.getPrivateKey(kp) +
                     "\n-----END RSA PRIVATE KEY-----";
             System.out.println(ssoAppPrivateKey);
-            String token = JwtToken.create(payload, ssoAppPrivateKey);
+            JwtToken tokenObj = JSONObject.parseObject(payload, JwtToken.class);
+            String token = JwtToken.create(tokenObj, ssoAppPrivateKey);
             System.out.println(token);
             String ssoAppPublicKey = "-----BEGIN PUBLIC KEY-----\n" +
                     RSAKeyCreator.getPublicKey(kp) +
                     "\n-----END PUBLIC KEY-----";
-            JwtToken jwt = JwtToken.decodeAndVerify(token, kp.getPublic());
+            JwtToken jwt = JwtToken.decodeAndVerify(token, RSAKeyCreator.getPublicKey(kp));
             System.out.println(ssoAppPublicKey);
             System.out.println(jwt.getClaims());
         } catch (Exception e) {

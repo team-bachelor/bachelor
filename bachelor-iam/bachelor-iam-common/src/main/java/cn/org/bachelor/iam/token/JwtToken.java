@@ -1,17 +1,20 @@
 package cn.org.bachelor.iam.token;
 
 import cn.org.bachelor.exception.BusinessException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.security.jwt.Jwt;
-import org.springframework.security.jwt.JwtHelper;
-import org.springframework.security.jwt.crypto.sign.RsaSigner;
-import org.springframework.security.jwt.crypto.sign.RsaVerifier;
-
-import java.io.IOException;
-import java.security.interfaces.RSAPublicKey;
-import java.util.HashMap;
+import cn.org.bachelor.exception.SystemException;
+import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
+import cn.org.bachelor.iam.vo.UserVo;
+import com.alibaba.fastjson.JSONObject;
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
+
+import static cn.org.bachelor.iam.token.JwtToken.PayloadKey.ACCESS_TOKEN;
 
 /**
  * @描述:
@@ -47,13 +50,85 @@ public class JwtToken {
     /**
      * 创建jwt
      *
-     * @param payload    token信息
+     * @param token token信息
      * @param privateKey 私钥
      * @return
      */
-    public static String create(String payload, String privateKey) {
-        Jwt jwt = JwtHelper.encode(payload, new RsaSigner(privateKey));
-        return jwt.getEncoded();
+//    public static String create(String payload, String privateKey) {
+//        Jwt jwt = JwtHelper.encode(payload, new RsaSigner(privateKey));
+//        return jwt.getEncoded();
+//    }
+    public static String create(JwtToken token, String privateKey){
+        return create(JSONObject.toJSONString(token), privateKey);
+    }
+    private static String create(String payloadStr, String privateKey) {
+        try {
+            //准备JWS-header
+            JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256)
+                    .type(JOSEObjectType.JWT).build();
+            //将负载信息装载到payload
+            Payload payload = new Payload(payloadStr);
+            //封装header和payload到JWS对象
+            JWSObject jwsObject = new JWSObject(jwsHeader, payload);
+            //创建HMAC签名器
+            JWSSigner jwsSigner = new MACSigner(privateKey);
+            //签名
+            jwsObject.sign(jwsSigner);
+            return jwsObject.serialize();
+        } catch (Exception e) {
+            throw new SystemException(e);
+        }
+    }
+
+    public static String getJWTString(OAuth2ClientCertification upCC, JSONObject userinfo, String privateKey, UserVo userDetail) {
+        String accesstoken = upCC.getAccessToken();
+        String refreshToken = upCC.getRefreshToken();
+        Date expTime_Date = parseExpireTime(upCC.getExpiresTime());
+        // 有效期保持与用户系统一致
+        long expTime = expTime_Date.getTime();
+        long currentTime = new Date().getTime();
+//        Map<String, Object> userObject = JSONParser.parseJSON(userinfo);
+        userinfo.put(ACCESS_TOKEN, accesstoken);
+
+        // 存储refreshToken为token有效期的2倍
+//        userSysService.saveRefreshToken(userinfo.getString("account"), refreshToken, 2 * (expTime - currentTime));
+        userinfo.put(JwtToken.PayloadKey.EXP, expTime);
+        userinfo.put(JwtToken.PayloadKey.IAT, currentTime);
+
+        userinfo.put(JwtToken.PayloadKey.ISS, ""); // jwt签发者
+        userinfo.put(JwtToken.PayloadKey.SUB, userinfo.get("account")); // jwt所面向的用户
+        userinfo.put(JwtToken.PayloadKey.AUD, ""); // 接收jwt的一方
+        userinfo.put(JwtToken.PayloadKey.NBF, ""); // 接收jwt的一方
+        userinfo.put(JwtToken.PayloadKey.JTI, ""); // jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击
+
+        userinfo.put(JwtToken.PayloadKey.USER_NAME, userinfo.get("username"));
+        userinfo.put(JwtToken.PayloadKey.USER_CODE, userinfo.get("account"));
+
+//        userinfo.put(USER_ID, userId);
+
+        if (userDetail != null) {
+            userinfo.put(JwtToken.PayloadKey.ORG_ID, userDetail.getOrgId());
+            userinfo.put(JwtToken.PayloadKey.ORG_NAME, userDetail.getOrgName());
+            userinfo.put(JwtToken.PayloadKey.DEPT_ID, userDetail.getDeptId());
+            userinfo.put(JwtToken.PayloadKey.DEPT_NAME, userDetail.getDeptName());
+        }
+//        logger.info(userinfo.toString());
+        String token = JwtToken.create(userinfo.toJSONString(), privateKey);
+        return token;
+    }
+
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    public static Date parseExpireTime(String expireTime) {
+        Date expTime;
+        try {
+            expTime = sdf.parse(expireTime);
+        } catch (ParseException e) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            expTime = calendar.getTime();
+        }
+        return expTime;
     }
 
     /**
@@ -63,20 +138,54 @@ public class JwtToken {
      * @param publicKey 公钥
      * @return
      */
-    public static JwtToken decodeAndVerify(String token, RSAPublicKey publicKey) {
-        Jwt j = JwtHelper.decodeAndVerify(token, new RsaVerifier(publicKey));
-        return fromJson(j.getClaims());
-    }
+//    public static JwtToken decodeAndVerify(String token, RSAPublicKey publicKey) {
+//        Jwt j = JwtHelper.decodeAndVerify(token, new RsaVerifier(publicKey));
+//        return fromJson(j.getClaims());
+//    }
+
+//    public static JwtToken decodeAndVerify(String token, String publicKey) {
+//        Jwt j = JwtHelper.decodeAndVerify(token, new RsaVerifier(publicKey));
+//        return fromJson(j.getClaims());
+//    }
+//    public static JwtToken decodeAndVerify(String token, RSAPublicKey publicKey) {
+//        Jwt j = JwtHelper.decodeAndVerify(token, new RsaVerifier(publicKey));
+//        return decodeAndVerify(token, publicKey.);
+//    }
 
     public static JwtToken decodeAndVerify(String token, String publicKey) {
-        Jwt j = JwtHelper.decodeAndVerify(token, new RsaVerifier(publicKey));
-        return fromJson(j.getClaims());
+        try {
+            JWSObject jwsObject = JWSObject.parse(token);
+            //创建HMAC验证器
+            JWSVerifier jwsVerifier = new MACVerifier(publicKey);
+            if (!jwsObject.verify(jwsVerifier)) {
+                throw new BusinessException("jwt签名不合法!");
+            }
+            String payload = jwsObject.getPayload().toString();
+            JwtToken payloadDto = JSONObject.parseObject(payload, JwtToken.class);
+            if (payloadDto.getExp() < new Date().getTime()) {
+                throw new BusinessException("jwt令牌已过期!");
+            }
+            return payloadDto;
+        } catch (Exception e) {
+            throw new SystemException(e);
+        }
     }
 
     public static JwtToken decode(String token) {
-        Jwt j = JwtHelper.decode(token);
-        return fromJson(j.getClaims());
+        try {
+            JWSObject jwsObject = JWSObject.parse(token);
+            String payload = jwsObject.getPayload().toString();
+            JwtToken payloadDto = JSONObject.parseObject(payload, JwtToken.class);
+
+            return payloadDto;
+        } catch (Exception e) {
+            throw new SystemException(e);
+        }
     }
+//    public static JwtToken decode(String token) {
+//        Jwt j = JwtHelper.decode(token);
+//        return fromJson(j.getClaims());
+//    }
 
     //jwt签发者
     private String iss;
@@ -166,87 +275,88 @@ public class JwtToken {
         this.jti = jti;
     }
 
-    public static String toJson(JwtToken token) {
-        if (token == null) return null;
-
-        Map<String, Object> tokenMap = token.getClaims();
-        if (tokenMap == null) {
-            tokenMap = new HashMap<>();
-        }
-        if (isNotEmpty(token.getIss())) {
-            tokenMap.put(PayloadKey.ISS, token.getIss());
-        }
-        if (isNotEmpty(token.getSub())) {
-            tokenMap.put(PayloadKey.SUB, token.getSub());
-        }
-        if (isNotEmpty(token.getAud())) {
-            tokenMap.put(PayloadKey.AUD, token.getAud());
-        }
-        if (token.getExp() != null) {
-            tokenMap.put(PayloadKey.EXP, String.valueOf(token.getExp()));
-        }
-        if (token.getNbf() != null) {
-            tokenMap.put(PayloadKey.NBF, String.valueOf(token.getNbf()));
-        }
-        if (token.getIat() != null) {
-            tokenMap.put(PayloadKey.IAT, String.valueOf(token.getIat()));
-        }
-        if (isNotEmpty(token.getJti())) {
-            tokenMap.put(PayloadKey.JTI, token.getJti());
-        }
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(tokenMap);
-        } catch (JsonProcessingException e) {
-            throw new BusinessException(e);
-        }
-    }
+//    public static String toJson(JwtToken token) {
+//        if (token == null) return null;
+//
+//        Map<String, Object> tokenMap = token.getClaims();
+//        if (tokenMap == null) {
+//            tokenMap = new HashMap<>();
+//        }
+//        if (isNotEmpty(token.getIss())) {
+//            tokenMap.put(PayloadKey.ISS, token.getIss());
+//        }
+//        if (isNotEmpty(token.getSub())) {
+//            tokenMap.put(PayloadKey.SUB, token.getSub());
+//        }
+//        if (isNotEmpty(token.getAud())) {
+//            tokenMap.put(PayloadKey.AUD, token.getAud());
+//        }
+//        if (token.getExp() != null) {
+//            tokenMap.put(PayloadKey.EXP, String.valueOf(token.getExp()));
+//        }
+//        if (token.getNbf() != null) {
+//            tokenMap.put(PayloadKey.NBF, String.valueOf(token.getNbf()));
+//        }
+//        if (token.getIat() != null) {
+//            tokenMap.put(PayloadKey.IAT, String.valueOf(token.getIat()));
+//        }
+//        if (isNotEmpty(token.getJti())) {
+//            tokenMap.put(PayloadKey.JTI, token.getJti());
+//        }
+//        JSONObject.toJSONString(tokenMap)
+//        try {
+//            ObjectMapper mapper = new ObjectMapper();
+//            return mapper.writeValueAsString(tokenMap);
+//        } catch (JsonProcessingException e) {
+//            throw new BusinessException(e);
+//        }
+//    }
 
     private static boolean isNotEmpty(String s) {
         return s != null && !"".equals(s);
     }
 
-    public static JwtToken fromJson(String json) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            Map<String, Object> tokenMap = mapper.readValue(json, Map.class);
-            return resolveMap(tokenMap);
-        } catch (IOException e) {
-            throw new BusinessException("invalid jwt string", e);
-        }
+//    public static JwtToken fromJson(String json) {
+//        ObjectMapper mapper = new ObjectMapper();
+//        try {
+//            Map<String, Object> tokenMap = mapper.readValue(json, Map.class);
+//            return resolveMap(tokenMap);
+//        } catch (IOException e) {
+//            throw new BusinessException("invalid jwt string", e);
+//        }
+//
+//    }
 
-    }
-
-    private static JwtToken resolveMap(Map<String, Object> tokenMap) {
-        JwtToken token = new JwtToken();
-        token.setIss(getAndRemoveClaim(PayloadKey.ISS, tokenMap));
-        token.setSub(getAndRemoveClaim(PayloadKey.SUB, tokenMap));
-        token.setAud(getAndRemoveClaim(PayloadKey.AUD, tokenMap));
-
-        String v = null;
-        try {
-            v = getAndRemoveClaim(PayloadKey.EXP, tokenMap);
-            if (isNotEmpty(v)) {
-                token.setExp(Long.valueOf(v));
-            }
-        } catch (NumberFormatException e) {
-        }
-        try {
-            v = getAndRemoveClaim(PayloadKey.NBF, tokenMap);
-            if (isNotEmpty(v))
-                token.setNbf(Long.valueOf(v));
-        } catch (NumberFormatException e) {
-        }
-        try {
-            v = getAndRemoveClaim(PayloadKey.IAT, tokenMap);
-            if (isNotEmpty(v))
-                token.setIat(Long.valueOf(v));
-        } catch (NumberFormatException e) {
-        }
-        token.setJti(getAndRemoveClaim(PayloadKey.JTI, tokenMap));
-        token.setClaims(tokenMap);
-        return token;
-    }
+//    private static JwtToken resolveMap(Map<String, Object> tokenMap) {
+//        JwtToken token = new JwtToken();
+//        token.setIss(getAndRemoveClaim(PayloadKey.ISS, tokenMap));
+//        token.setSub(getAndRemoveClaim(PayloadKey.SUB, tokenMap));
+//        token.setAud(getAndRemoveClaim(PayloadKey.AUD, tokenMap));
+//
+//        String v = null;
+//        try {
+//            v = getAndRemoveClaim(PayloadKey.EXP, tokenMap);
+//            if (isNotEmpty(v)) {
+//                token.setExp(Long.valueOf(v));
+//            }
+//        } catch (NumberFormatException e) {
+//        }
+//        try {
+//            v = getAndRemoveClaim(PayloadKey.NBF, tokenMap);
+//            if (isNotEmpty(v))
+//                token.setNbf(Long.valueOf(v));
+//        } catch (NumberFormatException e) {
+//        }
+//        try {
+//            v = getAndRemoveClaim(PayloadKey.IAT, tokenMap);
+//            if (isNotEmpty(v))
+//                token.setIat(Long.valueOf(v));
+//        } catch (NumberFormatException e) {
+//        }
+//        token.setJti(getAndRemoveClaim(PayloadKey.JTI, tokenMap));
+//        token.setClaims(tokenMap);
+//        return token;
+//    }
 
     private static String getAndRemoveClaim(String claimName, Map<String, Object> tokenMap) {
         if (tokenMap.containsKey(claimName)) {

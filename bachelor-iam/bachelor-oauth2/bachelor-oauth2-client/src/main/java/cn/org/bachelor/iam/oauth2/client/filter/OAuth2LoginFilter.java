@@ -130,7 +130,7 @@ public class OAuth2LoginFilter implements Filter {
                 return;
             }
             logger.info("去调用用户信息接口方法----url:" + requestURI);
-            client.bindUserInfo(code);
+            client.bindUser2Session(code);
 
 //				if(!client.toOriginalURL()){//如果直接敲有code的url地址
 //					chain.doFilter(client.request(), response);

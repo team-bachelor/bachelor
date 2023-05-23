@@ -9,8 +9,8 @@
     </parent>
 
     <artifactId>bachelor-iam-common</artifactId>
-    <packaging>jar</packaging>
     <name>bachelor-iam-common</name>
+    <packaging>jar</packaging>
     <properties>
         <skipTests>true</skipTests>
     </properties>
@@ -20,13 +20,17 @@
             <artifactId>bachelor-oauth2-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-jwt</artifactId>
-        </dependency>
+        <groupId>com.nimbusds</groupId>
+        <artifactId>nimbus-jose-jwt</artifactId>
+    </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
         </dependency>
     </dependencies>
 
