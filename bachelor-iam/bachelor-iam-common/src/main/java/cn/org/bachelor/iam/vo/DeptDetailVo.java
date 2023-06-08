@@ -1,25 +1,85 @@
 package cn.org.bachelor.iam.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Date;
+
 /**
  * @描述:
  * @创建人: liuzhuo
  * @创建时间: 2019/3/28
  */
 public class DeptDetailVo {
+
+
+    @ApiModelProperty("id")
+    @JsonProperty("id")
     private String id;
+
+    @ApiModelProperty("编码")
     private String code;
+
+    @ApiModelProperty("名称")
+    @JsonProperty("name")
     private String name;
-    private String pid;
+
+    @ApiModelProperty("机构id")
     private String orgId;
-    private String depttypeId;
-    private String areaId;
-    private String depttype;
+
+    @ApiModelProperty("父部门ID")
+    private String pid;
+
+    @ApiModelProperty("部门类型ID")
+    private String deptTypeId;
+
+    @ApiModelProperty("邮编")
     private String postcode;
-    private String telphone;
-    private String fax;
-    private Long createtime;
+
+    @ApiModelProperty("地址")
     private String address;
-    private String path;
+
+    @ApiModelProperty("电话")
+    private String telephone;
+
+    @ApiModelProperty("传真")
+    private String fax;
+
+    @ApiModelProperty("区域ID")
+    private String areaId;
+
+    @ApiModelProperty("隶属关系")
+    private String relationshipId;
+
+    @ApiModelProperty("单位级别")
+    private String levelId;
+
+    @ApiModelProperty("主管单位名称")
+    private String chargeDeptName;
+
+    @ApiModelProperty("单位性质")
+    private String propertyId;
+
+    @ApiModelProperty("机构id与机构")
+    private String economicTypeId;
+
+    @ApiModelProperty("机构id与机构")
+    private String industryId;
+
+    @ApiModelProperty("机构id与机构")
+    private String sort;
+
+    @ApiModelProperty("更新人")
+    private String updateUser;
+
+    @ApiModelProperty("更新时间")
+    private Date updateTime;
+
+    @ApiModelProperty("创建人")
+    private String createUser;
+
+    @ApiModelProperty("创建时间")
+    private Date createTime;
 
     public String getId() {
         return id;
@@ -45,14 +105,6 @@ public class DeptDetailVo {
         this.name = name;
     }
 
-    public String getPid() {
-        return pid;
-    }
-
-    public void setPid(String pid) {
-        this.pid = pid;
-    }
-
     public String getOrgId() {
         return orgId;
     }
@@ -61,12 +113,20 @@ public class DeptDetailVo {
         this.orgId = orgId;
     }
 
-    public String getDepttypeId() {
-        return depttypeId;
+    public String getPid() {
+        return pid;
     }
 
-    public void setDepttypeId(String depttypeId) {
-        this.depttypeId = depttypeId;
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
+
+    public String getDeptTypeId() {
+        return deptTypeId;
+    }
+
+    public void setDeptTypeId(String deptTypeId) {
+        this.deptTypeId = deptTypeId;
     }
 
     public String getPostcode() {
@@ -77,12 +137,20 @@ public class DeptDetailVo {
         this.postcode = postcode;
     }
 
-    public String getTelphone() {
-        return telphone;
+    public String getAddress() {
+        return address;
     }
 
-    public void setTelphone(String telphone) {
-        this.telphone = telphone;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     public String getFax() {
@@ -93,44 +161,99 @@ public class DeptDetailVo {
         this.fax = fax;
     }
 
-
-    public Long getCreatetime() {
-        return createtime;
-    }
-
-    public void setCreatetime(Long createtime) {
-        this.createtime = createtime;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getDepttype() {
-        return depttype;
-    }
-
-    public void setDepttype(String depttype) {
-        this.depttype = depttype;
-    }
-
     public String getAreaId() {
         return areaId;
     }
 
     public void setAreaId(String areaId) {
         this.areaId = areaId;
+    }
+
+    public String getRelationshipId() {
+        return relationshipId;
+    }
+
+    public void setRelationshipId(String relationshipId) {
+        this.relationshipId = relationshipId;
+    }
+
+    public String getLevelId() {
+        return levelId;
+    }
+
+    public void setLevelId(String levelId) {
+        this.levelId = levelId;
+    }
+
+    public String getChargeDeptName() {
+        return chargeDeptName;
+    }
+
+    public void setChargeDeptName(String chargeDeptName) {
+        this.chargeDeptName = chargeDeptName;
+    }
+
+    public String getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(String propertyId) {
+        this.propertyId = propertyId;
+    }
+
+    public String getEconomicTypeId() {
+        return economicTypeId;
+    }
+
+    public void setEconomicTypeId(String economicTypeId) {
+        this.economicTypeId = economicTypeId;
+    }
+
+    public String getIndustryId() {
+        return industryId;
+    }
+
+    public void setIndustryId(String industryId) {
+        this.industryId = industryId;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
+    public String getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(String updateUser) {
+        this.updateUser = updateUser;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

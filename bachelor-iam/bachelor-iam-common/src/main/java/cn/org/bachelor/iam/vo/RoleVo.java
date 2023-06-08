@@ -1,6 +1,7 @@
 package cn.org.bachelor.iam.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @描述:
@@ -9,7 +10,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RoleVo {
+
+    @ApiModelProperty("名称")
     private String name;
+
+    @ApiModelProperty("编码")
     private String code;
 
     public String getName() {

@@ -176,7 +176,7 @@ public class JwtToken {
             JWSObject jwsObject = JWSObject.parse(token);
             String payload = jwsObject.getPayload().toString();
             JwtToken payloadDto = JSONObject.parseObject(payload, JwtToken.class);
-
+            payloadDto.setClaims(JSONObject.parseObject(payload));
             return payloadDto;
         } catch (Exception e) {
             throw new SystemException(e);

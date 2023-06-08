@@ -51,8 +51,6 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
         user.setDeptName(request.getHeader(JwtToken.PayloadKey.DEPT_NAME));
         user.setAccessToken(request.getHeader(JwtToken.PayloadKey.ACCESS_TOKEN));
         user.setTenantId(request.getHeader(JwtToken.PayloadKey.TENANT_ID));
-        user.setAreaId(request.getHeader(JwtToken.PayloadKey.AREA_ID));
-        user.setAreaName(urlDecode(request.getHeader(JwtToken.PayloadKey.AREA_NAME)));
         Object o = request.getAttribute(ACCESS_BACKEND);
         if (o != null && "N".equals(o.toString())) {
             user.setAccessBackend(false);
@@ -76,7 +74,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
 //                String deptId = (String) request.getSession().getAttribute(ClientConstant.UP_DEPT_ID);
 //                String deptName = (String) request.getSession().getAttribute(ClientConstant.UP_DEPT_NAME);
                 UserVo userInSession = JSONObject.parseObject(personStr, UserVo.class);
-                user.setName(userInSession.getUsername());
+                user.setName(userInSession.getName());
                 user.setOrgId(userInSession.getOrgId());
                 user.setOrgName(userInSession.getOrgName());
                 user.setDeptId(userInSession.getDeptId());

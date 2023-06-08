@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.org.bachelor</groupId>
         <artifactId>bachelor-acm</artifactId>
-        <version>2.2.0-SNAPSHOT</version>
+        <version>2.2.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>bachelor-acm-service</artifactId>
@@ -17,13 +17,8 @@
         <!--bachelor引用-->
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-acm-biz</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jettison</artifactId>
-                    <groupId>org.codehaus.jettison</groupId>
-                </exclusion>
-            </exclusions>
+            <artifactId>bachelor-acm-common</artifactId>
+            <version>2.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>

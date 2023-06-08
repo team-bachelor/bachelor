@@ -42,10 +42,6 @@ public class UserAccessControlInterceptor extends HandlerInterceptorAdapter {
     @Resource
     private IamConfiguration iamConfiguration;
 
-//    @Resource
-//    private OAuth2CientConfig clientConfig;
-
-    //private Set<String> urlCache;
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String requestMethod = request.getMethod().toLowerCase();
         String requestPath = request.getServletPath();
@@ -87,7 +83,6 @@ public class UserAccessControlInterceptor extends HandlerInterceptorAdapter {
                 }
                 PrintWriter pw = response.getWriter();
                 pw.append("{\"status\":\"BIZ_ERR\",\"code\":\"UNAUTHORIZED\",\"msg\":\"UNAUTHORIZED\",\"data\":null,\"time\":" + new Date().getTime() + "}");
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

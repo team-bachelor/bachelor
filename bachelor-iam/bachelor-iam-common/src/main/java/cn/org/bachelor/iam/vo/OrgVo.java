@@ -2,6 +2,7 @@ package cn.org.bachelor.iam.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
@@ -13,23 +14,33 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OrgVo {
 
+    @ApiModelProperty("id")
     @JsonProperty("id")
     private String id;
 
+    @ApiModelProperty("编码")
     @JsonProperty("code")
     private String code;
 
+    @ApiModelProperty("简称")
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("fullname")
-    private String fullname;
+    @ApiModelProperty("全名")
+    @JsonProperty("fullName")
+    private String fullName;
 
+    @ApiModelProperty("上级名称")
     @JsonProperty("pid")
     private String parentId;
 
+    @ApiModelProperty("统一社会信用代码")
     @JsonProperty("uscCode")
     private String uscCode;
+
+    @ApiModelProperty("子机构")
+    @JsonProperty("subs")
+    private List<OrgVo> subOrgs;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private OrgVo parent;
@@ -37,11 +48,6 @@ public class OrgVo {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean hold;
 
-    @JsonProperty("depttypeId")
-    private String depttypeId;
-
-    @JsonProperty("subs")
-    private List<OrgVo> subOrgs;
 
 
     public String getId() {
@@ -84,14 +90,6 @@ public class OrgVo {
         this.subOrgs = subOrgs;
     }
 
-    public String getDepttypeId() {
-        return depttypeId;
-    }
-
-    public void setDepttypeId(String depttypeId) {
-        this.depttypeId = depttypeId;
-    }
-
     public OrgVo getParent() {
         return parent;
     }
@@ -108,12 +106,12 @@ public class OrgVo {
         this.hold = hold;
     }
 
-    public String getFullname() {
-        return fullname;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setFullName(String fulName) {
+        this.fullName = fullName;
     }
 
     public String getUscCode() {

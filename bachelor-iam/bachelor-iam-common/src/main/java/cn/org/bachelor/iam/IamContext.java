@@ -7,16 +7,19 @@ package cn.org.bachelor.iam;
 
 import cn.org.bachelor.context.IContext;
 import cn.org.bachelor.context.IUserContext;
+import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.iam.utils.StringUtils;
 import cn.org.bachelor.iam.vo.UserVo;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 /**
  * @author Team Bachelor
  */
-@Service
+@Component
 public class IamContext implements IUserContext {
 
     @Resource
@@ -64,6 +67,15 @@ public class IamContext implements IUserContext {
             name = getRemoteIP();
         }
         return name;
+    }
+
+    public String getUserOrgId() {
+        UserVo user = getUser();
+        if (Objects.isNull(user)) {
+            return null;
+        }
+        String orgId = user.getOrgId();
+        return orgId;
     }
 
     public String getRemoteIP() {

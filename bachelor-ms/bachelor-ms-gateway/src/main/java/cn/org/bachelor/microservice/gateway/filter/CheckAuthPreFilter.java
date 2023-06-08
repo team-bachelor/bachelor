@@ -2,6 +2,7 @@ package cn.org.bachelor.microservice.gateway.filter;
 
 import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.token.JwtToken;
+import cn.org.bachelor.iam.utils.JwtUtil;
 import cn.org.bachelor.microservice.gateway.service.ITenantIdProvider;
 import cn.org.bachelor.web.json.JsonResponse;
 import com.alibaba.fastjson.JSONObject;
@@ -32,6 +33,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static cn.org.bachelor.iam.utils.JwtUtil.getAndRemoveTokenClaim;
+import static cn.org.bachelor.iam.utils.JwtUtil.getAndTokenClaim;
+
 /**
  * @描述: 用于权限拦截的拦截器
  * @创建人: liuzhuo
@@ -44,8 +48,7 @@ public class CheckAuthPreFilter implements GlobalFilter {
 
     @Autowired(required = false)
     private ITenantIdProvider tenantIdProvider;
-//    @Autowired
-//    private AuthorizeService authorizeService;
+
 
     /**
      * @Description 访问认证中心判断权限
@@ -95,7 +98,7 @@ public class CheckAuthPreFilter implements GlobalFilter {
             logger.warn("invalid_authorization", token);
         }
         if (token != null && !"".equals(token)) {
-            isValidToekn = isValidToken(jwtToken);
+            isValidToekn = JwtUtil.isValidToken(jwtToken);
             if (jwtToken != null && isValidToekn) {
                 //TODO 安全性有待提高
                 Map<String, Object> tokenClaims = new HashMap<>(jwtToken.getClaims().size());
@@ -168,47 +171,13 @@ public class CheckAuthPreFilter implements GlobalFilter {
             jr.setStatus(cn.org.bachelor.web.json.ResponseStatus.BIZ_ERR);
         }
         response.getHeaders().set("Location", path.pathWithinApplication().value());
-//        try {
         String responseString = JSONObject.toJSONString(jr);
         byte[] responseBytes = responseString.getBytes(StandardCharsets.UTF_8);
         DataBuffer responseBuffer = response.bufferFactory().wrap(responseBytes);
         return response.writeWith(Flux.just(responseBuffer));
-//        } catch (JsonProcessingException e) {
-//            logger.info("JsonProcessingException", e);
-//        }
-//        return response.setComplete();
-
-//            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-//                logger.info("third post filter");
-//            }));
     }
 
-    private String getAndTokenClaim(Map<String, Object> tokenClaims, String payload, boolean urlencode, boolean remove) {
-        String value = tokenClaims.getOrDefault(payload, "").toString();
-        if (remove) {
-            tokenClaims.remove(payload);
-        }
-        if (urlencode) {
-            value = urlEncode(value);
-        }
-        return value;
-    }
 
-    private String getAndRemoveTokenClaim(Map<String, Object> tokenClaims, String payload, boolean urlencode) {
-        return getAndTokenClaim(tokenClaims, payload, urlencode, true);
-    }
-
-    private boolean isValidToken(JwtToken jwtToken) {
-        return jwtToken.getExp() > new Date().getTime();
-    }
-
-    private String urlEncode(String param) {
-        try {
-            return StringUtils.isBlank(param) ? StringUtils.EMPTY : URLEncoder.encode(param, "UTF-8");
-        } catch (Exception e) {
-            return "";
-        }
-    }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

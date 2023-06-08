@@ -1,5 +1,7 @@
 package cn.org.bachelor.iam.vo;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.List;
 import java.util.Map;
 
@@ -9,8 +11,14 @@ import java.util.Map;
  * @创建时间: 2019/6/26
  */
 public class DataPermVo {
+
+    @ApiModelProperty("部门列表")
     private List<OrgVo> depts;
+
+    @ApiModelProperty("机构id与机构")
     private Map<String, OrgVo> deptMap;
+
+    @ApiModelProperty("机构id与用户列表")
     private Map<String, List<UserVo>> orgUserMap;
 
     public DataPermVo(List<OrgVo> treeOrgs, Map<String, OrgVo> deptMap, Map<String, List<UserVo>> userMap) {

@@ -13,5 +13,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>bachelor-idm-service</module>
+        <module>bachelor-idm-login</module>
     </modules>
 </project>

@@ -10,6 +10,7 @@
 
     <artifactId>bachelor-iam-common</artifactId>
     <name>bachelor-iam-common</name>
+    <version>2.2.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
         <skipTests>true</skipTests>
@@ -31,6 +32,11 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
