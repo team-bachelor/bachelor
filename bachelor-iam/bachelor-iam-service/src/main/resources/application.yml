@@ -33,7 +33,7 @@ spring:
       config:
         file-extension: yml
 server:
-  port: 9003
+  port: 9013
 logging:
   level:
     org.bachelor.architecture.eureka: debug
