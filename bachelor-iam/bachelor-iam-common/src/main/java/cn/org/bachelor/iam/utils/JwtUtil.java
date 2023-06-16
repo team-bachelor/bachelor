@@ -1,7 +1,6 @@
 package cn.org.bachelor.iam.utils;
 
 import cn.org.bachelor.iam.token.JwtToken;
-import org.apache.commons.lang3.StringUtils;
 
 import java.net.URLEncoder;
 import java.util.Date;
@@ -29,7 +28,7 @@ public class JwtUtil {
 
     public static String urlEncode(String param) {
         try {
-            return org.apache.commons.lang3.StringUtils.isBlank(param) ? StringUtils.EMPTY : URLEncoder.encode(param, "UTF-8");
+            return StringUtils.isEmpty(param) ? StringUtils.EMPTY : URLEncoder.encode(param, "UTF-8");
         } catch (Exception e) {
             return "";
         }

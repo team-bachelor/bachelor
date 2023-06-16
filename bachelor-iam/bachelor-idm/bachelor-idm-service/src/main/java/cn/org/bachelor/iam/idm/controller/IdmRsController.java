@@ -1,22 +1,19 @@
 package cn.org.bachelor.iam.idm.controller;
 
-import cn.org.bachelor.iam.idm.service.DefaultImSysService;
-import cn.org.bachelor.iam.vo.AppVo;
 import cn.org.bachelor.iam.idm.service.ImSysParam;
-import cn.org.bachelor.iam.idm.service.ImSysResult;
+import cn.org.bachelor.iam.idm.service.ImSysService;
+import cn.org.bachelor.iam.vo.AppVo;
 import cn.org.bachelor.iam.vo.UserVo;
-import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
 import cn.org.bachelor.web.json.JsonResponse;
-import cn.org.bachelor.web.json.ResponseStatus;
+import com.github.pagehelper.PageHelper;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +21,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
+ * @author liuzhuo
  * @描述
  * @创建人 liuzhuo
  * @创建时间 2019/4/2
- * @author liuzhuo
  */
 @RestController
 /**
@@ -38,10 +35,9 @@ import java.util.List;
 public class IdmRsController {
 
     private static final Logger logger = LoggerFactory.getLogger(IdmRsController.class);
-    @Autowired
-    private DefaultImSysService userSysService;
-    @Autowired
-    private OAuth2CientConfig clientConfig;
+
+    @Qualifier("userSysService")
+    private ImSysService userSysService;
 
     @ApiOperation(value = "根据当前clientID查询用户")
     @ApiImplicitParams({
@@ -49,32 +45,29 @@ public class IdmRsController {
             @ApiImplicitParam(name = "deptId", value = "部门编码", paramType = "query", required = false),
             @ApiImplicitParam(name = "userName", value = "用户名（模糊匹配）", paramType = "query", required = false),
             @ApiImplicitParam(name = "pageSize", value = "每页的记录数", paramType = "query", required = false),
-            @ApiImplicitParam(name = "page", value = "当前页数", paramType = "query", required = false)
+            @ApiImplicitParam(name = "pageNum", value = "当前页数", paramType = "query", required = false)
     })
     @RequestMapping(value = "/users/{orgId}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getUsers(@PathVariable String orgId, String deptId, String userName, Integer pageSize, Integer page) {
+    public HttpEntity<JsonResponse> getUsers(@PathVariable String orgId, String deptId, String userName, Integer pageSize, Integer pageNum) {
+        PageHelper.startPage(pageNum, pageSize);
         ImSysParam param = new ImSysParam();
         param.setOrgId(orgId);
         param.setDeptId(deptId);
         param.setUserName(userName);
-        param.setPage(String.valueOf(page));
-        param.setPageSize(String.valueOf(pageSize));
-        ImSysResult<List<UserVo>> result = userSysService.findUsers(param);
-        JsonResponse jr = new JsonResponse(result.getRows());
-        jr.setStatus(ResponseStatus.OK);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("total", String.valueOf(result.getTotal()));
-
+        param.setPageSize(pageSize);
+        param.setPageNum(pageNum);
+        List<UserVo> result = userSysService.findUsers(param);
         //ResponseEntity response = JsonResponse.createHttpEntity(result.getRows());
 
         //response.getHeaders().add("total", String.valueOf(result.getTotal()));
-        return new ResponseEntity<JsonResponse>(jr, headers, HttpStatus.OK);
+        return JsonResponse.createHttpEntity(result);
     }
 
     /**
      * 根据当前clientID查询用户
-     * @param orgId 组织机构编码
-     * @param deptId 部门编码
+     *
+     * @param orgId   组织机构编码
+     * @param deptId  部门编码
      * @param keyWord 查询关键词，同时用于匹配用户名称和编码
      * @return
      */
@@ -86,7 +79,11 @@ public class IdmRsController {
     })
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUsers(String orgId, String deptId, String keyWord) {
-        return JsonResponse.createHttpEntity(userSysService.findUsers(orgId, deptId, keyWord));
+        ImSysParam param = new ImSysParam();
+        param.setOrgId(orgId);
+        param.setDeptId(deptId);
+        param.setKeyWord(keyWord);
+        return JsonResponse.createHttpEntity(userSysService.findUsers(param));
     }
 
     /**
@@ -101,7 +98,8 @@ public class IdmRsController {
     })
     @RequestMapping(value = "/user/{userID}", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUser(@PathVariable String userID) {
-        return JsonResponse.createHttpEntity(userSysService.findUser(null, userID, null));
+        List l = userSysService.findUsersById(userID);
+        return JsonResponse.createHttpEntity(l == null || l.size() == 0 ? null : l.get(0));
     }
 
     /**
@@ -118,7 +116,10 @@ public class IdmRsController {
     })
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUserByCode(String userCode, String orgId) {
-        return JsonResponse.createHttpEntity(userSysService.findUser(orgId, null, userCode));
+        ImSysParam param = new ImSysParam();
+        param.setOrgId(orgId);
+        param.setUserCode(userCode);
+        return JsonResponse.createHttpEntity(userSysService.findUsers(param));
     }
 
     @ApiOperation(value = "获得机构下部门列表")
@@ -129,7 +130,12 @@ public class IdmRsController {
     })
     @RequestMapping(value = "/depts", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getDepts(String orgId, String deptId, boolean tree) {
-        List permg = userSysService.findDepts(orgId, deptId, tree);
+        ImSysParam param = new ImSysParam();
+        param.setOrgId(orgId);
+        param.setDeptId(deptId);
+        param.setTree(tree);
+        param.setLevel(0);
+        List permg = userSysService.findDepts(param);
         return JsonResponse.createHttpEntity(permg);
     }
 
@@ -157,17 +163,18 @@ public class IdmRsController {
     })
     @RequestMapping(value = "/users/ids", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUserByIds(String userIds) {
-        List<UserVo> userVoList = userSysService.findUserByIds(userIds);
+        List<UserVo> userVoList = userSysService.findUsersById(userIds.split(","));
         return JsonResponse.createHttpEntity(userVoList);
     }
 
 
     @Value("${spring.application.portal-code:''}")
     private String portalCode;
+
     @ApiOperation(value = "获取跳转会portal的地址")
     @RequestMapping(value = "/app/portal/url", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getPortalURL() {
-        if(portalCode == null || "".equalsIgnoreCase(portalCode))
+        if (portalCode == null || "".equalsIgnoreCase(portalCode))
             return JsonResponse.createHttpEntity(HttpStatus.NOT_FOUND);
         else {
             AppVo app = userSysService.findAppByCode(portalCode);
@@ -191,7 +198,7 @@ public class IdmRsController {
     })
     @RequestMapping(value = "/user/{userId}/apps", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getAppByUserId(@PathVariable String userId) {
-        List<AppVo> apps = userSysService.findAppsByUserId(userId);
+        List<AppVo> apps = userSysService.findUserApps(userId);
         return JsonResponse.createHttpEntity(apps);
     }
 
@@ -209,14 +216,13 @@ public class IdmRsController {
             @ApiImplicitParam(name = "pageSize", value = "每页的记录数", paramType = "query", required = false),
             @ApiImplicitParam(name = "page", value = "当前页数", paramType = "query", required = false)
     })
-    public HttpEntity<JsonResponse> getUsersByClient(String deptId, String deptName, String userName, Integer pageSize, Integer page) {
+    public HttpEntity<JsonResponse> getUsersByClient(String deptId, String deptName, String userName, Integer pageSize, Integer pageNum) {
         ImSysParam param = new ImSysParam();
         param.setDeptId(deptId);
         param.setUserName(userName);
         param.setDeptName(deptName);
-        param.setPage(page == null ? null : String.valueOf(page));
-        param.setPageSize(page == null ? null : String.valueOf(pageSize));
-        param.setClientId(clientConfig.getId());
-        return JsonResponse.createHttpEntity(userSysService.findUsersByClientID(param));
+        param.setPageNum(pageNum == null ? param.getPageNum() : pageNum);
+        param.setPageSize(pageSize == null ? param.getPageSize() : pageSize);
+        return JsonResponse.createHttpEntity(userSysService.findUsersInApp(param));
     }
 }

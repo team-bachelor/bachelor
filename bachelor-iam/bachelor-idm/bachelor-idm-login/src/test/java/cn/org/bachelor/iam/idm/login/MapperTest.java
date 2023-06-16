@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = AuthServiceApplication.class)
+@SpringBootTest(classes = LoginTestApplication.class)
 public class MapperTest {
 
     @Autowired
@@ -29,7 +29,7 @@ public class MapperTest {
     public void testUserMapper() {
         List<User> users = userMapper.selectAll();
         System.out.println(users);
-        System.out.println(passwordEncoder.encode("1234"));
+        System.out.println(passwordEncoder.encode("222222"));
     }
 }
 

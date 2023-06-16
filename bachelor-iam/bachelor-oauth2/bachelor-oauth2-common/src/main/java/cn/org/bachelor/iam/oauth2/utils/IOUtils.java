@@ -168,14 +168,4 @@ public class IOUtils {
 
         return buf.toString();
     }
-
-    public static String returnResourceFile(String fileName,String info) throws ServletException, IOException {
-        String text = IOUtils.readFromResource("support/http/resources" + fileName);
-        if(text == null) {
-            return "错误信息模版为定义";
-        } else {
-            return StringUtils.replace(text, OAuthConstant.TEMPLATE_REPLACE_STRING,info);
-        }
-
-    }
 }

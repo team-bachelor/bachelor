@@ -11,6 +11,7 @@
 <!--    <groupId>cn.org.bachelor</groupId>-->
     <artifactId>bachelor-iam</artifactId>
     <name>bachelor-iam</name>
+    <version>2.2.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>

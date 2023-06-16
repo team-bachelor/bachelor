@@ -1,16 +1,18 @@
-package cn.org.bachelor.iam.idm.service;
+package cn.org.bachelor.iam.oauth2.client.service;
 
 import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.exception.RemoteException;
 import cn.org.bachelor.exception.SystemException;
+import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.idm.exception.ImSysException;
+import cn.org.bachelor.iam.idm.service.ImSysParam;
+import cn.org.bachelor.iam.idm.service.ImSysService;
 import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
 import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
 import cn.org.bachelor.iam.oauth2.client.SignSecurityOAuthClient;
 import cn.org.bachelor.iam.oauth2.client.URLConnectionClient;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
-import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
 import cn.org.bachelor.iam.oauth2.request.DefaultOAuthResourceRequest;
 import cn.org.bachelor.iam.oauth2.response.OAuthResourceResponse;
 import cn.org.bachelor.iam.vo.*;
@@ -22,21 +24,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * @描述 默认的用户平台服务提供类，如果不加载UP相关包则该类也不加载。
- *       若更换用户平台则需要实现UserSysService中的接口。
  * @author liuzhuo
+ * @描述 默认的用户平台服务提供类，如果不加载UP相关包则该类也不加载。
+ * 若更换用户平台则需要实现UserSysService中的接口。
  * @创建时间 2018/11/9
- * @更新履历  2021/01/20 规范了配置方式，将配置全部转移到OAuth2ClientConfig中。
+ * @更新履历 2021/01/20 规范了配置方式，将配置全部转移到OAuth2ClientConfig中。
  */
 @Service
 @ConditionalOnClass(OAuth2Client.class)
-public class DefaultImSysService implements ImSysService {
+public class Oauth2ImSysService implements ImSysService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultImSysService.class);
+    private static final Logger logger = LoggerFactory.getLogger(Oauth2ImSysService.class);
     @Autowired
     private IamContext iamContext;
 
@@ -47,7 +50,7 @@ public class DefaultImSysService implements ImSysService {
      * @param iamContext IamContext
      * @see IamContext
      */
-    public DefaultImSysService(IamContext iamContext) {
+    public Oauth2ImSysService(IamContext iamContext) {
         this.iamContext = iamContext;
     }
 
@@ -64,7 +67,7 @@ public class DefaultImSysService implements ImSysService {
     private static Map<String, AdminCache> adminCahce = new HashMap<>();
 
     @Override
-    public boolean checkUserIsAdmin(UserVo user) {
+    public boolean assertIsAdmin(UserVo user) {
         logger.info("用户：[" + user.getName() + "]获取管理员标志");
         boolean isadmin = false;
 
@@ -93,7 +96,11 @@ public class DefaultImSysService implements ImSysService {
         if (user.getAccessToken() == null) {
             return false;
         }
-        List<RoleVo> roles = findUserRolesInClient(clientConfig.getId(), user.getId(), user.getOrgId(), user.getAccessToken());
+        ImSysParam param = new ImSysParam();
+        param.setClientId(clientConfig.getId());
+        param.setUserId(user.getId());
+        param.setOrgId(user.getOrgId());
+        List<RoleVo> roles = findUserRolesInClient(param, user.getAccessToken());
         AtomicBoolean result = new AtomicBoolean(false);
         roles.forEach(roleVo -> {
             if ("super_admin".equals(roleVo.getCode())) {
@@ -103,59 +110,47 @@ public class DefaultImSysService implements ImSysService {
         return result.get();
     }
 
-    @Override
-    public List<RoleVo> findUserRolesInClient(String clientID, String userID, String orgID, String astoken) {
-        if (StringUtils.isEmpty(clientID) || StringUtils.isEmpty(userID) || StringUtils.isEmpty(orgID)) {
+    private List<RoleVo> findUserRolesInClient(ImSysParam param, String astoken) {
+        if (StringUtils.isEmpty(param.getClientId())
+                || StringUtils.isEmpty(param.getUserId())
+                || StringUtils.isEmpty(param.getOrgId())) {
             throw new BusinessException("clientID_userID_orgID_cannot_null_both");
         }
-        Map<String, String> param = new HashMap<String, String>();
-        param.put("clientId", clientID);
-        param.put("userId", userID);
-        param.put("orgId", orgID);
-        String json = callApi(clientConfig.getRsURL().getMtUserRoles(), "GET", param, astoken);
+        Map<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("clientId", param.getClientId());
+        paramMap.put("userId", param.getUserId());
+        paramMap.put("orgId", param.getOrgId());
+        String json = callApi(clientConfig.getRsURL().getMtUserRoles(), "GET", paramMap, astoken);
         List<RoleVo> roles = resolveJsonList(json, RoleVo.class);
         return roles;
     }
 
     @Override
-    public List<RoleVo> findUserRolesInClient(String clientID, String userID, String orgID) {
+    public List<RoleVo> findUserRolesInApp(ImSysParam param) {
         UserVo user = iamContext.getUser();
         String token = null;
         if (user != null && user.getAccessToken() != null) {
             token = user.getAccessToken();
         }
-        return findUserRolesInClient(clientID, userID, orgID, token);
+        return findUserRolesInClient(param, token);
     }
 
     @Override
-    public List<UserVo> findUsersByClientID(String clientID) {
+    public List<UserVo> findUsersInApp(String appID) {
         ImSysParam param = new ImSysParam();
-        param.setClientId(clientID);
-        return findUsersByClientID(param);
+        param.setClientId(appID);
+        return findUsersInApp(param);
     }
 
     @Override
-    public List<UserVo> findUsersByClientID(ImSysParam param) {
+    public List<UserVo> findUsersInApp(ImSysParam param) {
         if (StringUtils.isEmpty(param.getClientId())) {
-            throw new BusinessException("clientID_cannot_be_null");
+            if (StringUtils.isEmpty(clientConfig.getId())) {
+                throw new BusinessException("clientID_cannot_be_null");
+            }
+            param.setClientId(clientConfig.getId());
         }
-        Map<String, String> paramMap = new HashMap<String, String>();
-        paramMap.put("clientId", param.getClientId());
-        if (StringUtils.isNotEmpty(param.getDeptId())) {
-            paramMap.put("deptId", param.getDeptId());
-        }
-        if (StringUtils.isNotEmpty(param.getUserName())) {
-            paramMap.put("userName", param.getUserName());
-        }
-        if (StringUtils.isNotEmpty(param.getDeptName())) {
-            paramMap.put("deptName", param.getDeptName());
-        }
-        if (StringUtils.isNotEmpty(param.getPage()) || StringUtils.isNotEmpty(param.getPageSize())) {
-            paramMap.put("pageSize", param.getPageSize());
-            paramMap.put("page", param.getPage());
-        } else {
-            paramMap.put("pageSize", Integer.toString(2000));
-        }
+        Map<String, String> paramMap = param.toParamMap();
         String json = callApi(clientConfig.getRsURL().getUserByClientID(), "GET", paramMap);
         List<UserVo> users = resolveJsonList(json, UserVo.class);
         return users;
@@ -186,7 +181,7 @@ public class DefaultImSysService implements ImSysService {
     }
 
     @Override
-    public List<AppVo> findAppsByUserId(String userId) {
+    public List<AppVo> findUserApps(String userId) {
         if (StringUtils.isEmpty(userId)) {
             throw new BusinessException("userId_cannot_null");
         }
@@ -209,14 +204,12 @@ public class DefaultImSysService implements ImSysService {
     }
 
     @Override
-    public List<UserVo> findUserByIds(String userIds) {
+    public List<UserVo> findUsersById(String... userIds) {
         Map<String, String> param = new HashMap<String, String>();
-        if (StringUtils.isEmpty(userIds) && StringUtils.isEmpty(userIds)) {
+        if (userIds == null || userIds.length == 0) {
             throw new BusinessException("userIds_cannot_null");
         }
-        if (StringUtils.isNotEmpty(userIds)) {
-            param.put("userIds", userIds);
-        }
+        param.put("userIds", StringUtils.join(userIds, ','));
         String json = callApi(clientConfig.getRsURL().getUserByIds(), "GET", param);
         List<UserVo> users = resolveJsonList(json, UserVo.class);
         return users;
@@ -225,46 +218,19 @@ public class DefaultImSysService implements ImSysService {
 
     /**
      * @param orgId
-     * @param keyWord
      * @return
      */
-    @Override
-    public List<UserVo> findUsers(String orgId, String keyWord) {
-        return findUsers(orgId, null, keyWord);
+    private List<UserVo> findUsers(String orgId) {
+        ImSysParam param = new ImSysParam();
+        param.setOrgId(orgId);
+        return findUsers(param);
     }
 
     @Override
-    public ImSysResult<List<UserVo>> findUsers(ImSysParam param) {
+    public List<UserVo> findUsers(ImSysParam param) {
         String json = callApi(clientConfig.getRsURL().getUsers(), "GET", param.toParamMap());
         ImSysResult<List<UserVo>> users = new ImSysResult<>();
-        return resolveJson2Result(json, UserVo.class, true, users);
-    }
-
-    @Override
-    public List<UserVo> findUsers(String orgId, String deptId, String userNameParttern) {
-        if (StringUtils.isEmpty(orgId)) {
-            throw new BusinessException("orgId_can_not_null_or_empty");
-        }
-        ImSysParam param = new ImSysParam();
-        param.setOrgId(orgId);
-        param.setDeptId(deptId);
-        param.setUserName(userNameParttern);
-        return findUsers(param).getRows();
-    }
-
-    @Override
-    public UserVo findUser(String orgId, String userId, String userCode) {
-        if (StringUtils.isEmpty(orgId) && StringUtils.isEmpty(userId)) {
-            throw new BusinessException("orgId_userId_cannot_null_both");
-        }
-        ImSysParam param = new ImSysParam();
-        param.setOrgId(orgId);
-        param.setUserId(userId);
-        param.setUserCode(userCode);
-        List<UserVo> users = findUsers(param).getRows();
-        if (users != null && users.size() != 0)
-            return users.get(0);
-        return null;
+        return (List<UserVo>) resolveJson2Result(json, UserVo.class, true, users).getRows();
     }
 
     /**
@@ -275,7 +241,7 @@ public class DefaultImSysService implements ImSysService {
      */
     @Override
     public List<OrgVo> findAllOrgs() {
-        return findOrgs(null);
+        return findOrg(new ImSysParam());
     }
 
     /**
@@ -285,107 +251,92 @@ public class DefaultImSysService implements ImSysService {
      * @return 机构列表
      */
     @Override
-    public List<OrgVo> findOrgs(String orgId) {
-        return findOrgs(orgId, null, null);
+    public List<OrgVo> findOrg(String orgId) {
+        ImSysParam param = new ImSysParam();
+        param.setOrgId(orgId);
+        return findOrg(param);
     }
 
     /**
      * 查询机构
      *
-     * @param id   机构ID
-     * @param code 机构编码
-     * @param name 机构名称（模糊查询）
+     * @param param: orgId   机构ID
+     * @param param: orgCode 机构编码
+     * @param param: orgName 机构名称（模糊查询）
      * @return
      */
     @Override
-    public List<OrgVo> findOrgs(String id, String code, String name) {
+    public List<OrgVo> findOrg(ImSysParam param) {
         //获取组织机构树
-        Map<String, String> param = new HashMap<String, String>();
-
-        if (StringUtils.isNotEmpty(id))
-            param.put("id", id);
-        if (StringUtils.isNotEmpty(code))
-            param.put("code", code);
-        if (StringUtils.isNotEmpty(name))
-            param.put("name", name);
-        param.put("pageSize", "1000");
-        String json = callApi(clientConfig.getRsURL().getOrgs(), "GET", param);
+        Map<String, String> paramMap = new HashMap<String, String>();
+        if (StringUtils.isNotEmpty(param.getOrgId()))
+            paramMap.put("id", param.getOrgId());
+        if (StringUtils.isNotEmpty(param.getOrgCode()))
+            paramMap.put("code", param.getOrgCode());
+        if (StringUtils.isNotEmpty(param.getOrgName()))
+            paramMap.put("name", param.getOrgName());
+        paramMap.put("pageSize", "1000");
+        String json = callApi(clientConfig.getRsURL().getOrgs(), "GET", paramMap);
         return resolveJsonList(json, OrgVo.class);
     }
 
     @Override
-    public List<OrgVo> findDepts(String orgId) {
-        return findDepts(orgId, null, false);
+    public List<OrgVo> findDeptsByOrgId(String orgId) {
+        ImSysParam param = new ImSysParam();
+        param.setOrgId(orgId);
+        return findDepts(param);
     }
 
-    @Override
-    public List<OrgVo> findDepts(String orgId, boolean tree) {
-        return findDepts(orgId, null, tree);
-    }
 
-    @Override
-    public List<OrgVo> findDepts(String orgId, String deptId, boolean tree) {
-        return findDepts(orgId, deptId, tree, null);
-    }
-
-    /**
-     * 查找子部门
-     *
-     * @param orgId  机构ID
-     * @param deptId 父机构ID
-     * @return 部门信息
-     */
-    @Override
-    public OrgVo findDept(String orgId, String deptId) {
-        List<OrgVo> orgs = findDepts(orgId, deptId, true, null);
-        for (OrgVo org : orgs) {
-            if (org.getId().equals(deptId)) {
-                if (org.getSubOrgs() != null) {
-                    org.getSubOrgs().forEach(sub -> {
-                        sub.setSubOrgs(null);
-                    });
-                }
-                return org;
-            }
-        }
-        return null;
-    }
+//    /**
+//     * 查找子部门
+//     *
+//     * @param orgId  机构ID
+//     * @param deptId 父机构ID
+//     * @return 部门信息
+//     */
+//    private OrgVo findDept(String orgId, String deptId) {
+//        List<OrgVo> orgs = findDepts(orgId, deptId, true, null);
+//        for (OrgVo org : orgs) {
+//            if (org.getId().equals(deptId)) {
+//                if (org.getSubOrgs() != null) {
+//                    org.getSubOrgs().forEach(sub -> {
+//                        sub.setSubOrgs(null);
+//                    });
+//                }
+//                return org;
+//            }
+//        }
+//        return null;
+//    }
 
     /**
      * 获取当前机构的部门
      *
-     * @param orgId  机构ID
-     * @param deptId 指定的部门ID
-     * @param tree   是否返回树形结构，true是树形，false是平面
-     * @param level  层级数，-1代表无限，0代表本级
+     * @param param：orgId  机构ID
+     * @param param：deptId 指定的部门ID
+     * @param param：tree   是否返回树形结构，true是树形，false是平面
+     * @param param：level  层级数，-1代表无限，0代表本级
      * @return
      */
     @Override
-    public List<OrgVo> findDepts(String orgId, String deptId, boolean tree, Integer level) {
-        return findDepts(orgId, deptId, tree, level, null);
-    }
-
-    @Override
-    public List<OrgVo> findDepts(String orgId, String deptId, boolean tree, Integer level, String pid) {
+    public List<OrgVo> findDepts(ImSysParam param) {
         //获取组织机构树
-        if (StringUtils.isEmpty(orgId)) {
+        if (StringUtils.isEmpty(param.getOrgId())) {
             throw new BusinessException("org_id_can_not_be_null_or_empty");
         }
-        Map<String, String> param = new HashMap<String, String>();
-        param.put("orgId", orgId);//not null
-        if (StringUtils.isNotEmpty(deptId)) {
-            param.put("id", deptId);//not null
+        Map<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("orgId", param.getOrgId());//not null
+        if (StringUtils.isNotEmpty(param.getDeptId())) {
+            paramMap.put("id", param.getDeptId());//not null
         }
-        if (level == null) {
-            level = 0;
+        if (param.getLevel() == null) {
+            param.setLevel(0);
         }
-        if (StringUtils.isNotEmpty(pid)) {
-            param.put("pid", pid);
-        }
-        param.put("level", level.toString());
-        String json = callApi(clientConfig.getRsURL().getDepts(), "GET", param);
+        paramMap.put("level", String.valueOf(param.getLevel()));
+        String json = callApi(clientConfig.getRsURL().getDepts(), "GET", paramMap);
         List<OrgVo> flatOrgs = resolveJsonList(json, OrgVo.class);
-        if (!tree) {
+        if (!param.isTree()) {
             return flatOrgs;
         }
         return flatToTree(flatOrgs);
@@ -420,7 +371,7 @@ public class DefaultImSysService implements ImSysService {
      */
     @Override
     public DataPermVo processDataPerm(String orgId, Set<String> deptIds, boolean isAdmin) {
-        List<OrgVo> flatOrgs = findDepts(orgId);
+        List<OrgVo> flatOrgs = findDeptsByOrgId(orgId);
         Map<String, OrgVo> orgsMap = new HashMap<>(flatOrgs.size());
         Map<String, OrgVo> deptMap = new HashMap<>(flatOrgs.size());
         //构建树形结构
@@ -480,7 +431,7 @@ public class DefaultImSysService implements ImSysService {
             set2TopOrg(org.getParent(), org);
         }
 
-        List<UserVo> users = findUsers(orgId, null);
+        List<UserVo> users = findUsers(orgId);
         Map<String, List<UserVo>> userMap = new HashMap<>(flatOrgs.size());
         if (logger.isDebugEnabled())
             logger.debug("==============数据库中的用户=============");
@@ -504,7 +455,7 @@ public class DefaultImSysService implements ImSysService {
         return new DataPermVo(treeOrgs, deptMap, userMap);
     }
 
-//    @Autowired
+    //    @Autowired
 //    protected StringRedisTemplate redisTemplate;
     //TODO 要解决redis依赖问题
     // 设置1天有效时间
@@ -520,17 +471,9 @@ public class DefaultImSysService implements ImSysService {
     }
 
     @Override
-    public void saveRefreshToken(String account, String refreshToken, long expire) {
-//        if (!org.springframework.util.StringUtils.isEmpty(account)) {
-//            redisTemplate.opsForValue().set(bachelorPrefix + account, refreshToken, expire, TimeUnit.SECONDS);
-//        }
-    }
-
-    @Override
-    public String getRefreshToken(String account) {
-//        if (!org.springframework.util.StringUtils.isEmpty(account)) {
-//            return redisTemplate.opsForValue().get(bachelorPrefix + account);
-//        }
+    public String refreshToken(String refreshToken) {
+        OAuth2Client client = new OAuth2Client(clientConfig, null);
+        JSONObject userinfo = client.refreshAccessToken(refreshToken);
         return null;
     }
 
@@ -576,7 +519,8 @@ public class DefaultImSysService implements ImSysService {
         ImSysResult<T> userSysResult = new ImSysResult<>();
         return (T) resolveJson2Result(json, clazz, false, userSysResult).getRows();
     }
-    private JSONObject fillResult(String json, ImSysResult userSysResult){
+
+    private JSONObject fillResult(String json, ImSysResult userSysResult) {
         //Map<String, Object> tokenMap = jsonMapper.readValue(json, Map.class);
         JSONObject node = JSONObject.parseObject(json);
 
@@ -593,20 +537,21 @@ public class DefaultImSysService implements ImSysService {
         userSysResult.setTotal(total);
         return node;
     }
+
     private <T> ImSysResult resolveJson2Result(String json, Class<T> clazz, boolean asList, ImSysResult imSysResult) {
-            //Map<String, Object> tokenMap = jsonMapper.readValue(json, Map.class);
-            JSONObject node = fillResult(json, imSysResult);
-            String rowsString = node.get("rows").toString();
-            if (asList) {
-                imSysResult.setRows(JSONArray.parseArray(rowsString, clazz));
-            } else {
-                imSysResult.setRows(JSONObject.parseObject(rowsString, clazz));
-            }
-            return imSysResult;
+        //Map<String, Object> tokenMap = jsonMapper.readValue(json, Map.class);
+        JSONObject node = fillResult(json, imSysResult);
+        String rowsString = node.get("rows").toString();
+        if (asList) {
+            imSysResult.setRows(JSONArray.parseArray(rowsString, clazz));
+        } else {
+            imSysResult.setRows(JSONObject.parseObject(rowsString, clazz));
+        }
+        return imSysResult;
     }
 
     private String callApi(String url, String methodType,
-                          Map<String, String> param, String astoken) {
+                           Map<String, String> param, String astoken) {
         if (param == null) {
             param = new HashMap<>(2);
         }
@@ -627,10 +572,10 @@ public class DefaultImSysService implements ImSysService {
                 UserVo user = iamContext.getUser();
                 if (user != null && user.getAccessToken() != null) {
                     token = user.getAccessToken();
-                }else{
+                } else {
                     OAuth2ClientCertification upCC =
-                            (OAuth2ClientCertification) iamContext.getBaseContext().getSessionAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
-                    if(upCC == null){
+                            (OAuth2ClientCertification) iamContext.getBaseContext().getSessionAttribute(IamConstant.SESSION_AUTHENTICATION_KEY);
+                    if (upCC == null) {
                         throw new BusinessException("access token can not be null!");
                     }
                     token = upCC.getAccessToken();
@@ -654,7 +599,7 @@ public class DefaultImSysService implements ImSysService {
     }
 
     private String callApi(String url, String methodType,
-                          Map<String, String> param) {
+                           Map<String, String> param) {
         return callApi(url, methodType, param, null);
     }
 }

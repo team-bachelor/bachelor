@@ -45,8 +45,8 @@ public class User implements Serializable {
     @Column(name="name")
     private String name;
 
-    @Column(name="tel")
-    private String tel;
+    @Column(name="telephone")
+    private String telephone;
 
     @Column(name="email")
     private String email;

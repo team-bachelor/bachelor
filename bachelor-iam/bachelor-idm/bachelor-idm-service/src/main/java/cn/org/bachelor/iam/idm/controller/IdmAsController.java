@@ -2,14 +2,10 @@ package cn.org.bachelor.iam.idm.controller;
 
 import cn.org.bachelor.iam.IamConfiguration;
 import cn.org.bachelor.iam.IamConstant;
+import cn.org.bachelor.iam.credential.AbstractIamCredential;
 import cn.org.bachelor.iam.idm.service.IdmService;
-import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
-import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
-import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
-import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
-import cn.org.bachelor.iam.oauth2.exception.OAuthBusinessException;
-import cn.org.bachelor.iam.oauth2.utils.StringUtils;
 import cn.org.bachelor.iam.token.JwtToken;
+import cn.org.bachelor.iam.utils.StringUtils;
 import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.web.json.JsonResponse;
 import com.alibaba.fastjson.JSONObject;
@@ -51,9 +47,6 @@ public class IdmAsController {
     private IdmService idmService;
 
     @Autowired
-    private OAuth2CientConfig clientConfig;
-
-    @Autowired
     private IamConfiguration authConfig;
 
     /**
@@ -87,7 +80,7 @@ public class IdmAsController {
         if(user != null) {
             user.putAll(idmService.getUserExtInfo(user));
         }
-        Map<String, String> token = getToken(request, user);
+        Map<String, String> token = getJwtToken(request, user);
         return JsonResponse.createHttpEntity(token, HttpStatus.OK);
     }
 
@@ -102,22 +95,21 @@ public class IdmAsController {
     @RequestMapping(value = "/refreshToken", method = RequestMethod.POST)
     public ResponseEntity<JsonResponse> refreshToken(@RequestHeader(IamConstant.HTTP_HEADER_TOKEN_KEY) String authorization,
                                                      HttpServletRequest request, HttpServletResponse response) {
-        String newToken = idmService.refreshAccessToken(authorization);
+        String newToken = idmService.refreshAccessToken(JwtToken.decode(authorization));
         OAuth2Client client = new OAuth2Client(clientConfig, request, response);
         JSONObject userinfo = client.refreshAccessToken(newToken);
-        Map<String, String> token = getToken(request, userinfo);
-        return JsonResponse.createHttpEntity(token, HttpStatus.OK);
+        String token = getJwtToken(request, userinfo);
+        Map<String, String> tokenMap = new HashMap<String, String>(1);
+        tokenMap.put("token", token);
+        return JsonResponse.createHttpEntity(tokenMap, HttpStatus.OK);
     }
 
-    private Map<String, String> getToken(HttpServletRequest request, JSONObject userinfo) {
-        OAuth2ClientCertification upCC = (OAuth2ClientCertification) request.getSession()
-                .getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
+    private String getJwtToken(HttpServletRequest request, JSONObject userinfo) {
+        AbstractIamCredential upCC = (AbstractIamCredential) request.getSession()
+                .getAttribute(IamConstant.SESSION_AUTHENTICATION_KEY);
         String userId = userinfo.getString(USER_ID);
         UserVo userDetail = idmService.getUserDetail(userId);
-        String token_s = JwtToken.getJWTString(upCC, userinfo, authConfig.getPrivateKey(), userDetail);
-        Map<String, String> token = new HashMap<String, String>(1);
-        token.put("token", token_s);
-        return token;
+        return JwtToken.generate(upCC, userinfo, authConfig.getPrivateKey(), userDetail);
     }
 
     /**
@@ -128,7 +120,8 @@ public class IdmAsController {
     @ApiOperation(value = "为当前用户登出系统")
     @RequestMapping(value = "/logout", method = RequestMethod.PUT)
     public ResponseEntity<JsonResponse> logout(@RequestHeader(IamConstant.HTTP_HEADER_TOKEN_KEY) String authorization) {
-        idmService.logout(authorization);
+        JwtToken jwt = JwtToken.decode(authorization);
+        idmService.logout(jwt);
         return JsonResponse.createHttpEntity("logout success", HttpStatus.OK);
     }
 }

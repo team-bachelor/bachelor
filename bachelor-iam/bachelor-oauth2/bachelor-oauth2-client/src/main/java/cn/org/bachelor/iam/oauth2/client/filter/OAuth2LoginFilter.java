@@ -3,12 +3,12 @@
  */
 package cn.org.bachelor.iam.oauth2.client.filter;
 
+import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
 import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
 import cn.org.bachelor.iam.oauth2.client.exception.GetAccessTokenException;
 import cn.org.bachelor.iam.oauth2.client.exception.GetUserInfoException;
-import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
-import cn.org.bachelor.iam.oauth2.client.util.ClientUtil;
+import cn.org.bachelor.iam.oauth2.client.util.ClientHelper;
 import cn.org.bachelor.iam.oauth2.utils.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -87,7 +87,8 @@ public class OAuth2LoginFilter implements Filter {
             return;
         }
         response.setCharacterEncoding("UTF-8");
-        OAuth2Client client = new OAuth2Client(config, (HttpServletRequest) request, (HttpServletResponse) response);
+        OAuth2Client client = new OAuth2Client(config,
+                ClientHelper.startClient((HttpServletRequest) request, (HttpServletResponse) response));
         if (logger.isDebugEnabled()) {
             logger.debug("session hashcode:" + ((HttpServletRequest) request).getSession());
         }
@@ -96,7 +97,7 @@ public class OAuth2LoginFilter implements Filter {
             if (client.isLogin((HttpServletRequest) request)) {
                 logger.info("进入登录方法isLogin()----url:" + requestURI);
                 setLogon((HttpServletResponse) response, true);
-                chain.doFilter(client.request(), response);
+                chain.doFilter(ClientHelper.request((HttpServletRequest) request), response);
                 logger.info("isLogin方法通过");
                 return;
             } else if (client.isExcluded(EXCEPT_PATTERNS, EXCEPT_PARAMS, (HttpServletRequest) request)) {
@@ -125,7 +126,7 @@ public class OAuth2LoginFilter implements Filter {
 
             if (!client.isValidState((HttpServletRequest) request)) {
                 logger.info("验证state失败");
-                String result = returnResourceFile(ClientConstant.TEMPLATE_NAME, ClientConstant.STATE_ERROR);
+                String result = returnResourceFile(IamConstant.TEMPLATE_NAME, IamConstant.STATE_ERROR);
                 response.getWriter().write(result);
                 return;
             }
@@ -148,12 +149,12 @@ public class OAuth2LoginFilter implements Filter {
             chain.doFilter(request, response);
         } catch (GetAccessTokenException gte) {
             logger.error("客户端拦截器获取令牌失败===========>", gte);
-            String result = returnResourceFile(ClientConstant.TEMPLATE_NAME, ClientConstant.GET_ACCESS_TOKEN_ERROR + "," + gte.getMessage());
+            String result = returnResourceFile(IamConstant.TEMPLATE_NAME, IamConstant.GET_ACCESS_TOKEN_ERROR + "," + gte.getMessage());
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().write(result);
         } catch (GetUserInfoException gue) {
             logger.error("客户端拦截器获取用户信息失败===========>", gue);
-            String result = returnResourceFile(ClientConstant.TEMPLATE_NAME, ClientConstant.GET_USERINFO_ERROR);
+            String result = returnResourceFile(IamConstant.TEMPLATE_NAME, IamConstant.GET_USERINFO_ERROR);
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().write(result);
         } catch (Exception e) {
@@ -177,7 +178,7 @@ public class OAuth2LoginFilter implements Filter {
         OAuth2CientConfig config = getConfig(filterConfig.getServletContext());
         if (!config.isLoginFilterEnable()) return;
         try {
-            ClientUtil.config = config;// 放到全局变量里面
+            ClientHelper.config = config;// 放到全局变量里面
             EXCEPT_PATTERNS = filterConfig.getInitParameter("_except_urlpattern");
             EXCEPT_PARAMS = filterConfig.getInitParameter("_except_param");
         } catch (Exception e) {
@@ -192,7 +193,7 @@ public class OAuth2LoginFilter implements Filter {
         if (text == null) {
             return "未定义错误信息模版:" + info;
         } else {
-            return StringUtils.replace(text, ClientConstant.TEMPLATE_REPLACE_STRING, info);
+            return StringUtils.replace(text, IamConstant.TEMPLATE_REPLACE_STRING, info);
         }
 
     }

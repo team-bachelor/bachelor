@@ -1,8 +1,11 @@
 package cn.org.bachelor.iam.oauth2.client.model;
 
-import java.io.Serializable;
+import cn.org.bachelor.iam.credential.AbstractIamCredential;
 
-public class OAuth2ClientCertification implements Serializable {
+import java.io.Serializable;
+import java.util.Date;
+
+public class OAuth2ClientCertification extends AbstractIamCredential<String> implements Serializable {
 
 	private static final long serialVersionUID = -2225295839721811001L;
 	/**
@@ -17,26 +20,24 @@ public class OAuth2ClientCertification implements Serializable {
 
 	private String refreshToken=null;
 	
-	private String expiresTime = null;
-
 	public OAuth2ClientCertification(){
 	}
 	
-	public OAuth2ClientCertification(String userid, String accessToken, String refreshToken, String expiresTime){
-		this.userid = userid;
-		this.accessToken = accessToken;
+	public OAuth2ClientCertification(String userid, String accessToken, String refreshToken, Date expiresTime){
+		this.setUserid(userid);
+		this.setAccessToken(accessToken);
 		this.refreshToken = refreshToken;
-		this.expiresTime = expiresTime;
+		super.setExpiresTime(expiresTime);
 	}
 	
     public OAuth2ClientCertification(String userid, String accessToken, String refreshToken){
-		this.userid = userid;
-		this.accessToken = accessToken;
+		this.setUserid(userid);
+		this.setAccessToken(accessToken);
 		this.refreshToken = refreshToken;
 	}
     
     public OAuth2ClientCertification(String userid){
-		this.userid = userid;
+		this.setUserid(userid);
 	}
     
     public boolean equals(Object obj){
@@ -70,7 +71,9 @@ public class OAuth2ClientCertification implements Serializable {
 	}
 
 	public void setUserid(String userid) {
+
 		this.userid = userid;
+		super.setSubject(userid);
 	}
 
 	public String getAccessToken() {
@@ -78,6 +81,7 @@ public class OAuth2ClientCertification implements Serializable {
 	}
 
 	public void setAccessToken(String accessToken) {
+		super.setCredential(accessToken);
 		this.accessToken = accessToken;
 	}
 
@@ -89,11 +93,4 @@ public class OAuth2ClientCertification implements Serializable {
 		this.refreshToken = refreshToken;
 	}
 
-	public String getExpiresTime() {
-		return expiresTime;
-	}
-
-	public void setExpiresTime(String expiresTime) {
-		this.expiresTime = expiresTime;
-	}
 }

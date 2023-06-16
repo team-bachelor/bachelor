@@ -665,4 +665,8 @@ public abstract class StringUtils
   public static boolean isBlank(String s) {
     return "".equals(s);
   }
+
+  public static boolean isNotEmpty(String id) {
+    return !isEmpty(id);
+  }
 }

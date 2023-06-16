@@ -2,15 +2,13 @@ package cn.org.bachelor.iam.token;
 
 import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.exception.SystemException;
-import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
+import cn.org.bachelor.iam.credential.AbstractIamCredential;
 import cn.org.bachelor.iam.vo.UserVo;
 import com.alibaba.fastjson.JSONObject;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+
 import java.util.Date;
 import java.util.Map;
 
@@ -50,18 +48,14 @@ public class JwtToken {
     /**
      * 创建jwt
      *
-     * @param token token信息
      * @param privateKey 私钥
      * @return
      */
-//    public static String create(String payload, String privateKey) {
-//        Jwt jwt = JwtHelper.encode(payload, new RsaSigner(privateKey));
-//        return jwt.getEncoded();
-//    }
-    public static String create(JwtToken token, String privateKey){
-        return create(JSONObject.toJSONString(token), privateKey);
+    public String generate(String privateKey) {
+        return generate(JSONObject.toJSONString(this), privateKey);
     }
-    private static String create(String payloadStr, String privateKey) {
+
+    private static String generate(String payloadStr, String privateKey) {
         try {
             //准备JWS-header
             JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256)
@@ -80,10 +74,10 @@ public class JwtToken {
         }
     }
 
-    public static String getJWTString(OAuth2ClientCertification upCC, JSONObject userinfo, String privateKey, UserVo userDetail) {
-        String accesstoken = upCC.getAccessToken();
-        String refreshToken = upCC.getRefreshToken();
-        Date expTime_Date = parseExpireTime(upCC.getExpiresTime());
+    public static String generate(AbstractIamCredential credential, Map<String, Object> userinfo, String privateKey, UserVo userDetail) {
+        String accesstoken = (String)credential.getCredential();
+//        String refreshToken = upCC.getRefreshToken();
+        Date expTime_Date = credential.getExpiresTime();
         // 有效期保持与用户系统一致
         long expTime = expTime_Date.getTime();
         long currentTime = new Date().getTime();
@@ -113,22 +107,14 @@ public class JwtToken {
             userinfo.put(JwtToken.PayloadKey.DEPT_NAME, userDetail.getDeptName());
         }
 //        logger.info(userinfo.toString());
-        String token = JwtToken.create(userinfo.toJSONString(), privateKey);
-        return token;
-    }
-
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    public static Date parseExpireTime(String expireTime) {
-        Date expTime;
-        try {
-            expTime = sdf.parse(expireTime);
-        } catch (ParseException e) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_MONTH, 1);
-            expTime = calendar.getTime();
+        String userStr = null;
+        if(userinfo instanceof  JSONObject){
+            userStr = ((JSONObject) userinfo).toJSONString();
+        }else{
+            userStr = JSONObject.toJSONString(userinfo);
         }
-        return expTime;
+        String token = JwtToken.generate(userStr, privateKey);
+        return token;
     }
 
     /**
@@ -151,7 +137,6 @@ public class JwtToken {
 //        Jwt j = JwtHelper.decodeAndVerify(token, new RsaVerifier(publicKey));
 //        return decodeAndVerify(token, publicKey.);
 //    }
-
     public static JwtToken decodeAndVerify(String token, String publicKey) {
         try {
             JWSObject jwsObject = JWSObject.parse(token);

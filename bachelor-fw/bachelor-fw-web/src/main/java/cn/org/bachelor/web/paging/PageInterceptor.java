@@ -42,7 +42,6 @@ public class PageInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object obj) {
         try {
-            PageHelper.clearPage();
             String pageNum = null;
             String pageSize = null;
             if (request.getMethod().equals(HttpMethod.GET.name())) {
@@ -68,6 +67,7 @@ public class PageInterceptor extends HandlerInterceptorAdapter {
             Integer pageSizeInt = Integer.parseInt(pageSize);
 
             log.debug("找到分页标志，开始分页处理。");
+            PageHelper.clearPage();
             PageHelper.startPage(pageNumInt, pageSizeInt);
         } catch (Exception e) {
             log.error(e);

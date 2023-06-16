@@ -3,12 +3,13 @@
  */
 package cn.org.bachelor.iam.oauth2.client;
 
+import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.oauth2.OAuthConstant;
 import cn.org.bachelor.iam.oauth2.client.exception.GetAccessTokenException;
 import cn.org.bachelor.iam.oauth2.client.exception.GetUserInfoException;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
-import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
-import cn.org.bachelor.iam.oauth2.client.util.ClientUtil;
+import cn.org.bachelor.iam.oauth2.client.util.ClientHelper;
+import cn.org.bachelor.iam.oauth2.client.util.ClientInfo;
 import cn.org.bachelor.iam.oauth2.client.util.StateGenerator;
 import cn.org.bachelor.iam.oauth2.client.util.UrlExpProcessor;
 import cn.org.bachelor.iam.oauth2.exception.OAuthBusinessException;
@@ -24,16 +25,20 @@ import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
-import static cn.org.bachelor.iam.oauth2.client.util.ClientConstant.OAUTH_CB_STATE;
+import static cn.org.bachelor.iam.IamConstant.OAUTH_CB_STATE;
 
 
 /**
@@ -42,22 +47,17 @@ import static cn.org.bachelor.iam.oauth2.client.util.ClientConstant.OAUTH_CB_STA
  */
 public class OAuth2Client {
     private static UrlExpProcessor urlExpProcessor;
-    private HttpServletResponse response;
-    private HttpServletRequest request;
     private OAuth2CientConfig config;
     private JSONObject person;
-    private String url;
+    private ClientInfo info;
     public static final String defaultConfigFileName = "OAuth2-config.properties";
     private static Logger logger = LoggerFactory.getLogger(OAuth2Client.class);
 
     private SignSecurityOAuthClient oAuthClient;
 
-    public OAuth2Client(OAuth2CientConfig config, HttpServletRequest request2,
-                        HttpServletResponse response2) {
+    public OAuth2Client(OAuth2CientConfig config, ClientInfo info) {
         this.config = config;
-        this.request = request2;
-        this.response = response2;
-        this.url = request.getRequestURL().toString();
+        this.info = info;
         this.oAuthClient = new SignSecurityOAuthClient(new URLConnectionClient());
     }
 
@@ -67,7 +67,7 @@ public class OAuth2Client {
      */
     public String getAuthorizationCode() {
 //		logger.info("进入getAuthorizationCode");
-        String code = request.getParameter("code");
+        String code = info.getCode();
         boolean isRedirectURL = isRedirectURL();
         logger.info("进入getAuthorizationCode，code=" + code + "，isRedirectURL=" + isRedirectURL);
         if (!isRedirectURL) {
@@ -82,17 +82,17 @@ public class OAuth2Client {
      */
     public String getPhoneId() {
 //		logger.info("getPhoneId");
-        String phoneId = request.getParameter("phone_id");
+        String phoneId = info.getPhoneId();
         logger.info("getPhoneId，phone_id=" + phoneId);
         return phoneId;
     }
 
     private boolean isRedirectURL() {
-        logger.info("isRedirectURL()  url=" + url + ", config.redirecturl=" + config.getLoginRedirectURL());
-        if (url.equals(config.getLoginRedirectURL())) {
+        logger.info("isRedirectURL()  url=" + info.getUrl() + ", config.redirecturl=" + config.getLoginRedirectURL());
+        if (info.getUrl().equals(config.getLoginRedirectURL())) {
             return true;
         } else if (!config.getLoginRedirectURL().endsWith("/")) {
-            return url.equals(config.getLoginRedirectURL() + "/");
+            return info.getUrl().equals(config.getLoginRedirectURL() + "/");
         }
         return false;
     }
@@ -113,12 +113,6 @@ public class OAuth2Client {
     public void toGetAuthorizationCode(HttpServletRequest request) throws IOException {
         logger.info("进入toGetAuthorizationCode");
         String phoneId = getPhoneId();
-//		StringBuffer originalURL=new StringBuffer(url);
-//		String quering=getParamUrl(request,request.getCharacterEncoding(),null);
-//		if(quering.length()>0){
-//			originalURL.append("?").append(quering);
-//		}
-//		request.getSession().setAttribute(UpClientConstant.ORIGINALURL, originalURL.toString());
         StringBuilder url = new StringBuilder(config.getAsURL().getAuthorize());
         String m = config.getAsURL().getAuthorize().contains("?") ? "&" : "?";
         url.append(m);
@@ -128,7 +122,7 @@ public class OAuth2Client {
         url.append("client_id=").append(URLEncoder.encode(config.getId(), "utf-8"));
         url.append("&redirect_uri=").append(URLEncoder.encode(config.getLoginRedirectURL(), "utf-8"));
         url.append("&response_type=code");
-        url.append("&").append(OAUTH_CB_STATE).append("=").append(URLEncoder.encode(getState(request), "utf-8"));
+        url.append("&").append(OAUTH_CB_STATE).append("=").append(URLEncoder.encode(ClientHelper.getState(request), "utf-8"));
         //目标回调地址
         if (request != null) {
             String targetURL = StringUtils.isEmpty(config.getTargetURL()) ?
@@ -157,7 +151,7 @@ public class OAuth2Client {
             }
         }
         String _url = url.toString();
-        response.sendRedirect(_url);
+        ClientHelper.sendRedirect(_url);
         logger.info("退出toGetAuthorizationCode，url=" + _url);
     }
 
@@ -199,16 +193,27 @@ public class OAuth2Client {
             logger.error("获取用户基本信息错误=======>", e);
             throw new GetUserInfoException(e);
         }
+        ClientHelper.setUserJsonString(personStr);
+        ClientHelper.setCredential(
+                new OAuth2ClientCertification(userId, accessToken, refreshToken, parseExpireTime(expiration)));
 
-        request.getSession().setAttribute(ClientConstant.UP_USER, personStr);
-        request.getSession().setAttribute(ClientConstant.UP_OPEN_ID, openId);
-        request.getSession().setAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY,
-                new OAuth2ClientCertification(userId, accessToken, refreshToken, expiration));
-        ClientUtil.setSession(request.getSession());
-
-        logger.info("当前登录用户 userId:" + ClientUtil.getCurrentUserId());
-        logger.info("登录后的令牌信息：" + request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY));
+        logger.info("当前登录用户 userId:" + ClientHelper.getCurrentUserId());
+        logger.info("登录后的令牌信息：" + ClientHelper.getCredential());
         return person;
+    }
+
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    public static Date parseExpireTime(String expireTime) {
+        Date expTime;
+        try {
+            expTime = sdf.parse(expireTime);
+        } catch (ParseException e) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            expTime = calendar.getTime();
+        }
+        return expTime;
     }
 
     public JSONObject refreshAccessToken(String currentRefreshToken) {
@@ -239,13 +244,7 @@ public class OAuth2Client {
         return bindUser(builder);
     }
 
-    /**
-     * 获取当前用户ID
-     * @return
-     */
-    public String getUserId() {
-        return (String) request.getSession().getAttribute(ClientConstant.UP_USER_ID);
-    }
+
 
     /**
      * 是否从OAuth2认证服务器返回的请求，一般情况为出错了
@@ -253,27 +252,12 @@ public class OAuth2Client {
      */
     public boolean isCallback() {
         if (isRedirectURL()) {
-            String error = request.getParameter("error");
+            String error = info.getError();
             if (error != null) {
                 return true;
             }
         }
         return false;
-    }
-
-    public HttpServletRequest request() {
-        return new OAuth2RequestWrapper(request);
-    }
-
-    class OAuth2RequestWrapper extends HttpServletRequestWrapper {
-        public OAuth2RequestWrapper(HttpServletRequest request) {
-            super(request);
-        }
-
-        @Override
-        public String getRemoteUser() {
-            return getUserId();
-        }
     }
 
     private String getParamUrl(HttpServletRequest request, String encoding, List exceptPramList) {
@@ -313,10 +297,10 @@ public class OAuth2Client {
     }
 
     public boolean toOriginalURL() throws Exception {
-        String originalURL = (String) request.getSession().getAttribute(ClientConstant.ORIGINAL_URL);
+        String originalURL = (String) ClientHelper.getFromSession(IamConstant.ORIGINAL_URL);
         logger.debug("SSOClient toOriginalURL:" + originalURL);
         if (originalURL != null) {
-            response.sendRedirect(originalURL);
+            ClientHelper.sendRedirect(originalURL);
             return true;
         } else {
             return false;
@@ -325,13 +309,13 @@ public class OAuth2Client {
 
     public boolean toTargetURL() throws Exception {
         if (config.isToLoginRedirectURL()) {
-            response.sendRedirect(config.getLoginRedirectURL());
+            ClientHelper.sendRedirect(config.getLoginRedirectURL());
             return true;
         }
-        String targetURL = (String) request.getParameter("target_url");
+        String targetURL = info.getTargetUrl();
         logger.info("去访问targetURL:" + targetURL);
         if (targetURL != null) {
-            response.sendRedirect(targetURL);
+            ClientHelper.sendRedirect(targetURL);
             return true;
         }
         return false;
@@ -353,7 +337,7 @@ public class OAuth2Client {
         if (urlExpProcessor == null) {
             urlExpProcessor = new UrlExpProcessor(patterns);
         }
-        boolean result = urlExpProcessor.match(this.url);
+        boolean result = urlExpProcessor.match(info.getUrl());
         logger.info("进入isExcluded()========>" + urlExpProcessor.getPattern() + ", " + result);
         return result;
     }
@@ -376,14 +360,14 @@ public class OAuth2Client {
         if (urlExpProcessor == null) {
             urlExpProcessor = new UrlExpProcessor(except_urlpattern);
         }
-        boolean result = urlExpProcessor.match(this.url);
+        boolean result = urlExpProcessor.match(info.getUrl());
         logger.info(urlExpProcessor.getPattern() + ", " + result);
         return result;
     }
 
     public boolean isLogin() {
         boolean flag = false;
-        Object obj = request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
+        Object obj = ClientHelper.getCredential();
         if (obj instanceof OAuth2ClientCertification) {
             OAuth2ClientCertification my = (OAuth2ClientCertification) obj;
             String userid = my.getUserid();
@@ -398,7 +382,7 @@ public class OAuth2Client {
 
     public boolean isLogin(HttpServletRequest req) {
         boolean flag = false;
-        Object obj = request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
+        Object obj = ClientHelper.getCredential();
         logger.info("进入登录验证========> 登录后的令牌信息：=" + obj);
         //logger.info("当前登录用户 userId:" + ClientUtil.getCurrentUserId());
         if (obj instanceof OAuth2ClientCertification) {
@@ -407,7 +391,7 @@ public class OAuth2Client {
             boolean tokenValid = tokenValid(req);
             logger.info("isLogin(), userid:" + userid + ",tokenVlid=:" + tokenValid);
             if (userid != null && !userid.equals("") && tokenValid) {
-                ClientUtil.setSession(req.getSession());
+                ClientHelper.setSession(req.getSession());
                 flag = true;
 
             }
@@ -417,11 +401,11 @@ public class OAuth2Client {
     }
 
     public String[] isCookie() throws Exception {
-        Cookie[] cookies = request.getCookies();
+        Cookie[] cookies = info.getCookies();
         Cookie my = null;
         if (cookies != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if (ClientConstant.COOKIE_NAME.equals(cookie.getName())) {
+            for (Cookie cookie : info.getCookies()) {
+                if (IamConstant.COOKIE_NAME.equals(cookie.getName())) {
                     my = cookie;
                     break;
                 }
@@ -429,10 +413,10 @@ public class OAuth2Client {
             if (my == null) {
                 return null;
             }
-            byte[] b = my.getValue().getBytes(ClientConstant.DEFAULT_CHARSET);
+            byte[] b = my.getValue().getBytes(IamConstant.DEFAULT_CHARSET);
             b = new Base64().decode(b);
-            String access = new String(b, ClientConstant.DEFAULT_CHARSET);
-            String[] tokens = StringUtils.delimitedListToStringArray(access, ClientConstant.COOKIE_SEPERATOR);
+            String access = new String(b, IamConstant.DEFAULT_CHARSET);
+            String[] tokens = StringUtils.delimitedListToStringArray(access, IamConstant.COOKIE_SEPERATOR);
             return tokens;
         } else {
             return null;
@@ -440,7 +424,7 @@ public class OAuth2Client {
     }
 
     private boolean tokenValid(HttpServletRequest req) {
-        Object obj = request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
+        Object obj = ClientHelper.getCredential();
         if (!(obj instanceof OAuth2ClientCertification)) {
             return false;
         }
@@ -484,33 +468,13 @@ public class OAuth2Client {
      * @return
      */
     private boolean accessTokenValid(OAuth2ClientCertification my) {
-
-        String expiration = my.getExpiresTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date expirateionDate = null;
-        try {
-            expirateionDate = sdf.parse(expiration);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        if (my.getAccessToken() != null && !my.getAccessToken().equals("") && (expirateionDate.getTime() - System.currentTimeMillis() > 0)) {
+        if (my.getAccessToken() != null && !my.getAccessToken().equals("") && (my.getExpiresTime().getTime() - System.currentTimeMillis() > 0)) {
             return true;
         }
         return false;
     }
 
-    /**
-     * 获取state
-     * @param request
-     * @return
-     */
-    private String getState(HttpServletRequest request) {
-        String state = StateGenerator.genStateCode();
-        HttpSession session = request.getSession(true);
-        session.setAttribute(ClientConstant.OAUTH_STATE, state);
-        return state;
-    }
+
 
     /**
      * 验证state是否相同
@@ -519,11 +483,11 @@ public class OAuth2Client {
      */
     public boolean isValidState(HttpServletRequest request) {
         HttpSession session = request.getSession(true);
-        Object so = session.getAttribute(ClientConstant.OAUTH_STATE);
+        Object so = session.getAttribute(IamConstant.OAUTH_STATE);
         if (StringUtils.isEmpty(so)) {
             return true;
         } else if (so.toString().equals(request.getParameter(OAUTH_CB_STATE))) {
-            session.removeAttribute(ClientConstant.OAUTH_STATE);
+            session.removeAttribute(IamConstant.OAUTH_STATE);
             return true;
         }
         return false;

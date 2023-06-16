@@ -6,9 +6,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     ##测试服
-    url: jdbc:mysql://localhost:3306/eprs_contact?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://10.0.139.239:3306/iam?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
     username: root
-    password: Aa123456
+    password: root
 
     #正式服
   #    url: jdbc:mysql://10.0.139.239:3306/dy_yjtxl?useUnicode=true&characterEncoding=UTF-8&useSSL=false
@@ -45,7 +45,7 @@ spring:
       refreshable: none
 
 server:
-  port: 9003
+  port: 9103
   undertow:
     # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
     io-threads: 4

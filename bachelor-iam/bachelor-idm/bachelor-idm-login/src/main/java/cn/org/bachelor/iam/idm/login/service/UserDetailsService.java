@@ -9,13 +9,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @Author lz
  */
 @Service
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
+
 
     @Autowired
     private UserLoginMapper userMapper;
@@ -28,7 +28,7 @@ public class UserDetailsService implements org.springframework.security.core.use
         user.setCode(userCode);
         List<User> userList = userMapper.select(user);
         //如果查询不到数据就通过抛出异常来给出提示
-        if(userList == null || userList.size() == 0){
+        if (userList == null || userList.size() == 0) {
             throw new RuntimeException("用户名或密码错误");
         }
         user = userList.get(0);

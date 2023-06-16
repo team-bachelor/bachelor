@@ -1,4 +1,4 @@
-package cn.org.bachelor.iam.idm.service;
+package cn.org.bachelor.iam.oauth2.client.service;
 
 /**
  * @描述:

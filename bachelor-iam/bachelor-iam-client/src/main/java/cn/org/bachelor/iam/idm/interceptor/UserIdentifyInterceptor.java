@@ -3,7 +3,7 @@ package cn.org.bachelor.iam.idm.interceptor;
 import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.idm.service.ImSysService;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
-import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
+import cn.org.bachelor.iam.oauth2.client.util.IamConstant;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.web.util.RequestUtil;
@@ -63,16 +63,16 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
         }
         //如果header里面没取到，则尝试从session里面取
         if (user.getAccessToken() == null || "".equals(user.getAccessToken())) {
-            OAuth2ClientCertification ucc = (OAuth2ClientCertification) request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
+            OAuth2ClientCertification ucc = (OAuth2ClientCertification) request.getSession().getAttribute(IamConstant.SESSION_AUTHENTICATION_KEY);
             if (ucc != null) {
                 user.setAccessToken(ucc.getAccessToken());
                 user.setId(ucc.getUserid());
-                String personStr = (String) request.getSession().getAttribute(ClientConstant.UP_USER);
-//                String orgId = (String) request.getSession().getAttribute(ClientConstant.UP_ORG_ID);
-//                String userName = (String) request.getSession().getAttribute(ClientConstant.UP_USER_NAME);
-//                String orgName = (String) request.getSession().getAttribute(ClientConstant.UP_ORG_NAME);
-//                String deptId = (String) request.getSession().getAttribute(ClientConstant.UP_DEPT_ID);
-//                String deptName = (String) request.getSession().getAttribute(ClientConstant.UP_DEPT_NAME);
+                String personStr = (String) request.getSession().getAttribute(IamConstant.UP_USER);
+//                String orgId = (String) request.getSession().getAttribute(IamConstant.UP_ORG_ID);
+//                String userName = (String) request.getSession().getAttribute(IamConstant.UP_USER_NAME);
+//                String orgName = (String) request.getSession().getAttribute(IamConstant.UP_ORG_NAME);
+//                String deptId = (String) request.getSession().getAttribute(IamConstant.UP_DEPT_ID);
+//                String deptName = (String) request.getSession().getAttribute(IamConstant.UP_DEPT_NAME);
                 UserVo userInSession = JSONObject.parseObject(personStr, UserVo.class);
                 user.setName(userInSession.getName());
                 user.setOrgId(userInSession.getOrgId());

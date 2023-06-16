@@ -6,63 +6,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
  * @author liuzhuo
  */
 public interface ImSysService {
-
-    /**
-     * @param user 用户信息
-     * @return 用户是否为系统管理员
-     */
-    boolean checkUserIsAdmin(UserVo user);
-
-    /**
-     * @param clientID client id
-     * @param userID 用户id
-     * @param orgID 机构id
-     * @param astoken astoken
-     * @return 在当前应用中的用户角色
-     */
-    List<RoleVo> findUserRolesInClient(String clientID, String userID, String orgID, String astoken);
-
-    /**
-     * @param clientID client id
-     * @param userID 用户id
-     * @param orgID 机构id
-     * @return 在当前应用中的用户角色
-     */
-    List<RoleVo> findUserRolesInClient(String clientID, String userID, String orgID);
-
-    /**
-     * @param clientID client id
-     * @return 可访问指定应用的所有用户列表
-     */
-    List<UserVo> findUsersByClientID(String clientID);
-
-    /**
-     * @param param
-     * @return
-     */
-    List<UserVo> findUsersByClientID(ImSysParam param);
-
-    /**
-     * @param userId 用户id
-     * @return 用户详细信息
-     */
-    List<UserVo> findUsersDetail(String userId);
-
-    /**
-     * @param deptId 部门id
-     * @return 部门详细信息
-     */
-    DeptDetailVo findDeptDetail(String deptId);
-
-    /**
-     * @param userId 用户id
-     * @return 应用列表
-     */
-    List<AppVo> findAppsByUserId(String userId);
 
     /**
      * @param appCode 应用编码
@@ -71,42 +17,70 @@ public interface ImSysService {
     AppVo findAppByCode(String appCode);
 
     /**
+     * @param userId 用户id
+     * @return 应用列表
+     */
+    List<AppVo> findUserApps(String userId);
+
+    /**
+     * @param user 用户信息
+     * @return 用户是否为系统管理员
+     */
+    boolean assertIsAdmin(UserVo user);
+
+    /**
+     * @param appID 应用id
+     * @return 可访问指定应用的所有用户列表
+     */
+    List<UserVo> findUsersInApp(String appID);
+
+    /**
+     *
+     * @param param 查询参数
+     * @return
+     */
+    List<UserVo> findUsersInApp(ImSysParam param);
+
+    /**
+     * @param userId 用户id
+     * @return 用户详细信息
+     */
+    List<UserVo> findUsersDetail(String userId);
+
+    /**
+     * @param param: appID  应用id
+     * @param param: userID 用户id
+     * @param param: orgID  机构id
+     * @return 在当前应用中的用户角色
+     */
+    List<RoleVo> findUserRolesInApp(ImSysParam param);
+
+
+    /**
      * @param userIds 用户id（可多个）
      * @return 用户列表
      */
-    List<UserVo> findUserByIds(String userIds);
+    List<UserVo> findUsersById(String... userIds);
 
     /**
-     * @param orgId 机构列表
-     * @param keyWord 关键词
+     * @param param: orgId           机构id
+     * @param param: deptId          部门id
+     * @param param: userName 用户名称（模糊查询）
      * @return 用户列表
      */
-    List<UserVo> findUsers(String orgId, String keyWord);
+    List<UserVo> findUsers(ImSysParam param);
 
-    /**
-     * @param param 参数
-     * @return 用户列表
-     */
-    ImSysResult<List<UserVo>> findUsers(ImSysParam param);
-
-    /**
-     * @param orgId 机构id
-     * @param deptId 部门id
-     * @param userNameParttern 用户名称（模糊查询）
-     * @return 用户列表
-     */
-    List<UserVo> findUsers(String orgId, String deptId, String userNameParttern);
-
-    /**
-     * @param orgId 机构id
-     * @param userId 用户id
-     * @param userCode 用户编码
-     * @return 用户信息
-     */
-    UserVo findUser(String orgId, String userId, String userCode);
+//    /**
+//     * @param orgId    机构id
+//     * @param userId   用户id
+//     * @param userCode 用户编码
+//     * @return 用户信息
+//     */
+//    UserVo findUser(String orgId, String userId, String userCode);
 
     /**
      * 获取所有机构
+     *
      * @return 机构列表
      */
     List<OrgVo> findAllOrgs();
@@ -115,65 +89,41 @@ public interface ImSysService {
      * @param orgId 机构id
      * @return 机构列表
      */
-    List<OrgVo> findOrgs(String orgId);
+    List<OrgVo> findOrg(String orgId);
 
     /**
-     * @param id 机构id
-     * @param code 机构编码
-     * @param name 机构名称
-     * @return 机构列表
+     * 查询机构
+     *
+     * @param param: orgId   机构ID
+     * @param param: orgCode 机构编码
+     * @param param: orgName 机构名称（模糊查询）
+     * @return
      */
-    List<OrgVo> findOrgs(String id, String code, String name);
+    List<OrgVo> findOrg(ImSysParam param);
 
     /**
-     * @param orgId 机构id（筛选范围）
-     * @return 部门列表
-     */
-    List<OrgVo> findDepts(String orgId);
-
-    /**
-     * @param orgId 机构id（筛选范围）
-     * @param tree 是否返回树形（true返回树形，false返回平面）
-     * @return 部门列表
-     */
-    List<OrgVo> findDepts(String orgId, boolean tree);
-
-    /**
-     * @param orgId 机构id（筛选范围）
-     * @param deptId 部门id（筛选范围）
-     * @param tree 是否返回树形（true返回树形，false返回平面）
-     * @return 部门列表
-     */
-    List<OrgVo> findDepts(String orgId, String deptId, boolean tree);
-
-    /**
-     * @param orgId 机构id
      * @param deptId 部门id
-     * @return 部门信息（找不到返回null）
+     * @return 部门详细信息
      */
-    OrgVo findDept(String orgId, String deptId);
+    DeptDetailVo findDeptDetail(String deptId);
 
     /**
      * @param orgId 机构id（筛选范围）
-     * @param deptId 部门id（筛选范围）
-     * @param tree 是否返回树形（true返回树形，false返回平面）
-     * @param level 向下获取的层级
      * @return 部门列表
      */
-    List<OrgVo> findDepts(String orgId, String deptId, boolean tree, Integer level);
+    List<OrgVo> findDeptsByOrgId(String orgId);
 
     /**
-     * @param orgId 机构id（筛选范围）
-     * @param deptId 部门id（筛选范围）
-     * @param tree 是否返回树形（true返回树形，false返回平面）
-     * @param level 向下获取的层级
-     * @param pid 父级部门id
+     * @param param: orgId  机构id（筛选范围）
+     * @param param: deptId 部门id（筛选范围）
+     * @param param: tree   是否返回树形（true返回树形，false返回平面）
+     * @param param: level  向下获取的层级
      * @return 部门列表
      */
-    List<OrgVo> findDepts(String orgId, String deptId, boolean tree, Integer level, String pid);
+    List<OrgVo> findDepts(ImSysParam param);
 
     /**
-     * @param orgId 机构id（筛选范围）
+     * @param orgId   机构id（筛选范围）
      * @param deptIds 部门id（筛选范围）
      * @param isAdmin 是否是管理员
      * @return 数据权限
@@ -186,15 +136,9 @@ public interface ImSysService {
     void logout(String account);
 
     /**
-     * @param account 用户账号
-     * @param refreshToken IM系统发放的refreshToken
-     * @param expire 过期时间
+     * 刷新令牌
+     * @param refreshToken 当前刷新令牌
+     * @return
      */
-    void saveRefreshToken(String account, String refreshToken, long expire);
-
-    /**
-     * @param account 用户账号
-     * @return IM系统发放的refreshToken
-     */
-    String getRefreshToken(String account);
+    String refreshToken(String refreshToken);
 }

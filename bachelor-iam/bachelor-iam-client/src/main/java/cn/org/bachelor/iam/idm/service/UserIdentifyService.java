@@ -3,7 +3,7 @@ package cn.org.bachelor.iam.idm.service;
 import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.idm.interceptor.UserIdentifyInterceptor;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
-import cn.org.bachelor.iam.oauth2.client.util.ClientConstant;
+import cn.org.bachelor.iam.oauth2.client.util.IamConstant;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.web.util.RequestUtil;
@@ -64,11 +64,11 @@ public class UserIdentifyService {
         }
         //如果header里面没取到，则尝试从session里面取
         if (user.getAccessToken() == null || "".equals(user.getAccessToken())) {
-            OAuth2ClientCertification ucc = (OAuth2ClientCertification) request.getSession().getAttribute(ClientConstant.SESSION_AUTHENTICATION_KEY);
+            OAuth2ClientCertification ucc = (OAuth2ClientCertification) request.getSession().getAttribute(IamConstant.SESSION_AUTHENTICATION_KEY);
             if (ucc != null) {
                 user.setAccessToken(ucc.getAccessToken());
                 user.setId(ucc.getUserid());
-                String personStr = (String) request.getSession().getAttribute(ClientConstant.UP_USER);
+                String personStr = (String) request.getSession().getAttribute(IamConstant.UP_USER);
                 UserVo userInSession = JSONObject.parseObject(personStr, UserVo.class);
                 user.setName(userInSession.getName());
                 user.setOrgId(userInSession.getOrgId());
