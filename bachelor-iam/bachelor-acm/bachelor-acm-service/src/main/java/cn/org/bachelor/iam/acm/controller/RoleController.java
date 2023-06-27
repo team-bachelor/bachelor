@@ -182,7 +182,7 @@ public class RoleController {
 //            @ApiImplicitParam(name = "page", value = "当前页数", paramType = "query", required = false)
 //    })
 //    public HttpEntity<JsonResponse> getUsers(String deptId, String deptName, String userName, Integer pageSize, Integer page) {
-//        ImSysParam param = new ImSysParam();
+//        IamSysParam param = new IamSysParam();
 //        param.setDeptId(deptId);
 //        param.setUserName(userName);
 //        param.setDeptName(deptName);

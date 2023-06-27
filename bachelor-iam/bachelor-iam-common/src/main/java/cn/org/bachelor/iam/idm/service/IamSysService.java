@@ -2,13 +2,16 @@ package cn.org.bachelor.iam.idm.service;
 
 import cn.org.bachelor.iam.vo.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * @author liuzhuo
  */
-public interface ImSysService {
+public interface IamSysService {
 
     /**
      * @param appCode 应用编码
@@ -39,13 +42,13 @@ public interface ImSysService {
      * @param param 查询参数
      * @return
      */
-    List<UserVo> findUsersInApp(ImSysParam param);
+    List<UserVo> findUsersInApp(IamSysParam param);
 
     /**
      * @param userId 用户id
      * @return 用户详细信息
      */
-    List<UserVo> findUsersDetail(String userId);
+    UserVo findUsersDetail(String userId);
 
     /**
      * @param param: appID  应用id
@@ -53,7 +56,7 @@ public interface ImSysService {
      * @param param: orgID  机构id
      * @return 在当前应用中的用户角色
      */
-    List<RoleVo> findUserRolesInApp(ImSysParam param);
+    List<RoleVo> findUserRolesInApp(IamSysParam param);
 
 
     /**
@@ -68,7 +71,7 @@ public interface ImSysService {
      * @param param: userName 用户名称（模糊查询）
      * @return 用户列表
      */
-    List<UserVo> findUsers(ImSysParam param);
+    List<UserVo> findUsers(IamSysParam param);
 
 //    /**
 //     * @param orgId    机构id
@@ -89,7 +92,7 @@ public interface ImSysService {
      * @param orgId 机构id
      * @return 机构列表
      */
-    List<OrgVo> findOrg(String orgId);
+    OrgVo findOrg(String orgId);
 
     /**
      * 查询机构
@@ -99,7 +102,7 @@ public interface ImSysService {
      * @param param: orgName 机构名称（模糊查询）
      * @return
      */
-    List<OrgVo> findOrg(ImSysParam param);
+    List<OrgVo> findOrg(IamSysParam param);
 
     /**
      * @param deptId 部门id
@@ -120,7 +123,7 @@ public interface ImSysService {
      * @param param: level  向下获取的层级
      * @return 部门列表
      */
-    List<OrgVo> findDepts(ImSysParam param);
+    List<OrgVo> findDepts(IamSysParam param);
 
     /**
      * @param orgId   机构id（筛选范围）
@@ -137,8 +140,26 @@ public interface ImSysService {
 
     /**
      * 刷新令牌
+     * @param request
+     * @param response
      * @param refreshToken 当前刷新令牌
      * @return
      */
-    String refreshToken(String refreshToken);
+    Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response, String refreshToken);
+
+    /**
+     * 获取用户是否为管理员
+     * @param user
+     * @return
+     */
+    boolean checkUserIsAdmin(UserVo user);
+
+    /**
+     *
+     * @param request
+     * @param response
+     * @param code
+     * @return
+     */
+    Map<String, Object> getAccessToken(HttpServletRequest request, HttpServletResponse response, String code);
 }

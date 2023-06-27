@@ -1,9 +1,9 @@
-package cn.org.bachelor.iam.idm.login.filter;
+package cn.org.bachelor.iam.idm.login.security.filter;
 
 import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.idm.login.LoginUser;
-import cn.org.bachelor.iam.idm.login.config.IamLoginConfig;
+import cn.org.bachelor.iam.idm.login.config.IamLocalLoginConfig;
 import cn.org.bachelor.iam.idm.login.util.UserUtil;
 import cn.org.bachelor.iam.idm.service.UserIdentifyService;
 import cn.org.bachelor.iam.token.JwtToken;
@@ -22,13 +22,13 @@ import java.io.IOException;
 
 
 @Component
-public class UserIdentifyFilter extends OncePerRequestFilter {
+public class AccessControlFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserIdentifyService userIdentifyService;
 
     @Autowired
-    private IamLoginConfig iamLoginConfig;
+    private IamLocalLoginConfig iamLoginConfig;
 
     @Autowired
     private IamContext iamContext;

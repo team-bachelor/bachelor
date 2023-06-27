@@ -1,11 +1,12 @@
 package cn.org.bachelor.iam.idm.login.service;
 
 import cn.org.bachelor.iam.acm.domain.UserStatus;
+import cn.org.bachelor.iam.credential.AbstractIamCredential;
 import cn.org.bachelor.iam.idm.login.EventPublisher;
 import cn.org.bachelor.iam.idm.login.LoginEvent;
 import cn.org.bachelor.iam.idm.login.LoginException;
 import cn.org.bachelor.iam.idm.login.LoginUser;
-import cn.org.bachelor.iam.idm.login.config.IamLoginConfig;
+import cn.org.bachelor.iam.idm.login.config.IamLocalLoginConfig;
 import cn.org.bachelor.iam.idm.login.credential.UsernamePasswordCredential;
 import cn.org.bachelor.iam.token.JwtToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 @Service
 public class LoginService {
 
@@ -22,7 +27,7 @@ public class LoginService {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private IamLoginConfig iamConf;
+    private IamLocalLoginConfig iamConf;
 
     @Autowired
     private EventPublisher eventPublisher;
@@ -72,14 +77,26 @@ public class LoginService {
     public String getJwt(Authentication authenticate) {
         //使用userid生成token
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
-        String userId = loginUser.getUser().getId();
-        JwtToken token = new JwtToken();
-        token.setSub(userId);
+        AbstractIamCredential credential = new AbstractIamCredential<String>(){};
+        credential.setCredential("");
+        credential.setExpiresTime(getLoginExpiresTime());
+        JwtToken token = JwtToken.create(loginUser, credential);
         String jwt = token.generate(iamConf.getPrivateKey());
 
         //把token响应给前端
         return jwt;
     }
+
+    private Date getLoginExpiresTime() {
+        Date date = new Date();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        // 把日期往后增加一天,整数  往后推,负数往前移动
+        calendar.add(Calendar.DATE, 1);
+        // 这个时间就是日期往后推一天的结果
+        return calendar.getTime();
+    }
+
 
     public void logout() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

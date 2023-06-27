@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.idm.controller;
 
-import cn.org.bachelor.iam.idm.service.ImSysParam;
-import cn.org.bachelor.iam.idm.service.ImSysService;
+import cn.org.bachelor.iam.idm.service.IamSysParam;
+import cn.org.bachelor.iam.idm.service.IamSysService;
 import cn.org.bachelor.iam.vo.AppVo;
 import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.web.json.JsonResponse;
@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -36,8 +36,8 @@ public class IdmRsController {
 
     private static final Logger logger = LoggerFactory.getLogger(IdmRsController.class);
 
-    @Qualifier("userSysService")
-    private ImSysService userSysService;
+    @Autowired
+    private IamSysService userSysService;
 
     @ApiOperation(value = "根据当前clientID查询用户")
     @ApiImplicitParams({
@@ -50,7 +50,7 @@ public class IdmRsController {
     @RequestMapping(value = "/users/{orgId}", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUsers(@PathVariable String orgId, String deptId, String userName, Integer pageSize, Integer pageNum) {
         PageHelper.startPage(pageNum, pageSize);
-        ImSysParam param = new ImSysParam();
+        IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
         param.setDeptId(deptId);
         param.setUserName(userName);
@@ -79,7 +79,7 @@ public class IdmRsController {
     })
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUsers(String orgId, String deptId, String keyWord) {
-        ImSysParam param = new ImSysParam();
+        IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
         param.setDeptId(deptId);
         param.setKeyWord(keyWord);
@@ -116,7 +116,7 @@ public class IdmRsController {
     })
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUserByCode(String userCode, String orgId) {
-        ImSysParam param = new ImSysParam();
+        IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
         param.setUserCode(userCode);
         return JsonResponse.createHttpEntity(userSysService.findUsers(param));
@@ -130,7 +130,7 @@ public class IdmRsController {
     })
     @RequestMapping(value = "/depts", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getDepts(String orgId, String deptId, boolean tree) {
-        ImSysParam param = new ImSysParam();
+        IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
         param.setDeptId(deptId);
         param.setTree(tree);
@@ -155,6 +155,15 @@ public class IdmRsController {
     public HttpEntity<JsonResponse> getOrgs() {
         List permg = userSysService.findAllOrgs();
         return JsonResponse.createHttpEntity(permg);
+    }
+
+    @ApiOperation(value = "获得指定机构")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "orgId", value = "机构ID", paramType = "query", required = true),
+    })
+    @RequestMapping(value = "/org/{orgId}", method = RequestMethod.GET)
+    public HttpEntity<JsonResponse> getOrg(@PathVariable String orgId) {
+        return JsonResponse.createHttpEntity(userSysService.findOrg(orgId));
     }
 
     @ApiOperation(value = "根据用户ID获取用户列表")
@@ -217,7 +226,7 @@ public class IdmRsController {
             @ApiImplicitParam(name = "page", value = "当前页数", paramType = "query", required = false)
     })
     public HttpEntity<JsonResponse> getUsersByClient(String deptId, String deptName, String userName, Integer pageSize, Integer pageNum) {
-        ImSysParam param = new ImSysParam();
+        IamSysParam param = new IamSysParam();
         param.setDeptId(deptId);
         param.setUserName(userName);
         param.setDeptName(deptName);

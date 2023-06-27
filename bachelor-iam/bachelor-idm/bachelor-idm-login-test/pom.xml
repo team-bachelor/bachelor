@@ -9,9 +9,9 @@
         <version>2.2.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>bachelor-idm-login</artifactId>
+    <artifactId>bachelor-idm-login-test</artifactId>
     <packaging>jar</packaging>
-    <name>bachelor-idm-login</name>
+    <name>bachelor-idm-login-test</name>
     <version>2.2.1-SNAPSHOT</version>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -20,31 +20,12 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <!--redis依赖-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <!--fastjson依赖-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-fw-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-iam-common</artifactId>
+            <artifactId>bachelor-idm-login</artifactId>
             <version>2.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -58,31 +39,24 @@
             <version>2.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
             <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-fw-web</artifactId>
+            <artifactId>bachelor-iam-common</artifactId>
+            <version>2.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
+            <artifactId>spring-boot-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.whvcse</groupId>
-            <artifactId>easy-captcha</artifactId>
-            <version>1.6.2</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15to18</artifactId>
-            <version>1.69</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

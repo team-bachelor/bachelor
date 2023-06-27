@@ -14,5 +14,6 @@
     <modules>
         <module>bachelor-idm-service</module>
         <module>bachelor-idm-login</module>
+        <module>bachelor-idm-login-test</module>
     </modules>
 </project>

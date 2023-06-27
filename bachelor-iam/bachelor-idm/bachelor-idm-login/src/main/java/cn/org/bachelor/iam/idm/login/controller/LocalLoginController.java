@@ -31,6 +31,7 @@ public class LocalLoginController {
         try {
             Authentication authentication = loginService.login(user);
             String jwt = loginService.getJwt(authentication);
+            CaptchaUtil.clear(request);
             return JsonResponse.createHttpEntity(jwt);
         } catch (Exception e) {
             throw e;

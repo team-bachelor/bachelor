@@ -1,5 +1,6 @@
 package cn.org.bachelor.iam.idm.login;
 
+import cn.org.bachelor.context.IUser;
 import cn.org.bachelor.iam.acm.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,11 +16,11 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginUser implements UserDetails {
+public class LoginUser implements UserDetails, IUser {
 
     private User user;
 
-    private String OrgCode;
+    private String orgCode;
 
     private String deptName;
 
@@ -28,6 +29,8 @@ public class LoginUser implements UserDetails {
     private String accessToken;
 
     private String tenantId;
+
+    private boolean isAdministrator;
 
     public LoginUser(User user) {
         this.user = user;
@@ -66,5 +69,39 @@ public class LoginUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getId() {
+        return user == null ? null : user.getId();
+    }
+
+    @Override
+    public String getName() {
+        return user == null ? null : user.getName();
+    }
+
+    @Override
+    public String getCode() {
+        return user == null ? null : user.getCode();
+    }
+
+    @Override
+    public String getOrgId() {
+        return user == null ? null : user.getOrgId();
+    }
+
+    @Override
+    public String getDeptId() {
+        return user == null ? null : user.getDeptId();
+    }
+
+    @Override
+    public boolean isAdministrator() {
+        return isAdministrator;
+    }
+
+    public void setIsAdministrator(boolean isAdministrator){
+        this.isAdministrator = isAdministrator;
     }
 }

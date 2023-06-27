@@ -5,14 +5,17 @@ import cn.org.bachelor.exception.RemoteException;
 import cn.org.bachelor.exception.SystemException;
 import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.IamContext;
-import cn.org.bachelor.iam.idm.exception.ImSysException;
-import cn.org.bachelor.iam.idm.service.ImSysParam;
-import cn.org.bachelor.iam.idm.service.ImSysService;
+import cn.org.bachelor.iam.exception.IamBusinessException;
+import cn.org.bachelor.iam.exception.IamSystemException;
+import cn.org.bachelor.iam.idm.service.IamSysService;
+import cn.org.bachelor.iam.idm.service.IamSysParam;
 import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
 import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
 import cn.org.bachelor.iam.oauth2.client.SignSecurityOAuthClient;
 import cn.org.bachelor.iam.oauth2.client.URLConnectionClient;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
+import cn.org.bachelor.iam.oauth2.client.util.ClientHelper;
+import cn.org.bachelor.iam.oauth2.exception.OAuthBusinessException;
 import cn.org.bachelor.iam.oauth2.request.DefaultOAuthResourceRequest;
 import cn.org.bachelor.iam.oauth2.response.OAuthResourceResponse;
 import cn.org.bachelor.iam.vo.*;
@@ -25,6 +28,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -37,9 +42,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Service
 @ConditionalOnClass(OAuth2Client.class)
-public class Oauth2ImSysService implements ImSysService {
+public class Oauth2IamSysService implements IamSysService {
 
-    private static final Logger logger = LoggerFactory.getLogger(Oauth2ImSysService.class);
+    private static final Logger logger = LoggerFactory.getLogger(Oauth2IamSysService.class);
     @Autowired
     private IamContext iamContext;
 
@@ -50,9 +55,11 @@ public class Oauth2ImSysService implements ImSysService {
      * @param iamContext IamContext
      * @see IamContext
      */
-    public Oauth2ImSysService(IamContext iamContext) {
+    public Oauth2IamSysService(IamContext iamContext) {
         this.iamContext = iamContext;
     }
+
+    private static Map<String, AdminCache> adminCache = new HashMap<>();
 
     private class AdminCache {
         private boolean isAdmin;
@@ -64,7 +71,44 @@ public class Oauth2ImSysService implements ImSysService {
         }
     }
 
-    private static Map<String, AdminCache> adminCahce = new HashMap<>();
+    @Override
+    public boolean checkUserIsAdmin(UserVo user) {
+        logger.info("用户：[" + user.getName() + "]获取管理员标志");
+        boolean isadmin = false;
+
+        try {
+            if (StringUtils.isNotEmpty(user.getId()) && StringUtils.isNotEmpty(user.getOrgId())) {
+                long now = (new Date()).getTime();
+                if (!adminCache.containsKey(user.getId()) && (adminCache.get(user.getId())).time < now - 120000L) {
+                    isadmin = this.isAdministrator(user);
+                    adminCache.remove(user.getId());
+                    adminCache.put(user.getId(), new Oauth2IamSysService.AdminCache(isadmin, now));
+                } else {
+                    isadmin = (adminCache.get(user.getId())).isAdmin;
+                }
+            }
+        } catch (Exception var5) {
+            logger.debug(var5.getMessage());
+        }
+
+        user.setAdministrator(isadmin);
+        logger.info("用户：[" + user.getName() + "]管理员标志:" + isadmin);
+        return isadmin;
+    }
+
+    @Override
+    public Map<String, Object> getAccessToken(HttpServletRequest request, HttpServletResponse response, String code) {
+        OAuth2Client client = new OAuth2Client(clientConfig, ClientHelper.startClient(request, response));
+        JSONObject user = null;
+        try {
+            user = client.bindUser2Session(code);
+
+        } catch (OAuthBusinessException e) {
+            throw new IamBusinessException(e);
+        }
+        ClientHelper.stopClient();
+        return user;
+    }
 
     @Override
     public boolean assertIsAdmin(UserVo user) {
@@ -75,12 +119,12 @@ public class Oauth2ImSysService implements ImSysService {
             //2020.1.1 新加了一段缓存，2分钟之内同一用户不重复取用户系统。 lz
             if (StringUtils.isNotEmpty(user.getId()) && StringUtils.isNotEmpty(user.getOrgId())) {
                 long now = new Date().getTime();
-                if (!adminCahce.containsKey(user.getId()) && adminCahce.get(user.getId()).time < (now - 120000)) {
+                if (!adminCache.containsKey(user.getId()) && adminCache.get(user.getId()).time < (now - 120000)) {
                     isadmin = isAdministrator(user);
-                    adminCahce.remove(user.getId());
-                    adminCahce.put(user.getId(), new AdminCache(isadmin, now));
+                    adminCache.remove(user.getId());
+                    adminCache.put(user.getId(), new AdminCache(isadmin, now));
                 } else {
-                    isadmin = adminCahce.get(user.getId()).isAdmin;
+                    isadmin = adminCache.get(user.getId()).isAdmin;
                 }
 
             }
@@ -96,7 +140,7 @@ public class Oauth2ImSysService implements ImSysService {
         if (user.getAccessToken() == null) {
             return false;
         }
-        ImSysParam param = new ImSysParam();
+        IamSysParam param = new IamSysParam();
         param.setClientId(clientConfig.getId());
         param.setUserId(user.getId());
         param.setOrgId(user.getOrgId());
@@ -110,7 +154,7 @@ public class Oauth2ImSysService implements ImSysService {
         return result.get();
     }
 
-    private List<RoleVo> findUserRolesInClient(ImSysParam param, String astoken) {
+    private List<RoleVo> findUserRolesInClient(IamSysParam param, String astoken) {
         if (StringUtils.isEmpty(param.getClientId())
                 || StringUtils.isEmpty(param.getUserId())
                 || StringUtils.isEmpty(param.getOrgId())) {
@@ -126,7 +170,7 @@ public class Oauth2ImSysService implements ImSysService {
     }
 
     @Override
-    public List<RoleVo> findUserRolesInApp(ImSysParam param) {
+    public List<RoleVo> findUserRolesInApp(IamSysParam param) {
         UserVo user = iamContext.getUser();
         String token = null;
         if (user != null && user.getAccessToken() != null) {
@@ -137,13 +181,13 @@ public class Oauth2ImSysService implements ImSysService {
 
     @Override
     public List<UserVo> findUsersInApp(String appID) {
-        ImSysParam param = new ImSysParam();
+        IamSysParam param = new IamSysParam();
         param.setClientId(appID);
         return findUsersInApp(param);
     }
 
     @Override
-    public List<UserVo> findUsersInApp(ImSysParam param) {
+    public List<UserVo> findUsersInApp(IamSysParam param) {
         if (StringUtils.isEmpty(param.getClientId())) {
             if (StringUtils.isEmpty(clientConfig.getId())) {
                 throw new BusinessException("clientID_cannot_be_null");
@@ -157,7 +201,7 @@ public class Oauth2ImSysService implements ImSysService {
     }
 
     @Override
-    public List<UserVo> findUsersDetail(String userId) {
+    public UserVo findUsersDetail(String userId) {
         if (StringUtils.isEmpty(userId)) {
             throw new BusinessException("userId_cannot_null");
         }
@@ -165,7 +209,11 @@ public class Oauth2ImSysService implements ImSysService {
         param.put("id", userId);
         String json = callApi(clientConfig.getRsURL().getUserDetails(), "GET", param);
         List<UserVo> voList = resolveJsonList(json, UserVo.class);
-        return voList;
+        if(voList == null || voList.size() == 0){
+            return null;
+        }else{
+            return voList.get(0);
+        }
     }
 
     @Override
@@ -221,15 +269,15 @@ public class Oauth2ImSysService implements ImSysService {
      * @return
      */
     private List<UserVo> findUsers(String orgId) {
-        ImSysParam param = new ImSysParam();
+        IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
         return findUsers(param);
     }
 
     @Override
-    public List<UserVo> findUsers(ImSysParam param) {
+    public List<UserVo> findUsers(IamSysParam param) {
         String json = callApi(clientConfig.getRsURL().getUsers(), "GET", param.toParamMap());
-        ImSysResult<List<UserVo>> users = new ImSysResult<>();
+        IamSysResult<List<UserVo>> users = new IamSysResult<>();
         return (List<UserVo>) resolveJson2Result(json, UserVo.class, true, users).getRows();
     }
 
@@ -241,7 +289,7 @@ public class Oauth2ImSysService implements ImSysService {
      */
     @Override
     public List<OrgVo> findAllOrgs() {
-        return findOrg(new ImSysParam());
+        return findOrg(new IamSysParam());
     }
 
     /**
@@ -251,10 +299,15 @@ public class Oauth2ImSysService implements ImSysService {
      * @return 机构列表
      */
     @Override
-    public List<OrgVo> findOrg(String orgId) {
-        ImSysParam param = new ImSysParam();
+    public OrgVo findOrg(String orgId) {
+        IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
-        return findOrg(param);
+        List<OrgVo> orgList = findOrg(param);
+        if(orgList == null || orgList.size() == 0) {
+            return null;
+        }else{
+            return orgList.get(0);
+        }
     }
 
     /**
@@ -266,7 +319,7 @@ public class Oauth2ImSysService implements ImSysService {
      * @return
      */
     @Override
-    public List<OrgVo> findOrg(ImSysParam param) {
+    public List<OrgVo> findOrg(IamSysParam param) {
         //获取组织机构树
         Map<String, String> paramMap = new HashMap<String, String>();
         if (StringUtils.isNotEmpty(param.getOrgId()))
@@ -282,33 +335,10 @@ public class Oauth2ImSysService implements ImSysService {
 
     @Override
     public List<OrgVo> findDeptsByOrgId(String orgId) {
-        ImSysParam param = new ImSysParam();
+        IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
         return findDepts(param);
     }
-
-
-//    /**
-//     * 查找子部门
-//     *
-//     * @param orgId  机构ID
-//     * @param deptId 父机构ID
-//     * @return 部门信息
-//     */
-//    private OrgVo findDept(String orgId, String deptId) {
-//        List<OrgVo> orgs = findDepts(orgId, deptId, true, null);
-//        for (OrgVo org : orgs) {
-//            if (org.getId().equals(deptId)) {
-//                if (org.getSubOrgs() != null) {
-//                    org.getSubOrgs().forEach(sub -> {
-//                        sub.setSubOrgs(null);
-//                    });
-//                }
-//                return org;
-//            }
-//        }
-//        return null;
-//    }
 
     /**
      * 获取当前机构的部门
@@ -320,7 +350,7 @@ public class Oauth2ImSysService implements ImSysService {
      * @return
      */
     @Override
-    public List<OrgVo> findDepts(ImSysParam param) {
+    public List<OrgVo> findDepts(IamSysParam param) {
         //获取组织机构树
         if (StringUtils.isEmpty(param.getOrgId())) {
             throw new BusinessException("org_id_can_not_be_null_or_empty");
@@ -471,10 +501,12 @@ public class Oauth2ImSysService implements ImSysService {
     }
 
     @Override
-    public String refreshToken(String refreshToken) {
-        OAuth2Client client = new OAuth2Client(clientConfig, null);
+    public Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response, String refreshToken) {
+        OAuth2Client client = new OAuth2Client(clientConfig,
+                ClientHelper.startClient(request, response));
         JSONObject userinfo = client.refreshAccessToken(refreshToken);
-        return null;
+        ClientHelper.stopClient();
+        return userinfo;
     }
 
     private void setUserToTreeOrgs(OrgVo orgVo, Map<String, List<UserVo>> userMap, UserVo user) {
@@ -511,16 +543,16 @@ public class Oauth2ImSysService implements ImSysService {
     }
 
     private <T> List<T> resolveJsonList(String json, Class<T> clazz) {
-        ImSysResult<List<T>> userSysResult = new ImSysResult<>();
+        IamSysResult<List<T>> userSysResult = new IamSysResult<>();
         return (List<T>) resolveJson2Result(json, clazz, true, userSysResult).getRows();
     }
 
     private <T> T resolveJsonObject(String json, Class<T> clazz) {
-        ImSysResult<T> userSysResult = new ImSysResult<>();
+        IamSysResult<T> userSysResult = new IamSysResult<>();
         return (T) resolveJson2Result(json, clazz, false, userSysResult).getRows();
     }
 
-    private JSONObject fillResult(String json, ImSysResult userSysResult) {
+    private JSONObject fillResult(String json, IamSysResult userSysResult) {
         //Map<String, Object> tokenMap = jsonMapper.readValue(json, Map.class);
         JSONObject node = JSONObject.parseObject(json);
 
@@ -528,7 +560,7 @@ public class Oauth2ImSysService implements ImSysService {
         String message = node.getString("message");
         int total = node.getInteger("total");
         if ("1001".equals(result)) {
-            throw new ImSysException("ACCESS_TOKEN_EXPIRED");
+            throw new IamSystemException("ACCESS_TOKEN_EXPIRED");
         } else if (!"200".equals(result)) {
             throw new RemoteException(result + ":" + message);
         }
@@ -538,7 +570,7 @@ public class Oauth2ImSysService implements ImSysService {
         return node;
     }
 
-    private <T> ImSysResult resolveJson2Result(String json, Class<T> clazz, boolean asList, ImSysResult imSysResult) {
+    private <T> IamSysResult resolveJson2Result(String json, Class<T> clazz, boolean asList, IamSysResult imSysResult) {
         //Map<String, Object> tokenMap = jsonMapper.readValue(json, Map.class);
         JSONObject node = fillResult(json, imSysResult);
         String rowsString = node.get("rows").toString();

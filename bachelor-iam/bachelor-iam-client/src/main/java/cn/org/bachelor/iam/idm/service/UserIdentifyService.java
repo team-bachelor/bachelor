@@ -1,9 +1,9 @@
 package cn.org.bachelor.iam.idm.service;
 
+import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.IamContext;
+import cn.org.bachelor.iam.credential.AbstractIamCredential;
 import cn.org.bachelor.iam.idm.interceptor.UserIdentifyInterceptor;
-import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
-import cn.org.bachelor.iam.oauth2.client.util.IamConstant;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.web.util.RequestUtil;
@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +28,7 @@ public class UserIdentifyService {
     private IamContext iamContext;
 
     @Autowired
-    private ImSysService imSysService;
+    private IamSysService iamSysService;
 
     private static final String ACCESS_BACKEND = "up_access_backend";//是否访问后台获取用户状态，N为不访问，其余为访问
 
@@ -64,10 +65,10 @@ public class UserIdentifyService {
         }
         //如果header里面没取到，则尝试从session里面取
         if (user.getAccessToken() == null || "".equals(user.getAccessToken())) {
-            OAuth2ClientCertification ucc = (OAuth2ClientCertification) request.getSession().getAttribute(IamConstant.SESSION_AUTHENTICATION_KEY);
+            AbstractIamCredential ucc = (AbstractIamCredential) request.getSession().getAttribute(IamConstant.SESSION_AUTHENTICATION_KEY);
             if (ucc != null) {
-                user.setAccessToken(ucc.getAccessToken());
-                user.setId(ucc.getUserid());
+                user.setAccessToken((String) ucc.getCredential());
+                user.setId(ucc.getSubject());
                 String personStr = (String) request.getSession().getAttribute(IamConstant.UP_USER);
                 UserVo userInSession = JSONObject.parseObject(personStr, UserVo.class);
                 user.setName(userInSession.getName());
@@ -81,7 +82,7 @@ public class UserIdentifyService {
             }
         }
         if (user.isAccessBackend() && user.getAccessToken() != null) {
-            user.setAdministrator(imSysService.checkUserIsAdmin(user));
+            user.setAdministrator(iamSysService.checkUserIsAdmin(user));
             user.setAccessBackend(false);
         }
         iamContext.setLogonUser(user);

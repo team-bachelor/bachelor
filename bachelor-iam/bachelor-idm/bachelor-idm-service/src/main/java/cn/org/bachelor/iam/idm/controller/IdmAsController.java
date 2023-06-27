@@ -2,13 +2,10 @@ package cn.org.bachelor.iam.idm.controller;
 
 import cn.org.bachelor.iam.IamConfiguration;
 import cn.org.bachelor.iam.IamConstant;
-import cn.org.bachelor.iam.credential.AbstractIamCredential;
 import cn.org.bachelor.iam.idm.service.IdmService;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.utils.StringUtils;
-import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.web.json.JsonResponse;
-import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -21,9 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
-
-import static cn.org.bachelor.iam.token.JwtToken.PayloadKey.USER_ID;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author liuzhuo
@@ -57,32 +53,19 @@ public class IdmAsController {
      * @描述 根据code从用户系统获取accesstoken接口，生成的accesstoken和userid等信息，计算返回JWT
      */
     @ApiOperation(value = "根据授权码获取访问令牌")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "code", value = "授权码", paramType = "query", required = true)
-    })
+    @ApiImplicitParams({@ApiImplicitParam(name = "code", value = "授权码", paramType = "query", required = true)})
     @RequestMapping(value = "/accesstoken", method = RequestMethod.GET)
-    public ResponseEntity<JsonResponse> accesstoken(@RequestParam String code, HttpServletRequest request,
-                                                    HttpServletResponse response) {
+    public ResponseEntity<JsonResponse> accesstoken(@RequestParam String code, HttpServletRequest request, HttpServletResponse response) {
         if (StringUtils.isEmpty(code)) {
             // 返回提示，client重新引导用户登录
             logger.info("code 为空,url: {} {}", request.getRequestURI(), request.getQueryString());
             // TODO 设置统一的状态，包装token
         }
-        OAuth2Client client = new OAuth2Client(clientConfig, request, response);
-        JSONObject user = null;
-        try {
-            user = client.bindUser2Session(code);
-
-        } catch (OAuthBusinessException e) {
-            e.printStackTrace();
-            return JsonResponse.createHttpEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
-        }
-        if(user != null) {
-            user.putAll(idmService.getUserExtInfo(user));
-        }
-        Map<String, String> token = getJwtToken(request, user);
-        return JsonResponse.createHttpEntity(token, HttpStatus.OK);
+        JwtToken token = idmService.getAccessToken(request, response, code);
+        return JsonResponse.createHttpEntity(token.generate(authConfig.getPrivateKey()), HttpStatus.OK);
     }
+
+    public static final String REFRESH_TOKEN = "refresh_token";
 
     /**
      * @param authorization header中的jwt
@@ -93,23 +76,13 @@ public class IdmAsController {
      */
     @ApiOperation(value = "刷新JWT")
     @RequestMapping(value = "/refreshToken", method = RequestMethod.POST)
-    public ResponseEntity<JsonResponse> refreshToken(@RequestHeader(IamConstant.HTTP_HEADER_TOKEN_KEY) String authorization,
-                                                     HttpServletRequest request, HttpServletResponse response) {
-        String newToken = idmService.refreshAccessToken(JwtToken.decode(authorization));
-        OAuth2Client client = new OAuth2Client(clientConfig, request, response);
-        JSONObject userinfo = client.refreshAccessToken(newToken);
-        String token = getJwtToken(request, userinfo);
+    public ResponseEntity<JsonResponse> refreshToken(@RequestHeader(IamConstant.HTTP_HEADER_TOKEN_KEY) String authorization, HttpServletRequest request, HttpServletResponse response) {
+        JwtToken jwt = JwtToken.decode(authorization);
+        String refreshToken = jwt.getClaims().containsKey(REFRESH_TOKEN) ? jwt.getClaims().get(REFRESH_TOKEN).toString() : "";
+        JwtToken token = idmService.refreshAccessToken(request, response, refreshToken);
         Map<String, String> tokenMap = new HashMap<String, String>(1);
-        tokenMap.put("token", token);
+        tokenMap.put("token", token.generate(authConfig.getPrivateKey()));
         return JsonResponse.createHttpEntity(tokenMap, HttpStatus.OK);
-    }
-
-    private String getJwtToken(HttpServletRequest request, JSONObject userinfo) {
-        AbstractIamCredential upCC = (AbstractIamCredential) request.getSession()
-                .getAttribute(IamConstant.SESSION_AUTHENTICATION_KEY);
-        String userId = userinfo.getString(USER_ID);
-        UserVo userDetail = idmService.getUserDetail(userId);
-        return JwtToken.generate(upCC, userinfo, authConfig.getPrivateKey(), userDetail);
     }
 
     /**

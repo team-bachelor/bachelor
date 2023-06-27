@@ -5,7 +5,7 @@ package cn.org.bachelor.iam.oauth2.client.service;
  * @创建人: liuzhuo
  * @创建时间: 2019/7/24
  */
-public class ImSysResult<T> {
+public class IamSysResult<T> {
     private String result;
     private String message;
     private int total;

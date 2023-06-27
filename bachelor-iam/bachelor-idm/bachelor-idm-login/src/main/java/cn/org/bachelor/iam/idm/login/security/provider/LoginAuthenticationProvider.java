@@ -1,6 +1,7 @@
-package cn.org.bachelor.iam.idm.login.service;
+package cn.org.bachelor.iam.idm.login.security.provider;
 
 import cn.org.bachelor.iam.idm.login.LoginException;
+import cn.org.bachelor.iam.idm.login.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;

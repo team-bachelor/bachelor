@@ -1,18 +1,18 @@
 package cn.org.bachelor.iam.token;
 
+import cn.org.bachelor.context.IUser;
 import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.exception.SystemException;
 import cn.org.bachelor.iam.credential.AbstractIamCredential;
-import cn.org.bachelor.iam.vo.UserVo;
 import com.alibaba.fastjson.JSONObject;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
-
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static cn.org.bachelor.iam.token.JwtToken.PayloadKey.ACCESS_TOKEN;
+import static cn.org.bachelor.iam.token.JwtToken.PayloadKey.*;
 
 /**
  * @描述:
@@ -30,6 +30,7 @@ public class JwtToken {
         public static final String NBF = "nbf";
         public static final String IAT = "iat";
         public static final String JTI = "jti";
+        public static final String VER = "ver";
         public static final String USER_ID = "userId";
         public static final String USER_NAME = "user_name";
         public static final String USER_CODE = "user_code";
@@ -74,46 +75,64 @@ public class JwtToken {
         }
     }
 
-    public static String generate(AbstractIamCredential credential, Map<String, Object> userinfo, String privateKey, UserVo userDetail) {
-        String accesstoken = (String)credential.getCredential();
-//        String refreshToken = upCC.getRefreshToken();
+    public static JwtToken create(IUser userDetail, AbstractIamCredential credential) {
+        if(userDetail == null){
+            throw new BusinessException("user detail can not be null!");
+        }
         Date expTime_Date = credential.getExpiresTime();
         // 有效期保持与用户系统一致
         long expTime = expTime_Date.getTime();
         long currentTime = new Date().getTime();
 //        Map<String, Object> userObject = JSONParser.parseJSON(userinfo);
-        userinfo.put(ACCESS_TOKEN, accesstoken);
-
+//        userinfo.put(ACCESS_TOKEN, accesstoken);
+        JwtToken token = new JwtToken();
+        token.setExp(expTime);
+        token.setIat(currentTime);
+        token.setIss("");// jwt签发者
+        token.setSub(userDetail.getCode());// jwt所面向的用户
+        token.setAud("");// 接收jwt的一方
+        token.setNbf(0L);
+        token.setJti("");
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put(USER_NAME, userDetail.getName());
+        map.put(USER_CODE, userDetail.getCode());
+        map.put(ORG_ID, userDetail.getOrgId());
+        map.put(ORG_NAME, userDetail.getOrgName());
+        map.put(DEPT_ID, userDetail.getDeptId());
+        map.put(DEPT_NAME, userDetail.getDeptName());
+        map.put(ACCESS_TOKEN, credential.getCredential());
+        map.put(USER_ID, userDetail.getId());
+        token.setClaims(map);
         // 存储refreshToken为token有效期的2倍
 //        userSysService.saveRefreshToken(userinfo.getString("account"), refreshToken, 2 * (expTime - currentTime));
-        userinfo.put(JwtToken.PayloadKey.EXP, expTime);
-        userinfo.put(JwtToken.PayloadKey.IAT, currentTime);
-
-        userinfo.put(JwtToken.PayloadKey.ISS, ""); // jwt签发者
-        userinfo.put(JwtToken.PayloadKey.SUB, userinfo.get("account")); // jwt所面向的用户
-        userinfo.put(JwtToken.PayloadKey.AUD, ""); // 接收jwt的一方
-        userinfo.put(JwtToken.PayloadKey.NBF, ""); // 接收jwt的一方
-        userinfo.put(JwtToken.PayloadKey.JTI, ""); // jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击
-
-        userinfo.put(JwtToken.PayloadKey.USER_NAME, userinfo.get("username"));
-        userinfo.put(JwtToken.PayloadKey.USER_CODE, userinfo.get("account"));
-
-//        userinfo.put(USER_ID, userId);
-
-        if (userDetail != null) {
-            userinfo.put(JwtToken.PayloadKey.ORG_ID, userDetail.getOrgId());
-            userinfo.put(JwtToken.PayloadKey.ORG_NAME, userDetail.getOrgName());
-            userinfo.put(JwtToken.PayloadKey.DEPT_ID, userDetail.getDeptId());
-            userinfo.put(JwtToken.PayloadKey.DEPT_NAME, userDetail.getDeptName());
-        }
+//        userinfo.put(JwtToken.PayloadKey.EXP, expTime);
+//        userinfo.put(JwtToken.PayloadKey.IAT, currentTime);
+//
+//        userinfo.put(JwtToken.PayloadKey.ISS, ""); // jwt签发者
+//        userinfo.put(JwtToken.PayloadKey.SUB, userinfo.get("account")); // jwt所面向的用户
+//        userinfo.put(JwtToken.PayloadKey.AUD, ""); // 接收jwt的一方
+//        userinfo.put(JwtToken.PayloadKey.NBF, ""); // 接收jwt的一方
+//        userinfo.put(JwtToken.PayloadKey.JTI, ""); // jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击
+//
+//        userinfo.put(JwtToken.PayloadKey.USER_NAME, userinfo.get("username"));
+//        userinfo.put(JwtToken.PayloadKey.USER_CODE, userinfo.get("account"));
+//
+////        userinfo.put(USER_ID, userId);
+//
+//        if (userDetail != null) {
+//            userinfo.put(JwtToken.PayloadKey.ORG_ID, userDetail.getOrgId());
+//            userinfo.put(JwtToken.PayloadKey.ORG_NAME, userDetail.getOrgName());
+//            userinfo.put(JwtToken.PayloadKey.DEPT_ID, userDetail.getDeptId());
+//            userinfo.put(JwtToken.PayloadKey.DEPT_NAME, userDetail.getDeptName());
+//        }
 //        logger.info(userinfo.toString());
-        String userStr = null;
-        if(userinfo instanceof  JSONObject){
-            userStr = ((JSONObject) userinfo).toJSONString();
-        }else{
-            userStr = JSONObject.toJSONString(userinfo);
-        }
-        String token = JwtToken.generate(userStr, privateKey);
+//        String userStr = null;
+//        if(userinfo instanceof  JSONObject){
+//            userStr = ((JSONObject) userinfo).toJSONString();
+//        }else{
+//            userStr = JSONObject.toJSONString(userinfo);
+//        }token.generate(privateKey);
+//        String token = JwtToken.generate(userStr, privateKey);
         return token;
     }
 
@@ -161,7 +180,7 @@ public class JwtToken {
             JWSObject jwsObject = JWSObject.parse(token);
             String payload = jwsObject.getPayload().toString();
             JwtToken payloadDto = JSONObject.parseObject(payload, JwtToken.class);
-            payloadDto.setClaims(JSONObject.parseObject(payload));
+//            payloadDto.setClaims(JSONObject.parseObject(payload));
             return payloadDto;
         } catch (Exception e) {
             throw new SystemException(e);
@@ -192,6 +211,9 @@ public class JwtToken {
 
     //jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击
     private String jti;
+
+    //版本
+    private String ver;
 
     //规范外的其他内容
     private Map<String, Object> claims;
@@ -260,6 +282,13 @@ public class JwtToken {
         this.jti = jti;
     }
 
+    public String getVer() {
+        return ver;
+    }
+
+    public void setVer(String ver) {
+        this.ver = ver;
+    }
 //    public static String toJson(JwtToken token) {
 //        if (token == null) return null;
 //
@@ -297,9 +326,9 @@ public class JwtToken {
 //        }
 //    }
 
-    private static boolean isNotEmpty(String s) {
-        return s != null && !"".equals(s);
-    }
+//    private static boolean isNotEmpty(String s) {
+//        return s != null && !"".equals(s);
+//    }
 
 //    public static JwtToken fromJson(String json) {
 //        ObjectMapper mapper = new ObjectMapper();
@@ -342,12 +371,12 @@ public class JwtToken {
 //        token.setClaims(tokenMap);
 //        return token;
 //    }
-
-    private static String getAndRemoveClaim(String claimName, Map<String, Object> tokenMap) {
-        if (tokenMap.containsKey(claimName)) {
-            return tokenMap.remove(claimName).toString();
-        }
-        return null;
-    }
+//
+//    private static String getAndRemoveClaim(String claimName, Map<String, Object> tokenMap) {
+//        if (tokenMap.containsKey(claimName)) {
+//            return tokenMap.remove(claimName).toString();
+//        }
+//        return null;
+//    }
 
 }

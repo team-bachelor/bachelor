@@ -1,5 +1,6 @@
 package cn.org.bachelor.iam.acm.domain;
 
+import cn.org.bachelor.context.IUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

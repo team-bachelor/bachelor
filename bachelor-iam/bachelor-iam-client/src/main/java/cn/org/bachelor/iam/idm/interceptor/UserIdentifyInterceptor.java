@@ -1,9 +1,9 @@
 package cn.org.bachelor.iam.idm.interceptor;
 
+import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.IamContext;
-import cn.org.bachelor.iam.idm.service.ImSysService;
-import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
-import cn.org.bachelor.iam.oauth2.client.util.IamConstant;
+import cn.org.bachelor.iam.credential.AbstractIamCredential;
+import cn.org.bachelor.iam.idm.service.IamSysService;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.web.util.RequestUtil;
@@ -33,7 +33,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private IamContext iamContext;
     @Autowired
-    private ImSysService imSysService;
+    private IamSysService imSysService;
 
     private static final String ACCESS_BACKEND = "up_access_backend";//是否访问后台获取用户状态，N为不访问，其余为访问
 
@@ -63,10 +63,10 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
         }
         //如果header里面没取到，则尝试从session里面取
         if (user.getAccessToken() == null || "".equals(user.getAccessToken())) {
-            OAuth2ClientCertification ucc = (OAuth2ClientCertification) request.getSession().getAttribute(IamConstant.SESSION_AUTHENTICATION_KEY);
+            AbstractIamCredential ucc = (AbstractIamCredential) request.getSession().getAttribute(IamConstant.SESSION_AUTHENTICATION_KEY);
             if (ucc != null) {
-                user.setAccessToken(ucc.getAccessToken());
-                user.setId(ucc.getUserid());
+                user.setAccessToken((String) ucc.getCredential());
+                user.setId(ucc.getSubject());
                 String personStr = (String) request.getSession().getAttribute(IamConstant.UP_USER);
 //                String orgId = (String) request.getSession().getAttribute(IamConstant.UP_ORG_ID);
 //                String userName = (String) request.getSession().getAttribute(IamConstant.UP_USER_NAME);

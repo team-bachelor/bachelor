@@ -8,11 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.util.List;
 
 /**
- * @Author 三更  B站： https://space.bilibili.com/663528522
+ * @Author
  */
 
 @RunWith(SpringRunner.class)

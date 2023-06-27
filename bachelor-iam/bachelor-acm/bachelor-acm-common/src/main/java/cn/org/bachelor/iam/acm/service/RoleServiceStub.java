@@ -27,7 +27,7 @@ public interface RoleServiceStub {
 //     * @param param
 //     * @return
 //     */
-//    List<UserVo> findUserByClientID(ImSysParam param);
+//    List<UserVo> findUserByClientID(IamSysParam param);
 
     /**
      * @param roleID

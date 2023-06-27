@@ -3,6 +3,7 @@ package cn.org.bachelor.iam.vo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @创建人: liuzhuo
  * @创建时间: 2018/11/12
  */
+@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OrgVo {
 
@@ -47,78 +49,4 @@ public class OrgVo {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean hold;
-
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
-    public List<OrgVo> getSubOrgs() {
-        return subOrgs;
-    }
-
-    public void setSubOrgs(List<OrgVo> subOrgs) {
-        this.subOrgs = subOrgs;
-    }
-
-    public OrgVo getParent() {
-        return parent;
-    }
-
-    public void setParent(OrgVo parent) {
-        this.parent = parent;
-    }
-
-    public boolean isHold() {
-        return hold;
-    }
-
-    public void setHold(boolean hold) {
-        this.hold = hold;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fulName) {
-        this.fullName = fullName;
-    }
-
-    public String getUscCode() {
-        return uscCode;
-    }
-
-    public void setUscCode(String uscCode) {
-        this.uscCode = uscCode;
-    }
 }

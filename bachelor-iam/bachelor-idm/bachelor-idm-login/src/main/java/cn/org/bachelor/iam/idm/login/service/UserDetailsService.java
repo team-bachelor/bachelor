@@ -21,7 +21,7 @@ public class UserDetailsService implements org.springframework.security.core.use
     private UserLoginMapper userMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String userCode) throws UsernameNotFoundException {
+    public LoginUser loadUserByUsername(String userCode) throws UsernameNotFoundException {
         //根据用户名查询用户信息
 
         User user = new User();

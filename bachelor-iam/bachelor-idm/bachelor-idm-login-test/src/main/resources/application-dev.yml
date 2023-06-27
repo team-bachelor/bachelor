@@ -100,6 +100,8 @@ management:
         include: "*"
 bachelor:
   iam:
+    login:
+      enable-gateway: false
     enable_user_access_control: false
     ########################################↓权限配置↓########################################
     client:

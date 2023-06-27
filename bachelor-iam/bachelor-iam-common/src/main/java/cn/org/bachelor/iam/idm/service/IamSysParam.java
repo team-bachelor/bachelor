@@ -12,7 +12,7 @@ import java.util.Map;
  * @创建时间: 2019/7/24
  */
 @Data
-public class ImSysParam {
+public class IamSysParam {
     private String orgId;
     private String orgName;
     private String orgCode;

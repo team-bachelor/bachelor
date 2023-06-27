@@ -5,9 +5,9 @@ import cn.org.bachelor.iam.acm.UserType;
 import cn.org.bachelor.iam.acm.domain.LoginAttempt;
 import cn.org.bachelor.iam.idm.login.EventPublisher;
 import cn.org.bachelor.iam.idm.login.LoginEvent;
+import cn.org.bachelor.iam.idm.login.LoginUser;
 import cn.org.bachelor.iam.idm.login.credential.UsernamePasswordCredential;
 import cn.org.bachelor.iam.idm.login.dao.LoginAttemptMapper;
-import cn.org.bachelor.web.util.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -20,6 +20,9 @@ public class LoginAttemptService {
 
     @Autowired
     private LoginAttemptMapper loginAttemptMapper;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Autowired
     private IamContext iamContext;
@@ -46,8 +49,9 @@ public class LoginAttemptService {
         List<LoginAttempt> list = loginAttemptMapper.selectByExample(e);
         LoginAttempt la;
         if (list == null || list.size() == 0) {
+            LoginUser userDetail = userDetailsService.loadUserByUsername(user.getUsername());
             la = new LoginAttempt();
-            la.setId(UuidUtil.getUUID());
+            la.setId(userDetail.getId());
             la.setCode(user.getUsername());
             la.setIp(ip);
             la.setAttempt(1);

@@ -1,8 +1,10 @@
 package cn.org.bachelor.iam.idm.login.config;
 
 import cn.org.bachelor.iam.IamConfiguration;
-import cn.org.bachelor.iam.idm.login.filter.UserIdentifyFilter;
-import cn.org.bachelor.iam.idm.login.service.LoginAuthenticationProvider;
+import cn.org.bachelor.iam.idm.login.security.entryPoint.AuthAuthenticationEntryPoint;
+import cn.org.bachelor.iam.idm.login.security.filter.UserIdentifyFilter;
+import cn.org.bachelor.iam.idm.login.security.handler.JsonAccessDeniedHandler;
+import cn.org.bachelor.iam.idm.login.security.provider.LoginAuthenticationProvider;
 import cn.org.bachelor.iam.idm.login.service.UserDetailsService;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
@@ -27,7 +30,7 @@ import java.util.List;
 @ConfigurationProperties(
         prefix = "bachelor.iam.login"
 )
-public class IamLoginConfig extends WebSecurityConfigurerAdapter {
+public class IamLocalLoginConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 用户拦截器和访问控制拦截器要拦截的地址
@@ -66,18 +69,22 @@ public class IamLoginConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 // 对于登录接口 允许匿名访问s
-
                 .antMatchers(excludePathPatterns).anonymous()
                 // 除上面外的所有请求全部需要鉴权认证
-                .anyRequest().authenticated();
+                .anyRequest().anonymous();
 
         //把token校验过滤器添加到过滤器链中
-
 //        http.addFilterBefore(userIdentifyFilter, JwtAuthenticationTokenFilter.class);
         http.addFilterBefore(userIdentifyFilter, UsernamePasswordAuthenticationFilter.class);
 
+        http.exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+                .authenticationEntryPoint(new AuthAuthenticationEntryPoint());;
     }
 
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+        return new JsonAccessDeniedHandler();
+    }
     @Override
     protected void configure(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
         authManagerBuilder

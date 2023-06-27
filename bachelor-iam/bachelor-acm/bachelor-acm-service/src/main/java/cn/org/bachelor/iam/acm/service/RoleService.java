@@ -9,12 +9,12 @@ import cn.org.bachelor.iam.acm.domain.Role;
 import cn.org.bachelor.iam.acm.domain.RoleMenu;
 import cn.org.bachelor.iam.acm.domain.RolePermission;
 import cn.org.bachelor.iam.acm.domain.UserRole;
-import cn.org.bachelor.iam.idm.service.ImSysParam;
-import cn.org.bachelor.iam.idm.service.ImSysService;
-import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
+import cn.org.bachelor.iam.idm.service.IamSysParam;
+import cn.org.bachelor.iam.idm.service.IamSysService;
 import cn.org.bachelor.iam.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -40,10 +40,10 @@ public class RoleService implements RoleServiceStub {
     @Autowired
     private RoleMenuMapper roleMenuMapper;
     @Autowired
-    private ImSysService imSysService;
+    private IamSysService iamSysService;
 
-    @Autowired
-    private OAuth2CientConfig clientConfig;
+    @Value("bachelor.iam.client.id:''")
+    private String clientId;
 
     /**
      * @param orgCode
@@ -86,7 +86,7 @@ public class RoleService implements RoleServiceStub {
     }
 
 //    @Override
-//    public List<UserVo> findUserByClientID(ImSysParam param) {
+//    public List<UserVo> findUserByClientID(IamSysParam param) {
 //        param.setClientId(clientConfig.getId());
 //        List<UserVo> users = imSysService.findUsersByClientID(param);
 //        return users;
@@ -142,9 +142,9 @@ public class RoleService implements RoleServiceStub {
         UserRole ur = new UserRole();
         ur.setRoleCode(roleCode);
         List<UserRole> userRoles = userRoleMapper.select(ur);
-        ImSysParam usp = new ImSysParam();
-        usp.setClientId(clientConfig.getId());
-        List<UserVo> remote = imSysService.findUsersByClientID(usp);
+        IamSysParam usp = new IamSysParam();
+        usp.setClientId(clientId);
+        List<UserVo> remote = iamSysService.findUsersInApp(usp);
         Map<String, UserVo> rMap = new HashMap<>(userRoles.size());
         remote.forEach(i -> {
             rMap.put(i.getCode(), i);
@@ -159,10 +159,7 @@ public class RoleService implements RoleServiceStub {
             String id = i.getUserId();
             UserVo u = null;
             if (!StringUtils.isEmpty(id)) {
-                List<UserVo> ul = imSysService.findUsersDetail(id);
-                if(ul != null && ul.size() > 0) {
-                    u= ul.get(0);
-                }
+                u = iamSysService.findUsersDetail(id);
             }
             if(u == null){
                 u = new UserVo();

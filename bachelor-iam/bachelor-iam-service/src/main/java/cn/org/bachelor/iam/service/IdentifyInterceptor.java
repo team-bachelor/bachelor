@@ -1,10 +1,10 @@
 package cn.org.bachelor.iam.service;
 
 
+import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.IamContext;
-import cn.org.bachelor.iam.idm.service.ImSysService;
+import cn.org.bachelor.iam.idm.service.IamSysService;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
-import cn.org.bachelor.iam.oauth2.client.util.IamConstant;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.web.util.RequestUtil;
@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +34,7 @@ public class IdentifyInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private IamContext iamContext;
     @Autowired
-    private ImSysService imSysService;
+    private IamSysService userSysService;
 
     private static final String ACCESS_BACKEND = "up_access_backend";//是否访问后台获取用户状态，N为不访问，其余为访问
 
@@ -66,7 +67,7 @@ public class IdentifyInterceptor extends HandlerInterceptorAdapter {
                 user.setId(ucc.getUserid());
                 String personStr = (String) request.getSession().getAttribute(IamConstant.UP_USER);
                 UserVo userInSession = JSONObject.parseObject(personStr, UserVo.class);
-                user.setName(userInSession.getUsername());
+                user.setName(userInSession.getName());
                 user.setOrgId(userInSession.getOrgId());
                 user.setOrgName(userInSession.getOrgName());
                 user.setDeptId(userInSession.getDeptId());
@@ -77,7 +78,7 @@ public class IdentifyInterceptor extends HandlerInterceptorAdapter {
             }
         }
         if (user.isAccessBackend() && user.getAccessToken() != null) {
-            user.setAdministrator(imSysService.checkUserIsAdmin(user));
+            user.setAdministrator(userSysService.checkUserIsAdmin(user));
             user.setAccessBackend(false);
         }
         iamContext.setLogonUser(user);

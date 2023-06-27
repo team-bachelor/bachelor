@@ -4,6 +4,7 @@ package cn.org.bachelor.iam.service;
 import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.service.AuthorizeServiceStub;
+import cn.org.bachelor.iam.utils.StringUtils;
 import cn.org.bachelor.iam.vo.UserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,14 +39,8 @@ public class AccessControlInterceptor extends HandlerInterceptorAdapter {
 
     //private Set<String> urlCache;
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String requestMethod = request.getMethod().toLowerCase();
-        String requestPath = request.getServletPath();
-        String permCode = requestMethod + ":" + requestPath;
-        logger.info("进入权限拦截器：" + permCode);
-//        return true;
-        /** 判断请求方式是否符合规范 **/
-        PermissionOptions.AccessType accessType = PermissionOptions.AccessType.INTERFACE;
-        // 获取访问方法
+        PermissionOptions.AccessType accessType = null;
+        String requestPath = null;
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             RequestMapping requestAnno = handlerMethod.getMethodAnnotation(RequestMapping.class);
@@ -54,21 +49,14 @@ public class AccessControlInterceptor extends HandlerInterceptorAdapter {
             if (classRMs.length > 0) {
                 requestPath = (classRMs[0].value())[0] + requestPath;
             }
-            permCode = requestMethod + ":" + requestPath;
         } else if (handler instanceof ResourceHttpRequestHandler) {
             accessType = PermissionOptions.AccessType.RESOURCE;
-//            return true;
         } else {
             return true;
         }
 
-        UserVo user = iamContext.getUser();
-        String usercode = "";
-        if (user != null) {
-            usercode = user.getCode();
-        }
-        boolean pass = isPass(permCode, accessType, user, usercode);
-        logger.info("access path=[" + requestPath + "], from=[" + iamContext.getRemoteIP() + "], user=[" + usercode + "], is authorized=[" + pass + "]");
+        Boolean pass = checkAuthorized(request, accessType, requestPath);
+        if (pass == null) return true;
         if (!pass) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             try {
@@ -78,6 +66,28 @@ public class AccessControlInterceptor extends HandlerInterceptorAdapter {
                 e.printStackTrace();
             }
         }
+        return pass;
+    }
+
+    private Boolean checkAuthorized(HttpServletRequest request, PermissionOptions.AccessType accessType, String requestPath) {
+        String requestMethod = request.getMethod().toLowerCase();
+        if(StringUtils.isBlank(requestPath)){
+            requestPath = request.getServletPath();
+        }
+        if(accessType == null){
+            accessType = PermissionOptions.AccessType.INTERFACE;
+        }
+        String permCode = requestMethod + ":" + requestPath;
+        logger.info("进入权限拦截器：" + permCode);
+//        return true;
+        /** 判断请求方式是否符合规范 **/
+        UserVo user = iamContext.getUser();
+        String usercode = "";
+        if (user != null) {
+            usercode = user.getCode();
+        }
+        boolean pass = isPass(permCode, accessType, user, usercode);
+        logger.info("access path=[" + requestPath + "], from=[" + iamContext.getRemoteIP() + "], user=[" + usercode + "], is authorized=[" + pass + "]");
         return pass;
     }
 
