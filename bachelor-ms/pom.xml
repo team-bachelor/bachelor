@@ -11,10 +11,18 @@
 
 <!--    <groupId>cn.org.bachelor</groupId>-->
     <artifactId>bachelor-ms</artifactId>
+    <packaging>pom</packaging>
+    <name>bachelor-ms</name>
     <modules>
         <module>bachelor-ms-gateway</module>
     </modules>
-    <packaging>pom</packaging>
-    <name>bachelor-ms</name>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -7,7 +7,7 @@
         <artifactId>bachelor-dependencies</artifactId>
         <version>2.2.0-SNAPSHOT</version>
     </parent>
-<!--    <groupId>cn.org.bachelor</groupId>-->
+    <!--    <groupId>cn.org.bachelor</groupId>-->
     <artifactId>bachelor-fw</artifactId>
     <packaging>pom</packaging>
     <name>bachelor-fw</name>
@@ -20,4 +20,13 @@
         <module>bachelor-fw-web</module>
         <module>../bachelor-fw-ext</module>
     </modules>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>

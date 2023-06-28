@@ -54,6 +54,7 @@
         <bucket4j-core.version>8.1.0</bucket4j-core.version>
         <!--版本管理的maven插件-->
         <versions-maven-plugin.version>2.12.0</versions-maven-plugin.version>
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <!--XML转换为JSON-->
         <jettison.version>1.5.0</jettison.version>
         <!--为springboot添加配置说明和自动完成-->
@@ -61,6 +62,7 @@
         <!--远程调用-->
         <feign.version>1.4.7.RELEASE</feign.version>
         <nacos.version>2.2.0.RELEASE</nacos.version>
+        <nimbus-jose-jwt.version>9.31</nimbus-jose-jwt.version>
         <spring-cloud-nacos.version>0.9.0.RELEASE</spring-cloud-nacos.version>
         <bachelor-fw.version>2.2.0-SNAPSHOT</bachelor-fw.version>
         <bachelor-iam.version>2.2.0-SNAPSHOT</bachelor-iam.version>
@@ -268,6 +270,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${nimbus-jose-jwt.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -292,6 +299,22 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>versions-maven-plugin</artifactId>
                     <version>${versions-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                    <configuration>
+                        <attach>true</attach>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
