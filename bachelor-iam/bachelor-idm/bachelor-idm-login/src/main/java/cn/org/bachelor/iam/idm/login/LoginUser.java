@@ -30,6 +30,10 @@ public class LoginUser implements UserDetails, IUser {
 
     private String tenantId;
 
+    private String areaId;
+
+    private String areaName;
+
     private boolean isAdministrator;
 
     public LoginUser(User user) {

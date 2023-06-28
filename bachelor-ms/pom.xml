@@ -16,7 +16,6 @@
     <modules>
         <module>bachelor-ms-gateway</module>
     </modules>
-
     <build>
         <plugins>
             <plugin>

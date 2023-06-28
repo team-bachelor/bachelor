@@ -38,7 +38,7 @@
         <!--Spring Boot 应用的管理和监控-->
         <spring-boot-admin.version>2.7.5</spring-boot-admin.version>
         <!--spring jwt组件-->
-<!--        <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>-->
+        <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
         <!--springboot 打包插件-->
         <spring-boot-plugin.version>2.3.1.RELEASE</spring-boot-plugin.version>
         <!--api 文档工具-->
@@ -135,11 +135,11 @@
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.security</groupId>-->
-<!--                <artifactId>spring-security-jwt</artifactId>-->
-<!--                <version>${spring-security-jwt.version}</version>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-jwt</artifactId>
+                <version>${spring-security-jwt.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.bucket4j</groupId>
                 <artifactId>bucket4j_jdk8-core</artifactId>

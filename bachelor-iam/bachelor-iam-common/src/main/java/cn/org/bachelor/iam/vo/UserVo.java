@@ -56,8 +56,11 @@ public class UserVo implements IUser {
     @ApiModelProperty("区域ID")
     private String areaId;
 
+    @ApiModelProperty("区域名称")
+    private String areaName;
+
     @ApiModelProperty("扩展字段")
-    private Map<String,Object> extFields;
+    private Map<String, Object> extFields;
 
     public void setId(String id) {
         this.id = id;
@@ -134,6 +137,7 @@ public class UserVo implements IUser {
     public String getName() {
         return name;
     }
+
     public String getOrgCode() {
         return orgCode;
     }
@@ -184,5 +188,15 @@ public class UserVo implements IUser {
 
     public void setAreaId(String areaId) {
         this.areaId = areaId;
+    }
+
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+
+    @Override
+    public String getAreaName() {
+        return this.areaName;
     }
 }

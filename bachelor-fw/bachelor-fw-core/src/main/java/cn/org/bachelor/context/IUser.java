@@ -27,4 +27,8 @@ public interface IUser {
     String getTenantId();
 
     boolean isAdministrator();
+
+    String getAreaId();
+
+    String getAreaName();
 }
