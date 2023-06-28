@@ -5,14 +5,18 @@
  */
 package cn.org.bachelor.web.paging;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 /**
  * 分页拦截器
@@ -21,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class PageInterceptor extends HandlerInterceptorAdapter {
 
+    public static final String PAGE_NUM = "pageNum";
+    public static final String PAGE_SIZE = "pageSize";
     private Log log = LogFactory.getLog(this.getClass());
 
     /**
@@ -36,9 +42,22 @@ public class PageInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object obj) {
         try {
-            PageHelper.clearPage();
-            String pageNum = request.getParameter("pageNum");
-            String pageSize = request.getParameter("pageSize");
+            String pageNum = null;
+            String pageSize = null;
+            if (request.getMethod().equals(HttpMethod.GET.name())) {
+                pageNum = request.getParameter(PAGE_NUM);
+                pageSize = request.getParameter(PAGE_SIZE);
+            } else if (request.getMethod().equals(HttpMethod.POST.name())) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+                StringBuilder body = new StringBuilder("");
+                reader.lines().forEach(s -> {
+                    body.append(s);
+                });
+                JSONObject o = JSONObject.parseObject(body.toString());
+                pageNum = o.getString(PAGE_NUM);
+                pageSize = o.getString(PAGE_SIZE);
+
+            }
             if (StringUtils.isEmpty(pageNum) && StringUtils.isEmpty(pageSize)) {
                 log.debug("找不到分页标志，不开始分页处理。");
                 return true;
@@ -48,6 +67,7 @@ public class PageInterceptor extends HandlerInterceptorAdapter {
             Integer pageSizeInt = Integer.parseInt(pageSize);
 
             log.debug("找到分页标志，开始分页处理。");
+            PageHelper.clearPage();
             PageHelper.startPage(pageNumInt, pageSizeInt);
         } catch (Exception e) {
             log.error(e);

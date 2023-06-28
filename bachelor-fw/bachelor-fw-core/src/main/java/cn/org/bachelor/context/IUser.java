@@ -10,11 +10,17 @@ public interface IUser {
 
     String getId();
 
+    String getName();
+
     String getCode();
 
     String getOrgId();
 
+    String getOrgName();
+
     String getDeptId();
+
+    String getDeptName();
 
     String getAccessToken();
 
