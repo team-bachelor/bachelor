@@ -2,7 +2,6 @@ package cn.org.bachelor.iam.idm.login.config;
 
 import cn.org.bachelor.iam.IamConfiguration;
 import cn.org.bachelor.iam.idm.login.security.entryPoint.AuthAuthenticationEntryPoint;
-import cn.org.bachelor.iam.idm.login.security.filter.UserIdentifyFilter;
 import cn.org.bachelor.iam.idm.login.security.handler.JsonAccessDeniedHandler;
 import cn.org.bachelor.iam.idm.login.security.provider.LoginAuthenticationProvider;
 import cn.org.bachelor.iam.idm.login.service.UserDetailsService;
@@ -17,7 +16,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
@@ -37,8 +35,6 @@ public class IamLocalLoginConfig extends WebSecurityConfigurerAdapter {
      */
     private String[] excludePathPatterns;
 
-    private boolean enableGateway = true;
-
     @Resource
     private IamConfiguration config;
 
@@ -48,8 +44,8 @@ public class IamLocalLoginConfig extends WebSecurityConfigurerAdapter {
     @Resource
     private LoginAuthenticationProvider loginAuthenticationProvider;
 
-    @Resource
-    private UserIdentifyFilter userIdentifyFilter;
+//    @Resource
+//    private UserIdentifyFilter userIdentifyFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -75,7 +71,7 @@ public class IamLocalLoginConfig extends WebSecurityConfigurerAdapter {
 
         //把token校验过滤器添加到过滤器链中
 //        http.addFilterBefore(userIdentifyFilter, JwtAuthenticationTokenFilter.class);
-        http.addFilterBefore(userIdentifyFilter, UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(userIdentifyFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler())
                 .authenticationEntryPoint(new AuthAuthenticationEntryPoint());;
@@ -105,15 +101,6 @@ public class IamLocalLoginConfig extends WebSecurityConfigurerAdapter {
 
     public String getPrivateKey() {
         return config.getPrivateKey();
-    }
-
-
-    public void setEnableGateway(boolean enableGateway) {
-        this.enableGateway = enableGateway;
-    }
-
-    public boolean isEnableGateway() {
-        return enableGateway;
     }
 }
 

@@ -89,7 +89,7 @@ public class CheckAuthPreFilter implements GlobalFilter {
 
         ServerHttpRequest host = request;
         boolean pass = true;
-        boolean isValidToekn = false;
+        boolean isValidToken = false;
         JwtToken jwtToken = null;
         try {
             jwtToken = JwtToken.decode(token);
@@ -98,8 +98,8 @@ public class CheckAuthPreFilter implements GlobalFilter {
             logger.warn("invalid_authorization", token);
         }
         if (token != null && !"".equals(token)) {
-            isValidToekn = JwtUtil.isValidToken(jwtToken);
-            if (jwtToken != null && isValidToekn) {
+            isValidToken = JwtUtil.isValidToken(jwtToken);
+            if (jwtToken != null && isValidToken) {
                 //TODO 安全性有待提高
                 Map<String, Object> tokenClaims = new HashMap<>(jwtToken.getClaims().size());
                 tokenClaims.putAll(jwtToken.getClaims());
@@ -121,7 +121,9 @@ public class CheckAuthPreFilter implements GlobalFilter {
                         .header(JwtToken.PayloadKey.ORG_NAME,
                                 getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.ORG_NAME, true))
                         .header(JwtToken.PayloadKey.ACCESS_TOKEN,
-                                getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.ACCESS_TOKEN, false));
+                                getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.ACCESS_TOKEN, false))
+                        .header(JwtToken.PayloadKey.VER,
+                                getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.VER, false));
 
                 tokenClaims.keySet().forEach(key -> {
                     builder.header(key, getAndTokenClaim(tokenClaims, key, false, false));
@@ -153,7 +155,7 @@ public class CheckAuthPreFilter implements GlobalFilter {
         //如果没权限则返回401
         ServerHttpResponse response = exchange.getResponse();
         JsonResponse<String> jr = null;
-        if (isValidToekn) {
+        if (isValidToken) {
             response.setStatusCode(HttpStatus.LOCKED);
             //构造返回内容的body
             jr = new JsonResponse();

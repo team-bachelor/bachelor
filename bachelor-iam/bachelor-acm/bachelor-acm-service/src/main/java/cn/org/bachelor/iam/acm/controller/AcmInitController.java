@@ -54,7 +54,7 @@ public class AcmInitController {
     @GetMapping(value = "/init")
     public ResponseEntity<JsonResponse> initPermissions() {
         List<ObjPermissionVo> list = getObjPermissionVos();
-        String userCode = iamContext.getCurrentUserCode();
+        String userCode = iamContext.getUserCode();
         Map<String, ObjOperation> opMap = new HashMap<>();
         Map<String, ObjDomain> domainMap = new HashMap<>();
         List<ObjPermission> permissions = new ArrayList<>(list.size());

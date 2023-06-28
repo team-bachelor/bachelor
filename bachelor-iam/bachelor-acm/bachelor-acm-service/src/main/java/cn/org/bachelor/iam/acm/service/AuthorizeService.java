@@ -12,6 +12,7 @@ import cn.org.bachelor.iam.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
@@ -25,6 +26,8 @@ import java.util.*;
  * @创建时间 2018/10/22
  */
 @Service
+@ConditionalOnProperty(prefix = "bachelor.iam",
+        name = {"service-provider"}, havingValue = "db", matchIfMissing = true)
 public class AuthorizeService implements AuthorizeServiceStub {
     private static final Logger logger = LoggerFactory.getLogger(AuthorizeService.class);
 

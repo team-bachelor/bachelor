@@ -4,6 +4,7 @@ package cn.org.bachelor.iam.acm.service;
 import cn.org.bachelor.iam.acm.permission.PermissionGroup;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.permission.PermissionPoint;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.Map;
  * @author liuzhuo
  */
 @Service
+@ConditionalOnProperty(prefix = "bachelor.iam",
+        name = {"service-provider"}, havingValue = "rpc")
 public class AuthorizeServiceClientFallback implements AuthorizeServiceClient {
 
 //    @Override

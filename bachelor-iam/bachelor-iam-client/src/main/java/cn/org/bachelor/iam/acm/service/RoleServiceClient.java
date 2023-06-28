@@ -2,6 +2,7 @@ package cn.org.bachelor.iam.acm.service;
 
 import cn.org.bachelor.iam.acm.domain.Role;
 import cn.org.bachelor.iam.vo.UserVo;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,8 @@ import java.util.List;
 //@Component("remoteRoleService")
 @Component
 @FeignClient(value = "${bachelor.iam.service-name.role-service:bachelor-ms-iam-service}", contextId = "RoleServiceClient", path = "/acm/rpc/role", fallback = RoleServiceClientFallback.class)
+@ConditionalOnProperty(prefix = "bachelor.iam",
+        name = {"service-provider"}, havingValue = "rpc")
 public interface RoleServiceClient extends RoleServiceStub {
 
 

@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 public class DacWebInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LoggerFactory.getLogger(DacWebInterceptor.class);
 
-    private static final String ACCESS_BACKEND = "up_access_backend";//是否访问后台获取用户状态，N为不访问，其余为访问
 
     private DacConfiguration configuration;
 

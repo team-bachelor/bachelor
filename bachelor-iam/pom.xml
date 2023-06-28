@@ -16,7 +16,7 @@
 
     <modules>
         <module>bachelor-iam-common</module>
-        <module>bachelor-iam-service</module>
+        <module>bachelor-iam-standalone-runner</module>
         <module>bachelor-iam-client</module>
         <module>bachelor-idm</module>
         <module>bachelor-acm</module>

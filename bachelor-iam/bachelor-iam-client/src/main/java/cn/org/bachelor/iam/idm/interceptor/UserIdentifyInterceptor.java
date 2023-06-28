@@ -1,5 +1,6 @@
 package cn.org.bachelor.iam.idm.interceptor;
 
+import cn.org.bachelor.iam.IamConfiguration;
 import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.credential.AbstractIamCredential;
@@ -14,13 +15,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+
+import static cn.org.bachelor.iam.IamConstant.ACCESS_BACKEND;
 
 /**
- * 权限拦截器
+ * 访问身份识别拦截器
  * <p>
  * <b>NOTE:</b> 根据已经配置的服务和功能授权信息，控制用户的访问权限
  *
@@ -33,65 +40,118 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private IamContext iamContext;
     @Autowired
-    private IamSysService imSysService;
+    private IamSysService iamSysService;
+    @Resource
+    private IamConfiguration config;
 
-    private static final String ACCESS_BACKEND = "up_access_backend";//是否访问后台获取用户状态，N为不访问，其余为访问
 
     //private Set<String> urlCache;
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         logger.info("进入用户信息拦截器，开始组装用户信息：" + request.getServletPath());
-        UserVo user = new UserVo();
-        user.setId(request.getHeader(JwtToken.PayloadKey.USER_ID));
-        user.setCode(request.getHeader(JwtToken.PayloadKey.USER_CODE));
-        user.setName(urlDecode(request.getHeader(JwtToken.PayloadKey.USER_NAME)));
-        user.setOrgCode(request.getHeader(JwtToken.PayloadKey.ORG_CODE));
-        user.setOrgName(urlDecode(request.getHeader(JwtToken.PayloadKey.ORG_NAME)));
-        user.setOrgId(request.getHeader(JwtToken.PayloadKey.ORG_ID));
-        user.setDeptId(request.getHeader(JwtToken.PayloadKey.DEPT_ID));
-        user.setDeptName(request.getHeader(JwtToken.PayloadKey.DEPT_NAME));
-        user.setAccessToken(request.getHeader(JwtToken.PayloadKey.ACCESS_TOKEN));
-        user.setTenantId(request.getHeader(JwtToken.PayloadKey.TENANT_ID));
-        Object o = request.getAttribute(ACCESS_BACKEND);
-        if (o != null && "N".equals(o.toString())) {
-            user.setAccessBackend(false);
-        } else {
-            user.setAccessBackend(true);
-        }
 
+        UserVo user = getUserVoFromRequest(request);
         if (logger.isDebugEnabled()) {
             logger.debug("user info assembly: " + JSONObject.toJSONString(user));
         }
+        if (user == null) {
+            return true;
+        }
         //如果header里面没取到，则尝试从session里面取
-        if (user.getAccessToken() == null || "".equals(user.getAccessToken())) {
+        if (StringUtils.isNotBlank(user.getAccessToken())) {
             AbstractIamCredential ucc = (AbstractIamCredential) request.getSession().getAttribute(IamConstant.SESSION_AUTHENTICATION_KEY);
             if (ucc != null) {
                 user.setAccessToken((String) ucc.getCredential());
                 user.setId(ucc.getSubject());
-                String personStr = (String) request.getSession().getAttribute(IamConstant.UP_USER);
-//                String orgId = (String) request.getSession().getAttribute(IamConstant.UP_ORG_ID);
-//                String userName = (String) request.getSession().getAttribute(IamConstant.UP_USER_NAME);
-//                String orgName = (String) request.getSession().getAttribute(IamConstant.UP_ORG_NAME);
-//                String deptId = (String) request.getSession().getAttribute(IamConstant.UP_DEPT_ID);
-//                String deptName = (String) request.getSession().getAttribute(IamConstant.UP_DEPT_NAME);
-                UserVo userInSession = JSONObject.parseObject(personStr, UserVo.class);
-                user.setName(userInSession.getName());
-                user.setOrgId(userInSession.getOrgId());
-                user.setOrgName(userInSession.getOrgName());
-                user.setDeptId(userInSession.getDeptId());
-                user.setDeptName(userInSession.getDeptName());
+                String ver = request.getHeader(JwtToken.PayloadKey.VER);
+                if (StringUtils.isBlank(ver) || JwtToken.Ver1.equals(ver)) {
+                    user.setOrgId(getSessionString(request, IamConstant.UP_ORG_ID));
+                    user.setName(getSessionString(request, IamConstant.UP_USER_NAME));
+                    user.setOrgName(getSessionString(request, IamConstant.UP_ORG_NAME));
+                    user.setDeptId(getSessionString(request, IamConstant.UP_DEPT_ID));
+                    user.setDeptName(getSessionString(request, IamConstant.UP_DEPT_NAME));
+                } else if (JwtToken.Ver2.equals(ver)) {
+                    String personStr = getSessionString(request, IamConstant.UP_USER);
+                    UserVo userInSession = JSONObject.parseObject(personStr, UserVo.class);
+                    user.setName(userInSession.getName());
+                    user.setOrgId(userInSession.getOrgId());
+                    user.setOrgName(userInSession.getOrgName());
+                    user.setDeptId(userInSession.getDeptId());
+                    user.setDeptName(userInSession.getDeptName());
+                }
                 if (logger.isDebugEnabled()) {
                     logger.debug("user info in session: " + JSONObject.toJSONString(user));
                 }
             }
         }
-        if (user.isAccessBackend() && user.getAccessToken() != null) {
-            user.setAdministrator(imSysService.checkUserIsAdmin(user));
-            user.setAccessBackend(false);
-        }
-        iamContext.setLogonUser(user);
+        iamContext.setUser(user);
 
         iamContext.setRemoteIP(RequestUtil.getIpAddr(request));
         return true;
+    }
+
+    private String getSessionString(HttpServletRequest request, String key) {
+        return (String) request.getSession().getAttribute(key);
+    }
+
+    private UserVo getUserVoFromRequest(HttpServletRequest request) {
+        boolean enableGateWay = config.isEnableGateway();
+
+        UserVo user = new UserVo();
+        Map<String, Object> claims;
+        if (enableGateWay) {
+//            if (StringUtils.isBlank(ver) || JwtToken.Ver1.equals(ver)) {
+            claims = getHeaderMap(request);
+//            } else if (JwtToken.Ver2.equals(ver)) {
+//                String claimsJson = request.getHeader(JwtToken.PayloadKey.CLAIMS);
+//                claims = JSONObject.parseObject(claimsJson);
+//            }
+        } else {
+            String tokenString = request.getHeader(IamConstant.HTTP_HEADER_TOKEN_KEY);
+            if (StringUtils.isEmpty(tokenString)) {
+                return null;
+            }
+            JwtToken jwt = JwtToken.decode(tokenString);
+            claims = jwt.getClaims();
+        }
+        fillUserByClaims(user, claims);
+        Object o = request.getAttribute(ACCESS_BACKEND);
+        user.setAccessBackend(!(o != null && "N".equals(o.toString())));
+        if (user.isAccessBackend() && user.getAccessToken() != null) {
+            user.setAdministrator(iamSysService.checkUserIsAdmin(user));
+            user.setAccessBackend(false);
+        }
+        return user;
+    }
+
+    private Map<String, Object> getHeaderMap(HttpServletRequest request) {
+        Map<String, Object> headers = new HashMap<>();
+        Enumeration<String> names = request.getHeaderNames();
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            headers.put(name, request.getHeader(name));
+        }
+        return headers;
+    }
+
+    private void fillUserByClaims(UserVo user, Map<String, Object> claims) {
+        if (claims == null || claims.size() == 0) {
+            return;
+        }
+        user.setId(getJwtClaim(JwtToken.PayloadKey.USER_ID, claims));
+        user.setCode(getJwtClaim(JwtToken.PayloadKey.USER_CODE, claims));
+        user.setName(urlDecode(getJwtClaim(JwtToken.PayloadKey.USER_NAME, claims)));
+        user.setOrgCode(getJwtClaim(JwtToken.PayloadKey.ORG_CODE, claims));
+        user.setOrgName(urlDecode(getJwtClaim(JwtToken.PayloadKey.ORG_NAME, claims)));
+        user.setOrgId(getJwtClaim(JwtToken.PayloadKey.ORG_ID, claims));
+        user.setDeptId(getJwtClaim(JwtToken.PayloadKey.DEPT_ID, claims));
+        user.setDeptName(getJwtClaim(JwtToken.PayloadKey.DEPT_NAME, claims));
+        user.setAccessToken(getJwtClaim(JwtToken.PayloadKey.ACCESS_TOKEN, claims));
+        user.setTenantId(getJwtClaim(JwtToken.PayloadKey.TENANT_ID, claims));
+        user.setAreaId(getJwtClaim(JwtToken.PayloadKey.AREA_ID, claims));
+    }
+
+    private String getJwtClaim(String key, Map<String, Object> claims) {
+        return claims.containsKey(key) ? claims.get(key).toString() : "";
     }
 
 

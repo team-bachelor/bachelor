@@ -7,10 +7,8 @@ package cn.org.bachelor.iam;
 
 import cn.org.bachelor.context.IContext;
 import cn.org.bachelor.context.IUserContext;
-import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.iam.utils.StringUtils;
 import cn.org.bachelor.iam.vo.UserVo;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -33,7 +31,7 @@ public class IamContext implements IUserContext {
 
     @Deprecated
     public void setCurrentUser(UserVo user) {
-        setLogonUser(user);
+        setUser(user);
     }
 
     @Deprecated
@@ -46,7 +44,7 @@ public class IamContext implements IUserContext {
         return user == null ? false : StringUtils.isEmpty(user.getAccessToken()) ? false : true;
     }
 
-    public void setLogonUser(UserVo user) {
+    public void setUser(UserVo user) {
         baseContext.setRequestAttribute(IamConstant.USER_KEY, user);
     }
 
@@ -58,7 +56,7 @@ public class IamContext implements IUserContext {
         return null;
     }
 
-    public String getCurrentUserCode() {
+    public String getUserCode() {
         UserVo user = getUser();
         String name = "user_unknown";
         if (user != null && user.getCode() != null) {

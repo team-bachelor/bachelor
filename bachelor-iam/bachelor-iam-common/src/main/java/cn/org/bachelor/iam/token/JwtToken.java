@@ -4,10 +4,12 @@ import cn.org.bachelor.context.IUser;
 import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.exception.SystemException;
 import cn.org.bachelor.iam.credential.AbstractIamCredential;
+import cn.org.bachelor.iam.utils.StringUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
+
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -22,6 +24,9 @@ import static cn.org.bachelor.iam.token.JwtToken.PayloadKey.*;
 //TODO 处理过时的spring security方法
 public class JwtToken {
 
+    public static final String Ver1 = "VER_1";
+    public static final String Ver2 = "VER_2";
+
     public static class PayloadKey {
         public static final String ISS = "iss";
         public static final String SUB = "sub";
@@ -31,6 +36,7 @@ public class JwtToken {
         public static final String IAT = "iat";
         public static final String JTI = "jti";
         public static final String VER = "ver";
+        public static final String CLAIMS = "claims";
         public static final String USER_ID = "userId";
         public static final String USER_NAME = "user_name";
         public static final String USER_CODE = "user_code";
@@ -76,7 +82,7 @@ public class JwtToken {
     }
 
     public static JwtToken create(IUser userDetail, AbstractIamCredential credential) {
-        if(userDetail == null){
+        if (userDetail == null) {
             throw new BusinessException("user detail can not be null!");
         }
         Date expTime_Date = credential.getExpiresTime();
@@ -93,6 +99,7 @@ public class JwtToken {
         token.setAud("");// 接收jwt的一方
         token.setNbf(0L);
         token.setJti("");
+        token.setVer(JwtToken.Ver2);
         Map<String, Object> map = new LinkedHashMap<>();
         map.put(USER_NAME, userDetail.getName());
         map.put(USER_CODE, userDetail.getCode());
@@ -180,7 +187,9 @@ public class JwtToken {
             JWSObject jwsObject = JWSObject.parse(token);
             String payload = jwsObject.getPayload().toString();
             JwtToken payloadDto = JSONObject.parseObject(payload, JwtToken.class);
-//            payloadDto.setClaims(JSONObject.parseObject(payload));
+            if (StringUtils.isBlank(payloadDto.getVer()) || Ver1.equals(payloadDto.getVer())) {
+                payloadDto.setClaims(JSONObject.parseObject(payload));
+            }
             return payloadDto;
         } catch (Exception e) {
             throw new SystemException(e);

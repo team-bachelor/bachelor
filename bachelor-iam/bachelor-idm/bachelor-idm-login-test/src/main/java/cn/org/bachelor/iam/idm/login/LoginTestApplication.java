@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication(scanBasePackages = {"cn.org.bachelor"})
-@MapperScan("cn.org.bachelor.iam.idm.login.dao")
+@MapperScan({"cn.org.bachelor.iam.idm.login.dao","cn.org.bachelor.iam.acm.dao"})
 public class LoginTestApplication {
 
     public static void main(String[] args) {

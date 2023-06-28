@@ -54,6 +54,11 @@ public class IamConfiguration {
     private String privateKeyFile = "/id_rsa";
 
 
+    /**
+     * 是否启用网关
+     */
+    private boolean enableGateway = true;
+
     private String privateKey;
     public String getPrivateKey(){
         return privateKey;
@@ -130,5 +135,14 @@ public class IamConfiguration {
 
     public void setLoginURL(String loginURL) {
         this.loginURL = loginURL;
+    }
+
+
+    public void setEnableGateway(boolean enableGateway) {
+        this.enableGateway = enableGateway;
+    }
+
+    public boolean isEnableGateway() {
+        return enableGateway;
     }
 }

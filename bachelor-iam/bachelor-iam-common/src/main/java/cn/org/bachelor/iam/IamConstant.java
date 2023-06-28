@@ -8,7 +8,7 @@ package cn.org.bachelor.iam;
 public class IamConstant {
     public static final String USER_KEY = "BACHELOR_USER_HOLD_KEY";
     public static final String HTTP_HEADER_TOKEN_KEY = "bachelor_authorization";
-
+    public static final String ACCESS_BACKEND = "up_access_backend";//是否访问后台获取用户状态，N为不访问，其余为访问
     public static final String UP_USER_ID = "_up_user_id";
     public static final String UP_OPEN_ID = "_up_open_id";
     public static final String UP_USER = "_up_user";

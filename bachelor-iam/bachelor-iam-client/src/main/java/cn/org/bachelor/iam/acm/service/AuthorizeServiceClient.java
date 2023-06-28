@@ -4,6 +4,7 @@ package cn.org.bachelor.iam.acm.service;
 import cn.org.bachelor.iam.acm.permission.PermissionGroup;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.permission.PermissionPoint;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,8 @@ import java.util.Map;
  */
 @Component
 @FeignClient(value = "${bachelor.iam.service-name.authorize-service:bachelor-ms-iam-service}", contextId = "AuthorizeServiceClient", path = "/acm/rpc/role", fallback = AuthorizeServiceClientFallback.class)
+@ConditionalOnProperty(prefix = "bachelor.iam",
+        name = {"service-provider"}, havingValue = "rpc")
 public interface AuthorizeServiceClient extends AuthorizeServiceStub {
     /**
      * 根据用户编码判断用户是否能访问当前对象

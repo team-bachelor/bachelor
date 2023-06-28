@@ -48,7 +48,7 @@ public class MenuService {
     public void insert(Menu m) {
         m.setId(UUID.randomUUID().toString());
         m.setUpdateTime(new Date());
-        String userCode = iamContext.getCurrentUserCode();
+        String userCode = iamContext.getUserCode();
         m.setUpdateUser(userCode == null ? iamContext.getRemoteIP() : userCode);
         menuMapper.insert(m);
     }
@@ -60,7 +60,7 @@ public class MenuService {
      */
     public void update(Menu m) {
         m.setUpdateTime(new Date());
-        String userCode = iamContext.getCurrentUserCode();
+        String userCode = iamContext.getUserCode();
         m.setUpdateUser(userCode == null ? iamContext.getRemoteIP() : userCode);
         menuMapper.updateByPrimaryKey(m);
     }

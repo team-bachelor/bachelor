@@ -15,6 +15,7 @@ import cn.org.bachelor.iam.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -27,8 +28,8 @@ import java.util.*;
  */
 //@Service("dbRoleService")
 @Service
-//@ConditionalOnProperty(prefix = "bachelor.iam",
-//        name={"service-provider"}, havingValue = "local", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "bachelor.iam",
+        name = {"service-provider"}, havingValue = "db", matchIfMissing = true)
 public class RoleService implements RoleServiceStub {
 
     @Autowired

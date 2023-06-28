@@ -12,17 +12,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-@Service
+import static cn.org.bachelor.iam.IamConstant.ACCESS_BACKEND;
+
+//@Service
 public class UserIdentifyService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserIdentifyInterceptor.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserIdentifyService.class);
 
     @Autowired
     private IamContext iamContext;
@@ -30,7 +31,6 @@ public class UserIdentifyService {
     @Autowired
     private IamSysService iamSysService;
 
-    private static final String ACCESS_BACKEND = "up_access_backend";//是否访问后台获取用户状态，N为不访问，其余为访问
 
     private String urlDecode(String param) {
         try {
@@ -85,7 +85,7 @@ public class UserIdentifyService {
             user.setAdministrator(iamSysService.checkUserIsAdmin(user));
             user.setAccessBackend(false);
         }
-        iamContext.setLogonUser(user);
+        iamContext.setUser(user);
 
         iamContext.setRemoteIP(RequestUtil.getIpAddr(request));
         return user;
