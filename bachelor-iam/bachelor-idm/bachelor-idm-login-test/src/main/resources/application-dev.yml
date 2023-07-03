@@ -102,7 +102,7 @@ bachelor:
   iam:
     enable-gateway: false
     login:
-#    enable_user_access_control: false
+    enable_user_access_control: false
     ########################################↓权限配置↓########################################
     client:
       id: 8872cb73cb054676aeeadfe97f0ba400

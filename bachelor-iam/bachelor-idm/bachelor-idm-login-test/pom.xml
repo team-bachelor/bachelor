@@ -80,8 +80,15 @@
         </plugins>
         <resources>
             <resource>
+                <directory>src/main/resources</directory><!--所在的目录-->
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
                 <directory>src/main/java</directory><!--所在的目录-->
-                <includes><!--包括目录下的.properties,.xml文件都会扫描到-->
+                <includes>
                     <include>**/*.properties</include>
                     <include>**/*.xml</include>
                 </includes>

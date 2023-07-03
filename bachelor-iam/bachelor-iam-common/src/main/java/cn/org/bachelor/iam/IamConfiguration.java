@@ -11,9 +11,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
+ * @author liuzhuo
  * @描述
  * @创建时间 2018/11/5
- * @author liuzhuo
  */
 @Configuration
 @ConfigurationProperties(prefix = "bachelor.iam")
@@ -60,13 +60,17 @@ public class IamConfiguration {
     private boolean enableGateway = true;
 
     private String privateKey;
-    public String getPrivateKey(){
+
+    public String getPrivateKey() {
         return privateKey;
     }
 
     @PostConstruct
-    private void init(){
-        privateKey = readPrivateKey();
+    private void init() {
+        if (!StringUtils.isEmpty(this.privateKey)) {
+            return;
+        }
+        this.privateKey = readPrivateKey();
     }
 
     public String readPrivateKey() {

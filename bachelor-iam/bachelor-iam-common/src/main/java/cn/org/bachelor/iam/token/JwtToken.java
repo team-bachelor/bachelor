@@ -187,7 +187,7 @@ public class JwtToken {
             JWSObject jwsObject = JWSObject.parse(token);
             String payload = jwsObject.getPayload().toString();
             JwtToken payloadDto = JSONObject.parseObject(payload, JwtToken.class);
-            if (StringUtils.isBlank(payloadDto.getVer()) || Ver1.equals(payloadDto.getVer())) {
+            if (StringUtils.isEmpty(payloadDto.getVer()) || Ver1.equals(payloadDto.getVer())) {
                 payloadDto.setClaims(JSONObject.parseObject(payload));
             }
             return payloadDto;

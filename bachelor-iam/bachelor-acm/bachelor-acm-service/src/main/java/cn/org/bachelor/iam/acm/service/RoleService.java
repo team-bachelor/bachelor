@@ -43,7 +43,7 @@ public class RoleService implements RoleServiceStub {
     @Autowired
     private IamSysService iamSysService;
 
-    @Value("bachelor.iam.client.id:''")
+    @Value("${bachelor.iam.client.id:}")
     private String clientId;
 
     /**

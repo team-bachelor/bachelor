@@ -177,7 +177,7 @@ public class IdmRsController {
     }
 
 
-    @Value("${spring.application.portal-code:''}")
+    @Value("${spring.application.portal-code:}")
     private String portalCode;
 
     @ApiOperation(value = "获取跳转会portal的地址")

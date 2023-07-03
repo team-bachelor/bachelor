@@ -10,9 +10,9 @@
     </parent>
 
     <artifactId>bachelor-idm-login</artifactId>
+    <version>2.2.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>bachelor-idm-login</name>
-    <version>2.2.1-SNAPSHOT</version>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>

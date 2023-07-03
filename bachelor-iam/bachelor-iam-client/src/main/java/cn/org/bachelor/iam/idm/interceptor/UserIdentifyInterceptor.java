@@ -63,7 +63,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
                 user.setAccessToken((String) ucc.getCredential());
                 user.setId(ucc.getSubject());
                 String ver = request.getHeader(JwtToken.PayloadKey.VER);
-                if (StringUtils.isBlank(ver) || JwtToken.Ver1.equals(ver)) {
+                if (StringUtils.isEmpty(ver) || JwtToken.Ver1.equals(ver)) {
                     user.setOrgId(getSessionString(request, IamConstant.UP_ORG_ID));
                     user.setName(getSessionString(request, IamConstant.UP_USER_NAME));
                     user.setOrgName(getSessionString(request, IamConstant.UP_ORG_NAME));
@@ -157,7 +157,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
 
     private String urlDecode(String param) {
         try {
-            return StringUtils.isBlank(param) ? StringUtils.EMPTY : URLDecoder.decode(param, "UTF-8");
+            return StringUtils.isEmpty(param) ? StringUtils.EMPTY : URLDecoder.decode(param, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             return "";
         }
