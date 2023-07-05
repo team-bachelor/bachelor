@@ -6,6 +6,7 @@ import cn.org.bachelor.iam.credential.AbstractIamCredential;
 import cn.org.bachelor.iam.idm.login.*;
 import cn.org.bachelor.iam.idm.login.config.IamLocalLoginConfig;
 import cn.org.bachelor.iam.idm.login.credential.UsernamePasswordCredential;
+import cn.org.bachelor.iam.idm.login.event.LoginEvent;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;

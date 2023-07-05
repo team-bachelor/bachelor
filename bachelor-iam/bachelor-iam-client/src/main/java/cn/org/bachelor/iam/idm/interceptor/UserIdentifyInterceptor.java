@@ -112,7 +112,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
         Object o = request.getAttribute(ACCESS_BACKEND);
         user.setAccessBackend(!(o != null && "N".equals(o.toString())));
         if (user.isAccessBackend() && user.getAccessToken() != null) {
-            user.setAdministrator(iamSysService.checkUserIsAdmin(user));
+            user.setAdministrator(iamSysService.assertIsAdmin(user));
             user.setAccessBackend(false);
         }
         return user;

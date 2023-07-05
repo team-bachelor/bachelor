@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.idm.login.service;
 
-import cn.org.bachelor.iam.idm.service.IamSysService;
 import cn.org.bachelor.iam.idm.service.IamSysParam;
+import cn.org.bachelor.iam.idm.service.IamSysService;
 import cn.org.bachelor.iam.vo.*;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +22,6 @@ public class DefaultLocalIamService implements IamSysService {
     @Override
     public List<AppVo> findUserApps(String userId) {
         return null;
-    }
-
-    @Override
-    public boolean assertIsAdmin(UserVo user) {
-        return false;
     }
 
     @Override
@@ -95,18 +90,23 @@ public class DefaultLocalIamService implements IamSysService {
     }
 
     @Override
-    public void logout(String account) {
+    public boolean assertIsAdmin(UserVo user) {
+        return false;
+    }
 
+    @Override
+    public Object login(Object account) {
+        return null;
+    }
+
+    @Override
+    public Object logout(Object account) {
+        return null;
     }
 
     @Override
     public Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response, Object refreshToken) {
         return null;
-    }
-
-    @Override
-    public boolean checkUserIsAdmin(UserVo user) {
-        return false;
     }
 
     @Override

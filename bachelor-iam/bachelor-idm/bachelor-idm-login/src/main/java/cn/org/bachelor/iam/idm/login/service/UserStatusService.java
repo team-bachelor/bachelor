@@ -3,7 +3,7 @@ package cn.org.bachelor.iam.idm.login.service;
 import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.acm.UserType;
 import cn.org.bachelor.iam.acm.domain.UserStatus;
-import cn.org.bachelor.iam.idm.login.LoginEvent;
+import cn.org.bachelor.iam.idm.login.event.LoginEvent;
 import cn.org.bachelor.iam.idm.login.credential.UsernamePasswordCredential;
 import cn.org.bachelor.iam.idm.login.dao.UserStatusMapper;
 import cn.org.bachelor.web.util.UuidUtil;

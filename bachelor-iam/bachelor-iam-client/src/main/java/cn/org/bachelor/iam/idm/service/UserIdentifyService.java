@@ -82,7 +82,7 @@ public class UserIdentifyService {
             }
         }
         if (user.isAccessBackend() && user.getAccessToken() != null) {
-            user.setAdministrator(iamSysService.checkUserIsAdmin(user));
+            user.setAdministrator(iamSysService.assertIsAdmin(user));
             user.setAccessBackend(false);
         }
         iamContext.setUser(user);

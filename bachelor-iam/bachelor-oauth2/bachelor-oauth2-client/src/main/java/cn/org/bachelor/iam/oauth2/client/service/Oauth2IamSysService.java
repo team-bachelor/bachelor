@@ -72,31 +72,6 @@ public class Oauth2IamSysService implements IamSysService {
     }
 
     @Override
-    public boolean checkUserIsAdmin(UserVo user) {
-        logger.info("用户：[" + user.getName() + "]获取管理员标志");
-        boolean isadmin = false;
-
-        try {
-            if (StringUtils.isNotEmpty(user.getId()) && StringUtils.isNotEmpty(user.getOrgId())) {
-                long now = (new Date()).getTime();
-                if (!adminCache.containsKey(user.getId()) && (adminCache.get(user.getId())).time < now - 120000L) {
-                    isadmin = this.isAdministrator(user);
-                    adminCache.remove(user.getId());
-                    adminCache.put(user.getId(), new Oauth2IamSysService.AdminCache(isadmin, now));
-                } else {
-                    isadmin = (adminCache.get(user.getId())).isAdmin;
-                }
-            }
-        } catch (Exception var5) {
-            logger.debug(var5.getMessage());
-        }
-
-        user.setAdministrator(isadmin);
-        logger.info("用户：[" + user.getName() + "]管理员标志:" + isadmin);
-        return isadmin;
-    }
-
-    @Override
     public Map<String, Object> getAccessToken(HttpServletRequest request, HttpServletResponse response, String code) {
         OAuth2Client client = new OAuth2Client(clientConfig, ClientHelper.startClient(request, response));
         JSONObject user = null;
@@ -268,7 +243,7 @@ public class Oauth2IamSysService implements IamSysService {
      * @param orgId
      * @return
      */
-    private List<UserVo> findUsers(String orgId) {
+    private List<UserVo> findUsersByOrgId(String orgId) {
         IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
         return findUsers(param);
@@ -461,7 +436,7 @@ public class Oauth2IamSysService implements IamSysService {
             set2TopOrg(org.getParent(), org);
         }
 
-        List<UserVo> users = findUsers(orgId);
+        List<UserVo> users = findUsersByOrgId(orgId);
         Map<String, List<UserVo>> userMap = new HashMap<>(flatOrgs.size());
         if (logger.isDebugEnabled())
             logger.debug("==============数据库中的用户=============");
@@ -494,10 +469,15 @@ public class Oauth2IamSysService implements IamSysService {
     private String bachelorPrefix = "bachelor";
 
     @Override
-    public void logout(String account) {
+    public Object login(Object account) {
+        return null;
+    }
+    @Override
+    public Object logout(Object account) {
 //        if (!org.springframework.util.StringUtils.isEmpty(account)) {
 //            redisTemplate.opsForValue().set(delPrefix + account, "LO", timeout, TimeUnit.DAYS);
 //        }
+        return null;
     }
 
     @Override

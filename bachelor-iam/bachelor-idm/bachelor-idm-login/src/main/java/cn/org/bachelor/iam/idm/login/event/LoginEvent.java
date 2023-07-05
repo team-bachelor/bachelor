@@ -1,4 +1,4 @@
-package cn.org.bachelor.iam.idm.login;
+package cn.org.bachelor.iam.idm.login.event;
 
 import cn.org.bachelor.iam.idm.login.credential.UsernamePasswordCredential;
 import lombok.Getter;

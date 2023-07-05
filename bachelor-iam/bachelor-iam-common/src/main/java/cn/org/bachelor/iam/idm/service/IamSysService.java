@@ -25,11 +25,6 @@ public interface IamSysService {
      */
     List<AppVo> findUserApps(String userId);
 
-    /**
-     * @param user 用户信息
-     * @return 用户是否为系统管理员
-     */
-    boolean assertIsAdmin(UserVo user);
 
     /**
      * @param appID 应用id
@@ -136,7 +131,11 @@ public interface IamSysService {
     /**
      * @param account 用户账号
      */
-    void logout(String account);
+    Object login(Object account);
+    /**
+     * @param account 用户账号
+     */
+    Object logout(Object account);
 
     /**
      * 刷新令牌
@@ -148,12 +147,10 @@ public interface IamSysService {
     Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response, Object token);
 
     /**
-     * 获取用户是否为管理员
-     * @param user
-     * @return
+     * @param user 用户信息
+     * @return 用户是否为系统管理员
      */
-    boolean checkUserIsAdmin(UserVo user);
-
+    boolean assertIsAdmin(UserVo user);
     /**
      *
      * @param request

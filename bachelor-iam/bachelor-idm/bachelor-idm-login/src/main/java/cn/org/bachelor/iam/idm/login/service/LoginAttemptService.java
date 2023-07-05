@@ -4,7 +4,7 @@ import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.acm.UserType;
 import cn.org.bachelor.iam.acm.domain.LoginAttempt;
 import cn.org.bachelor.iam.idm.login.EventPublisher;
-import cn.org.bachelor.iam.idm.login.LoginEvent;
+import cn.org.bachelor.iam.idm.login.event.LoginEvent;
 import cn.org.bachelor.iam.idm.login.LoginUser;
 import cn.org.bachelor.iam.idm.login.credential.UsernamePasswordCredential;
 import cn.org.bachelor.iam.idm.login.dao.LoginAttemptMapper;
