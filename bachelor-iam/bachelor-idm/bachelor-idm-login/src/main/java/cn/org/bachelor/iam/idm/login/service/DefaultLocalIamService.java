@@ -100,7 +100,7 @@ public class DefaultLocalIamService implements IamSysService {
     }
 
     @Override
-    public Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response, String refreshToken) {
+    public Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response, Object refreshToken) {
         return null;
     }
 

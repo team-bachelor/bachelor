@@ -22,7 +22,7 @@ public class IamConstant {
     public static final String ISV = "_isv_name";
     public static final String ORIGINAL_URL = "_Original_URL";
     public static final String DEFAULT_CHARSET = "utf-8";
-    public static final String COOKIE_SEPERATOR = "|";
+    public static final String COOKIE_SEPARATOR = "|";
     public static final String COOKIE_NAME="RCLOUD";
     public static final String OAUTH_STATE="oauth_state";
     public static final String OAUTH_CB_STATE="state";

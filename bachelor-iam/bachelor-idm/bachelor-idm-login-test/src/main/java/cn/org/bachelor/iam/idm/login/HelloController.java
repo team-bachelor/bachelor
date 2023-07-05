@@ -1,4 +1,4 @@
-package cn.org.bachelor.iam.idm.login.controller;
+package cn.org.bachelor.iam.idm.login;
 
 
 import org.springframework.web.bind.annotation.PathVariable;

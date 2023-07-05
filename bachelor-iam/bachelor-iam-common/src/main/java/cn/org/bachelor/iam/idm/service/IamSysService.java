@@ -142,10 +142,10 @@ public interface IamSysService {
      * 刷新令牌
      * @param request
      * @param response
-     * @param refreshToken 当前刷新令牌
+     * @param token 用于刷新的对象
      * @return
      */
-    Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response, String refreshToken);
+    Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response, Object token);
 
     /**
      * 获取用户是否为管理员

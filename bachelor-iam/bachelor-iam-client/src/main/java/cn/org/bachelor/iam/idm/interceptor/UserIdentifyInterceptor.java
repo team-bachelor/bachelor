@@ -84,7 +84,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
             }
         }
         iamContext.setUser(user);
-
+        iamSysService.refreshToken(request, response, user);
         iamContext.setRemoteIP(RequestUtil.getIpAddr(request));
         return true;
     }
@@ -99,12 +99,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
         UserVo user = new UserVo();
         Map<String, Object> claims;
         if (enableGateWay) {
-//            if (StringUtils.isBlank(ver) || JwtToken.Ver1.equals(ver)) {
             claims = getHeaderMap(request);
-//            } else if (JwtToken.Ver2.equals(ver)) {
-//                String claimsJson = request.getHeader(JwtToken.PayloadKey.CLAIMS);
-//                claims = JSONObject.parseObject(claimsJson);
-//            }
         } else {
             String tokenString = request.getHeader(IamConstant.HTTP_HEADER_TOKEN_KEY);
             if (StringUtils.isEmpty(tokenString)) {

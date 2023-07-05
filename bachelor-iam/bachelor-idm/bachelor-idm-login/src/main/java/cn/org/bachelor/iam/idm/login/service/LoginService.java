@@ -1,14 +1,13 @@
 package cn.org.bachelor.iam.idm.login.service;
 
+import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.acm.domain.UserStatus;
 import cn.org.bachelor.iam.credential.AbstractIamCredential;
-import cn.org.bachelor.iam.idm.login.EventPublisher;
-import cn.org.bachelor.iam.idm.login.LoginEvent;
-import cn.org.bachelor.iam.idm.login.LoginException;
-import cn.org.bachelor.iam.idm.login.LoginUser;
+import cn.org.bachelor.iam.idm.login.*;
 import cn.org.bachelor.iam.idm.login.config.IamLocalLoginConfig;
 import cn.org.bachelor.iam.idm.login.credential.UsernamePasswordCredential;
 import cn.org.bachelor.iam.token.JwtToken;
+import cn.org.bachelor.iam.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,17 +38,24 @@ public class LoginService {
     @Autowired
     private UserStatusService userStatusService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Autowired
+    private IamContext iamContext;
+
     public Authentication login(UsernamePasswordCredential user) {
         preLogin(user);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
         try {
             Authentication authenticate = authenticationManager.authenticate(authenticationToken);
             //authenticate存入redis
+            RedisCacheHelper.setLoginUser(redisTemplate, (LoginUser) authenticate.getPrincipal());
 //        redisCache.setCacheObject("login:" + userId, loginUser);
             loginAttemptService.clearLoginAttempt(user);
             eventPublisher.publish(new LoginEvent(user, true));
             return authenticate;
-        } catch(Exception e){
+        } catch (Exception e) {
             loginAttemptService.setLoginAttempt(user);
             throw new LoginException("用户名或密码错误", e);
         }
@@ -57,19 +63,19 @@ public class LoginService {
 
     private void preLogin(UsernamePasswordCredential user) {
         UserStatus status = userStatusService.getUserStatus(user);
-        if(status == null){
+        if (status == null) {
             return;
         }
-        if(status.getDisabled()){
+        if (status.getDisabled()) {
             throw new LoginException("该账户已禁用");
         }
-        if(status.getExpired()){
+        if (status.getExpired()) {
             throw new LoginException("该账户已过期");
         }
-        if(status.getLocked()){
+        if (status.getLocked()) {
             throw new LoginException("该账户被锁定");
         }
-        if(status.getCredentialsExpired()){
+        if (status.getCredentialsExpired()) {
             throw new LoginException("账户凭证已过期");
         }
 
@@ -78,7 +84,8 @@ public class LoginService {
     public String getJwt(Authentication authenticate) {
         //使用userid生成token
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
-        AbstractIamCredential credential = new AbstractIamCredential<String>(){};
+        AbstractIamCredential credential = new AbstractIamCredential<String>() {
+        };
         credential.setCredential("");
         credential.setExpiresTime(getLoginExpiresTime());
         JwtToken token = JwtToken.create(loginUser, credential);
@@ -98,12 +105,18 @@ public class LoginService {
         return calendar.getTime();
     }
 
+    public void refreshLogin() {
+        UserVo user = iamContext.getUser();
+        if(user != null) {
+            String userId = user.getId();
+            RedisCacheHelper.refreshLoginUser(redisTemplate, userId);
+        }
+    }
 
     public void logout() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-//        String userid = loginUser.getUser().getId();
-//        redisCache.deleteObject("login:" + userid);
+        RedisCacheHelper.delLoginUser(redisTemplate, loginUser.getId());
     }
 }
 

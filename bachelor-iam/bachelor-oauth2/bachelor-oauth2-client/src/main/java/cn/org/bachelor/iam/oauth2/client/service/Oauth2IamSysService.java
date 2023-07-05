@@ -501,10 +501,15 @@ public class Oauth2IamSysService implements IamSysService {
     }
 
     @Override
-    public Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response, String refreshToken) {
+    public Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response, Object refreshToken) {
+        if(Objects.isNull(refreshToken)
+                || !(refreshToken instanceof String)
+                || StringUtils.isEmpty(refreshToken.toString())){
+            return null;
+        }
         OAuth2Client client = new OAuth2Client(clientConfig,
                 ClientHelper.startClient(request, response));
-        JSONObject userinfo = client.refreshAccessToken(refreshToken);
+        JSONObject userinfo = client.refreshAccessToken(refreshToken.toString());
         ClientHelper.stopClient();
         return userinfo;
     }

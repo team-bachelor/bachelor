@@ -10,7 +10,6 @@ import cn.org.bachelor.iam.oauth2.client.exception.GetUserInfoException;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
 import cn.org.bachelor.iam.oauth2.client.util.ClientHelper;
 import cn.org.bachelor.iam.oauth2.client.util.ClientInfo;
-import cn.org.bachelor.iam.oauth2.client.util.StateGenerator;
 import cn.org.bachelor.iam.oauth2.client.util.UrlExpProcessor;
 import cn.org.bachelor.iam.oauth2.exception.OAuthBusinessException;
 import cn.org.bachelor.iam.oauth2.key.Base64;
@@ -27,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -416,7 +414,7 @@ public class OAuth2Client {
             byte[] b = my.getValue().getBytes(IamConstant.DEFAULT_CHARSET);
             b = new Base64().decode(b);
             String access = new String(b, IamConstant.DEFAULT_CHARSET);
-            String[] tokens = StringUtils.delimitedListToStringArray(access, IamConstant.COOKIE_SEPERATOR);
+            String[] tokens = StringUtils.delimitedListToStringArray(access, IamConstant.COOKIE_SEPARATOR);
             return tokens;
         } else {
             return null;

@@ -1,10 +1,8 @@
 package cn.org.bachelor.iam.idm.login.security.provider;
 
-import cn.org.bachelor.iam.idm.login.LoginException;
 import cn.org.bachelor.iam.idm.login.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -30,6 +28,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             return null;
         }
+        //还可以填充其他信息
         return new UsernamePasswordAuthenticationToken(user, user.getPassword());
     }
 
