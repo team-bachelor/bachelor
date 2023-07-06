@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpMethod;
+import org.springframework.lang.Nullable;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +29,7 @@ public class PageInterceptor extends HandlerInterceptorAdapter {
 
     public static final String PAGE_NUM = "pageNum";
     public static final String PAGE_SIZE = "pageSize";
+    public static final String PAGE_FLAG = "page";
     private Log log = LogFactory.getLog(this.getClass());
 
     /**
@@ -41,6 +44,11 @@ public class PageInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object obj) {
+        String flag = request.getParameter(PAGE_FLAG);
+        if("n".equals(flag) || "N".equals(flag)){
+            PageHelper.clearPage();
+            return true;
+        }
         try {
             String pageNum = null;
             String pageSize = null;
@@ -74,5 +82,9 @@ public class PageInterceptor extends HandlerInterceptorAdapter {
         }
         return true;
     }
-
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+                           @Nullable ModelAndView modelAndView) throws Exception {
+        PageHelper.clearPage();
+    }
 }

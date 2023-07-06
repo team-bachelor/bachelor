@@ -6,6 +6,7 @@ import cn.org.bachelor.exception.SystemException;
 import cn.org.bachelor.web.json.JsonResponse;
 import cn.org.bachelor.web.json.ResponseStatus;
 import cn.org.bachelor.web.util.MessageUtil;
+import com.github.pagehelper.PageHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.NoSuchMessageException;
@@ -36,6 +37,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = RemoteException.class)
     public ResponseEntity handleRemoteException(HttpServletRequest request, Exception e) throws Exception {
+        commonPreHandler(request, e);
         logWarn(e);
         RemoteException re = (RemoteException) e;
         // 远程异常
@@ -47,8 +49,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         }
     }
 
+    private void commonPreHandler(HttpServletRequest request, Throwable e) {
+        PageHelper.clearPage();
+    }
+
     @ExceptionHandler(value = BusinessException.class)
     public ResponseEntity handleBusinessException(HttpServletRequest request, Exception e) throws Exception {
+        commonPreHandler(request, e);
         logDebug(e);
         BusinessException be = (BusinessException) e;
         return createExceptionResponseEntity(e.getMessage(), be.getArgs(), BIZ_ERR, BAD_REQUEST);
@@ -56,12 +63,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = SystemException.class)
     public ResponseEntity handleSystemException(HttpServletRequest request, Exception e) throws Exception {
+        commonPreHandler(request, e);
         logError(e);
         return createExceptionResponseEntity(e.getMessage(), null, SYS_ERR, INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(value = Throwable.class)
     public ResponseEntity handleException(HttpServletRequest request, Throwable e) throws Exception {
+        commonPreHandler(request, e);
         logError(e);
         return createExceptionResponseEntity("UNEXPECT_SYSTEM_EXCEPTION", null, SYS_ERR, INTERNAL_SERVER_ERROR);
     }
@@ -78,24 +87,27 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         JsonResponse jr = new JsonResponse(null, code, msg, rs);
         return new ResponseEntity(jr, hs);
     }
-    private void logWarn(Throwable e){
-        if(logger.isWarnEnabled()) {
+
+    private void logWarn(Throwable e) {
+        if (logger.isWarnEnabled()) {
             logger.warn("", e);
         }
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             e.printStackTrace();
         }
     }
-    private void logError(Throwable e){
-        if(logger.isErrorEnabled()) {
+
+    private void logError(Throwable e) {
+        if (logger.isErrorEnabled()) {
             logger.error("", e);
         }
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             e.printStackTrace();
         }
     }
-    private void logDebug(Throwable e){
-        if(logger.isDebugEnabled()) {
+
+    private void logDebug(Throwable e) {
+        if (logger.isDebugEnabled()) {
             logger.debug("", e);
             e.printStackTrace();
         }
