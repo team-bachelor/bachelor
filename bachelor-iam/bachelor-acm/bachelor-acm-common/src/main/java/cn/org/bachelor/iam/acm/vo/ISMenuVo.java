@@ -15,17 +15,7 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor
-public class ISMenuVo {
-    private String id;
-    private String name;
-    private String icon;
-    @JsonIgnore
-    private ISMenuVo parent;
-    private String parentId;
-    private int seqOrder;
-    private String comment;
-    private boolean has;
-    private String groupName;
+public class ISMenuVo extends MenuVo{
     private String activePath;//code 仅二级
     private String entry;//code
     private String title;//name
@@ -42,13 +32,6 @@ public class ISMenuVo {
     private List<ISMenuVo> children;
 
     public ISMenuVo() {
-    }
-
-    public List<ISMenuVo> getSubMenus() {
-        if (children == null) {
-            children = new ArrayList<ISMenuVo>(5);
-        }
-        return children;
     }
 
 }

@@ -133,7 +133,7 @@ public class MenuService {
 
     private List<ISMenuVo> convert2ISMenu(List<MenuVo> originMenus, boolean isSubSys) {
         List<ISMenuVo> menus = new ArrayList<>();
-        if(originMenus == null){
+        if (originMenus == null) {
             return menus;
         }
         originMenus.forEach(m -> menus.add(convert2ISMenu(m, isSubSys)));
@@ -156,6 +156,7 @@ public class MenuService {
         m.setActivePath(originMenu.getCode());
         m.setEntry(isSubSys ? originMenu.getUri() : null);
         m.setTitle(originMenu.getName());
+        m.setHidden(originMenu.isHidden());
         m.setComponent(isSubSys ? null : originMenu.getUri());
         m.setType(originMenu.getType());
         m.setOwner(originMenu.getOwner());
@@ -181,7 +182,7 @@ public class MenuService {
     }
 
     /**
-     * @param orgCode 组织编码
+     * @param orgCode  组织编码
      * @param menuCode 当前角色拥有的所有菜单列表
      * @author liuzhuo
      */
@@ -332,9 +333,9 @@ public class MenuService {
         if (isFlat) {
             result.addAll(menuVoMap.values());
         } else {
-            if(parentId != null && !"".equals(parentId)){
+            if (parentId != null && !"".equals(parentId)) {
                 result.add(menuVoMap.get(parentId));
-            }else {
+            } else {
                 for (MenuVo m : menuVoMap.values()) {
                     if (m.getParent() == null) {
                         result.add(m);
@@ -351,6 +352,7 @@ public class MenuService {
         mv.setParentId(m.getParentId());
         mv.setSeqOrder(m.getSeqOrder());
         mv.setOwner(owner);
+        mv.setHidden(m.getHidden());
         mv.setHas(has);
         mv.setGroupName(m.getGroupName());
         return mv;

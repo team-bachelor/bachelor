@@ -19,6 +19,7 @@ public class MenuVo {
     private String name;
     private String uri;
     private String icon;
+    private boolean hidden;
     @JsonIgnore
     private MenuVo parent;
     private String parentId;

@@ -71,7 +71,7 @@ public class MenuController {
      * @return OK
      * @更新履历 2021.1.28 访问路径 /role_menu/{role} => /role/menu/{role}
      */
-    @ApiOperation(value = "设置角色的菜单")
+    @ApiOperation(value = "更新菜单")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "menu", value = "菜单数据", paramType = "body", required = true)
     })
@@ -88,11 +88,10 @@ public class MenuController {
      * @return OK
      * @更新履历 2021.1.28 访问路径 /role_menu/{role} => /role/menu/{role}
      */
-    @ApiOperation(value = "设置角色的菜单")
+    @ApiOperation(value = "删除菜单")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "menuId", value = "菜单数据", paramType = "path", required = true)
     })
-    //@PutMapping(value = "/menu/{menuId}")
     @DeleteMapping(value = "/menu/{menuId}")
     public ResponseEntity updateMenu(@PathVariable String menuId) {
         menuService.delete(menuId);
@@ -178,23 +177,40 @@ public class MenuController {
      *
      * @param userCode 用户的编码
      * @param group    菜单分组
+     * @param parentId 父级菜单ID
      * @return
      */
+    @ApiOperation(value = "获得用户的菜单(分组）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userCode", value = "用户的编码", paramType = "path", required = true),
+            @ApiImplicitParam(name = "group", value = "菜单分组", paramType = "path", required = true),
+            @ApiImplicitParam(name = "parentId", value = "父级菜单ID", paramType = "request")
+    })
     @RequestMapping(value = "/user/menu/{userCode}/{group}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getUserMenu(@PathVariable String userCode, @PathVariable String group, @RequestParam(value = "parent", required = false) String parentId) {
+    public HttpEntity<JsonResponse> getUserMenu(@PathVariable String userCode,
+                                                @PathVariable String group,
+                                                @RequestParam(value = "parent", required = false) String parentId) {
         List menus = menuService.calUserMenu(userCode, group, parentId);
         return JsonResponse.createHttpEntity(menus);
     }
 
     /**
-     * 获得用户的菜单(分组）
+     * 获得用户的菜单(分组)
      *
      * @param userCode 用户的编码
      * @param group    菜单分组
      * @return
      */
+    @ApiOperation(value = "获得用户的菜单(分组)-用于基于IS的微前端")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userCode", value = "用户的编码", paramType = "path", required = true),
+            @ApiImplicitParam(name = "group", value = "菜单分组", paramType = "path", required = true),
+            @ApiImplicitParam(name = "parentId", value = "父级菜单ID", paramType = "request")
+    })
     @RequestMapping(value = "/user/menu/is/{userCode}/{group}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getIsUserMenu(@PathVariable String userCode, @PathVariable String group, @RequestParam(value = "parent", required = false) String parentId) {
+    public HttpEntity<JsonResponse> getIsUserMenu(@PathVariable String userCode,
+                                                  @PathVariable String group,
+                                                  @RequestParam(value = "parent", required = false) String parentId) {
         List menus = menuService.getUserISMenu(userCode, group, parentId);
         return JsonResponse.createHttpEntity(menus);
     }
