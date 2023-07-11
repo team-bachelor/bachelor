@@ -66,6 +66,12 @@ public class Menu {
     private Short seqOrder;
 
     /**
+     * 是否隐藏
+     */
+    @Column(name = "HIDDEN")
+    private Boolean hidden = false;
+
+    /**
      * 更新时间
      */
     @Column(name = "UPDATE_TIME")

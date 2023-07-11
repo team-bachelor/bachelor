@@ -1,0 +1,2 @@
+ALTER TABLE `iam`.`cmn_acm_menu`
+    ADD COLUMN `HIDDEN` tinyint(1) NULL DEFAULT 0 AFTER `SEQ_ORDER`;
