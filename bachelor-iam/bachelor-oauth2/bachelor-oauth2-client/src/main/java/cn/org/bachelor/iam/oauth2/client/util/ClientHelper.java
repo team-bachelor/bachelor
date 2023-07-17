@@ -2,7 +2,6 @@ package cn.org.bachelor.iam.oauth2.client.util;
 
 import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
-import cn.org.bachelor.iam.oauth2.client.model.MJsonObject;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
 import com.alibaba.fastjson.JSONObject;
 
@@ -56,6 +55,7 @@ public class ClientHelper {
     public static ClientInfo startClient(HttpServletRequest request,
                                          HttpServletResponse response) {
         setSession(request.getSession());
+        ClientHelper.response.set(response);
         ClientInfo info = new ClientInfo();
         info.setUrl(request.getRequestURL().toString());
         info.setCode(request.getParameter("code"));
@@ -104,7 +104,7 @@ public class ClientHelper {
         return (OAuth2ClientCertification) session.get().getAttribute(IamConstant.SESSION_AUTHENTICATION_KEY);
     }
 
-    public static Object getFromSession(String key){
+    public static Object getFromSession(String key) {
         return session.get().getAttribute(key);
     }
 
@@ -145,9 +145,9 @@ public class ClientHelper {
      * @return
      */
     public static String getCurrentUserName() {
-        MJsonObject user = getCurrentUser();
+        JSONObject user = getCurrentUser();
         if (user == null) return "";
-        return user.getJsonValue("username");
+        return user.containsKey("account") ? user.getString("account") : "";
     }
 
     /**
@@ -156,9 +156,9 @@ public class ClientHelper {
      * @return
      */
     public static String getCurrentAccount() {
-        MJsonObject user = getCurrentUser();
+        JSONObject user = getCurrentUser();
         if (user == null) return "";
-        return user.getJsonValue("account");
+        return user.containsKey("account") ? user.getJSONObject("account").toJSONString() : "";
     }
 
 
@@ -167,13 +167,13 @@ public class ClientHelper {
      *
      * @return
      */
-    public static MJsonObject getCurrentUser() {
+    public static JSONObject getCurrentUser() {
         String personStr = getCurrentUserStr();
         if (personStr == null) {
             return null;
         }
         JSONObject personJson = JSONObject.parseObject(personStr);
-        return new MJsonObject(personJson);
+        return personJson;
     }
 
     public static String getCurrentUserStr() {

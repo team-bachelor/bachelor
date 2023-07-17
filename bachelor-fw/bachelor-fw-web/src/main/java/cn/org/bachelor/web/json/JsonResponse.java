@@ -195,12 +195,11 @@ public class JsonResponse<T> {
     }
 
     private static JsonResponse setJsonResponseStatus(JsonResponse response, HttpStatus status) {
-        int s = status.value();
-        if (s < 300) {
+        if (status.is2xxSuccessful() || status.is3xxRedirection()) {
             response.setStatus(ResponseStatus.OK);
-        } else if (s < 500) {
+        } else if (status.is4xxClientError()) {
             response.setStatus(ResponseStatus.BIZ_ERR);
-        } else if (s < 600) {
+        } else if (status.is5xxServerError()) {
             response.setStatus(ResponseStatus.SYS_ERR);
         }
         return response;

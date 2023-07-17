@@ -49,23 +49,14 @@ import java.io.IOException;
  * @author team bachelor
  *
  */
-//@Component
-//@ServletComponentScan
+
 @WebFilter(urlPatterns = "/*", filterName = "oauth2LoginFilter")
 public class OAuth2LoginFilter implements Filter {
 
-    //    private OAuth2CientConfig config;
-    //    private static final String defaultConfigFileName = UpClient.defaultConfigFileName;
+
     private static final Logger logger = LoggerFactory.getLogger(OAuth2LoginFilter.class);
-    //    private static String configFileName = defaultConfigFileName;
     private static String EXCEPT_PATTERNS = "";
     private static String EXCEPT_PARAMS = "";
-//    private static String serviceString = "serviceAuthenticate";
-//    private static String upString = "UpAuthenticate";
-
-//    public static String getConfigFileName() {
-//        return configFileName;
-//    }
 
     @Override
     public void destroy() {
@@ -132,13 +123,6 @@ public class OAuth2LoginFilter implements Filter {
             }
             logger.info("去调用用户信息接口方法----url:" + requestURI);
             client.bindUser2Session(code);
-
-//				if(!client.toOriginalURL()){//如果直接敲有code的url地址
-//					chain.doFilter(client.request(), response);
-//				}
-			/*if(client.prefect()){
-				return;
-			}*/
 
 
             if (client.toTargetURL()) {

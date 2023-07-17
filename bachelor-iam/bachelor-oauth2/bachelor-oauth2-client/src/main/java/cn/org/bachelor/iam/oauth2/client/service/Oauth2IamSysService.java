@@ -45,6 +45,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Oauth2IamSysService implements IamSysService {
 
     private static final Logger logger = LoggerFactory.getLogger(Oauth2IamSysService.class);
+
     @Autowired
     private IamContext iamContext;
 

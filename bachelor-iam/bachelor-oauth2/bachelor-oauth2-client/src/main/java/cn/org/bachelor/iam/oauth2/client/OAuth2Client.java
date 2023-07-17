@@ -12,7 +12,6 @@ import cn.org.bachelor.iam.oauth2.client.util.ClientHelper;
 import cn.org.bachelor.iam.oauth2.client.util.ClientInfo;
 import cn.org.bachelor.iam.oauth2.client.util.UrlExpProcessor;
 import cn.org.bachelor.iam.oauth2.exception.OAuthBusinessException;
-import cn.org.bachelor.iam.oauth2.key.Base64;
 import cn.org.bachelor.iam.oauth2.request.DefaultOAuthRequest;
 import cn.org.bachelor.iam.oauth2.request.DefaultOAuthRequest.TokenRequestBuilder;
 import cn.org.bachelor.iam.oauth2.request.DefaultOAuthResourceRequest;
@@ -24,15 +23,10 @@ import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -43,7 +37,7 @@ import static cn.org.bachelor.iam.IamConstant.OAUTH_CB_STATE;
  * @author team bachelor
  *
  */
-public class OAuth2Client {
+public class OAuth2Client implements IamClient {
     private static UrlExpProcessor urlExpProcessor;
     private OAuth2CientConfig config;
     private JSONObject person;
@@ -63,6 +57,7 @@ public class OAuth2Client {
      * 获取授权码
      * @return
      */
+    @Override
     public String getAuthorizationCode() {
 //		logger.info("进入getAuthorizationCode");
         String code = info.getCode();
@@ -78,8 +73,8 @@ public class OAuth2Client {
      * 获取phone_id
      * @return
      */
+    @Override
     public String getPhoneId() {
-//		logger.info("getPhoneId");
         String phoneId = info.getPhoneId();
         logger.info("getPhoneId，phone_id=" + phoneId);
         return phoneId;
@@ -95,19 +90,11 @@ public class OAuth2Client {
         return false;
     }
 
-
     /**
      * 引导用户授权
      * @throws IOException
      */
-    public void toGetAuthorizationCode() throws IOException {
-        toGetAuthorizationCode(null);
-    }
-
-    /**
-     * 引导用户授权
-     * @throws IOException
-     */
+    @Override
     public void toGetAuthorizationCode(HttpServletRequest request) throws IOException {
         logger.info("进入toGetAuthorizationCode");
         String phoneId = getPhoneId();
@@ -193,27 +180,14 @@ public class OAuth2Client {
         }
         ClientHelper.setUserJsonString(personStr);
         ClientHelper.setCredential(
-                new OAuth2ClientCertification(userId, accessToken, refreshToken, parseExpireTime(expiration)));
+                new OAuth2ClientCertification(userId, accessToken, refreshToken, IamClient.parseExpireTime(expiration)));
 
         logger.info("当前登录用户 userId:" + ClientHelper.getCurrentUserId());
         logger.info("登录后的令牌信息：" + ClientHelper.getCredential());
         return person;
     }
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    public static Date parseExpireTime(String expireTime) {
-        Date expTime;
-        try {
-            expTime = sdf.parse(expireTime);
-        } catch (ParseException e) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_MONTH, 1);
-            expTime = calendar.getTime();
-        }
-        return expTime;
-    }
-
+    @Override
     public JSONObject refreshAccessToken(String currentRefreshToken) {
         TokenRequestBuilder builder = DefaultOAuthRequest
                 .tokenLocation(config.getAsURL().getAccessToken())
@@ -231,6 +205,7 @@ public class OAuth2Client {
      * @return
      * @throws Exception
      */
+    @Override
     public JSONObject bindUser2Session(String authorizationCode) {
         TokenRequestBuilder builder = DefaultOAuthRequest
                 .tokenLocation(config.getAsURL().getAccessToken())
@@ -243,11 +218,11 @@ public class OAuth2Client {
     }
 
 
-
     /**
      * 是否从OAuth2认证服务器返回的请求，一般情况为出错了
      * @return
      */
+    @Override
     public boolean isCallback() {
         if (isRedirectURL()) {
             String error = info.getError();
@@ -294,17 +269,19 @@ public class OAuth2Client {
         return query.toString();
     }
 
-    public boolean toOriginalURL() throws Exception {
-        String originalURL = (String) ClientHelper.getFromSession(IamConstant.ORIGINAL_URL);
-        logger.debug("SSOClient toOriginalURL:" + originalURL);
-        if (originalURL != null) {
-            ClientHelper.sendRedirect(originalURL);
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    @Override
+//    public boolean toOriginalURL() throws Exception {
+//        String originalURL = (String) ClientHelper.getFromSession(IamConstant.ORIGINAL_URL);
+//        logger.debug("SSOClient toOriginalURL:" + originalURL);
+//        if (originalURL != null) {
+//            ClientHelper.sendRedirect(originalURL);
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
+    @Override
     public boolean toTargetURL() throws Exception {
         if (config.isToLoginRedirectURL()) {
             ClientHelper.sendRedirect(config.getLoginRedirectURL());
@@ -331,16 +308,18 @@ public class OAuth2Client {
     //新增跳转代码-----------end
 
 
-    public boolean isExcluded(String patterns) {
-        if (urlExpProcessor == null) {
-            urlExpProcessor = new UrlExpProcessor(patterns);
-        }
-        boolean result = urlExpProcessor.match(info.getUrl());
-        logger.info("进入isExcluded()========>" + urlExpProcessor.getPattern() + ", " + result);
-        return result;
-    }
+//    @Override
+//    public boolean isExcluded(String patterns) {
+//        if (urlExpProcessor == null) {
+//            urlExpProcessor = new UrlExpProcessor(patterns);
+//        }
+//        boolean result = urlExpProcessor.match(info.getUrl());
+//        logger.info("进入isExcluded()========>" + urlExpProcessor.getPattern() + ", " + result);
+//        return result;
+//    }
 
-    public boolean isExcluded(String except_urlpattern, String except_param, HttpServletRequest request) {
+    @Override
+    public boolean isExcluded(String except_url_pattern, String except_param, HttpServletRequest request) {
         logger.info("进入isExcluded()========>");
         if (except_param != null && !"".equals(except_param)) {
             int idx = except_param.indexOf("=");
@@ -356,28 +335,30 @@ public class OAuth2Client {
         }
 
         if (urlExpProcessor == null) {
-            urlExpProcessor = new UrlExpProcessor(except_urlpattern);
+            urlExpProcessor = new UrlExpProcessor(except_url_pattern);
         }
         boolean result = urlExpProcessor.match(info.getUrl());
         logger.info(urlExpProcessor.getPattern() + ", " + result);
         return result;
     }
 
-    public boolean isLogin() {
-        boolean flag = false;
-        Object obj = ClientHelper.getCredential();
-        if (obj instanceof OAuth2ClientCertification) {
-            OAuth2ClientCertification my = (OAuth2ClientCertification) obj;
-            String userid = my.getUserid();
-            logger.info("isLogin(), userid:" + userid);
-            logger.debug("current user:" + userid);
-            if (userid != null && !userid.equals("")) {
-                flag = true;
-            }
-        }
-        return flag;
-    }
+//    @Override
+//    public boolean isLogin() {
+//        boolean flag = false;
+//        Object obj = ClientHelper.getCredential();
+//        if (obj instanceof OAuth2ClientCertification) {
+//            OAuth2ClientCertification my = (OAuth2ClientCertification) obj;
+//            String userid = my.getUserid();
+//            logger.info("isLogin(), userid:" + userid);
+//            logger.debug("current user:" + userid);
+//            if (userid != null && !userid.equals("")) {
+//                flag = true;
+//            }
+//        }
+//        return flag;
+//    }
 
+    @Override
     public boolean isLogin(HttpServletRequest req) {
         boolean flag = false;
         Object obj = ClientHelper.getCredential();
@@ -398,28 +379,29 @@ public class OAuth2Client {
         return flag;
     }
 
-    public String[] isCookie() throws Exception {
-        Cookie[] cookies = info.getCookies();
-        Cookie my = null;
-        if (cookies != null) {
-            for (Cookie cookie : info.getCookies()) {
-                if (IamConstant.COOKIE_NAME.equals(cookie.getName())) {
-                    my = cookie;
-                    break;
-                }
-            }
-            if (my == null) {
-                return null;
-            }
-            byte[] b = my.getValue().getBytes(IamConstant.DEFAULT_CHARSET);
-            b = new Base64().decode(b);
-            String access = new String(b, IamConstant.DEFAULT_CHARSET);
-            String[] tokens = StringUtils.delimitedListToStringArray(access, IamConstant.COOKIE_SEPARATOR);
-            return tokens;
-        } else {
-            return null;
-        }
-    }
+//    @Override
+//    public String[] isCookie() throws Exception {
+//        Cookie[] cookies = info.getCookies();
+//        Cookie my = null;
+//        if (cookies != null) {
+//            for (Cookie cookie : info.getCookies()) {
+//                if (IamConstant.COOKIE_NAME.equals(cookie.getName())) {
+//                    my = cookie;
+//                    break;
+//                }
+//            }
+//            if (my == null) {
+//                return null;
+//            }
+//            byte[] b = my.getValue().getBytes(IamConstant.DEFAULT_CHARSET);
+//            b = new Base64().decode(b);
+//            String access = new String(b, IamConstant.DEFAULT_CHARSET);
+//            String[] tokens = StringUtils.delimitedListToStringArray(access, IamConstant.COOKIE_SEPARATOR);
+//            return tokens;
+//        } else {
+//            return null;
+//        }
+//    }
 
     private boolean tokenValid(HttpServletRequest req) {
         Object obj = ClientHelper.getCredential();
@@ -473,12 +455,12 @@ public class OAuth2Client {
     }
 
 
-
     /**
      * 验证state是否相同
      * @param request
      * @return
      */
+    @Override
     public boolean isValidState(HttpServletRequest request) {
         HttpSession session = request.getSession(true);
         Object so = session.getAttribute(IamConstant.OAUTH_STATE);
