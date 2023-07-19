@@ -57,6 +57,12 @@
             <artifactId>bachelor-acm-common</artifactId>
             <version>2.2.1-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>cn.org.bachelor</groupId>
+            <artifactId>bachelor-acm-service</artifactId>
+            <version>2.2.1-SNAPSHOT</version>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>cn.org.bachelor</groupId>-->
 <!--            <artifactId>bachelor-iam-service</artifactId>-->

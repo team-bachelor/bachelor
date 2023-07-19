@@ -102,6 +102,7 @@ bachelor:
   iam:
     enable-gateway: false
     login:
+      password_encoder_name: org.springframework.security.crypto.argon2.Argon2PasswordEncoder
     enable_user_access_control: false
     ########################################↓权限配置↓########################################
     client:

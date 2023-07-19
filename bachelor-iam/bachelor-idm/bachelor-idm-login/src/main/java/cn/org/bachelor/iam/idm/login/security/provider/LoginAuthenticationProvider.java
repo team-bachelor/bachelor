@@ -1,20 +1,18 @@
 package cn.org.bachelor.iam.idm.login.security.provider;
 
 import cn.org.bachelor.iam.idm.login.service.UserDetailsService;
+import cn.org.bachelor.iam.utils.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LoginAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -25,7 +23,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         Object credentials = authentication.getCredentials();
         String password = credentials == null ? null : credentials.toString();
         UserDetails user = loadUserByUsername(username);
-        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+        if (user == null || !PasswordUtil.getPasswordEncoder().matches(password, user.getPassword())) {
             return null;
         }
         //还可以填充其他信息

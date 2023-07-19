@@ -40,6 +40,11 @@ public class IamConfiguration {
     private boolean jsonResponse = true;
 
     /**
+     * 密码编码器的实现类
+     */
+    private String passwordEncoder = "org.springframework.security.crypto.argon2.Argon2PasswordEncoder";
+
+    /**
      * jsonResponse为false时导向到loginURL配置的地址）
      */
     private String loginURL;
@@ -148,5 +153,14 @@ public class IamConfiguration {
 
     public boolean isEnableGateway() {
         return enableGateway;
+    }
+
+
+    public String getPasswordEncoder() {
+        return passwordEncoder;
+    }
+
+    public void setPasswordEncoder(String passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 }

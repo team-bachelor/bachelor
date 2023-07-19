@@ -2,6 +2,7 @@ package cn.org.bachelor.iam.idm.login.service;
 
 import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.acm.domain.UserStatus;
+import cn.org.bachelor.iam.acm.service.UserStatusService;
 import cn.org.bachelor.iam.credential.AbstractIamCredential;
 import cn.org.bachelor.iam.idm.login.*;
 import cn.org.bachelor.iam.idm.login.config.IamLocalLoginConfig;
@@ -63,7 +64,7 @@ public class LoginService {
     }
 
     private void preLogin(UsernamePasswordCredential user) {
-        UserStatus status = userStatusService.getUserStatus(user);
+        UserStatus status = userStatusService.getUserStatus(user.getUsername());
         if (status == null) {
             return;
         }

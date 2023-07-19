@@ -9,7 +9,7 @@ import cn.org.bachelor.iam.oauth2.client.exception.GetAccessTokenException;
 import cn.org.bachelor.iam.oauth2.client.exception.GetUserInfoException;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
 import cn.org.bachelor.iam.oauth2.client.util.ClientHelper;
-import cn.org.bachelor.iam.oauth2.client.util.ClientInfo;
+import cn.org.bachelor.iam.oauth2.client.util.ClientRequestInfo;
 import cn.org.bachelor.iam.oauth2.client.util.UrlExpProcessor;
 import cn.org.bachelor.iam.oauth2.exception.OAuthBusinessException;
 import cn.org.bachelor.iam.oauth2.request.DefaultOAuthRequest;
@@ -41,13 +41,13 @@ public class OAuth2Client implements IamClient {
     private static UrlExpProcessor urlExpProcessor;
     private OAuth2CientConfig config;
     private JSONObject person;
-    private ClientInfo info;
+    private ClientRequestInfo info;
     public static final String defaultConfigFileName = "OAuth2-config.properties";
     private static Logger logger = LoggerFactory.getLogger(OAuth2Client.class);
 
     private SignSecurityOAuthClient oAuthClient;
 
-    public OAuth2Client(OAuth2CientConfig config, ClientInfo info) {
+    public OAuth2Client(OAuth2CientConfig config, ClientRequestInfo info) {
         this.config = config;
         this.info = info;
         this.oAuthClient = new SignSecurityOAuthClient(new URLConnectionClient());

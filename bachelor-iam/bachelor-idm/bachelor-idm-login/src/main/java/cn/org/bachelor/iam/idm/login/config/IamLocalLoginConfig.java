@@ -13,8 +13,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 import javax.annotation.Resource;
@@ -28,7 +26,7 @@ import java.util.List;
 @ConfigurationProperties(
         prefix = "bachelor.iam.login"
 )
-public class IamLocalLoginConfig extends WebSecurityConfigurerAdapter {
+public class IamLocalLoginConfig extends WebSecurityConfigurerAdapter{
 
     /**
      * 用户拦截器和访问控制拦截器要拦截的地址
@@ -74,13 +72,15 @@ public class IamLocalLoginConfig extends WebSecurityConfigurerAdapter {
 //        http.addFilterBefore(userIdentifyFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler())
-                .authenticationEntryPoint(new AuthAuthenticationEntryPoint());;
+                .authenticationEntryPoint(new AuthAuthenticationEntryPoint());
+        ;
     }
 
     @Bean
-    public AccessDeniedHandler accessDeniedHandler(){
+    public AccessDeniedHandler accessDeniedHandler() {
         return new JsonAccessDeniedHandler();
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
         authManagerBuilder
@@ -94,13 +94,16 @@ public class IamLocalLoginConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new Argon2PasswordEncoder();
-    }
-
     public String getPrivateKey() {
         return config.getPrivateKey();
+    }
+
+    public String[] getExcludePathPatterns() {
+        return excludePathPatterns;
+    }
+
+    public void setExcludePathPatterns(String[] excludePathPatterns) {
+        this.excludePathPatterns = excludePathPatterns;
     }
 }
 

@@ -52,11 +52,11 @@ public class ClientHelper {
         return (String) session.getAttribute(IamConstant.UP_OPEN_ID);
     }
 
-    public static ClientInfo startClient(HttpServletRequest request,
-                                         HttpServletResponse response) {
+    public static ClientRequestInfo startClient(HttpServletRequest request,
+                                                HttpServletResponse response) {
         setSession(request.getSession());
         ClientHelper.response.set(response);
-        ClientInfo info = new ClientInfo();
+        ClientRequestInfo info = new ClientRequestInfo();
         info.setUrl(request.getRequestURL().toString());
         info.setCode(request.getParameter("code"));
         info.setPhoneId(request.getParameter("phone_id"));

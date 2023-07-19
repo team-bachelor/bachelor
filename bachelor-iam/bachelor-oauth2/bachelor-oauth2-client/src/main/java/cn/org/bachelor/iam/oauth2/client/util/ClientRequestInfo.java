@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.servlet.http.Cookie;
 
 @Data
-public class ClientInfo {
+public class ClientRequestInfo {
 
     private String url;
     private String code;
@@ -14,7 +14,7 @@ public class ClientInfo {
     private String targetUrl;
     private Cookie[] cookies;
 
-    public ClientInfo() {
+    public ClientRequestInfo() {
 
     }
 }
