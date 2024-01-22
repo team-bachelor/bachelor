@@ -14,7 +14,6 @@
     <modules>
         <module>bachelor-oauth2-client</module>
         <module>bachelor-oauth2-common</module>
-        <module>bachelor-oauth2-resource-service</module>
     </modules>
     <packaging>pom</packaging>
 
