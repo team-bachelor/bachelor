@@ -36,16 +36,16 @@ public class FilterConfiguration {
     private static final String ALLOWED_METHODS = "*";
     private static final String ALLOWED_ORIGIN = "*";
     private static final String ALLOWED_Expose = "*";
-    private static final String MAX_AGE = "18000L"; 
-    
+    private static final String MAX_AGE = "18000L";
+
     @Bean
     public WebFilter corsFilter() {
         return (ServerWebExchange ctx, WebFilterChain chain) -> {
             ServerHttpRequest request = ctx.getRequest();
             logger.info("intercept request with uri : " + request.getURI());
             if (CorsUtils.isCorsRequest(request)) {
-            	List<String> list = request.getHeaders().get("Origin");
-            	String origin = list.get(0);
+                List<String> list = request.getHeaders().get("Origin");
+                String origin = list.get(0);
                 ServerHttpResponse response = ctx.getResponse();
                 HttpHeaders headers = response.getHeaders();
                 headers.add("Access-Control-Allow-Origin",  StringUtils.isEmpty(origin) ? "*" : origin);
@@ -63,5 +63,5 @@ public class FilterConfiguration {
             return chain.filter(ctx);
         };
     }
-    
+
 }
