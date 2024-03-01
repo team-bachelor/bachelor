@@ -2,7 +2,7 @@ package cn.org.bachelor.iam.idm.login;
 
 import cn.org.bachelor.iam.acm.domain.User;
 import cn.org.bachelor.iam.idm.login.dao.UserLoginMapper;
-import cn.org.bachelor.iam.utils.PasswordUtil;
+import cn.org.bachelor.iam.PasswordEncoderHolder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class MapperTest {
     public void testUserMapper() {
         List<User> users = userMapper.selectAll();
         System.out.println(users);
-        System.out.println(PasswordUtil.getPasswordEncoder().encode("222222"));
+        System.out.println(PasswordEncoderHolder.getPasswordEncoder().encode("222222"));
     }
 }
 

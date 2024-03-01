@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "bachelor.iam.login.password_encoder_name",
+      "type": "java.lang.String",
+      "description": "Description for bachelor.iam.login.password_encoder_name."
+  }
+] }

@@ -1,6 +1,7 @@
 package cn.org.bachelor.iam;
 
 import cn.org.bachelor.iam.utils.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,7 +18,7 @@ import java.io.InputStreamReader;
  */
 @Configuration
 @ConfigurationProperties(prefix = "bachelor.iam")
-public class IamConfiguration {
+public class IamConfiguration implements InitializingBean {
 
     /**
      * 用户拦截器和访问控制拦截器要拦截的地址
@@ -162,5 +163,10 @@ public class IamConfiguration {
 
     public void setPasswordEncoder(String passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        PasswordEncoderHolder.setConfig(this.getPasswordEncoder());
     }
 }

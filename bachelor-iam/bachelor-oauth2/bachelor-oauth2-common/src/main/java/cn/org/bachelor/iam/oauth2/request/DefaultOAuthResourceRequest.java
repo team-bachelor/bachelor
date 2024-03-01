@@ -1,10 +1,10 @@
 package cn.org.bachelor.iam.oauth2.request;
 
-import cn.org.bachelor.iam.oauth2.OAuthConstant;
-import cn.org.bachelor.iam.oauth2.OAuthConstant;
 
-import java.io.UnsupportedEncodingException;
-import java.util.*;
+import cn.org.bachelor.iam.oauth2.OAuthConstant;
+import cn.org.bachelor.iam.oauth2.utils.SignatureUtil;
+
+import static cn.org.bachelor.iam.oauth2.utils.SignatureUtil.sortParameters;
 
 /**
  * Created by team bachelor on 15/5/20.
@@ -27,8 +27,8 @@ public class DefaultOAuthResourceRequest extends DefaultOAuthRequest.OAuthReques
         return this;
     }
 
-    public DefaultOAuthResourceRequest setOpentID(String opentID) {
-        this.parameters.put(OAuthConstant.HTTP_REQUEST_PARAM_OPEN_ID, opentID);
+    public DefaultOAuthResourceRequest setOpenID(String openID) {
+        this.parameters.put(OAuthConstant.HTTP_REQUEST_PARAM_OPEN_ID, openID);
         return this;
     }
 
@@ -54,60 +54,17 @@ public class DefaultOAuthResourceRequest extends DefaultOAuthRequest.OAuthReques
     }
 
     public String toString() {
-        // 将加入两个id的key集合排序
-        Set<String> keySet = this.parameters.keySet();
-        List<String> paramkeys = new ArrayList<String>(keySet);
-        Collections.sort(paramkeys);
-
-        // 生成一个新的map将两个id放进去
-        Map<String, Object> newParams = new HashMap<String, Object>(this.parameters);
-
-        // 根据新生成的map和排序后的key集合生成访问字符串并urlencode
-        StringBuilder paramBuilder = new StringBuilder();
-        for (String key : paramkeys) {
-            String value = newParams.get(key).toString();
-            if (value != null && !"".equals(value)) {
-                paramBuilder.append(key).append("=").append(value).append("&");
-            }
-        }
-        paramBuilder.deleteCharAt(paramBuilder.length() - 1);
-        String param = paramBuilder.toString();
-        paramBuilder = new StringBuilder(getMethod())
+        String param = getParamsString();
+        StringBuilder paramBuilder = new StringBuilder(getMethod())
                 .append("&")
-                .append(encode(this.url))
+                .append(SignatureUtil.encode(this.url))
                 .append("&")
-                .append(encode(param));
+                .append(param);
         return paramBuilder.toString();
     }
 
     //改写toString方法
-    public String getParamsString(){
-        // 将加入两个id的key集合排序
-        Set<String> keySet = this.parameters.keySet();
-        List<String> paramkeys = new ArrayList<String>(keySet);
-        Collections.sort(paramkeys);
-
-        // 生成一个新的map将两个id放进去
-        Map<String, Object> newParams = new HashMap<String, Object>(this.parameters);
-
-        // 根据新生成的map和排序后的key集合生成访问字符串并urlencode
-        StringBuilder paramBuilder = new StringBuilder();
-        for (String key : paramkeys) {
-            String value = newParams.get(key).toString();
-            if (value != null && !"".equals(value)) {
-                paramBuilder.append(key).append("=").append(value).append("&");
-            }
-        }
-        paramBuilder.deleteCharAt(paramBuilder.length() - 1);
-        return encode(paramBuilder.toString());
-    }
-
-    private static String encode(String src) {
-        try {
-            return java.net.URLEncoder.encode(src, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return src;
-        }
+    public String getParamsString() {
+        return sortParameters(this.parameters);
     }
 }

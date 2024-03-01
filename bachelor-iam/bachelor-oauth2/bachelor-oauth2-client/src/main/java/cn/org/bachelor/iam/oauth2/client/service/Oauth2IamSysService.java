@@ -9,7 +9,7 @@ import cn.org.bachelor.iam.exception.IamBusinessException;
 import cn.org.bachelor.iam.exception.IamSystemException;
 import cn.org.bachelor.iam.idm.service.IamSysService;
 import cn.org.bachelor.iam.idm.service.IamSysParam;
-import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
+import cn.org.bachelor.iam.oauth2.client.OAuth2ClientConfig;
 import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
 import cn.org.bachelor.iam.oauth2.client.SignSecurityOAuthClient;
 import cn.org.bachelor.iam.oauth2.client.URLConnectionClient;
@@ -50,7 +50,7 @@ public class Oauth2IamSysService implements IamSysService {
     private IamContext iamContext;
 
     @Autowired
-    private OAuth2CientConfig clientConfig;
+    private OAuth2ClientConfig clientConfig;
 
     /**
      * @param iamContext IamContext

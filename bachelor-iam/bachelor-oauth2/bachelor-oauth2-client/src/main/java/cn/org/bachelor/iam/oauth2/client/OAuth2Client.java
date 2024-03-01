@@ -39,7 +39,7 @@ import static cn.org.bachelor.iam.IamConstant.OAUTH_CB_STATE;
  */
 public class OAuth2Client implements IamClient {
     private static UrlExpProcessor urlExpProcessor;
-    private OAuth2CientConfig config;
+    private OAuth2ClientConfig config;
     private JSONObject person;
     private ClientRequestInfo info;
     public static final String defaultConfigFileName = "OAuth2-config.properties";
@@ -47,7 +47,7 @@ public class OAuth2Client implements IamClient {
 
     private SignSecurityOAuthClient oAuthClient;
 
-    public OAuth2Client(OAuth2CientConfig config, ClientRequestInfo info) {
+    public OAuth2Client(OAuth2ClientConfig config, ClientRequestInfo info) {
         this.config = config;
         this.info = info;
         this.oAuthClient = new SignSecurityOAuthClient(new URLConnectionClient());

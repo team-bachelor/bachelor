@@ -4,7 +4,7 @@
 package cn.org.bachelor.iam.oauth2.client.filter;
 
 import cn.org.bachelor.iam.IamConstant;
-import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
+import cn.org.bachelor.iam.oauth2.client.OAuth2ClientConfig;
 import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
 import cn.org.bachelor.iam.oauth2.client.exception.GetAccessTokenException;
 import cn.org.bachelor.iam.oauth2.client.exception.GetUserInfoException;
@@ -63,16 +63,16 @@ public class OAuth2LoginFilter implements Filter {
 
     }
 
-    private OAuth2CientConfig getConfig(ServletContext context) {
+    private OAuth2ClientConfig getConfig(ServletContext context) {
         WebApplicationContext applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
 
-        return applicationContext.getBean(OAuth2CientConfig.class);
+        return applicationContext.getBean(OAuth2ClientConfig.class);
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
-        OAuth2CientConfig config = getConfig(request.getServletContext());
+        OAuth2ClientConfig config = getConfig(request.getServletContext());
         if (!config.isLoginFilterEnable()) {
             chain.doFilter(request, response);
             return;
@@ -159,7 +159,7 @@ public class OAuth2LoginFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        OAuth2CientConfig config = getConfig(filterConfig.getServletContext());
+        OAuth2ClientConfig config = getConfig(filterConfig.getServletContext());
         if (!config.isLoginFilterEnable()) return;
         try {
             ClientHelper.config = config;// 放到全局变量里面

@@ -16,8 +16,6 @@ public class UserStatusService {
     @Autowired
     private UserStatusMapper userStatusMapper;
 
-
-
     public UserStatus getUserStatus(String userName) {
         Example e = new Example(UserStatus.class);
         e.createCriteria()

@@ -1,16 +1,20 @@
 package cn.org.bachelor.iam.oauth2.utils;
 
 
+import org.apache.commons.codec.binary.Base64;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.codec.binary.Base64;
 
 /**
  * Created by team bachelor on 15/5/20.
@@ -32,13 +36,13 @@ public final class OAuthUtils {
         StringBuilder result = new StringBuilder();
         Iterator i$ = parameters.iterator();
 
-        while(i$.hasNext()) {
-            Map.Entry parameter = (Map.Entry)i$.next();
-            String value = parameter.getValue() == null?null:String.valueOf(parameter.getValue());
-            if(!isEmpty((String)parameter.getKey()) && !isEmpty(value)) {
-                String encodedName = urlEncode((String)parameter.getKey(), encoding);
-                String encodedValue = value != null? urlEncode(value, encoding):"";
-                if(result.length() > 0) {
+        while (i$.hasNext()) {
+            Map.Entry parameter = (Map.Entry) i$.next();
+            String value = parameter.getValue() == null ? null : String.valueOf(parameter.getValue());
+            if (!isEmpty((String) parameter.getKey()) && !isEmpty(value)) {
+                String encodedName = urlEncode((String) parameter.getKey(), encoding);
+                String encodedValue = value != null ? urlEncode(value, encoding) : "";
+                if (result.length() > 0) {
                     result.append("&");
                 }
 
@@ -64,11 +68,11 @@ public final class OAuthUtils {
     }
 
     public static String streamToString(InputStream is, String defaultCharset) throws IOException {
-        if(is == null) {
+        if (is == null) {
             throw new IllegalArgumentException("InputStream may not be null");
         } else {
             String charset = defaultCharset;
-            if(defaultCharset == null) {
+            if (defaultCharset == null) {
                 charset = "UTF-8";
             }
 
@@ -79,7 +83,7 @@ public final class OAuthUtils {
                 char[] tmp = new char[4096];
 
                 int l;
-                while((l = reader.read(tmp)) != -1) {
+                while ((l = reader.read(tmp)) != -1) {
                     sb.append(tmp, 0, l);
                 }
             } finally {
@@ -93,16 +97,16 @@ public final class OAuthUtils {
 
     public static Map<String, Object> decodeForm(String form) {
         HashMap params = new HashMap();
-        if(!isEmpty(form)) {
+        if (!isEmpty(form)) {
             String[] arr$ = form.split("\\&");
             int len$ = arr$.length;
 
-            for(int i$ = 0; i$ < len$; ++i$) {
+            for (int i$ = 0; i$ < len$; ++i$) {
                 String nvp = arr$[i$];
                 int equals = nvp.indexOf(61);
                 String name;
                 String value;
-                if(equals < 0) {
+                if (equals < 0) {
                     name = decodePercent(nvp);
                     value = null;
                 } else {
@@ -118,11 +122,11 @@ public final class OAuthUtils {
     }
 
     public static boolean isFormEncoded(String contentType) {
-        if(contentType == null) {
+        if (contentType == null) {
             return false;
         } else {
             int semi = contentType.indexOf(";");
-            if(semi >= 0) {
+            if (semi >= 0) {
                 contentType = contentType.substring(0, semi);
             }
 
@@ -142,11 +146,11 @@ public final class OAuthUtils {
         StringBuilder p = new StringBuilder();
         Iterator i$ = values.iterator();
 
-        while(i$.hasNext()) {
+        while (i$.hasNext()) {
             Object v = i$.next();
             String stringValue = streamToString(v);
-            if(!isEmpty(stringValue)) {
-                if(p.length() > 0) {
+            if (!isEmpty(stringValue)) {
+                if (p.length() > 0) {
                     p.append("&");
                 }
 
@@ -158,7 +162,7 @@ public final class OAuthUtils {
     }
 
     public static String percentEncode(String s) {
-        if(s == null) {
+        if (s == null) {
             return "";
         } else {
             try {
@@ -170,13 +174,13 @@ public final class OAuthUtils {
     }
 
     private static final String streamToString(Object from) {
-        return from == null?null:from.toString();
+        return from == null ? null : from.toString();
     }
 
     public static String getAuthHeaderField(String authHeader) {
-        if(authHeader != null) {
+        if (authHeader != null) {
             Matcher m = OAUTH_HEADER.matcher(authHeader);
-            if(m.matches() && "Bearer".equalsIgnoreCase(m.group(1))) {
+            if (m.matches() && "Bearer".equalsIgnoreCase(m.group(1))) {
                 return m.group(2);
             }
         }
@@ -186,16 +190,16 @@ public final class OAuthUtils {
 
     public static Map<String, String> decodeOAuthHeader(String header) {
         HashMap headerValues = new HashMap();
-        if(header != null) {
+        if (header != null) {
             Matcher m = OAUTH_HEADER.matcher(header);
-            if(m.matches() && "Bearer".equalsIgnoreCase(m.group(1))) {
+            if (m.matches() && "Bearer".equalsIgnoreCase(m.group(1))) {
                 String[] arr$ = m.group(2).split("\\s*,\\s*");
                 int len$ = arr$.length;
 
-                for(int i$ = 0; i$ < len$; ++i$) {
+                for (int i$ = 0; i$ < len$; ++i$) {
                     String nvp = arr$[i$];
                     m = NVP.matcher(nvp);
-                    if(m.matches()) {
+                    if (m.matches()) {
                         String name = decodePercent(m.group(1));
                         String value = decodePercent(m.group(2));
                         headerValues.put(name, value);
@@ -208,25 +212,25 @@ public final class OAuthUtils {
     }
 
     public static String[] decodeClientAuthenticationHeader(String authenticationHeader) {
-        if(authenticationHeader != null && !"".equals(authenticationHeader)) {
+        if (authenticationHeader != null && !"".equals(authenticationHeader)) {
             String[] tokens = authenticationHeader.split(" ");
-            if(tokens == null) {
+            if (tokens == null) {
                 return null;
             } else {
                 String encodedCreds;
-                if(tokens[0] != null && !"".equals(tokens[0])) {
+                if (tokens[0] != null && !"".equals(tokens[0])) {
                     encodedCreds = tokens[0];
-                    if(!encodedCreds.equalsIgnoreCase("basic")) {
+                    if (!encodedCreds.equalsIgnoreCase("basic")) {
                         return null;
                     }
                 }
 
-                if(tokens[1] != null && !"".equals(tokens[1])) {
+                if (tokens[1] != null && !"".equals(tokens[1])) {
                     encodedCreds = tokens[1];
                     String decodedCreds = new String(Base64.decodeBase64(encodedCreds));
-                    if(decodedCreds.contains(":") && decodedCreds.split(":").length == 2) {
+                    if (decodedCreds.contains(":") && decodedCreds.split(":").length == 2) {
                         String[] creds = decodedCreds.split(":");
-                        if(!isEmpty(creds[0]) && !isEmpty(creds[1])) {
+                        if (!isEmpty(creds[0]) && !isEmpty(creds[1])) {
                             return decodedCreds.split(":");
                         }
                     }
@@ -244,11 +248,11 @@ public final class OAuthUtils {
         sb.append("Bearer").append(" ");
         Iterator i$ = entries.entrySet().iterator();
 
-        while(i$.hasNext()) {
-            Map.Entry entry = (Map.Entry)i$.next();
-            String value = entry.getValue() == null?null:String.valueOf(entry.getValue());
-            if(!isEmpty((String)entry.getKey()) && !isEmpty(value)) {
-                sb.append((String)entry.getKey());
+        while (i$.hasNext()) {
+            Map.Entry entry = (Map.Entry) i$.next();
+            String value = entry.getValue() == null ? null : String.valueOf(entry.getValue());
+            if (!isEmpty((String) entry.getKey()) && !isEmpty(value)) {
+                sb.append((String) entry.getKey());
                 sb.append("=\"");
                 sb.append(value);
                 sb.append("\",");
@@ -263,10 +267,10 @@ public final class OAuthUtils {
         sb.append("Bearer").append(" ");
         Iterator i$ = entries.entrySet().iterator();
 
-        while(i$.hasNext()) {
-            Map.Entry entry = (Map.Entry)i$.next();
-            String value = entry.getValue() == null?null:String.valueOf(entry.getValue());
-            if(!isEmpty((String)entry.getKey()) && !isEmpty(value)) {
+        while (i$.hasNext()) {
+            Map.Entry entry = (Map.Entry) i$.next();
+            String value = entry.getValue() == null ? null : String.valueOf(entry.getValue());
+            if (!isEmpty((String) entry.getKey()) && !isEmpty(value)) {
                 sb.append(value);
             }
         }
@@ -279,13 +283,13 @@ public final class OAuthUtils {
     }
 
     public static boolean hasEmptyValues(String[] array) {
-        if(array != null && array.length != 0) {
+        if (array != null && array.length != 0) {
             String[] arr$ = array;
             int len$ = array.length;
 
-            for(int i$ = 0; i$ < len$; ++i$) {
+            for (int i$ = 0; i$ < len$; ++i$) {
                 String s = arr$[i$];
-                if(isEmpty(s)) {
+                if (isEmpty(s)) {
                     return true;
                 }
             }

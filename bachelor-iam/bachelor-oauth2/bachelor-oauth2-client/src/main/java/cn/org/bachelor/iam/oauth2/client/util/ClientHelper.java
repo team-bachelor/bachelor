@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.oauth2.client.util;
 
 import cn.org.bachelor.iam.IamConstant;
-import cn.org.bachelor.iam.oauth2.client.OAuth2CientConfig;
+import cn.org.bachelor.iam.oauth2.client.OAuth2ClientConfig;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
 import com.alibaba.fastjson.JSONObject;
 
@@ -22,7 +22,7 @@ public class ClientHelper {
     private static ThreadLocal<HttpSession> session = new ThreadLocal<>();//存放session
     private static ThreadLocal<HttpServletResponse> response = new ThreadLocal<>();//存放session
 
-    public static OAuth2CientConfig config;//OAuth2LoginFilter.init的时候初始化
+    public static OAuth2ClientConfig config;//OAuth2LoginFilter.init的时候初始化
 
     /**
      * 设置session到ThreadLocal中
