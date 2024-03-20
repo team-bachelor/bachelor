@@ -33,6 +33,12 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  servlet:
+    multipart:
+      # maxFileSize 单个数据大小
+      maxFileSize: 30MB
+      # maxRequestSize 是总数据大小
+      maxRequestSize: 100MB
 server:
   port: 8899
 #  connection-timeout: 1000

@@ -23,9 +23,10 @@ spring:
       cache: false
   mvc:
     static-path-pattern: /**
-    date-format: yyyy-MM-dd HH:mm:ss
     refresh:
       refreshable: none
+    format:
+      date: yyyy-MM-dd HH:mm:ss
   cloud:
     nacos:
       discovery:

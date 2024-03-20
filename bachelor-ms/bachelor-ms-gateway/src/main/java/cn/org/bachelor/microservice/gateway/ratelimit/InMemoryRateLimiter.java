@@ -13,8 +13,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @描述:
- * @创建人: liuzhuo
+ *
+ * @author liuzhuo
  * @创建时间: 2019/1/4
  */
 public class InMemoryRateLimiter extends AbstractRateLimiter<InMemoryRateLimiter.Config> {

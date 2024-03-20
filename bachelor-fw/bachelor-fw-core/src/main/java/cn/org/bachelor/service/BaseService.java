@@ -6,11 +6,8 @@ import tk.mybatis.mapper.common.BaseMapper;
 import java.util.List;
 
 /**
- * @ClassName BaseService
- * @Description:
- * @Author Alexhendar
- * @Date 2018/10/10 9:20
- * @Version 1.0
+ * @author Alexhendar
+ * @version 1.0
  **/
 public abstract class BaseService<T> implements IService<T> {
 

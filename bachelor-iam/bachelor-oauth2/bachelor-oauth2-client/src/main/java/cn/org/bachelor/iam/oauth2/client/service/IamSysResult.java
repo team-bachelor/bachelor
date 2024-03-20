@@ -1,8 +1,8 @@
 package cn.org.bachelor.iam.oauth2.client.service;
 
 /**
- * @描述:
- * @创建人: liuzhuo
+ *
+ * @author liuzhuo
  * @创建时间: 2019/7/24
  */
 public class IamSysResult<T> {

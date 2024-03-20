@@ -27,8 +27,8 @@ public abstract class BaseContainerStopListener implements
 
 	/**
 	 * Context容器关闭时触发的事件
-	 * @param event
-	 * @throws Exception
+	 * @param event 事件对象
+	 * @throws Exception 各种错误
 	 */
 	public abstract void onEvent(ContextClosedEvent event) throws Exception;
 	

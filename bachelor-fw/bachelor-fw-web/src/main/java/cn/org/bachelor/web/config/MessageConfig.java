@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 /**
- * @描述:
- * @创建人: liuzhuo
+ *
+ * @author liuzhuo
  * @创建时间: 2018/11/9
  */
 @Configuration

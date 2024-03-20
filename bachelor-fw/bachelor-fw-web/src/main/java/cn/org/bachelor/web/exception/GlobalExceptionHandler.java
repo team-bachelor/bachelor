@@ -25,8 +25,8 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 /**
- * @描述:
- * @创建人: liuzhuo
+ *
+ * @author liuzhuo
  * @创建时间: 2018/11/9
  * 全局异常处理
  */

@@ -11,9 +11,8 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 /**
- * @描述:
- * @创建人: liuzhuo
- * @创建时间: 2018/10/24
+ * RSA键值创建器
+ * @author liuzhuo
  */
 public class RSAKeyCreator {
 

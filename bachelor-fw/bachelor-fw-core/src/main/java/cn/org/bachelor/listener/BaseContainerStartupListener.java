@@ -27,8 +27,8 @@ public abstract class BaseContainerStartupListener implements
     /**
      * Context容器启动时触发的事件
      *
-     * @param event
-     * @throws Exception
+     * @param event 事件对象
+     * @throws Exception 各种错误
      */
     public abstract void onEvent(ContextRefreshedEvent event) throws Exception;
 }

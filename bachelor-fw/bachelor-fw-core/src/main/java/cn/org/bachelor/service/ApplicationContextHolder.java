@@ -37,8 +37,8 @@ public class ApplicationContextHolder implements ApplicationContextAware {
 
     /**
      *  得到本机IP
-     * @return
-     * @throws Exception
+     * @return 本机IP
+     * @throws Exception 各种错误
      */
     @SuppressWarnings("rawtypes")
     public static String getServerIp() throws Exception{

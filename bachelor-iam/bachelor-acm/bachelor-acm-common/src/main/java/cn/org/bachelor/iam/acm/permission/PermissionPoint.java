@@ -1,8 +1,8 @@
 package cn.org.bachelor.iam.acm.permission;
 
 /**
- * @描述: 权限的DTO
- * @创建人: liuzhuo
+ *  权限的DTO
+ * @author liuzhuo
  * @创建时间: 2018/10/22
  */
 public class PermissionPoint {

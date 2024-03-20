@@ -8,9 +8,8 @@ import lombok.Data;
 import java.util.Map;
 
 /**
- * @描述:
- * @创建人: liuzhuo
- * @创建时间: 2018/11/1
+ * 用户信息
+ * @author  liuzhuo
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)

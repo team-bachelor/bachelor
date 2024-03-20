@@ -7,9 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @描述:
- * @创建人: liuzhuo
- * @创建时间: 2019/7/24
+ * IAM系统查询参数
+ * @author: liuzhuo
  */
 @Data
 public class IamSysParam {

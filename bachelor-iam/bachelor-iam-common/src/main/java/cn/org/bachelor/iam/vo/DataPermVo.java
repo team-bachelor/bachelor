@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @描述:
- * @创建人: liuzhuo
- * @创建时间: 2019/6/26
+ * <p>数据权限信息</p>
+ * 创建时间: 2019/6/26
+ * @author liuzhuo
+ *
  */
 public class DataPermVo {
 

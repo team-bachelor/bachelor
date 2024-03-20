@@ -12,11 +12,10 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 /**
- * @Author Hyw
- * @PackageName eprs
- * @Package cn.org.bachelor.iam.acm.rpc
- * @Date 2022/12/13 17:03
- * @Version 1.0
+ * @author Hyw
+ * @package cn.org.bachelor.iam.acm.rpc
+ * @date 2022/12/13 17:03
+ * @version 1.0
  */
 @RestController
 @RequestMapping(value = "/rpc/area")

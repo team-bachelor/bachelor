@@ -35,7 +35,7 @@ public interface IamSysService {
     /**
      *
      * @param param 查询参数
-     * @return
+     * @return 用户列表
      */
     List<UserVo> findUsersInApp(IamSysParam param);
 
@@ -95,7 +95,7 @@ public interface IamSysService {
      * @param param: orgId   机构ID
      * @param param: orgCode 机构编码
      * @param param: orgName 机构名称（模糊查询）
-     * @return
+     * @return 组织结构列表
      */
     List<OrgVo> findOrg(IamSysParam param);
 
@@ -129,20 +129,24 @@ public interface IamSysService {
     DataPermVo processDataPerm(String orgId, Set<String> deptIds, boolean isAdmin);
 
     /**
+     * 登录
      * @param account 用户账号
+     * @return 返回值
      */
     Object login(Object account);
     /**
+     * 登出
      * @param account 用户账号
+     * @return 返回值
      */
     Object logout(Object account);
 
     /**
      * 刷新令牌
-     * @param request
-     * @param response
+     * @param request http request
+     * @param response http response
      * @param token 用于刷新的对象
-     * @return
+     * @return 令牌的键值对
      */
     Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response, Object token);
 
@@ -153,10 +157,10 @@ public interface IamSysService {
     boolean assertIsAdmin(UserVo user);
     /**
      *
-     * @param request
-     * @param response
-     * @param code
-     * @return
+     * @param request http request
+     * @param response http response
+     * @param code 登录过程中的临时代码
+     * @return 令牌的键值对
      */
     Map<String, Object> getAccessToken(HttpServletRequest request, HttpServletResponse response, String code);
 }

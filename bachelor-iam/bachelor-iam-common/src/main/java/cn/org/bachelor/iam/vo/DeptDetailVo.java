@@ -6,9 +6,8 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 
 /**
- * @描述:
- * @创建人: liuzhuo
- * @创建时间: 2019/3/28
+ *
+ * @author liuzhuo
  */
 public class DeptDetailVo {
 

@@ -14,6 +14,7 @@ import cn.org.bachelor.iam.idm.service.IamSysService;
 import cn.org.bachelor.iam.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ import java.util.*;
 
 /**
  * @author : liuzhuo
- * @描述:
+ *
  * @创建时间: 2018/10/27
  */
 //@Service("dbRoleService")

@@ -10,6 +10,7 @@ import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpMethod;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,6 +26,8 @@ import java.io.InputStreamReader;
  *
  * @author Team Bachelor
  */
+@ConditionalOnProperty(prefix = "bachelor.paging",
+        name = {"enabled"}, havingValue = "true", matchIfMissing = true)
 public class PageInterceptor extends HandlerInterceptorAdapter {
 
     public static final String PAGE_NUM = "pageNum";

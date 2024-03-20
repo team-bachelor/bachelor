@@ -12,9 +12,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
+ * 身份识别系统配置信息
  * @author liuzhuo
- * @描述
- * @创建时间 2018/11/5
  */
 @Configuration
 @ConfigurationProperties(prefix = "bachelor.iam")

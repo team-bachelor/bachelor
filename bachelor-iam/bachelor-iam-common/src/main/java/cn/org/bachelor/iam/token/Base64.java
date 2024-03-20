@@ -8,7 +8,13 @@ public class Base64 {
         return java.util.Base64.getEncoder().encodeToString(s.getBytes());
     }
 
-    // 将 BASE64 编码的字符串 s 进行解码
+    /**
+     * 将 BASE64 编码的字符串 s 进行解码
+     *
+     * @param s 用于解密的字符串
+     * @return 解密后的二进制数组
+     */
+
     public static byte[] decode(String s) {
         if (s == null)
             return null;
@@ -27,8 +33,9 @@ public class Base64 {
      * <p>
      * 由于http传输时，会将+转成空格，为了解决这个和签名一致问题，将+替换成2B，而不是%2B
      *
+     * @param s 用于加密的数组
+     * @return 加密后的字符串
      * @author lishihong
-     * @time 20170919 14:39:00
      */
     public static String encodeBase64(byte[] s) {
         return java.util.Base64.getEncoder().encodeToString(s).replace("+", "2B");

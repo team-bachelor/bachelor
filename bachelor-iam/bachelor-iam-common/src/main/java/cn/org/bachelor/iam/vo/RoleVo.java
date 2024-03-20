@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * @描述:
- * @创建人: liuzhuo
- * @创建时间: 2019/3/5
+ * 角色信息
+ * @author liuzhuo
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RoleVo {

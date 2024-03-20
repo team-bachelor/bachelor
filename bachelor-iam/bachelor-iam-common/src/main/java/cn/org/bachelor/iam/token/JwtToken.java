@@ -17,9 +17,8 @@ import java.util.Map;
 import static cn.org.bachelor.iam.token.JwtToken.PayloadKey.*;
 
 /**
- * @描述:
- * @创建人: liuzhuo
- * @创建时间: 2018/10/24
+ * JSONWebToken
+ * @author  liuzhuo
  */
 //TODO 处理过时的spring security方法
 public class JwtToken {
@@ -54,9 +53,8 @@ public class JwtToken {
 
     /**
      * 创建jwt
-     *
      * @param privateKey 私钥
-     * @return
+     * @return 返回生成的jwt
      */
     public String generate(String privateKey) {
         return generate(JSONObject.toJSONString(this), privateKey);
@@ -148,7 +146,7 @@ public class JwtToken {
      *
      * @param token     token
      * @param publicKey 公钥
-     * @return
+     * @return 解析后的JWT
      */
 //    public static JwtToken decodeAndVerify(String token, RSAPublicKey publicKey) {
 //        Jwt j = JwtHelper.decodeAndVerify(token, new RsaVerifier(publicKey));

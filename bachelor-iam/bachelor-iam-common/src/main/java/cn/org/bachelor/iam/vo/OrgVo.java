@@ -8,9 +8,8 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * @描述:
- * @创建人: liuzhuo
- * @创建时间: 2018/11/12
+ * 组织机构信息
+ * @author  liuzhuo
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)

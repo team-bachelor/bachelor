@@ -2,9 +2,7 @@ package cn.org.bachelor.context;
 
 
 /**
- * @描述:
- * @创建人: liuzhuo
- * @创建时间: 2022/11/10
+ * @author liuzhuo
  */
 public interface IUser {
 

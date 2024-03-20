@@ -6,8 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @描述:
- * @创建人: liuzhuo
+ *
+ * @author liuzhuo
  * @创建时间: 2019/4/1
  */
 @Target({ElementType.TYPE})

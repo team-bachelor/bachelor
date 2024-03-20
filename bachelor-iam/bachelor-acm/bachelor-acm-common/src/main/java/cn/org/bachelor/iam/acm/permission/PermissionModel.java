@@ -1,8 +1,8 @@
 package cn.org.bachelor.iam.acm.permission;
 
 /**
- * @描述: 权限模型类别
- * @创建人: liuzhuo
+ *  权限模型类别
+ * @author liuzhuo
  * @创建时间: 2018/10/30
  */
 public enum PermissionModel {

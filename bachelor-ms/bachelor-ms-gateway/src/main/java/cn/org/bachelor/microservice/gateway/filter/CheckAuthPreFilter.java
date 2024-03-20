@@ -37,8 +37,8 @@ import static cn.org.bachelor.iam.utils.JwtUtil.getAndRemoveTokenClaim;
 import static cn.org.bachelor.iam.utils.JwtUtil.getAndTokenClaim;
 
 /**
- * @描述: 用于权限拦截的拦截器
- * @创建人: liuzhuo
+ *  用于权限拦截的拦截器
+ * @author liuzhuo
  * @创建时间: 2018/10/18
  */
 @Order(-1)

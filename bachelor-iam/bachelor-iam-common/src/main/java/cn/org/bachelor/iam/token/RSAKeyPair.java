@@ -5,9 +5,8 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
 /**
- * @描述:
- * @创建人: liuzhuo
- * @创建时间: 2018/10/25
+ * RSA加密时用到的键值对
+ * @author liuzhuo
  */
 public class RSAKeyPair implements Serializable {
     private RSAPrivateKey privateKey;
