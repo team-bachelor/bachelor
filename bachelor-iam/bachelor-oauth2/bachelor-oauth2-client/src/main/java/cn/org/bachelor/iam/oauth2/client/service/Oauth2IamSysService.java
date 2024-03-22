@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @创建时间 2018/11/9
  * @更新履历 2021/01/20 规范了配置方式，将配置全部转移到OAuth2ClientConfig中。
  */
-@Service
+@Service("Oauth2IamSysService")
 @ConditionalOnClass(OAuth2Client.class)
 public class Oauth2IamSysService implements IamSysService {
 

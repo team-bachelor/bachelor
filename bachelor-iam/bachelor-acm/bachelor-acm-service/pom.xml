@@ -14,6 +14,10 @@
     <name>bachelor-acm-service</name>
 
     <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
         <!--bachelor引用-->
         <dependency>
             <groupId>cn.org.bachelor</groupId>

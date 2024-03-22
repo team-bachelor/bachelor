@@ -41,6 +41,8 @@ public class RoleService implements RoleServiceStub {
     private RolePermissionMapper rolePermissionMapper;
     @Autowired
     private RoleMenuMapper roleMenuMapper;
+
+    @Qualifier("Oauth2IamSysService")
     @Autowired
     private IamSysService iamSysService;
 

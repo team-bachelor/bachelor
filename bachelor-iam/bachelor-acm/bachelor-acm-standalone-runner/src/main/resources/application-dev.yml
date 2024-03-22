@@ -1,9 +1,12 @@
 spring:
   datasource:
     ##测试服
-    url: jdbc:mysql://10.0.160.219:3306/sprc_acm?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+#    url: jdbc:mysql://10.0.160.219:3306/sprc_acm?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+#    username: root
+#    password: i<Wrftox8r%
+    url: jdbc:mysql://10.0.139.239:3306/eprs_acm?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: i<Wrftox8r%
+    password: root
 bachelor:
   iam:
   ########################################↓权限配置↓########################################
