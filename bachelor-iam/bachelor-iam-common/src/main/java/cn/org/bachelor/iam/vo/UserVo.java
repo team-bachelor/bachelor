@@ -60,8 +60,14 @@ public class UserVo implements IUser {
     @ApiModelProperty("区域名称")
     private String areaName;
 
-    @ApiModelProperty("扩展字段")
-    private Map<String, Object> extFields;
+    @ApiModelProperty("用户名(用户平台同步用)")
+    private String username;
+
+    @ApiModelProperty("用户编码(用户平台同步用)")
+    private String account;
+
+    @ApiModelProperty("扩展信息")
+    private Map<String, Object> extendInfo;
 
     @Override
     public String getId() {
@@ -98,13 +104,27 @@ public class UserVo implements IUser {
         return isAdministrator;
     }
 
-    @Override
     public String getAreaName() {
         return areaName;
     }
 
     @Override
+    public Map<String, Object> getExtendInfo() {
+        return this.extendInfo;
+    }
+
+    @Override
     public String getName() {
         return name;
+    }
+
+    public void setUsername(String name){
+        this.username = name;
+        this.setName(name);
+    }
+
+    public void setAccount(String account){
+        this.account = account;
+        this.setCode(account);
     }
 }

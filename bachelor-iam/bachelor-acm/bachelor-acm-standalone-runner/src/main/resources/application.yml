@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: sprc
   application:
     name: bachelor-web-cmn-acm
     id: ${bachelor.iam.client.id}
@@ -82,7 +82,7 @@ bachelor:
       logoutRedirectURL: https://wfw.dygzhyq.cn/app-logistics/index.html
       loginRedirectURL: http://localhost:8888
       as_url:
-        base: https://yhty.dygzhyq.cn/user-asserver
+        base: https://yhty.dygzhyq.cn/sprc-asserver
       rs_url:
         base: https://yhty.dygzhyq.cn/user/api
   ########################################↑权限配置↑########################################

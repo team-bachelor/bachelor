@@ -21,7 +21,7 @@ import java.util.Map;
  * @创建时间 2018/10/22
  */
 @Component
-@FeignClient(value = "${bachelor.iam.service-name.authorize-service:bachelor-ms-iam-service}", contextId = "AuthorizeServiceClient", path = "/acm/rpc/role", fallback = AuthorizeServiceClientFallback.class)
+@FeignClient(value = "${bachelor.iam.service.authorize:bachelor-web-cmn-acm}", contextId = "AuthorizeServiceClient", path = "/acm/rpc/role", fallback = AuthorizeServiceClientFallback.class)
 @ConditionalOnProperty(prefix = "bachelor.iam",
         name = {"service-provider"}, havingValue = "rpc")
 public interface AuthorizeServiceClient extends AuthorizeServiceStub {

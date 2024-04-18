@@ -14,7 +14,7 @@ import java.util.List;
  */
 //@Component("remoteRoleService")
 @Component
-@FeignClient(value = "${bachelor.iam.service-name.role-service:bachelor-ms-iam-service}", contextId = "RoleServiceClient", path = "/acm/rpc/role", fallback = RoleServiceClientFallback.class)
+@FeignClient(value = "${bachelor.iam.service.role:bachelor-web-cmn-acm}", contextId = "RoleServiceClient", path = "/acm/rpc/role", fallback = RoleServiceClientFallback.class)
 @ConditionalOnProperty(prefix = "bachelor.iam",
         name = {"service-provider"}, havingValue = "rpc")
 public interface RoleServiceClient extends RoleServiceStub {

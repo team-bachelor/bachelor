@@ -5,6 +5,8 @@ import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.credential.AbstractIamCredential;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.vo.UserVo;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +14,9 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static cn.org.bachelor.iam.token.JwtToken.PayloadKey.USER_ID;
+import static cn.org.bachelor.iam.token.JwtToken.PayloadKey.*;
 
 @Service
 public class IdmService {
@@ -52,10 +51,14 @@ public class IdmService {
 
     public JwtToken getAccessToken(HttpServletRequest request, HttpServletResponse response, String code) {
         Map<String, Object> user = userSysService.getAccessToken(request, response, code);
-        if (user != null) {
-            user.putAll(getUserExtInfo(user));
+        if (user == null) {
+            user = new HashMap<>(0);
         }
         JwtToken token = getJwtToken(request, user.containsKey(USER_ID) ? user.get(USER_ID).toString() : "");
+        token.getClaims().put(USER_CODE, user.get(ACCOUNT));
+        token.getClaims().put(USER_NAME, user.get("username"));
+        token.getClaims().put(USER_ID, user.get(USER_ID));
+        token.getClaims().put(OPEN_ID, user.get(OPEN_ID_CAM));
         return token;
     }
 
@@ -72,12 +75,13 @@ public class IdmService {
         AbstractIamCredential upCC = (AbstractIamCredential) request.getSession()
                 .getAttribute(IamConstant.SESSION_AUTHENTICATION_KEY);
         UserVo userDetail = getUserDetail(userId);
+        userDetail.setExtendInfo(getUserExtInfo((JSONObject)JSON.toJSON(userDetail)));
         return JwtToken.create(userDetail, upCC);
     }
 
-    public Map<? extends String, ? extends Object> getUserExtInfo(Map<String, Object> user) {
+    public Map<String, Object> getUserExtInfo(Map<String, Object> user) {
         Map umMap = Collections.unmodifiableMap(user);
-        Map<? extends String, ? extends Object> result = new LinkedHashMap();
+        Map<String, Object> result = new LinkedHashMap();
         if (userExtendInfoProviders == null) {
             return result;
         }

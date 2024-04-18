@@ -13,4 +13,6 @@ bachelor:
     client:
       id: f74381f3ad4b4fb681cbf1e6e2fd74f5
       secret: ff5aadc7c33e4a398800575a4389512b
+#      id: 3ce0cab2277d428eb17caf7d1bd196a2
+#      secret: 01bd345836644d3780cb0d4db17689af
   ########################################↑权限配置↑########################################

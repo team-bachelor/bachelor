@@ -20,7 +20,6 @@ import java.net.URLEncoder;
 import java.util.*;
 
 /**
- * Created by Intellij IDEA.
  * User:  ZhuangJiaHui
  */
 @Service
@@ -29,6 +28,7 @@ public class AreaUserService implements UserExtendInfoProvider {
 
     @Autowired
     private DacAreaUserMapper areaUserMapper;
+
     @Resource
     private IamContext iamContext;
 

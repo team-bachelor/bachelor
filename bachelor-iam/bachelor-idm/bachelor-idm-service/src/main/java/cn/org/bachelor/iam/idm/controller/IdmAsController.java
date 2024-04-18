@@ -92,9 +92,11 @@ public class IdmAsController {
      */
     @ApiOperation(value = "为当前用户登出系统")
     @RequestMapping(value = "/logout", method = RequestMethod.PUT)
-    public ResponseEntity<JsonResponse> logout(@RequestHeader(IamConstant.HTTP_HEADER_TOKEN_KEY) String authorization) {
-        JwtToken jwt = JwtToken.decode(authorization);
-        idmService.logout(jwt);
+    public ResponseEntity<JsonResponse> logout(@RequestHeader(value = IamConstant.HTTP_HEADER_TOKEN_KEY, required = false) String authorization) {
+        if (StringUtils.isNotEmpty(authorization)) {
+            JwtToken jwt = JwtToken.decode(authorization);
+            idmService.logout(jwt);
+        }
         return JsonResponse.createHttpEntity("logout success", HttpStatus.OK);
     }
 }

@@ -1,6 +1,8 @@
 package cn.org.bachelor.context;
 
 
+import java.util.Map;
+
 /**
  * @author liuzhuo
  */
@@ -29,4 +31,6 @@ public interface IUser {
     String getAreaId();
 
     String getAreaName();
+
+    Map<String, Object> getExtendInfo();
 }

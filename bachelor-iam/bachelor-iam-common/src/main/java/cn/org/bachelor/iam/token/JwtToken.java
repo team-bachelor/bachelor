@@ -38,6 +38,7 @@ public class JwtToken {
         public static final String CLAIMS = "claims";
         public static final String USER_ID = "userId";
         public static final String USER_NAME = "user_name";
+        public static final String ACCOUNT = "account";
         public static final String USER_CODE = "user_code";
         public static final String ORG_NAME = "org_name";
         public static final String ORG_ID = "org_id";
@@ -48,6 +49,8 @@ public class JwtToken {
         public static final String IS_ADMINISTRATOR = "is_administrator";
         public static final String TENANT_ID = "tenant_id";
         public static final String AREA_ID = "area_id";
+        public static final String OPEN_ID = "open_id";
+        public static final String OPEN_ID_CAM = "openid";
         public static final String AREA_NAME = "area_name";
     }
 
@@ -107,6 +110,9 @@ public class JwtToken {
         map.put(DEPT_NAME, userDetail.getDeptName());
         map.put(ACCESS_TOKEN, credential.getCredential());
         map.put(USER_ID, userDetail.getId());
+        if(userDetail.getExtendInfo() != null && userDetail.getExtendInfo().size() > 0){
+            map.putAll(userDetail.getExtendInfo());
+        }
         token.setClaims(map);
         // 存储refreshToken为token有效期的2倍
 //        userSysService.saveRefreshToken(userinfo.getString("account"), refreshToken, 2 * (expTime - currentTime));

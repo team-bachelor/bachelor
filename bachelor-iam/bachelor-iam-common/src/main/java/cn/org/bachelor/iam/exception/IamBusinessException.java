@@ -1,6 +1,7 @@
 package cn.org.bachelor.iam.exception;
 
 
+import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.iam.utils.StringUtils;
 
 import java.util.HashMap;
@@ -9,7 +10,7 @@ import java.util.Map;
 /**
  * Created by team bachelor on 15/5/20.
  */
-public class IamBusinessException extends RuntimeException {
+public class IamBusinessException extends BusinessException {
     private String error;
     private String description;
     private String uri;
