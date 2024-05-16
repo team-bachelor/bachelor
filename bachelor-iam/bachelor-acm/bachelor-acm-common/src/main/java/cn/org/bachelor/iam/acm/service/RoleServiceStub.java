@@ -44,6 +44,7 @@ public interface RoleServiceStub {
      * @return
      */
     List<UserVo> getRoleUsers(String roleCode);
+    List<UserVo> getLocalRoleUsers(String roleCode);
 
     /**
      * @param userCode

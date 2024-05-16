@@ -7,10 +7,10 @@ import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.exception.IamBusinessException;
 import cn.org.bachelor.iam.exception.IamSystemException;
-import cn.org.bachelor.iam.idm.service.IamSysService;
 import cn.org.bachelor.iam.idm.service.IamSysParam;
-import cn.org.bachelor.iam.oauth2.client.OAuth2ClientConfig;
+import cn.org.bachelor.iam.idm.service.IamSysService;
 import cn.org.bachelor.iam.oauth2.client.OAuth2Client;
+import cn.org.bachelor.iam.oauth2.client.OAuth2ClientConfig;
 import cn.org.bachelor.iam.oauth2.client.SignSecurityOAuthClient;
 import cn.org.bachelor.iam.oauth2.client.URLConnectionClient;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
@@ -185,9 +185,9 @@ public class Oauth2IamSysService implements IamSysService {
         param.put("id", userId);
         String json = callApi(clientConfig.getRsURL().getUserDetails(), "GET", param);
         List<UserVo> voList = resolveJsonList(json, UserVo.class);
-        if(voList == null || voList.size() == 0){
+        if (voList == null || voList.size() == 0) {
             return null;
-        }else{
+        } else {
             return voList.get(0);
         }
     }
@@ -279,9 +279,9 @@ public class Oauth2IamSysService implements IamSysService {
         IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
         List<OrgVo> orgList = findOrg(param);
-        if(orgList == null || orgList.size() == 0) {
+        if (orgList == null || orgList.size() == 0) {
             return null;
-        }else{
+        } else {
             return orgList.get(0);
         }
     }
@@ -473,6 +473,7 @@ public class Oauth2IamSysService implements IamSysService {
     public Object login(Object account) {
         return null;
     }
+
     @Override
     public Object logout(Object account) {
 //        if (!org.springframework.util.StringUtils.isEmpty(account)) {
@@ -483,9 +484,9 @@ public class Oauth2IamSysService implements IamSysService {
 
     @Override
     public Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response, Object refreshToken) {
-        if(Objects.isNull(refreshToken)
+        if (Objects.isNull(refreshToken)
                 || !(refreshToken instanceof String)
-                || StringUtils.isEmpty(refreshToken.toString())){
+                || StringUtils.isEmpty(refreshToken.toString())) {
             return null;
         }
         OAuth2Client client = new OAuth2Client(clientConfig,
@@ -559,11 +560,15 @@ public class Oauth2IamSysService implements IamSysService {
     private <T> IamSysResult resolveJson2Result(String json, Class<T> clazz, boolean asList, IamSysResult imSysResult) {
         //Map<String, Object> tokenMap = jsonMapper.readValue(json, Map.class);
         JSONObject node = fillResult(json, imSysResult);
-        String rowsString = node.get("rows").toString();
-        if (asList) {
-            imSysResult.setRows(JSONArray.parseArray(rowsString, clazz));
-        } else {
-            imSysResult.setRows(JSONObject.parseObject(rowsString, clazz));
+        logger.debug("------------resolve json result--------------");
+        logger.debug(node.toJSONString());
+        Object rowsString = node.get("rows");
+        if (rowsString != null) {
+            if (asList) {
+                imSysResult.setRows(((JSONArray) rowsString).toJavaList(clazz));
+            } else {
+                imSysResult.setRows(((JSONObject) rowsString).toJavaObject(clazz));
+            }
         }
         return imSysResult;
     }

@@ -104,11 +104,22 @@ public class RpcRoleController {
      */
     @ApiOperation(value = "获取角色下的用户")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "roleCode", value = "角色的编码", paramType = "path", required = true)
+            @ApiImplicitParam(name = "roleCode", value = "角色的编码", paramType = "path", required = true),
+            @ApiImplicitParam(name = "local", value = "是否只取本地角色", paramType = "path", required = false)
     })
     @RequestMapping(value = "/users/{roleCode}", method = RequestMethod.GET)
     public List<UserVo> getRoleUsers(@PathVariable("roleCode") String roleCode) {
         return roleService.getRoleUsers(roleCode);
+    }
+
+    @ApiOperation(value = "获取角色下的用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "roleCode", value = "角色的编码", paramType = "path", required = true),
+            @ApiImplicitParam(name = "local", value = "是否只取本地角色", paramType = "path", required = false)
+    })
+    @RequestMapping(value = "/local/users/{roleCode}", method = RequestMethod.GET)
+    public List<UserVo> getLocalRoleUsers(@PathVariable("roleCode") String roleCode) {
+        return roleService.getLocalRoleUsers(roleCode);
     }
 
     /**

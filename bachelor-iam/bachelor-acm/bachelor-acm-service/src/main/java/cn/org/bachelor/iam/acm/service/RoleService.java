@@ -24,7 +24,6 @@ import java.util.*;
 
 /**
  * @author : liuzhuo
- *
  * @创建时间: 2018/10/27
  */
 //@Service("dbRoleService")
@@ -97,7 +96,6 @@ public class RoleService implements RoleServiceStub {
 //    }
 
     /**
-     *
      * @param roleID
      */
     @Override
@@ -143,35 +141,56 @@ public class RoleService implements RoleServiceStub {
      */
     @Override
     public List<UserVo> getRoleUsers(String roleCode) {
+        return getRoleUsers(roleCode, false);
+    }
+
+    @Override
+    public List<UserVo> getLocalRoleUsers(String roleCode) {
+        return getRoleUsers(roleCode, true);
+    }
+
+    private List<UserVo> getRoleUsers(String roleCode, Boolean local) {
         UserRole ur = new UserRole();
         ur.setRoleCode(roleCode);
         List<UserRole> userRoles = userRoleMapper.select(ur);
-        IamSysParam usp = new IamSysParam();
-        usp.setClientId(clientId);
-        List<UserVo> remote = iamSysService.findUsersInApp(usp);
-        Map<String, UserVo> rMap = new HashMap<>(userRoles.size());
-        remote.forEach(i -> {
-            rMap.put(i.getCode(), i);
-        });
         List<UserVo> result = new ArrayList<>();
-        userRoles.forEach(i -> {
-            //访问用户服务调用查询
-            if (rMap.containsKey(i.getUserCode())) {
-                result.add(rMap.get(i.getUserCode()));
-                return;
+        if (!local) {
+            IamSysParam usp = new IamSysParam();
+            usp.setClientId(clientId);
+            List<UserVo> remote = iamSysService.findUsersInApp(usp);
+            Map<String, UserVo> rMap = new HashMap<>(userRoles.size());
+            if (remote != null) {
+                remote.forEach(i -> {
+                    if (i == null) return;
+                    rMap.put(i.getCode(), i);
+                });
             }
-            String id = i.getUserId();
-            UserVo u = null;
-            if (!StringUtils.isEmpty(id)) {
-                u = iamSysService.findUsersDetail(id);
-            }
-            if(u == null){
-                u = new UserVo();
-                u.setCode(i.getUserCode());
-                u.setName("该用户已不存在，请删除！");
-            }
-            result.add(u);
-        });
+            userRoles.forEach(i -> {
+                //访问用户服务调用查询
+                if (rMap.containsKey(i.getUserCode())) {
+                    result.add(rMap.get(i.getUserCode()));
+                    return;
+                }
+                String id = i.getUserId();
+                UserVo u = null;
+                if (!StringUtils.isEmpty(id)) {
+                    u = iamSysService.findUsersDetail(id);
+                }
+                if (u == null) {
+                    u = new UserVo();
+                    u.setCode(i.getUserCode());
+                    u.setName("该用户已不存在，请删除！");
+                }
+                result.add(u);
+            });
+        } else {
+            userRoles.forEach(i -> {
+                UserVo u = new UserVo();
+                u.setAccount(i.getUserCode());
+                u.setId(i.getUserId());
+                result.add(u);
+            });
+        }
         return result;
     }
 
@@ -194,6 +213,7 @@ public class RoleService implements RoleServiceStub {
         });
         return result;
     }
+
 
     /**
      * @param roleCode

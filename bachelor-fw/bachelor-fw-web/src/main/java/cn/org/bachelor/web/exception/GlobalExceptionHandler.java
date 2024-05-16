@@ -7,9 +7,9 @@ import cn.org.bachelor.web.json.JsonResponse;
 import cn.org.bachelor.web.json.ResponseStatus;
 import cn.org.bachelor.web.util.MessageUtil;
 import com.github.pagehelper.PageHelper;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.NoSuchMessageException;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,15 +25,15 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 /**
- *
  * @author liuzhuo
  * @创建时间: 2018/11/9
  * 全局异常处理
  */
 //@RestControllerAdvice(annotations = {ExceptionHandle.class})
+@Slf4j
+@Order(20)
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    private static Log logger = LogFactory.getLog(GlobalExceptionHandler.class);
 
     @ExceptionHandler(value = RemoteException.class)
     public ResponseEntity handleRemoteException(HttpServletRequest request, Exception e) throws Exception {
@@ -82,7 +82,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 msg = MessageUtil.getMessage(code, args == null ? "null" : Arrays.asList(args).toArray());
             }
         } catch (NoSuchMessageException e) {
-            logger.debug(e.getMessage());
+            log.debug(e.getMessage());
         }
         JsonResponse jr = new JsonResponse(null, code, msg, rs);
         return new ResponseEntity(jr, hs);

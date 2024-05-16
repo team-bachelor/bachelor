@@ -38,6 +38,10 @@ public interface RoleServiceClient extends RoleServiceStub {
     void modifyRole(@RequestBody Role role);
 
     @Override
+    @RequestMapping(value = "/local/users/{roleCode}", method = RequestMethod.GET)
+    List<UserVo> getLocalRoleUsers(@PathVariable("roleCode") String roleCode);
+
+    @Override
     @RequestMapping(value = "/users/{roleCode}", method = RequestMethod.GET)
     List<UserVo> getRoleUsers(@PathVariable("roleCode") String roleCode);
 

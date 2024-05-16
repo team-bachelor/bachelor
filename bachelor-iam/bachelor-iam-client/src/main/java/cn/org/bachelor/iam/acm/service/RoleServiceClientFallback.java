@@ -42,6 +42,11 @@ public class RoleServiceClientFallback implements RoleServiceClient {
     }
 
     @Override
+    public List<UserVo> getLocalRoleUsers(String roleCode) {
+        return null;
+    }
+
+    @Override
     public List<String> getUserRoles(@PathVariable String userCode) {
         return null;
     }
