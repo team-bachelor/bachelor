@@ -1,4 +1,4 @@
-package org.bachelor;
+package cn.org.bachelor;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
