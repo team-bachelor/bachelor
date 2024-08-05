@@ -22,7 +22,7 @@ public class MenuVo {
     @JsonIgnore
     private MenuVo parent;
     private String parentId;
-    private int seqOrder;
+    private long seqOrder;
     private String comment;
     private boolean has;
     private String groupName;

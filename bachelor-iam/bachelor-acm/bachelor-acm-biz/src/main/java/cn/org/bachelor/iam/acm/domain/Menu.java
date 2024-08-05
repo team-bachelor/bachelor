@@ -63,7 +63,7 @@ public class Menu {
      * 排序
      */
     @Column(name = "SEQ_ORDER")
-    private Short seqOrder;
+    private Long seqOrder;
 
     /**
      * 更新时间
