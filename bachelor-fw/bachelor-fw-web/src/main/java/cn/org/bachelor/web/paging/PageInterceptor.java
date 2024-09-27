@@ -16,6 +16,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
@@ -59,15 +60,21 @@ public class PageInterceptor extends HandlerInterceptorAdapter {
                 pageNum = request.getParameter(PAGE_NUM);
                 pageSize = request.getParameter(PAGE_SIZE);
             } else if (request.getMethod().equals(HttpMethod.POST.name())) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+                ServletInputStream stream = request.getInputStream();
+                if(!stream.isReady()){
+                    return true;
+                }
+                BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
                 StringBuilder body = new StringBuilder("");
                 reader.lines().forEach(s -> {
                     body.append(s);
                 });
-                JSONObject o = JSONObject.parseObject(body.toString());
-                pageNum = o.getString(PAGE_NUM);
-                pageSize = o.getString(PAGE_SIZE);
-
+                String b = body.toString().trim();
+                if(b.startsWith("{")) {
+                    JSONObject o = JSONObject.parseObject(b);
+                    pageNum = o.getString(PAGE_NUM);
+                    pageSize = o.getString(PAGE_SIZE);
+                }
             }
             if (StringUtils.isEmpty(pageNum) && StringUtils.isEmpty(pageSize)) {
                 log.debug("找不到分页标志，不开始分页处理。");
@@ -82,8 +89,10 @@ public class PageInterceptor extends HandlerInterceptorAdapter {
             PageHelper.startPage(pageNumInt, pageSizeInt);
         } catch (Exception e) {
             log.error(e);
+            PageHelper.clearPage();
+        }finally {
+            return true;
         }
-        return true;
     }
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
