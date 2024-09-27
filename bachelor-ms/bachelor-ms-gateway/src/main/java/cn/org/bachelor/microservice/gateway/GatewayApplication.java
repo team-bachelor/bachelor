@@ -34,7 +34,7 @@ import java.net.UnknownHostException;
 @RefreshScope
 @ComponentScan("cn.org.bachelor.**.*")
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
-@EnableHystrix
+//@EnableHystrix
 public class GatewayApplication {
     private static Logger logger = LoggerFactory.getLogger(GatewayApplication.class);
 

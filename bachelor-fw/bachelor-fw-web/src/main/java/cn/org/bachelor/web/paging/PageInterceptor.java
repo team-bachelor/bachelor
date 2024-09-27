@@ -27,7 +27,9 @@ import org.springframework.web.servlet.ModelAndView;
 // 引入 Spring MVC 框架中的 HandlerInterceptorAdapter 类，用于实现拦截器功能
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.servlet.ServletInputStream;
 // 引入 Servlet API 中的 HttpServletRequest 类，用于表示 HTTP 请求
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 // 引入 Servlet API 中的 HttpServletResponse 类，用于表示 HTTP 响应
 import javax.servlet.http.HttpServletResponse;
@@ -86,6 +88,10 @@ public class PageInterceptor extends HandlerInterceptorAdapter {
                 pageNum = request.getParameter(PAGE_NUM);
                 pageSize = request.getParameter(PAGE_SIZE);
             } else if (request.getMethod().equals(HttpMethod.POST.name())) {
+                ServletInputStream stream = request.getInputStream();
+                if(!stream.isReady()){
+                    return true;
+                }
                 // 创建 BufferedReader 用于读取 POST 请求的输入流
                 BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
                 // 创建 StringBuilder 用于存储读取的请求体内容
@@ -93,10 +99,13 @@ public class PageInterceptor extends HandlerInterceptorAdapter {
                 // 逐行读取请求体内容并添加到 StringBuilder 中
                 reader.lines().forEach(body::append);
                 // 将请求体内容解析为 JSONObject
-                JSONObject o = JSONObject.parseObject(body.toString());
-                // 从 JSONObject 中获取分页页码和每页数量
-                pageNum = o.getString(PAGE_NUM);
-                pageSize = o.getString(PAGE_SIZE);
+                String b = body.toString().trim();
+                if(b.startsWith("{")) {
+                    JSONObject o = JSONObject.parseObject(b);
+                    // 从 JSONObject 中获取分页页码和每页数量
+                    pageNum = o.getString(PAGE_NUM);
+                    pageSize = o.getString(PAGE_SIZE);
+                }
             }
             // 判断分页页码和每页数量是否都为空
             if (StringUtils.isEmpty(pageNum) && StringUtils.isEmpty(pageSize)) {
@@ -117,8 +126,10 @@ public class PageInterceptor extends HandlerInterceptorAdapter {
         } catch (Exception e) {
             // 记录错误日志，打印异常信息
             log.error(e);
+            PageHelper.clearPage();
+        }finally {
+            return true;
         }
-        return true;
     }
 
     /**
