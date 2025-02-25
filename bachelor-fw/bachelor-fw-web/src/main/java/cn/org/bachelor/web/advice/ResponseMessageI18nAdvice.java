@@ -17,6 +17,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.util.Locale;
 
+/**
+ * 用于返回信息国际化的通知类.<br/>
+ * 如果返回的JsonResponse.msg属性所制定的信息编号在信息文件中存在,则返回与编号对应的信息,如果不存在则直接返回JsonResponse的msg属性.
+ * @See cn.org.bachelor.web.json.JsonResponse#getMsg()
+ */
 @ControllerAdvice
 public class ResponseMessageI18nAdvice implements ResponseBodyAdvice {
 

@@ -1,10 +1,10 @@
 package cn.org.bachelor.exception;
 
+/**
+ * 系统异常
+ */
 public class SystemException extends BaseException{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public SystemException() {

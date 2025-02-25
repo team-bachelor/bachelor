@@ -6,7 +6,7 @@
 package cn.org.bachelor.exception;
 
 /**
- * 开发平台基础异常类
+ * 基础异常
  * 
  * @author Team Bachelor
  *
