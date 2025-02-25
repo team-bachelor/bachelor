@@ -49,7 +49,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
         user.setOrgName(urlDecode(request.getHeader(JwtToken.PayloadKey.ORG_NAME)));
         user.setOrgId(request.getHeader(JwtToken.PayloadKey.ORG_ID));
         user.setDeptId(request.getHeader(JwtToken.PayloadKey.DEPT_ID));
-        user.setDeptName(request.getHeader(JwtToken.PayloadKey.DEPT_NAME));
+        user.setDeptName(urlDecode(request.getHeader(JwtToken.PayloadKey.DEPT_NAME)));
         user.setAccessToken(request.getHeader(JwtToken.PayloadKey.ACCESS_TOKEN));
         Object o = request.getAttribute(ACCESS_BACKEND);
         if (o != null && "N".equals(o.toString())) {

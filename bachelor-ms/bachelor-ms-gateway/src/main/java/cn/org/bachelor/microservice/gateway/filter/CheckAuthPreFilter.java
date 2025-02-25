@@ -29,6 +29,7 @@ import reactor.core.publisher.Mono;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -94,7 +95,8 @@ public class CheckAuthPreFilter implements GlobalFilter {
             isValidToekn = isValidToken(jwtToken);
             if (jwtToken != null && isValidToekn) {
                 //TODO 安全性有待提高
-                Map<String, Object> tokenClaims = jwtToken.getClaims();
+                Map<String, Object> tokenClaims = new HashMap<>(jwtToken.getClaims().size());
+                tokenClaims.putAll(jwtToken.getClaims());
                 String ver = (String) tokenClaims.get("ver");
                 if(StringUtils.isNotEmpty(ver) && "VER_2".equals(ver)){
                     tokenClaims = (Map<String, Object>) tokenClaims.get("claims");
@@ -118,6 +120,8 @@ public class CheckAuthPreFilter implements GlobalFilter {
                                 getTokenClaim(tokenClaims, JwtToken.PayloadKey.ORG_NAME, true))
                         .header(JwtToken.PayloadKey.ACCESS_TOKEN,
                                 getTokenClaim(tokenClaims, JwtToken.PayloadKey.ACCESS_TOKEN, false))
+                        .header(JwtToken.PayloadKey.VER,
+                                getTokenClaim(tokenClaims, JwtToken.PayloadKey.VER, false))
                         .build();
             } else {
                 pass = false;
