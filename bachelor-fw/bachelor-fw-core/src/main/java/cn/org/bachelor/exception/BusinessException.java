@@ -1,10 +1,10 @@
 package cn.org.bachelor.exception;
 
+/**
+ * 业务异常
+ */
 public class BusinessException extends BaseException{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private String[] args = null;
