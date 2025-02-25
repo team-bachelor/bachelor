@@ -95,6 +95,10 @@ public class CheckAuthPreFilter implements GlobalFilter {
             if (jwtToken != null && isValidToekn) {
                 //TODO 安全性有待提高
                 Map<String, Object> tokenClaims = jwtToken.getClaims();
+                String ver = (String) tokenClaims.get("ver");
+                if(StringUtils.isNotEmpty(ver) && "VER_2".equals(ver)){
+                    tokenClaims = (Map<String, Object>) tokenClaims.get("claims");
+                }
                 host = request.mutate()
                         .header(JwtToken.PayloadKey.ORG_ID,
                                 getTokenClaim(tokenClaims, JwtToken.PayloadKey.ORG_ID, false))
