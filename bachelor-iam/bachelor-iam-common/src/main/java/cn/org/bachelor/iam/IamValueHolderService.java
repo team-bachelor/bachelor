@@ -36,7 +36,7 @@ public class IamValueHolderService {
             user = (UserVo) uo;
             return user;
         }
-        return user;
+        return new UserVo();
     }
 
     public String getCurrentUserCode(){
