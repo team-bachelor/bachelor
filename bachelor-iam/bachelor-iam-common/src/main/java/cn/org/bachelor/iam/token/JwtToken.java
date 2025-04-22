@@ -20,49 +20,84 @@ import static cn.org.bachelor.iam.token.JwtToken.PayloadKey.*;
  * JSONWebToken
  * @author  liuzhuo
  */
-//TODO 处理过时的spring security方法
 public class JwtToken {
 
     public static final String Ver1 = "VER_1";
     public static final String Ver2 = "VER_2";
 
+    /**
+     * JWT 负载中的键名常量类，包含了各种标准和自定义的 JWT 声明。
+     */
     public static class PayloadKey {
+        // JWT 签发者
         public static final String ISS = "iss";
+        // JWT 所面向的用户
         public static final String SUB = "sub";
+        // 接收 JWT 的一方
         public static final String AUD = "aud";
+        // JWT 的过期时间
         public static final String EXP = "exp";
+        // 定义在什么时间之前，该 JWT 都是不可用的
         public static final String NBF = "nbf";
+        // JWT 的签发时间
         public static final String IAT = "iat";
+        // JWT 的唯一身份标识，主要用来作为一次性 token，从而回避重放攻击
         public static final String JTI = "jti";
+        // JWT 版本
         public static final String VER = "ver";
+        // 规范外的其他内容
         public static final String CLAIMS = "claims";
+        // 用户 ID
         public static final String USER_ID = "userId";
+        // 用户名称
         public static final String USER_NAME = "user_name";
+        // 用户账号
         public static final String ACCOUNT = "account";
+        // 用户代码
         public static final String USER_CODE = "user_code";
+        // 组织机构名称
         public static final String ORG_NAME = "org_name";
+        // 组织机构 ID
         public static final String ORG_ID = "org_id";
+        // 部门名称
         public static final String DEPT_NAME = "dept_name";
+        // 部门 ID
         public static final String DEPT_ID = "dept_id";
+        // 组织机构代码
         public static final String ORG_CODE = "org_code";
+        // 访问令牌
         public static final String ACCESS_TOKEN = "accesstoken";
+        // 是否为管理员
         public static final String IS_ADMINISTRATOR = "is_administrator";
+        // 租户 ID
         public static final String TENANT_ID = "tenant_id";
+        // 区域 ID
         public static final String AREA_ID = "area_id";
+        // 开放 ID
         public static final String OPEN_ID = "open_id";
+        // 开放 ID（另一种表示）
         public static final String OPEN_ID_CAM = "openid";
+        // 区域名称
         public static final String AREA_NAME = "area_name";
     }
 
     /**
-     * 创建jwt
-     * @param privateKey 私钥
-     * @return 返回生成的jwt
+     * 创建 JWT 并生成字符串表示。
+     *
+     * @param privateKey 私钥，用于对 JWT 进行签名
+     * @return 返回生成的 JWT 字符串
      */
     public String generate(String privateKey) {
         return generate(JSONObject.toJSONString(this), privateKey);
     }
 
+    /**
+     * 私有静态方法，用于根据负载字符串和私钥生成 JWT。
+     *
+     * @param payloadStr 负载信息的 JSON 字符串
+     * @param privateKey 私钥，用于对 JWT 进行签名
+     * @return 返回生成的 JWT 字符串
+     */
     private static String generate(String payloadStr, String privateKey) {
         try {
             //准备JWS-header
@@ -82,6 +117,13 @@ public class JwtToken {
         }
     }
 
+    /**
+     * 根据用户信息和凭证创建 JwtToken 实例。
+     *
+     * @param userDetail 用户详细信息
+     * @param credential 抽象 IAM 凭证
+     * @return 创建好的 JwtToken 实例
+     */
     public static JwtToken create(IUser userDetail, AbstractIamCredential credential) {
         if (userDetail == null) {
             throw new BusinessException("user detail can not be null!");
@@ -146,27 +188,13 @@ public class JwtToken {
 //        String token = JwtToken.generate(userStr, privateKey);
         return token;
     }
-
     /**
-     * 解析和验证
+     * 解析和验证 JWT 字符串。
      *
-     * @param token     token
-     * @param publicKey 公钥
-     * @return 解析后的JWT
+     * @param token     JWT 字符串
+     * @param publicKey 公钥，用于验证 JWT 签名
+     * @return 解析后的 JwtToken 实例
      */
-//    public static JwtToken decodeAndVerify(String token, RSAPublicKey publicKey) {
-//        Jwt j = JwtHelper.decodeAndVerify(token, new RsaVerifier(publicKey));
-//        return fromJson(j.getClaims());
-//    }
-
-//    public static JwtToken decodeAndVerify(String token, String publicKey) {
-//        Jwt j = JwtHelper.decodeAndVerify(token, new RsaVerifier(publicKey));
-//        return fromJson(j.getClaims());
-//    }
-//    public static JwtToken decodeAndVerify(String token, RSAPublicKey publicKey) {
-//        Jwt j = JwtHelper.decodeAndVerify(token, new RsaVerifier(publicKey));
-//        return decodeAndVerify(token, publicKey.);
-//    }
     public static JwtToken decodeAndVerify(String token, String publicKey) {
         try {
             JWSObject jwsObject = JWSObject.parse(token);
@@ -199,197 +227,175 @@ public class JwtToken {
             throw new SystemException(e);
         }
     }
-//    public static JwtToken decode(String token) {
-//        Jwt j = JwtHelper.decode(token);
-//        return fromJson(j.getClaims());
-//    }
-
-    //jwt签发者
+    // jwt签发者
     private String iss;
 
-    //jwt所面向的用户
+    // jwt所面向的用户
     private String sub;
 
-    //接收jwt的一方
+    // 接收jwt的一方
     private String aud;
 
-    //jwt的过期时间，这个过期时间必须要大于签发时间
+    // jwt的过期时间，这个过期时间必须要大于签发时间
     private Long exp;
 
-    //定义在什么时间之前，该jwt都是不可用的.
+    // 定义在什么时间之前，该jwt都是不可用的
     private Long nbf;
 
-    //jwt的签发时间
+    // jwt的签发时间
     private Long iat;
 
-    //jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击
+    // jwt的唯一身份标识，主要用来作为一次性token，从而回避重放攻击
     private String jti;
 
-    //版本
+    // 版本
     private String ver;
 
-    //规范外的其他内容
+    // 规范外的其他内容
     private Map<String, Object> claims;
 
+    /**
+     * 获取规范外的其他内容
+     * @return 包含规范外其他内容的Map对象
+     */
     public Map<String, Object> getClaims() {
         return claims;
     }
 
+    /**
+     * 设置规范外的其他内容
+     * @param claims 包含规范外其他内容的Map对象
+     */
     public void setClaims(Map<String, Object> claims) {
         this.claims = claims;
     }
 
+    /**
+     * 获取 jwt 签发者
+     * @return jwt 签发者的字符串
+     */
     public String getIss() {
         return iss;
     }
 
+    /**
+     * 设置 jwt 签发者
+     * @param iss jwt 签发者的字符串
+     */
     public void setIss(String iss) {
         this.iss = iss;
     }
 
+    /**
+     * 获取 jwt 所面向的用户
+     * @return jwt 所面向用户的字符串
+     */
     public String getSub() {
         return sub;
     }
 
+    /**
+     * 设置 jwt 所面向的用户
+     * @param sub jwt 所面向用户的字符串
+     */
     public void setSub(String sub) {
         this.sub = sub;
     }
 
+    /**
+     * 获取接收 jwt 的一方
+     * @return 接收 jwt 一方的字符串
+     */
     public String getAud() {
         return aud;
     }
 
+    /**
+     * 设置接收 jwt 的一方
+     * @param aud 接收 jwt 一方的字符串
+     */
     public void setAud(String aud) {
         this.aud = aud;
     }
 
+    /**
+     * 获取 jwt 的过期时间
+     * @return jwt 过期时间的 Long 类型值
+     */
     public Long getExp() {
         return exp;
     }
 
+    /**
+     * 设置 jwt 的过期时间
+     * @param exp jwt 过期时间的 Long 类型值
+     */
     public void setExp(Long exp) {
         this.exp = exp;
     }
 
+    /**
+     * 获取 jwt 在什么时间之前不可用
+     * @return 表示不可用时间的 Long 类型值
+     */
     public Long getNbf() {
         return nbf;
     }
 
+    /**
+     * 设置 jwt 在什么时间之前不可用
+     * @param nbf 表示不可用时间的 Long 类型值
+     */
     public void setNbf(Long nbf) {
         this.nbf = nbf;
     }
 
+    /**
+     * 获取 jwt 的签发时间
+     * @return jwt 签发时间的 Long 类型值
+     */
     public Long getIat() {
         return iat;
     }
 
+    /**
+     * 设置 jwt 的签发时间
+     * @param iat jwt 签发时间的 Long 类型值
+     */
     public void setIat(Long iat) {
         this.iat = iat;
     }
 
+    /**
+     * 获取 jwt 的唯一身份标识
+     * @return jwt 唯一身份标识的字符串
+     */
     public String getJti() {
         return jti;
     }
 
+    /**
+     * 设置 jwt 的唯一身份标识
+     * @param jti jwt 唯一身份标识的字符串
+     */
     public void setJti(String jti) {
         this.jti = jti;
     }
 
+    /**
+     * 获取 jwt 的版本
+     * @return jwt 版本的字符串
+     */
     public String getVer() {
         return ver;
     }
 
+    /**
+     * 设置 jwt 的版本
+     * @param ver jwt 版本的字符串
+     */
     public void setVer(String ver) {
         this.ver = ver;
     }
-//    public static String toJson(JwtToken token) {
-//        if (token == null) return null;
-//
-//        Map<String, Object> tokenMap = token.getClaims();
-//        if (tokenMap == null) {
-//            tokenMap = new HashMap<>();
-//        }
-//        if (isNotEmpty(token.getIss())) {
-//            tokenMap.put(PayloadKey.ISS, token.getIss());
-//        }
-//        if (isNotEmpty(token.getSub())) {
-//            tokenMap.put(PayloadKey.SUB, token.getSub());
-//        }
-//        if (isNotEmpty(token.getAud())) {
-//            tokenMap.put(PayloadKey.AUD, token.getAud());
-//        }
-//        if (token.getExp() != null) {
-//            tokenMap.put(PayloadKey.EXP, String.valueOf(token.getExp()));
-//        }
-//        if (token.getNbf() != null) {
-//            tokenMap.put(PayloadKey.NBF, String.valueOf(token.getNbf()));
-//        }
-//        if (token.getIat() != null) {
-//            tokenMap.put(PayloadKey.IAT, String.valueOf(token.getIat()));
-//        }
-//        if (isNotEmpty(token.getJti())) {
-//            tokenMap.put(PayloadKey.JTI, token.getJti());
-//        }
-//        JSONObject.toJSONString(tokenMap)
-//        try {
-//            ObjectMapper mapper = new ObjectMapper();
-//            return mapper.writeValueAsString(tokenMap);
-//        } catch (JsonProcessingException e) {
-//            throw new BusinessException(e);
-//        }
-//    }
-
-//    private static boolean isNotEmpty(String s) {
-//        return s != null && !"".equals(s);
-//    }
-
-//    public static JwtToken fromJson(String json) {
-//        ObjectMapper mapper = new ObjectMapper();
-//        try {
-//            Map<String, Object> tokenMap = mapper.readValue(json, Map.class);
-//            return resolveMap(tokenMap);
-//        } catch (IOException e) {
-//            throw new BusinessException("invalid jwt string", e);
-//        }
-//
-//    }
-
-//    private static JwtToken resolveMap(Map<String, Object> tokenMap) {
-//        JwtToken token = new JwtToken();
-//        token.setIss(getAndRemoveClaim(PayloadKey.ISS, tokenMap));
-//        token.setSub(getAndRemoveClaim(PayloadKey.SUB, tokenMap));
-//        token.setAud(getAndRemoveClaim(PayloadKey.AUD, tokenMap));
-//
-//        String v = null;
-//        try {
-//            v = getAndRemoveClaim(PayloadKey.EXP, tokenMap);
-//            if (isNotEmpty(v)) {
-//                token.setExp(Long.valueOf(v));
-//            }
-//        } catch (NumberFormatException e) {
-//        }
-//        try {
-//            v = getAndRemoveClaim(PayloadKey.NBF, tokenMap);
-//            if (isNotEmpty(v))
-//                token.setNbf(Long.valueOf(v));
-//        } catch (NumberFormatException e) {
-//        }
-//        try {
-//            v = getAndRemoveClaim(PayloadKey.IAT, tokenMap);
-//            if (isNotEmpty(v))
-//                token.setIat(Long.valueOf(v));
-//        } catch (NumberFormatException e) {
-//        }
-//        token.setJti(getAndRemoveClaim(PayloadKey.JTI, tokenMap));
-//        token.setClaims(tokenMap);
-//        return token;
-//    }
-//
-//    private static String getAndRemoveClaim(String claimName, Map<String, Object> tokenMap) {
-//        if (tokenMap.containsKey(claimName)) {
-//            return tokenMap.remove(claimName).toString();
-//        }
-//        return null;
-//    }
 
 }

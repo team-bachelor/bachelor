@@ -13,88 +13,102 @@ import java.util.*;
  * @since 2015/8/25
  */
 public class RedisClientWrapper {
-	
-	private String host = "127.0.0.1";
-	
-	private int port = 6379;
-	
-	// 0 - never expire
-	private int expire = 0;
-	
-	//timeout for jedis try to connect to redis server, not expire time! In milliseconds
-	private int timeout = 0;
-	
-	private String password = "";
-	
-    private static HashMap<String, JedisPool> jedisPoolMap = new HashMap<String, JedisPool>(0);
-	
-    private static HashMap<String, JedisCluster> jedisClusterMap = new HashMap<String, JedisCluster>(0);
-		
+    // Redis服务的主机名，默认值为 127.0.0.1
+    private String host = "127.0.0.1";
+    // Redis服务的端口，默认值为 6379
+    private int port = 6379;
+    // 缓存过期时间，0 表示永不过期
+    private int expire = 0;
+    // Jedis连接Redis服务器的超时时间，单位为毫秒，非过期时间
+    private int timeout = 0;
+    // Redis的连接密码，默认为空字符串
+    private String password = "";
+    // 静态的Jedis连接池映射，键为缓存名称，值为Jedis连接池实例
+    private static final HashMap<String, JedisPool> jedisPoolMap = new HashMap<>(0);
+    // 静态的Jedis集群映射，键为缓存名称，值为Jedis集群实例
+    private static final HashMap<String, JedisCluster> jedisClusterMap = new HashMap<>(0);
+    // 缓存名称，默认为空字符串
     private String cacheName = "";
-
+    // 存储Redis主机信息的集合
     private Set<String> hosts;
-
+    // 标记是否为集群模式
     private boolean isCluster = false;
 
+    /**
+     * 无参构造函数
+     */
     public RedisClientWrapper() {
 
-	}
-	
-	/**
-	 * 初始化方法
-	 */
-//    public void init() {
-//        init(host + ":" + port);
-//    }
+    }
+
+    /**
+     * 初始化方法
+     *
+     * @param name 缓存名称
+     */
     public void init(String name) {
         cacheName = name;
+        // 存储主机和端口信息的集合
         Set<HostAndPort> haps = null;
         if (hosts != null) {
-//            if (hosts.size() == 1) {
-//                HostAndPort hap = parseHostAndPort(hosts.iterator().next());
-//                host = hap.getHost();
-//                port = hap.getPort();
-//                addToJedisPool(cacheName, host, port);
-//            } else {
-                haps = new HashSet<HostAndPort>(hosts.size());
-                for (String hostString : hosts) {
-                    HostAndPort hap = parseHostAndPort(hostString);
-                    haps.add(hap);
-                }
-                JedisCluster jc = null;
-                if (timeout == 0) {
-                    jc = new JedisCluster(haps);
-                } else {
-                    jc = new JedisCluster(haps, timeout);
-
-                }
-                isCluster = true;
-                jedisClusterMap.put(name, jc);
-//            }
+            // 初始化集合，容量为 hosts 的大小
+            haps = new HashSet<>(hosts.size());
+            for (String hostString : hosts) {
+                // 解析主机和端口信息
+                HostAndPort hap = parseHostAndPort(hostString);
+                haps.add(hap);
+            }
+            // Jedis集群实例
+            JedisCluster jc;
+            if (timeout == 0) {
+                jc = new JedisCluster(haps);
+            } else {
+                jc = new JedisCluster(haps, timeout);
+            }
+            isCluster = true;
+            // 将集群实例添加到映射中
+            jedisClusterMap.put(name, jc);
         }
-        if (haps == null || haps.size() == 0) {
+        // 如果 haps 为空或没有元素，则添加到 Jedis 连接池
+        if (haps == null || haps.isEmpty()) {
             addToJedisPool(cacheName, host, port);
         }
     }
 
+    /**
+     * 将指定的主机和端口信息添加到 Jedis 连接池
+     *
+     * @param name 缓存名称
+     * @param _host 主机名
+     * @param _port 端口号
+     */
     private void addToJedisPool(String name, String _host, int _port) {
+        // 从映射中获取 Jedis 连接池实例
         JedisPool jedisPool = jedisPoolMap.get(name);
         if (jedisPool == null) {
-            if (password != null && !"".equals(password)) {
+            if (password != null && !password.isEmpty()) {
                 jedisPool = new JedisPool(new JedisPoolConfig(), _host, _port, timeout, password);
             } else if (timeout != 0) {
                 jedisPool = new JedisPool(new JedisPoolConfig(), _host, _port, timeout);
             } else {
                 jedisPool = new JedisPool(new JedisPoolConfig(), _host, _port);
             }
+            // 将连接池实例添加到映射中
             jedisPoolMap.put(name, jedisPool);
         }
     }
 
+    /**
+     * 解析主机和端口信息
+     *
+     * @param hostString 主机和端口信息的字符串，格式为 "host:port"
+     * @return 解析后的 HostAndPort 实例
+     * @throws InvalidPropertyException 如果主机信息格式不正确
+     */
     private HostAndPort parseHostAndPort(String hostString) {
         StringTokenizer st = new StringTokenizer(hostString, ":");
-        if (st.hasMoreElements() & st.countTokens() == 2) {
-            return new HostAndPort(st.nextToken(), Integer.valueOf(st.nextToken()));
+        if (st.hasMoreElements() && st.countTokens() == 2) {
+            return new HostAndPort(st.nextToken(), Integer.parseInt(st.nextToken()));
         } else {
             throw new InvalidPropertyException(this.getClass(), "hosts", "invalid host name:" + hostString + ".");
         }
@@ -107,36 +121,48 @@ public class RedisClientWrapper {
      * @return 根据key获取的值
      */
     public Map<String, String> hgetAll(String key) {
-        if(isCluster){
+        if (isCluster) {
             return hgetAllCluster(key);
-			}else{
+        } else {
             return hgetAllSingle(key);
-			}
-		}
+        }
+    }
 
+    /**
+     * 从集群模式下的 Redis 中获取哈希数据
+     *
+     * @param key 要获取的哈希数据的键
+     * @return 哈希数据的键值对映射
+     */
     private Map<String, String> hgetAllCluster(String key) {
+        // 获取 Jedis 集群实例
         JedisCluster jc = getJedisCluster();
         return jc.hgetAll(key);
-	}
-	
+    }
+
+    /**
+     * 从单节点模式下的 Redis 中获取哈希数据
+     *
+     * @param key 要获取的哈希数据的键
+     * @return 哈希数据的键值对映射
+     */
     private Map<String, String> hgetAllSingle(String key) {
-        Map<String, String> value = null;
+        // 存储获取到的哈希数据
+        Map<String, String> value;
+        // 获取 Jedis 连接池实例
         JedisPool jedisPool = getJedisPool();
-        Jedis jedis = jedisPool.getResource();
-        try {
+        try (Jedis jedis = jedisPool.getResource()) {
             value = jedis.hgetAll(key);
-        } finally {
-            jedis.close();
         }
         return value;
     }
 
-	/**
-	 * 根据指定key从Redis中获取值
+    /**
+     * 根据指定key从Redis中获取值
      *
-	 * @param key 要获得值的key
-	 * @return 根据key获取的值
-	 */
+     * @param key 要获得值的key
+     * @return 根据key获取的值
+     */
     public byte[] get(byte[] key) {
         if (isCluster) {
             return getCluster(key);
@@ -145,46 +171,58 @@ public class RedisClientWrapper {
         }
     }
 
+    /**
+     * 从集群模式下的 Redis 中获取二进制数据
+     *
+     * @param key 要获取的二进制数据的键
+     * @return 二进制数据
+     */
     private byte[] getCluster(byte[] key) {
+        // 获取 Jedis 集群实例
         JedisCluster jc = getJedisCluster();
         return jc.get(key);
     }
 
+    /**
+     * 从单节点模式下的 Redis 中获取二进制数据
+     *
+     * @param key 要获取的二进制数据的键
+     * @return 二进制数据
+     */
     private byte[] getSingle(byte[] key) {
-		byte[] value = null;
+        // 存储获取到的二进制数据
+        byte[] value;
+        // 获取 Jedis 连接池实例
         JedisPool jedisPool = getJedisPool();
-		Jedis jedis = jedisPool.getResource();
-        try {
-			value = jedis.get(key);
-        } finally {
-            jedis.close();
-		}
-		return value;
-	}
-	
-	/**
-	 * 将指定value以指定key存入Redis
+        try (Jedis jedis = jedisPool.getResource()) {
+            value = jedis.get(key);
+        }
+        return value;
+    }
+
+    /**
+     * 将指定value以指定key存入Redis
      *
      * @param key   要设置的key
-	 * @param value 要设置的value
-	 * @return 存入Redis的值
-	 */
+     * @param value 要设置的value
+     * @return 存入Redis的值
+     */
     public byte[] set(byte[] key, byte[] value) {
         if (isCluster) {
             return setCluster(key, value, expire);
         } else {
             return setSingle(key, value, expire);
-		 	}
-		}
-	
-	/**
-	 * 将指定value以指定key存入Redis
+        }
+    }
+
+    /**
+     * 将指定value以指定key存入Redis，并设置过期时间
      *
      * @param key    要设置的key
      * @param value  要设置的value
-	 * @param expire 过期时间
-	 * @return 存入Redis的值
-	 */
+     * @param expire 过期时间
+     * @return 存入Redis的值
+     */
     public byte[] set(byte[] key, byte[] value, int expire) {
         if (isCluster) {
             return setCluster(key, value, expire);
@@ -193,6 +231,14 @@ public class RedisClientWrapper {
         }
     }
 
+    /**
+     * 在集群模式下将二进制数据存入 Redis，并设置过期时间
+     *
+     * @param key    要存储的二进制数据的键
+     * @param value  要存储的二进制数据
+     * @param expire 过期时间
+     * @return 存储的二进制数据
+     */
     private byte[] setCluster(byte[] key, byte[] value, int expire) {
         JedisCluster jc = getJedisCluster();
         jc.set(key, value);
@@ -202,6 +248,14 @@ public class RedisClientWrapper {
         return value;
     }
 
+    /**
+     * 在单节点模式下将二进制数据存入 Redis，并设置过期时间
+     *
+     * @param key    要存储的二进制数据的键
+     * @param value  要存储的二进制数据
+     * @param expire 过期时间
+     * @return 存储的二进制数据
+     */
     private byte[] setSingle(byte[] key, byte[] value, int expire) {
         JedisPool jedisPool = getJedisPool();
 		Jedis jedis = jedisPool.getResource();
@@ -229,17 +283,30 @@ public class RedisClientWrapper {
         }
     }
 
+    /**
+     * 在集群模式下根据指定key删除Redis中的值
+     *
+     * @param key 要删除的键
+     */
     private void delCluster(byte[] key) {
         JedisCluster jc = getJedisCluster();
         jc.del(key);
     }
 
+    /**
+     * 在单节点模式下根据指定key删除Redis中的值
+     *
+     * @param key 要删除的键
+     */
     private void delSingle(byte[] key) {
+        // 获取当前缓存名称对应的 Jedis 连接池
         JedisPool jedisPool = getJedisPool();
-		Jedis jedis = jedisPool.getResource();
+        // 从连接池中获取一个 Jedis 连接资源
+        Jedis jedis = jedisPool.getResource();
         try {
 			jedis.del(key);
         } finally {
+            // 无论是否发生异常，最后都要关闭 Jedis 连接，将连接归还给连接池
             jedis.close();
 		}
 	}

@@ -9,39 +9,44 @@ import java.security.interfaces.RSAPublicKey;
  * @author liuzhuo
  */
 public class RSAKeyPair implements Serializable {
+    // 定义一个私钥对象，使用final修饰，确保在对象创建后不能被重新赋值
     private RSAPrivateKey privateKey;
+    // 定义一个公钥对象，使用final修饰，确保在对象创建后不能被重新赋值
     private RSAPublicKey publicKey;
 
     /**
-     * Constructs a cn.org.bachelor.iam.oauth2.key pair from the given public cn.org.bachelor.iam.oauth2.key and private cn.org.bachelor.iam.oauth2.key.
+     * 从给定的公钥和私钥构造一个RSA密钥对对象。
      *
-     * <p>Note that this constructor only stores references to the public
-     * and private cn.org.bachelor.iam.oauth2.key components in the generated cn.org.bachelor.iam.oauth2.key pair. This is safe,
-     * because {@code Key} objects are immutable.
+     * <p>注意，此构造函数仅存储对生成的密钥对中公钥和私钥组件的引用。
+     * 这是安全的，因为{@code Key}对象是不可变的。
      *
-     * @param publicKey  the public cn.org.bachelor.iam.oauth2.key.
-     * @param privateKey the private cn.org.bachelor.iam.oauth2.key.
+     * @param publicKey  公钥对象
+     * @param privateKey 私钥对象
      */
     public RSAKeyPair(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
+        // 将传入的公钥赋值给当前对象的公钥属性
         this.publicKey = publicKey;
+        // 将传入的私钥赋值给当前对象的私钥属性
         this.privateKey = privateKey;
     }
 
     /**
-     * Returns a reference to the public cn.org.bachelor.iam.oauth2.key component of this cn.org.bachelor.iam.oauth2.key pair.
+     * 返回此密钥对中公钥组件的引用。
      *
-     * @return a reference to the public cn.org.bachelor.iam.oauth2.key.
+     * @return 公钥的引用
      */
     public RSAPublicKey getPublic() {
+        // 返回当前对象的公钥属性
         return publicKey;
     }
 
     /**
-     * Returns a reference to the private cn.org.bachelor.iam.oauth2.key component of this cn.org.bachelor.iam.oauth2.key pair.
+     * 返回此密钥对中私钥组件的引用。
      *
-     * @return a reference to the private cn.org.bachelor.iam.oauth2.key.
+     * @return 私钥的引用
      */
     public RSAPrivateKey getPrivate() {
+        // 返回当前对象的私钥属性
         return privateKey;
     }
 }
