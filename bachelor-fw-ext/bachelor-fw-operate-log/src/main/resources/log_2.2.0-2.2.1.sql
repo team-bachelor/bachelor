@@ -1,0 +1,3 @@
+ALTER TABLE `cmn_operate_log`
+    ADD COLUMN `OP_ACCOUNT_NAME` varchar(50) NULL COMMENT '操作人员账号名' AFTER `OP_ACCOUNT`,
+ADD COLUMN `OP_ORG_NAME` varchar(100) NULL COMMENT '操作人所属机构名' AFTER `OP_ORG_ID`;

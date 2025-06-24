@@ -16,8 +16,16 @@ public class OperateLog implements Serializable {
     private String id;
     @ApiModelProperty("操作人账号")
     private String opAccount;
+
+    @ApiModelProperty("操作人账号名")
+    private String opAccountName;
+
     @ApiModelProperty("操作人所属机构")
     private String opOrgId;
+
+    @ApiModelProperty("操作人所属机构名")
+    private String opOrgName;
+
     @ApiModelProperty("操作时间")
     private Date opTime;
     @ApiModelProperty("操作库名称")
@@ -154,5 +162,21 @@ public class OperateLog implements Serializable {
 
     public void setSeriesNumber(String seriesNumber) {
         this.seriesNumber = seriesNumber;
+    }
+
+    public String getOpAccountName() {
+        return opAccountName;
+    }
+
+    public void setOpAccountName(String opAccountName) {
+        this.opAccountName = opAccountName;
+    }
+
+    public String getOpOrgName() {
+        return opOrgName;
+    }
+
+    public void setOpOrgName(String opOrgName) {
+        this.opOrgName = opOrgName;
     }
 }

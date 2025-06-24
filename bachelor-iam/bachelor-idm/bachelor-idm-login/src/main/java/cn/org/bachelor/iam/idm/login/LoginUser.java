@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * @Author lz
@@ -35,6 +36,8 @@ public class LoginUser implements UserDetails, IUser {
     private String areaName;
 
     private boolean isAdministrator;
+
+    private Map<String, Object> extendInfo;
 
     public LoginUser(User user) {
         this.user = user;
@@ -103,6 +106,11 @@ public class LoginUser implements UserDetails, IUser {
     @Override
     public boolean isAdministrator() {
         return isAdministrator;
+    }
+
+    @Override
+    public Map<String, Object> getExtendInfo() {
+        return extendInfo;
     }
 
     public void setIsAdministrator(boolean isAdministrator){

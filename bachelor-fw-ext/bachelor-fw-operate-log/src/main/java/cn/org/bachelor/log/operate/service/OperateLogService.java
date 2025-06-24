@@ -42,7 +42,13 @@ public class OperateLogService {
             criteria.andLike("opAccount", "%" + logParams.getOpAccount() + "%");
         }
         if (StringUtils.isNotEmpty(logParams.getOpOrgId())) {
-            criteria.andLike("opOrg", "%" + logParams.getOpOrgId() + "%");
+            criteria.andLike("opOrgId", "%" + logParams.getOpOrgId() + "%");
+        }
+        if (StringUtils.isNotEmpty(logParams.getOpAccount())) {
+            criteria.andLike("opAccountName", "%" + logParams.getOpAccountName() + "%");
+        }
+        if (StringUtils.isNotEmpty(logParams.getOpOrgId())) {
+            criteria.andLike("opOrgName", "%" + logParams.getOpOrgName() + "%");
         }
         if (StringUtils.isNotEmpty(logParams.getDataBase())) {
             criteria.andEqualTo("dataBase", logParams.getDataBase());
@@ -115,13 +121,17 @@ public class OperateLogService {
         ol.setAttribute(StringUtils.isEmpty(attribute) ? data.getAttribute() : attribute);
         ol.setResult(StringUtils.isEmpty(result) ? "成功" : result);
         IUser user = logonUserContext == null ? null : logonUserContext.getUser();
-        if (user == null) {
+        if (user == null || StringUtils.isEmpty(user.getCode()) || StringUtils.isEmpty(user.getOrgId())) {
             logger.warn("操作日志未获取到操作用户，可以尝试在工程中引入bachelor-iam-client模块，并通过网关访问当前操作。");
             ol.setOpAccount("未获取");
+            ol.setOpAccountName("未获取");
             ol.setOpOrgId("未获取");
+            ol.setOpOrgName("未获取");
         } else {
             ol.setOpAccount(user.getCode());
+            ol.setOpAccountName(user.getName());
             ol.setOpOrgId(user.getOrgId());
+            ol.setOpOrgName(user.getOrgName());
         }
         ol.setOpTime(new Date());
         ol.setSeriesNumber(data.getSerialNumber());
