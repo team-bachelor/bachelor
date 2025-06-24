@@ -19,11 +19,14 @@ import java.util.Set;
  */
 public class RedisCacheManager extends AbstractTransactionSupportingCacheManager {
 
+    // 定义日志记录器，用于记录该类的相关日志信息
     private static final Logger logger = LoggerFactory
             .getLogger(RedisCacheManager.class);
 
+    // 缓存客户端包装器，用于与Redis进行交互
     private RedisClientWrapper cacheClient;
 
+    // 缓存名称的集合，用于存储需要管理的缓存名称
     private Set<String> cacheNames;
 
     /**
@@ -34,15 +37,23 @@ public class RedisCacheManager extends AbstractTransactionSupportingCacheManager
      */
     @Override
     public Cache getCache(String name) {
+        // 记录调试日志，表明正在获取指定名称的RedisCache实例
         logger.debug("获取名称为: " + name + " 的RedisCache实例");
+        // 调用父类的getCache方法获取缓存对象
         return super.getCache(name);
     }
 
+    /**
+     * 当缓存不存在时，初始化并创建一个新的缓存实例.
+     *
+     * @param name 缓存名称
+     * @return 新创建的缓存实例
+     */
     @Override
     protected Cache getMissingCache(String name) {
-        // initialize the Redis manager instance
+        // 初始化Redis管理器实例，为指定名称的缓存进行初始化操作
         cacheClient.init(name);
-        // create a new cache instance
+        // 创建一个新的SpringRedisCache实例，并返回
         return new SpringRedisCache(cacheClient, name);
     }
 
@@ -52,6 +63,7 @@ public class RedisCacheManager extends AbstractTransactionSupportingCacheManager
      * @return 缓存封装对象
      */
     public RedisClientWrapper getCacheClient() {
+        // 返回缓存客户端包装器实例
         return cacheClient;
     }
 
@@ -61,6 +73,7 @@ public class RedisCacheManager extends AbstractTransactionSupportingCacheManager
      * @param cacheClient 缓存封装对象
      */
     public void setCacheClient(RedisClientWrapper cacheClient) {
+        // 将传入的缓存客户端包装器实例赋值给当前类的成员变量
         this.cacheClient = cacheClient;
     }
 
@@ -70,12 +83,18 @@ public class RedisCacheManager extends AbstractTransactionSupportingCacheManager
      * @return 缓存实例的集合
      */
     protected Collection<Cache> loadCaches() {
+        // 断言缓存客户端包装器不为空，若为空则抛出异常
         Assert.notNull(this.cacheClient, "A backing Redis CacheManager is required");
+        // 获取缓存名称的集合
         Collection<String> names = this.cacheNames;
-        LinkedHashSet caches = new LinkedHashSet(names.size());
+        // 创建一个LinkedHashSet集合，用于存储缓存实例，初始容量为缓存名称集合的大小
+        LinkedHashSet<Cache> caches = new LinkedHashSet<>(names.size());
+        // 遍历缓存名称集合
         for (String name : names) {
+            // 将获取到的缓存实例添加到caches集合中
             caches.add(this.getCache(name));
         }
+        // 返回缓存实例的集合
         return caches;
     }
 
@@ -85,6 +104,7 @@ public class RedisCacheManager extends AbstractTransactionSupportingCacheManager
      * @param cacheNames 缓存名称的集合
      */
     public void setCacheNames(Set<String> cacheNames) {
+        // 将传入的缓存名称集合赋值给当前类的成员变量
         this.cacheNames = cacheNames;
     }
 }
