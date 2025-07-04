@@ -69,7 +69,10 @@ public class ResponseMessageI18nAdvice implements ResponseBodyAdvice {
             }
             try {
                 // 尝试从消息源中获取与 code 对应的国际化消息
-                jsonResponse.setMsg(messageSource.getMessage(jsonResponse.getCode(), null, LocaleContextHolder.getLocale()));
+                if(jsonResponse.getCode() != null && !"null".equals(jsonResponse.getCode())){
+                    String msg = messageSource.getMessage(jsonResponse.getCode(), null, LocaleContextHolder.getLocale());
+                    jsonResponse.setMsg(msg);
+                }
             } catch(NoSuchMessageException nsme) {
                 // 若未找到对应的消息，记录警告日志
                 logger.warn(nsme.getMessage());

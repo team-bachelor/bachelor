@@ -44,10 +44,10 @@ public class OperateLogService {
         if (StringUtils.isNotEmpty(logParams.getOpOrgId())) {
             criteria.andLike("opOrgId", "%" + logParams.getOpOrgId() + "%");
         }
-        if (StringUtils.isNotEmpty(logParams.getOpAccount())) {
+        if (StringUtils.isNotEmpty(logParams.getOpAccountName())) {
             criteria.andLike("opAccountName", "%" + logParams.getOpAccountName() + "%");
         }
-        if (StringUtils.isNotEmpty(logParams.getOpOrgId())) {
+        if (StringUtils.isNotEmpty(logParams.getOpOrgName())) {
             criteria.andLike("opOrgName", "%" + logParams.getOpOrgName() + "%");
         }
         if (StringUtils.isNotEmpty(logParams.getDataBase())) {
