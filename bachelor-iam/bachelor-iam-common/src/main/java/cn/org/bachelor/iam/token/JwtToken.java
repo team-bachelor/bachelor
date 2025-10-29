@@ -48,7 +48,7 @@ public class JwtToken {
         // 规范外的其他内容
         public static final String CLAIMS = "claims";
         // 用户 ID
-        public static final String USER_ID = "userId";
+        public static final String USER_ID = "userid";
         // 用户名称
         public static final String USER_NAME = "user_name";
         // 用户账号

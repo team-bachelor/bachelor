@@ -146,6 +146,7 @@ public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
     }
 
     private String getAndDelJwtClaim(String key, Map<String, Object> claims) {
+        key = key.toLowerCase();
         if (claims.containsKey(key)) {
             String result = claims.get(key).toString();
             claims.remove(key);
