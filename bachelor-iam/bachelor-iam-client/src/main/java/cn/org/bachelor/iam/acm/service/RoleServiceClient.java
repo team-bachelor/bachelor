@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.acm.service;
 
 import cn.org.bachelor.iam.acm.domain.Role;
-import cn.org.bachelor.iam.vo.UserVo;
+import cn.org.bachelor.iam.pojo.IamUser;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -39,11 +39,11 @@ public interface RoleServiceClient extends RoleServiceStub {
 
     @Override
     @RequestMapping(value = "/local/users/{roleCode}", method = RequestMethod.GET)
-    List<UserVo> getLocalRoleUsers(@PathVariable("roleCode") String roleCode);
+    List<IamUser> getLocalRoleUsers(@PathVariable("roleCode") String roleCode);
 
     @Override
     @RequestMapping(value = "/users/{roleCode}", method = RequestMethod.GET)
-    List<UserVo> getRoleUsers(@PathVariable("roleCode") String roleCode);
+    List<IamUser> getRoleUsers(@PathVariable("roleCode") String roleCode);
 
     @Override
     @RequestMapping(value = "/roles/{userCode}", method = RequestMethod.GET)
@@ -51,7 +51,7 @@ public interface RoleServiceClient extends RoleServiceStub {
 
     @Override
     @RequestMapping(value = "/users/{roleCode}", method = RequestMethod.POST)
-    void addUsersToRole(@PathVariable("roleCode") String roleCode, @RequestBody List<UserVo> users);
+    void addUsersToRole(@PathVariable("roleCode") String roleCode, @RequestBody List<IamUser> users);
 
     @Override
     @RequestMapping(value = "/users/{roleCode}", method = RequestMethod.PUT)

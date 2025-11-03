@@ -1,7 +1,6 @@
 package cn.org.bachelor.iam.dac.service.service;
 
 import cn.org.bachelor.iam.dac.service.dao.DacAreaMapper;
-import cn.org.bachelor.iam.dac.service.domain.DacArea;
 import cn.org.bachelor.iam.dac.service.pojo.vo.DacAreaVo;
 import cn.org.bachelor.iam.dac.service.pojo.vo.SearchDacAreaVo;
 import cn.org.bachelor.iam.dac.service.pojo.vo.UpdateDacAreaVo;
@@ -178,7 +177,7 @@ public class DacAreaService {
      */
 
     public void addArea(DacAreaVo dacAreaVo) {
-        DacArea dacArea = new DacArea();
+        cn.org.bachelor.iam.dac.service.domain.DacArea dacArea = new cn.org.bachelor.iam.dac.service.domain.DacArea();
         Date addSystemTime = new Date();
         dacArea.setId(UuidUtil.getUUID());
         dacArea.setName(dacAreaVo.getName());
@@ -197,13 +196,13 @@ public class DacAreaService {
 
     public List<Map<Object, Object>> areaTree(String deep) {
         List<Map<Object, Object>> mapList = new ArrayList<>();
-        List<DacArea> dacAreas = dacAreaMapper.selectDacAreaParentCodeIsNull();
+        List<cn.org.bachelor.iam.dac.service.domain.DacArea> dacAreas = dacAreaMapper.selectDacAreaParentCodeIsNull();
         if("1".equals(deep)) { //镇街级
             dacAreas.stream().forEach(item -> {
                 Map<Object, Object> mapOne = new HashMap<>();
-                List<DacArea> levelTwoList = dacAreaMapper.selectDacAreaByParentCode(item.getCode());
+                List<cn.org.bachelor.iam.dac.service.domain.DacArea> levelTwoList = dacAreaMapper.selectDacAreaByParentCode(item.getCode());
                 levelTwoList.stream().forEach(itemThree -> {
-                    List<DacArea> levelThreeList = dacAreaMapper.selectDacAreaByParentCode(itemThree.getCode());
+                    List<cn.org.bachelor.iam.dac.service.domain.DacArea> levelThreeList = dacAreaMapper.selectDacAreaByParentCode(itemThree.getCode());
                     levelThreeList.stream().forEach(s -> {
                         mapOne.put("id", s.getId());
                         mapOne.put("name", s.getName());
@@ -218,13 +217,13 @@ public class DacAreaService {
         } else if ("2".equals(deep)) {
             dacAreas.stream().forEach(item -> {
                 Map<Object, Object> mapOne = new HashMap<>();
-                List<DacArea> levelTwoList = dacAreaMapper.selectDacAreaByParentCode(item.getCode());
+                List<cn.org.bachelor.iam.dac.service.domain.DacArea> levelTwoList = dacAreaMapper.selectDacAreaByParentCode(item.getCode());
                 levelTwoList.stream().forEach(itemThree -> {
                     mapOne.put("id", itemThree.getId());
                     mapOne.put("name", itemThree.getName());
                     mapOne.put("code", itemThree.getCode());
                     mapOne.put("parentCode", itemThree.getParentCode());
-                    List<DacArea> levelThreeList = dacAreaMapper.selectDacAreaByParentCode(itemThree.getCode());
+                    List<cn.org.bachelor.iam.dac.service.domain.DacArea> levelThreeList = dacAreaMapper.selectDacAreaByParentCode(itemThree.getCode());
                     mapOne.put("children", levelThreeList);
                     mapList.add(mapOne);
                 });
@@ -236,9 +235,9 @@ public class DacAreaService {
                 mapOne.put("name", item.getName());
                 mapOne.put("code", item.getCode());
                 mapOne.put("id", item.getId());
-                List<DacArea> levelTwoList = dacAreaMapper.selectDacAreaByParentCode(item.getCode());
+                List<cn.org.bachelor.iam.dac.service.domain.DacArea> levelTwoList = dacAreaMapper.selectDacAreaByParentCode(item.getCode());
                 levelTwoList.stream().forEach(itemThree -> {
-                    List<DacArea> levelThreeList = dacAreaMapper.selectDacAreaByParentCode(itemThree.getCode());
+                    List<cn.org.bachelor.iam.dac.service.domain.DacArea> levelThreeList = dacAreaMapper.selectDacAreaByParentCode(itemThree.getCode());
                     itemThree.setChildren(levelThreeList);
                 });
                 mapOne.put("children", levelTwoList);
@@ -249,10 +248,10 @@ public class DacAreaService {
         return mapList;
     }
 
-    public PageInfo<DacArea> getDacAreaList(SearchDacAreaVo searchDacAreaVo) {
+    public PageInfo<cn.org.bachelor.iam.dac.service.domain.DacArea> getDacAreaList(SearchDacAreaVo searchDacAreaVo) {
         PageHelper.startPage(searchDacAreaVo.getPageNum(), searchDacAreaVo.getPageSize()); //这句要在查询代码之前，pageNum从1开始
-        List<DacArea> list = dacAreaMapper.getDacAreaList(searchDacAreaVo);
-        return new PageInfo<DacArea>(list);
+        List<cn.org.bachelor.iam.dac.service.domain.DacArea> list = dacAreaMapper.getDacAreaList(searchDacAreaVo);
+        return new PageInfo<cn.org.bachelor.iam.dac.service.domain.DacArea>(list);
     }
 
     public void deleteArea(String id) {

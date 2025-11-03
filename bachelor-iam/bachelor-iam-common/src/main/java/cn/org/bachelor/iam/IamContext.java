@@ -7,8 +7,8 @@ package cn.org.bachelor.iam;
 
 import cn.org.bachelor.context.IContext;
 import cn.org.bachelor.context.IUserContext;
+import cn.org.bachelor.iam.pojo.IamUser;
 import cn.org.bachelor.iam.utils.StringUtils;
-import cn.org.bachelor.iam.vo.UserVo;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.Resource;
@@ -37,16 +37,16 @@ public class IamContext implements IUserContext {
     /**
      * 设置当前登录用户
      */
-    public void setCurrentUser(UserVo user) {
+    public void setCurrentUser(IamUser user) {
         setUser(user);
     }
 
     /**
      * 获取当前登录用户
-     * @return UserVo 当前登录用户
+     * @return IamUser 当前登录用户
      */
     @Deprecated
-    public UserVo getCurrentUser() {
+    public IamUser getCurrentUser() {
         return getUser();
     }
 
@@ -55,7 +55,7 @@ public class IamContext implements IUserContext {
      * @return 当前用户是否已登录
      */
     public boolean isUserLogon() {
-        UserVo user = getUser();
+        IamUser user = getUser();
         return user == null ? false : StringUtils.isEmpty(user.getAccessToken()) ? false : true;
     }
 
@@ -63,7 +63,7 @@ public class IamContext implements IUserContext {
      * 设置当前登录用户
      * @param user 当前登录用户
      */
-    public void setUser(UserVo user) {
+    public void setUser(IamUser user) {
         baseContext.setRequestAttribute(IamConstant.USER_KEY, user);
     }
 
@@ -71,10 +71,10 @@ public class IamContext implements IUserContext {
      * 获取当前登录用户
      * @return 当前登录用户
      */
-    public UserVo getUser() {
+    public IamUser getUser() {
         Object uo = baseContext.getRequestAttribute(IamConstant.USER_KEY);
         if (uo != null) {
-            return (UserVo) uo;
+            return (IamUser) uo;
         }
         return null;
     }
@@ -84,7 +84,7 @@ public class IamContext implements IUserContext {
      * @return 当前登录用户的编码
      */
     public String getUserCode() {
-        UserVo user = getUser();
+        IamUser user = getUser();
         String name = "user_unknown";
         if (user != null && user.getCode() != null) {
             name = user.getCode();
@@ -99,7 +99,7 @@ public class IamContext implements IUserContext {
      * @return 当前登录用户的组织机构编码
      */
     public String getUserOrgId() {
-        UserVo user = getUser();
+        IamUser user = getUser();
         if (Objects.isNull(user)) {
             return null;
         }

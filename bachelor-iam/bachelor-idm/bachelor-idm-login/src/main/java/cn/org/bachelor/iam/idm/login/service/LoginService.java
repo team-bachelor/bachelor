@@ -8,8 +8,8 @@ import cn.org.bachelor.iam.idm.login.*;
 import cn.org.bachelor.iam.idm.login.config.IamLocalLoginConfig;
 import cn.org.bachelor.iam.idm.login.credential.UsernamePasswordCredential;
 import cn.org.bachelor.iam.idm.login.event.LoginEvent;
+import cn.org.bachelor.iam.pojo.IamUser;
 import cn.org.bachelor.iam.token.JwtToken;
-import cn.org.bachelor.iam.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -108,7 +108,7 @@ public class LoginService {
     }
 
     public void refreshLogin() {
-        UserVo user = iamContext.getUser();
+        IamUser user = iamContext.getUser();
         if(user != null) {
             String userId = user.getId();
             RedisCacheHelper.refreshLoginUser(redisTemplate, userId);

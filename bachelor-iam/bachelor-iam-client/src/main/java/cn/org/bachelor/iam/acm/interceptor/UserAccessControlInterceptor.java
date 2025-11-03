@@ -5,7 +5,7 @@ import cn.org.bachelor.iam.IamConfiguration;
 import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.service.AuthorizeServiceStub;
-import cn.org.bachelor.iam.vo.UserVo;
+import cn.org.bachelor.iam.pojo.IamUser;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -53,7 +53,7 @@ public class UserAccessControlInterceptor implements HandlerInterceptor {
             return true;
         }
         // 获取访问方法
-        UserVo user = iamContext.getUser();
+        IamUser user = iamContext.getUser();
         String userCode = "";
         if (user != null) {
             userCode = user.getCode();
@@ -98,7 +98,7 @@ public class UserAccessControlInterceptor implements HandlerInterceptor {
         return null;
     }
 
-    private boolean isPass(String permCode, PermissionOptions.AccessType accessType, UserVo user, String usercode) {
+    private boolean isPass(String permCode, PermissionOptions.AccessType accessType, IamUser user, String usercode) {
         if (user != null && user.isAdministrator()) {
             return true;
         }

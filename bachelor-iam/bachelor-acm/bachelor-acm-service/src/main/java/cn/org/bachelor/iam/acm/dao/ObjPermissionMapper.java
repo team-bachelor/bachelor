@@ -1,7 +1,6 @@
 package cn.org.bachelor.iam.acm.dao;
 
-import cn.org.bachelor.iam.acm.domain.ObjPermission;
-import cn.org.bachelor.iam.acm.vo.ObjPermissionVo;
+import cn.org.bachelor.iam.acm.pojo.ObjPermission;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
@@ -11,7 +10,7 @@ import tk.mybatis.mapper.common.Mapper;
 import java.util.List;
 
 @Repository
-public interface ObjPermissionMapper extends Mapper<ObjPermission> {
+public interface ObjPermissionMapper extends Mapper<cn.org.bachelor.iam.acm.domain.ObjPermission> {
     @Select("SELECT\n" +
             "o.ID,\n" +
             "o.NAME,\n" +
@@ -40,6 +39,6 @@ public interface ObjPermissionMapper extends Mapper<ObjPermission> {
             @Result(property = "domainCode", column = "DOMAIN_CODE"),
             @Result(property = "domainName", column = "DOMAIN_NAME")
     })
-    List<ObjPermissionVo> findAllForType(String type);
+    List<ObjPermission> findAllForType(String type);
 
 }

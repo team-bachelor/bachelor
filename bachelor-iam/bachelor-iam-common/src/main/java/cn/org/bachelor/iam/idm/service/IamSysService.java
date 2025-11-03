@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.idm.service;
 
-import cn.org.bachelor.iam.vo.*;
+import cn.org.bachelor.iam.pojo.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,33 +17,33 @@ public interface IamSysService {
      * @param appCode 应用编码
      * @return 应用信息
      */
-    AppVo findAppByCode(String appCode);
+    IamApp findAppByCode(String appCode);
 
     /**
      * @param userId 用户id
      * @return 应用列表
      */
-    List<AppVo> findUserApps(String userId);
+    List<IamApp> findUserApps(String userId);
 
 
     /**
      * @param appID 应用id
      * @return 可访问指定应用的所有用户列表
      */
-    List<UserVo> findUsersInApp(String appID);
+    List<IamUser> findUsersInApp(String appID);
 
     /**
      *
      * @param param 查询参数
      * @return 用户列表
      */
-    List<UserVo> findUsersInApp(IamSysParam param);
+    List<IamUser> findUsersInApp(IamSysParam param);
 
     /**
      * @param userId 用户id
      * @return 用户详细信息
      */
-    UserVo findUsersDetail(String userId);
+    IamUser findUsersDetail(String userId);
 
     /**
      * @param param: appID  应用id
@@ -51,14 +51,14 @@ public interface IamSysService {
      * @param param: orgID  机构id
      * @return 在当前应用中的用户角色
      */
-    List<RoleVo> findUserRolesInApp(IamSysParam param);
+    List<IamRole> findUserRolesInApp(IamSysParam param);
 
 
     /**
      * @param userIds 用户id（可多个）
      * @return 用户列表
      */
-    List<UserVo> findUsersById(String... userIds);
+    List<IamUser> findUsersById(String... userIds);
 
     /**
      * @param param: orgId           机构id
@@ -66,7 +66,7 @@ public interface IamSysService {
      * @param param: userName 用户名称（模糊查询）
      * @return 用户列表
      */
-    List<UserVo> findUsers(IamSysParam param);
+    List<IamUser> findUsers(IamSysParam param);
 
 //    /**
 //     * @param orgId    机构id
@@ -81,13 +81,13 @@ public interface IamSysService {
      *
      * @return 机构列表
      */
-    List<OrgVo> findAllOrgs();
+    List<IamOrg> findAllOrgs();
 
     /**
      * @param orgId 机构id
      * @return 机构列表
      */
-    OrgVo findOrg(String orgId);
+    IamOrg findOrg(String orgId);
 
     /**
      * 查询机构
@@ -97,19 +97,19 @@ public interface IamSysService {
      * @param param: orgName 机构名称（模糊查询）
      * @return 组织结构列表
      */
-    List<OrgVo> findOrg(IamSysParam param);
+    List<IamOrg> findOrg(IamSysParam param);
 
     /**
      * @param deptId 部门id
      * @return 部门详细信息
      */
-    DeptDetailVo findDeptDetail(String deptId);
+    IamDept findDeptDetail(String deptId);
 
     /**
      * @param orgId 机构id（筛选范围）
      * @return 部门列表
      */
-    List<OrgVo> findDeptsByOrgId(String orgId);
+    List<IamOrg> findDeptsByOrgId(String orgId);
 
     /**
      * @param param: orgId  机构id（筛选范围）
@@ -118,7 +118,7 @@ public interface IamSysService {
      * @param param: level  向下获取的层级
      * @return 部门列表
      */
-    List<OrgVo> findDepts(IamSysParam param);
+    List<IamOrg> findDepts(IamSysParam param);
 
     /**
      * @param orgId   机构id（筛选范围）
@@ -126,7 +126,7 @@ public interface IamSysService {
      * @param isAdmin 是否是管理员
      * @return 数据权限
      */
-    DataPermVo processDataPerm(String orgId, Set<String> deptIds, boolean isAdmin);
+    DataPermission processDataPerm(String orgId, Set<String> deptIds, boolean isAdmin);
 
     /**
      * 登录
@@ -154,7 +154,7 @@ public interface IamSysService {
      * @param user 用户信息
      * @return 用户是否为系统管理员
      */
-    boolean assertIsAdmin(UserVo user);
+    boolean assertIsAdmin(IamUser user);
     /**
      *
      * @param request http request

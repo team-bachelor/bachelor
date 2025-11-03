@@ -11,7 +11,7 @@ import cn.org.bachelor.iam.acm.domain.RolePermission;
 import cn.org.bachelor.iam.acm.domain.UserRole;
 import cn.org.bachelor.iam.idm.service.IamSysParam;
 import cn.org.bachelor.iam.idm.service.IamSysService;
-import cn.org.bachelor.iam.vo.UserVo;
+import cn.org.bachelor.iam.pojo.IamUser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -140,25 +140,25 @@ public class RoleService implements RoleServiceStub {
      * @return
      */
     @Override
-    public List<UserVo> getRoleUsers(String roleCode) {
+    public List<IamUser> getRoleUsers(String roleCode) {
         return getRoleUsers(roleCode, false);
     }
 
     @Override
-    public List<UserVo> getLocalRoleUsers(String roleCode) {
+    public List<IamUser> getLocalRoleUsers(String roleCode) {
         return getRoleUsers(roleCode, true);
     }
 
-    private List<UserVo> getRoleUsers(String roleCode, Boolean local) {
+    private List<IamUser> getRoleUsers(String roleCode, Boolean local) {
         UserRole ur = new UserRole();
         ur.setRoleCode(roleCode);
         List<UserRole> userRoles = userRoleMapper.select(ur);
-        List<UserVo> result = new ArrayList<>();
+        List<IamUser> result = new ArrayList<>();
         if (!local) {
             IamSysParam usp = new IamSysParam();
             usp.setClientId(clientId);
-            List<UserVo> remote = iamSysService.findUsersInApp(usp);
-            Map<String, UserVo> rMap = new HashMap<>(userRoles.size());
+            List<IamUser> remote = iamSysService.findUsersInApp(usp);
+            Map<String, IamUser> rMap = new HashMap<>(userRoles.size());
             if (remote != null) {
                 remote.forEach(i -> {
                     if (i == null) return;
@@ -172,12 +172,12 @@ public class RoleService implements RoleServiceStub {
                     return;
                 }
                 String id = i.getUserId();
-                UserVo u = null;
+                IamUser u = null;
                 if (!StringUtils.isEmpty(id)) {
                     u = iamSysService.findUsersDetail(id);
                 }
                 if (u == null) {
-                    u = new UserVo();
+                    u = new IamUser();
                     u.setCode(i.getUserCode());
                     u.setName("该用户已不存在，请删除！");
                 }
@@ -185,7 +185,7 @@ public class RoleService implements RoleServiceStub {
             });
         } else {
             userRoles.forEach(i -> {
-                UserVo u = new UserVo();
+                IamUser u = new IamUser();
                 u.setAccount(i.getUserCode());
                 u.setId(i.getUserId());
                 result.add(u);
@@ -220,11 +220,11 @@ public class RoleService implements RoleServiceStub {
      * @param users
      */
     @Override
-    public void addUsersToRole(String roleCode, List<UserVo> users) {
+    public void addUsersToRole(String roleCode, List<IamUser> users) {
         if (StringUtils.isEmpty(roleCode)) {
             throw new BusinessException("role_code_must_be_exist");
         }
-        for (UserVo user : users) {
+        for (IamUser user : users) {
             UserRole ur = new UserRole();
             ur.setRoleCode(roleCode);
             ur.setUserCode(user.getCode());

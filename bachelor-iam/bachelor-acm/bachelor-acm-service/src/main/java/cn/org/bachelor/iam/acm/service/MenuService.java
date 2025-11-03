@@ -5,12 +5,11 @@ import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.acm.dao.MenuMapper;
 import cn.org.bachelor.iam.acm.dao.OrgMenuMapper;
 import cn.org.bachelor.iam.acm.dao.RoleMenuMapper;
-import cn.org.bachelor.iam.acm.domain.Menu;
 import cn.org.bachelor.iam.acm.domain.OrgMenu;
 import cn.org.bachelor.iam.acm.domain.RoleMenu;
 import cn.org.bachelor.iam.acm.permission.PermissionModel;
-import cn.org.bachelor.iam.acm.vo.ISMenuVo;
-import cn.org.bachelor.iam.acm.vo.MenuVo;
+import cn.org.bachelor.iam.acm.pojo.ISMenu;
+import cn.org.bachelor.iam.acm.pojo.Menu;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,7 +44,7 @@ public class MenuService {
      *
      * @param m 菜单信息
      */
-    public void insert(Menu m) {
+    public void insert(cn.org.bachelor.iam.acm.domain.Menu m) {
         m.setId(UUID.randomUUID().toString());
         m.setUpdateTime(new Date());
         String userCode = iamContext.getUserCode();
@@ -58,7 +57,7 @@ public class MenuService {
      *
      * @param m 菜单信息
      */
-    public void update(Menu m) {
+    public void update(cn.org.bachelor.iam.acm.domain.Menu m) {
         m.setUpdateTime(new Date());
         String userCode = iamContext.getUserCode();
         m.setUpdateUser(userCode == null ? iamContext.getRemoteIP() : userCode);
@@ -81,7 +80,7 @@ public class MenuService {
      * @param userCode 用户编码
      * @return 用户菜单
      */
-    public List<MenuVo> calUserMenu(String userCode) {
+    public List<Menu> calUserMenu(String userCode) {
         return calUserMenu(userCode, null, null);
     }
 
@@ -91,7 +90,7 @@ public class MenuService {
      * @param userCode 用户编码
      * @return 用户菜单
      */
-    public List<MenuVo> calUserMenu(String userCode, String group, String parentId) {
+    public List<Menu> calUserMenu(String userCode, String group, String parentId) {
         if (userCode == null) {
             throw new BusinessException("user code could not be null");
         }
@@ -107,11 +106,11 @@ public class MenuService {
 
     }
 
-    private List<MenuVo> getAllMenu(String group, String parentId) {
-        return getMenuVoListWithCodes(null, PermissionModel.USER, group, null, parentId);
+    private List<Menu> getAllMenu(String group, String parentId) {
+        return getMenuListWithCodes(null, PermissionModel.USER, group, null, parentId);
     }
 
-    private List<MenuVo> calRoleMenu(String owner, PermissionModel type, List<RoleMenu> rmList, String groupName, String parentId) {
+    private List<Menu> calRoleMenu(String owner, PermissionModel type, List<RoleMenu> rmList, String groupName, String parentId) {
         if (rmList.size() == 0) {
             return Collections.emptyList();
         }
@@ -119,20 +118,20 @@ public class MenuService {
         for (RoleMenu p : rmList) {
             menuCodes.add(p.getMenuCode());
         }
-        return getMenuVoListWithCodes(owner, type, groupName, menuCodes, parentId);
+        return getMenuListWithCodes(owner, type, groupName, menuCodes, parentId);
     }
 
-    private List<MenuVo> filterMenuByParent(List<MenuVo> originMenus, String parentId) {
+    private List<Menu> filterMenuByParent(List<Menu> originMenus, String parentId) {
         return null;
     }
 
-    public List<ISMenuVo> getUserISMenu(String userCode, String group, String parentId) {
-        List<MenuVo> originMenus = calUserMenu(userCode, group, parentId);
+    public List<ISMenu> getUserISMenu(String userCode, String group, String parentId) {
+        List<Menu> originMenus = calUserMenu(userCode, group, parentId);
         return convert2ISMenu(originMenus, true);
     }
 
-    private List<ISMenuVo> convert2ISMenu(List<MenuVo> originMenus, boolean isSubSys) {
-        List<ISMenuVo> menus = new ArrayList<>();
+    private List<ISMenu> convert2ISMenu(List<Menu> originMenus, boolean isSubSys) {
+        List<ISMenu> menus = new ArrayList<>();
         if (originMenus == null) {
             return menus;
         }
@@ -140,11 +139,11 @@ public class MenuService {
         return menus;
     }
 
-    private ISMenuVo convert2ISMenu(MenuVo originMenu, boolean isSubSys) {
+    private ISMenu convert2ISMenu(Menu originMenu, boolean isSubSys) {
         if (originMenu == null) {
             return null;
         }
-        ISMenuVo m = new ISMenuVo();
+        ISMenu m = new ISMenu();
         m.setId(originMenu.getId());
         m.setName(originMenu.getName());
         m.setIcon(originMenu.getIcon());
@@ -244,8 +243,8 @@ public class MenuService {
     }
 
     private List<String> sortMenuCode(List<String> menuCode) {
-        List<MenuVo> fullMenu = getMenuList(true, null);
-        Map<String, MenuVo> mmap = new HashMap<>(fullMenu.size());
+        List<Menu> fullMenu = getMenuList(true, null);
+        Map<String, Menu> mmap = new HashMap<>(fullMenu.size());
         fullMenu.forEach(menu -> mmap.put(menu.getCode(), menu));
         List<String> adds = new ArrayList<>();
         menuCode.forEach(code -> checkForParentMenu(adds, mmap, code));
@@ -257,8 +256,8 @@ public class MenuService {
         return menuCode;
     }
 
-    private void checkForParentMenu(List<String> adds, Map<String, MenuVo> mmap, String code) {
-        MenuVo m = mmap.get(code);
+    private void checkForParentMenu(List<String> adds, Map<String, Menu> mmap, String code) {
+        Menu m = mmap.get(code);
         if (m == null) return;
         if (m.getParent() != null) {
             if (!adds.contains(m.getParent().getCode())) {
@@ -275,18 +274,18 @@ public class MenuService {
      * @Return:
      */
     //TODO 目前不考虑机构隔离，以后要考虑
-    public List<MenuVo> getMenuList() {
+    public List<Menu> getMenuList() {
         return getMenuList(false, null);
     }
 
-    private List<MenuVo> getMenuVoListWithCodes(String owner, PermissionModel type, String group, List<String> menuCodes, String parentId) {
+    private List<Menu> getMenuListWithCodes(String owner, PermissionModel type, String group, List<String> menuCodes, String parentId) {
         Example example = getMenuCriteria(menuCodes, group);
-        List<Menu> menus = menuMapper.selectByExample(example);
+        List<cn.org.bachelor.iam.acm.domain.Menu> menus = menuMapper.selectByExample(example);
         return getMenuList(owner, type, menus, parentId);
     }
 
     private Example getMenuCriteria(List<String> menuCodes, String group) {
-        Example example = new Example(Menu.class);
+        Example example = new Example(cn.org.bachelor.iam.acm.domain.Menu.class);
         example.orderBy("seqOrder").orderBy("parentId").asc();
         Example.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotEmpty(group)) {
@@ -298,45 +297,45 @@ public class MenuService {
         return example;
     }
 
-    private List<MenuVo> getMenuList(String owner, PermissionModel type, List<Menu> menus, String parentId) {
+    private List<Menu> getMenuList(String owner, PermissionModel type, List<cn.org.bachelor.iam.acm.domain.Menu> menus, String parentId) {
         return getMenuList(false, menus, owner, type, true, parentId);
     }
 
-    public List<MenuVo> getMenuList(boolean isFlat, String groupName) {
+    public List<Menu> getMenuList(boolean isFlat, String groupName) {
         Example example = getMenuCriteria(null, groupName);
-        List<Menu> menus = menuMapper.selectByExample(example);
+        List<cn.org.bachelor.iam.acm.domain.Menu> menus = menuMapper.selectByExample(example);
         return getMenuList(isFlat, menus, null, PermissionModel.ROLE, false, null);
     }
 
-    private List<MenuVo> getMenuList(boolean isFlat, List<Menu> menus,
-                                     String owner, PermissionModel type,
-                                     boolean isHas, String parentId) {
-        Map<String, MenuVo> menuVoMap = new LinkedHashMap<>(menus.size());
-        for (Menu m : menus) {
-            MenuVo mvo = toMenuVo(null, type, isHas, m, null);
-            menuVoMap.put(m.getId(), mvo);
+    private List<Menu> getMenuList(boolean isFlat, List<cn.org.bachelor.iam.acm.domain.Menu> menus,
+                                   String owner, PermissionModel type,
+                                   boolean isHas, String parentId) {
+        Map<String, Menu> menuMap = new LinkedHashMap<>(menus.size());
+        for (cn.org.bachelor.iam.acm.domain.Menu m : menus) {
+            Menu menu = toMenu(null, type, isHas, m, null);
+            menuMap.put(m.getId(), menu);
         }
-        for (Menu m : menus) {
-            MenuVo parent = null;
-            if (menuVoMap.containsKey(m.getParentId())) {
-                parent = menuVoMap.get(m.getParentId());
+        for (cn.org.bachelor.iam.acm.domain.Menu m : menus) {
+            Menu parent = null;
+            if (menuMap.containsKey(m.getParentId())) {
+                parent = menuMap.get(m.getParentId());
             }
-            MenuVo mvo = menuVoMap.get(m.getId());
+            Menu mvo = menuMap.get(m.getId());
             if (parent != null) {
                 mvo.setParentId(parent.getId());
                 mvo.setParent(parent);
                 parent.getSubMenus().add(mvo);
             }
-            menuVoMap.put(m.getId(), mvo);
+            menuMap.put(m.getId(), mvo);
         }
-        List<MenuVo> result = new ArrayList<>();
+        List<Menu> result = new ArrayList<>();
         if (isFlat) {
-            result.addAll(menuVoMap.values());
+            result.addAll(menuMap.values());
         } else {
             if (parentId != null && !"".equals(parentId)) {
-                result.add(menuVoMap.get(parentId));
+                result.add(menuMap.get(parentId));
             } else {
-                for (MenuVo m : menuVoMap.values()) {
+                for (Menu m : menuMap.values()) {
                     if (m.getParent() == null) {
                         result.add(m);
                     }
@@ -346,8 +345,8 @@ public class MenuService {
         return result;
     }
 
-    private MenuVo toMenuVo(String owner, PermissionModel type, boolean has, Menu m, MenuVo parent) {
-        MenuVo mv = new MenuVo(m.getId(), m.getCode(), m.getUri(), m.getIcon(), m.getComment(), type, parent, new ArrayList<>());
+    private Menu toMenu(String owner, PermissionModel type, boolean has, cn.org.bachelor.iam.acm.domain.Menu m, Menu parent) {
+        Menu mv = new Menu(m.getId(), m.getCode(), m.getUri(), m.getIcon(), m.getComment(), type, parent, new ArrayList<>());
         mv.setName(m.getName());
         mv.setParentId(m.getParentId());
         mv.setSeqOrder(m.getSeqOrder());

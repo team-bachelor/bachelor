@@ -18,7 +18,7 @@ import cn.org.bachelor.iam.oauth2.client.util.ClientHelper;
 import cn.org.bachelor.iam.oauth2.exception.OAuthBusinessException;
 import cn.org.bachelor.iam.oauth2.request.DefaultOAuthResourceRequest;
 import cn.org.bachelor.iam.oauth2.response.OAuthResourceResponse;
-import cn.org.bachelor.iam.vo.*;
+import cn.org.bachelor.iam.pojo.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -87,7 +87,7 @@ public class Oauth2IamSysService implements IamSysService {
     }
 
     @Override
-    public boolean assertIsAdmin(UserVo user) {
+    public boolean assertIsAdmin(IamUser user) {
         logger.info("用户：[" + user.getName() + "]获取管理员标志");
         boolean isadmin = false;
 
@@ -112,7 +112,7 @@ public class Oauth2IamSysService implements IamSysService {
         return isadmin;
     }
 
-    private boolean isAdministrator(UserVo user) {
+    private boolean isAdministrator(IamUser user) {
         if (user.getAccessToken() == null) {
             return false;
         }
@@ -120,17 +120,17 @@ public class Oauth2IamSysService implements IamSysService {
         param.setClientId(clientConfig.getId());
         param.setUserId(user.getId());
         param.setOrgId(user.getOrgId());
-        List<RoleVo> roles = findUserRolesInClient(param, user.getAccessToken());
+        List<IamRole> iamRoles = findUserRolesInClient(param, user.getAccessToken());
         AtomicBoolean result = new AtomicBoolean(false);
-        roles.forEach(roleVo -> {
-            if ("super_admin".equals(roleVo.getCode())) {
+        iamRoles.forEach(iamRole -> {
+            if ("super_admin".equals(iamRole.getCode())) {
                 result.set(true);
             }
         });
         return result.get();
     }
 
-    private List<RoleVo> findUserRolesInClient(IamSysParam param, String astoken) {
+    private List<IamRole> findUserRolesInClient(IamSysParam param, String astoken) {
         if (StringUtils.isEmpty(param.getClientId())
                 || StringUtils.isEmpty(param.getUserId())
                 || StringUtils.isEmpty(param.getOrgId())) {
@@ -141,13 +141,13 @@ public class Oauth2IamSysService implements IamSysService {
         paramMap.put("userId", param.getUserId());
         paramMap.put("orgId", param.getOrgId());
         String json = callApi(clientConfig.getRsURL().getMtUserRoles(), "GET", paramMap, astoken);
-        List<RoleVo> roles = resolveJsonList(json, RoleVo.class);
-        return roles;
+        List<IamRole> iamRoles = resolveJsonList(json, IamRole.class);
+        return iamRoles;
     }
 
     @Override
-    public List<RoleVo> findUserRolesInApp(IamSysParam param) {
-        UserVo user = iamContext.getUser();
+    public List<IamRole> findUserRolesInApp(IamSysParam param) {
+        IamUser user = iamContext.getUser();
         String token = null;
         if (user != null && user.getAccessToken() != null) {
             token = user.getAccessToken();
@@ -156,14 +156,14 @@ public class Oauth2IamSysService implements IamSysService {
     }
 
     @Override
-    public List<UserVo> findUsersInApp(String appID) {
+    public List<IamUser> findUsersInApp(String appID) {
         IamSysParam param = new IamSysParam();
         param.setClientId(appID);
         return findUsersInApp(param);
     }
 
     @Override
-    public List<UserVo> findUsersInApp(IamSysParam param) {
+    public List<IamUser> findUsersInApp(IamSysParam param) {
         if (StringUtils.isEmpty(param.getClientId())) {
             if (StringUtils.isEmpty(clientConfig.getId())) {
                 throw new BusinessException("clientID_cannot_be_null");
@@ -172,19 +172,19 @@ public class Oauth2IamSysService implements IamSysService {
         }
         Map<String, String> paramMap = param.toParamMap();
         String json = callApi(clientConfig.getRsURL().getUserByClientID(), "GET", paramMap);
-        List<UserVo> users = resolveJsonList(json, UserVo.class);
+        List<IamUser> users = resolveJsonList(json, IamUser.class);
         return users;
     }
 
     @Override
-    public UserVo findUsersDetail(String userId) {
+    public IamUser findUsersDetail(String userId) {
         if (StringUtils.isEmpty(userId)) {
             throw new BusinessException("userId_cannot_null");
         }
         Map<String, String> param = new HashMap<String, String>();
         param.put("id", userId);
         String json = callApi(clientConfig.getRsURL().getUserDetails(), "GET", param);
-        List<UserVo> voList = resolveJsonList(json, UserVo.class);
+        List<IamUser> voList = resolveJsonList(json, IamUser.class);
         if (voList == null || voList.size() == 0) {
             return null;
         } else {
@@ -193,49 +193,49 @@ public class Oauth2IamSysService implements IamSysService {
     }
 
     @Override
-    public DeptDetailVo findDeptDetail(String deptId) {
+    public IamDept findDeptDetail(String deptId) {
         if (StringUtils.isEmpty(deptId)) {
             throw new BusinessException("deptId_cannot_null");
         }
         Map<String, String> param = new HashMap<String, String>();
         param.put("id", deptId);
         String json = callApi(clientConfig.getRsURL().getDeptDetails(), "GET", param);
-        DeptDetailVo voList = resolveJsonObject(json, DeptDetailVo.class);
+        IamDept voList = resolveJsonObject(json, IamDept.class);
         return voList;
     }
 
     @Override
-    public List<AppVo> findUserApps(String userId) {
+    public List<IamApp> findUserApps(String userId) {
         if (StringUtils.isEmpty(userId)) {
             throw new BusinessException("userId_cannot_null");
         }
         Map<String, String> param = new HashMap<String, String>();
         param.put("userId", userId);
         String json = callApi(clientConfig.getRsURL().getAppsByUserId(), "GET", param);
-        List<AppVo> appVoList = resolveJsonList(json, AppVo.class);
-        return appVoList;
+        List<IamApp> iamAppList = resolveJsonList(json, IamApp.class);
+        return iamAppList;
     }
 
     @Override
-    public AppVo findAppByCode(String appCode) {
+    public IamApp findAppByCode(String appCode) {
         if (StringUtils.isEmpty(appCode)) {
             throw new BusinessException("appCode_cannot_null");
         }
         Map<String, String> param = new HashMap<String, String>();
         param.put("code", appCode);
         String json = callApi(clientConfig.getRsURL().getApp(), "GET", param);
-        return resolveJsonObject(json, AppVo.class);
+        return resolveJsonObject(json, IamApp.class);
     }
 
     @Override
-    public List<UserVo> findUsersById(String... userIds) {
+    public List<IamUser> findUsersById(String... userIds) {
         Map<String, String> param = new HashMap<String, String>();
         if (userIds == null || userIds.length == 0) {
             throw new BusinessException("userIds_cannot_null");
         }
         param.put("userIds", StringUtils.join(userIds, ','));
         String json = callApi(clientConfig.getRsURL().getUserByIds(), "GET", param);
-        List<UserVo> users = resolveJsonList(json, UserVo.class);
+        List<IamUser> users = resolveJsonList(json, IamUser.class);
         return users;
     }
 
@@ -244,17 +244,17 @@ public class Oauth2IamSysService implements IamSysService {
      * @param orgId
      * @return
      */
-    private List<UserVo> findUsersByOrgId(String orgId) {
+    private List<IamUser> findUsersByOrgId(String orgId) {
         IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
         return findUsers(param);
     }
 
     @Override
-    public List<UserVo> findUsers(IamSysParam param) {
+    public List<IamUser> findUsers(IamSysParam param) {
         String json = callApi(clientConfig.getRsURL().getUsers(), "GET", param.toParamMap());
-        IamSysResult<List<UserVo>> users = new IamSysResult<>();
-        return (List<UserVo>) resolveJson2Result(json, UserVo.class, true, users).getRows();
+        IamSysResult<List<IamUser>> users = new IamSysResult<>();
+        return (List<IamUser>) resolveJson2Result(json, IamUser.class, true, users).getRows();
     }
 
     /**
@@ -264,7 +264,7 @@ public class Oauth2IamSysService implements IamSysService {
      * @return 机构列表
      */
     @Override
-    public List<OrgVo> findAllOrgs() {
+    public List<IamOrg> findAllOrgs() {
         return findOrg(new IamSysParam());
     }
 
@@ -275,10 +275,10 @@ public class Oauth2IamSysService implements IamSysService {
      * @return 机构列表
      */
     @Override
-    public OrgVo findOrg(String orgId) {
+    public IamOrg findOrg(String orgId) {
         IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
-        List<OrgVo> orgList = findOrg(param);
+        List<IamOrg> orgList = findOrg(param);
         if (orgList == null || orgList.size() == 0) {
             return null;
         } else {
@@ -295,7 +295,7 @@ public class Oauth2IamSysService implements IamSysService {
      * @return
      */
     @Override
-    public List<OrgVo> findOrg(IamSysParam param) {
+    public List<IamOrg> findOrg(IamSysParam param) {
         //获取组织机构树
         Map<String, String> paramMap = new HashMap<String, String>();
         if (StringUtils.isNotEmpty(param.getOrgId()))
@@ -306,11 +306,11 @@ public class Oauth2IamSysService implements IamSysService {
             paramMap.put("name", param.getOrgName());
         paramMap.put("pageSize", "1000");
         String json = callApi(clientConfig.getRsURL().getOrgs(), "GET", paramMap);
-        return resolveJsonList(json, OrgVo.class);
+        return resolveJsonList(json, IamOrg.class);
     }
 
     @Override
-    public List<OrgVo> findDeptsByOrgId(String orgId) {
+    public List<IamOrg> findDeptsByOrgId(String orgId) {
         IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
         return findDepts(param);
@@ -326,7 +326,7 @@ public class Oauth2IamSysService implements IamSysService {
      * @return
      */
     @Override
-    public List<OrgVo> findDepts(IamSysParam param) {
+    public List<IamOrg> findDepts(IamSysParam param) {
         //获取组织机构树
         if (StringUtils.isEmpty(param.getOrgId())) {
             throw new BusinessException("org_id_can_not_be_null_or_empty");
@@ -341,26 +341,26 @@ public class Oauth2IamSysService implements IamSysService {
         }
         paramMap.put("level", String.valueOf(param.getLevel()));
         String json = callApi(clientConfig.getRsURL().getDepts(), "GET", paramMap);
-        List<OrgVo> flatOrgs = resolveJsonList(json, OrgVo.class);
+        List<IamOrg> flatOrgs = resolveJsonList(json, IamOrg.class);
         if (!param.isTree()) {
             return flatOrgs;
         }
         return flatToTree(flatOrgs);
     }
 
-    private List<OrgVo> flatToTree(List<OrgVo> flatOrgs) {
-        Map<String, OrgVo> orgsMap = new HashMap<>(flatOrgs.size());
+    private List<IamOrg> flatToTree(List<IamOrg> flatOrgs) {
+        Map<String, IamOrg> orgsMap = new HashMap<>(flatOrgs.size());
         //构建树形结构
-        for (OrgVo o : flatOrgs) {
+        for (IamOrg o : flatOrgs) {
             orgsMap.put(o.getId(), o);
         }
         //删除有父节点的组织,保留一级部门
-        for (OrgVo o : flatOrgs) {
+        for (IamOrg o : flatOrgs) {
             if (StringUtils.isNotEmpty(o.getParentId())) {
-                OrgVo p = orgsMap.get(o.getParentId());
+                IamOrg p = orgsMap.get(o.getParentId());
                 if (p == null) continue;
                 if (p.getSubOrgs() == null) {
-                    p.setSubOrgs(new ArrayList<OrgVo>());
+                    p.setSubOrgs(new ArrayList<IamOrg>());
                 }
                 p.getSubOrgs().add(orgsMap.remove(o.getId()));
             }
@@ -376,16 +376,16 @@ public class Oauth2IamSysService implements IamSysService {
      * @return
      */
     @Override
-    public DataPermVo processDataPerm(String orgId, Set<String> deptIds, boolean isAdmin) {
-        List<OrgVo> flatOrgs = findDeptsByOrgId(orgId);
-        Map<String, OrgVo> orgsMap = new HashMap<>(flatOrgs.size());
-        Map<String, OrgVo> deptMap = new HashMap<>(flatOrgs.size());
+    public DataPermission processDataPerm(String orgId, Set<String> deptIds, boolean isAdmin) {
+        List<IamOrg> flatOrgs = findDeptsByOrgId(orgId);
+        Map<String, IamOrg> orgsMap = new HashMap<>(flatOrgs.size());
+        Map<String, IamOrg> deptMap = new HashMap<>(flatOrgs.size());
         //构建树形结构
         if (logger.isDebugEnabled()) {
             logger.debug("==============构建组织结构树=============");
             logger.debug("==============数据库中的组织机构=============");
         }
-        for (OrgVo o : flatOrgs) {
+        for (IamOrg o : flatOrgs) {
             orgsMap.put(o.getId(), o);
             if (logger.isDebugEnabled())
                 logger.debug(o.getId() + "=" + o.getName());
@@ -395,15 +395,15 @@ public class Oauth2IamSysService implements IamSysService {
             }
         }
         //构建父子关系
-        for (OrgVo o : flatOrgs) {
+        for (IamOrg o : flatOrgs) {
             if (StringUtils.isNotEmpty(o.getParentId())) {
-                OrgVo p = orgsMap.get(o.getParentId());
+                IamOrg p = orgsMap.get(o.getParentId());
                 o.setParent(p);
             }
         }
         //刷掉多余的节点
         if (isAdmin) {
-            for (OrgVo o : flatOrgs) {
+            for (IamOrg o : flatOrgs) {
                 o.setHold(true);
             }
         } else {
@@ -422,8 +422,8 @@ public class Oauth2IamSysService implements IamSysService {
             }
         }
         //构建两层的树
-        List<OrgVo> treeOrgs = new ArrayList<>();
-        for (OrgVo org : orgsMap.values()) {
+        List<IamOrg> treeOrgs = new ArrayList<>();
+        for (IamOrg org : orgsMap.values()) {
             //顶级部门为单位
             if (org.getParent() == null) {
                 treeOrgs.add(org);
@@ -431,17 +431,17 @@ public class Oauth2IamSysService implements IamSysService {
         }
         if (logger.isDebugEnabled())
             logger.debug("==============当前用户可访问的组织机构=============");
-        for (OrgVo org : orgsMap.values()) {
+        for (IamOrg org : orgsMap.values()) {
             if (logger.isDebugEnabled())
                 logger.debug(org.getId() + "=" + org.getName());
             set2TopOrg(org.getParent(), org);
         }
 
-        List<UserVo> users = findUsersByOrgId(orgId);
-        Map<String, List<UserVo>> userMap = new HashMap<>(flatOrgs.size());
+        List<IamUser> users = findUsersByOrgId(orgId);
+        Map<String, List<IamUser>> userMap = new HashMap<>(flatOrgs.size());
         if (logger.isDebugEnabled())
             logger.debug("==============数据库中的用户=============");
-        for (UserVo user : users) {
+        for (IamUser user : users) {
             if (logger.isDebugEnabled()) {
                 logger.debug(user.getDeptId() + "|" + user.getId() + "|" + user.getName());
             }
@@ -453,12 +453,12 @@ public class Oauth2IamSysService implements IamSysService {
             logger.debug("==============当前用户能访问的用户=============");
             for (String org : userMap.keySet()) {
                 //logger.debug("组织机构=" + org + "=" + orgsMap.get(org).getName());
-                for (UserVo user : userMap.get(org)) {
+                for (IamUser user : userMap.get(org)) {
                     logger.debug(org + "=" + user.getId() + "=" + user.getName());
                 }
             }
         }
-        return new DataPermVo(treeOrgs, deptMap, userMap);
+        return new DataPermission(treeOrgs, deptMap, userMap);
     }
 
     //    @Autowired
@@ -496,18 +496,18 @@ public class Oauth2IamSysService implements IamSysService {
         return userinfo;
     }
 
-    private void setUserToTreeOrgs(OrgVo orgVo, Map<String, List<UserVo>> userMap, UserVo user) {
-        if (orgVo == null) return;
-        if (!userMap.containsKey(orgVo.getId())) {
-            userMap.put(orgVo.getId(), new ArrayList<>());
+    private void setUserToTreeOrgs(IamOrg iamOrg, Map<String, List<IamUser>> userMap, IamUser user) {
+        if (iamOrg == null) return;
+        if (!userMap.containsKey(iamOrg.getId())) {
+            userMap.put(iamOrg.getId(), new ArrayList<>());
         }
-        if (!userMap.get(orgVo.getId()).contains(user)) {
-            userMap.get(orgVo.getId()).add(user);
+        if (!userMap.get(iamOrg.getId()).contains(user)) {
+            userMap.get(iamOrg.getId()).add(user);
         }
-        //setUserToTreeOrgs(orgVo.getParent(), userMap, user);
+        //setUserToTreeOrgs(org.getParent(), userMap, user);
     }
 
-    private void set2TopOrg(OrgVo parent, OrgVo org) {
+    private void set2TopOrg(IamOrg parent, IamOrg org) {
         if (parent == null) return;
         if (parent.getParent() != null) {
             set2TopOrg(parent.getParent(), org);
@@ -519,12 +519,12 @@ public class Oauth2IamSysService implements IamSysService {
         }
     }
 
-    private void mark4Reserv(OrgVo orgVo) {
-        if (orgVo.isHold()) return;
-        orgVo.setHold(true);
-        if (orgVo.getParent() != null) {
-            if (!orgVo.getParent().isHold()) {
-                mark4Reserv(orgVo.getParent());
+    private void mark4Reserv(IamOrg iamOrg) {
+        if (iamOrg.isHold()) return;
+        iamOrg.setHold(true);
+        if (iamOrg.getParent() != null) {
+            if (!iamOrg.getParent().isHold()) {
+                mark4Reserv(iamOrg.getParent());
             }
         }
     }
@@ -592,7 +592,7 @@ public class Oauth2IamSysService implements IamSysService {
 
             String token = "";
             if (astoken == null) {
-                UserVo user = iamContext.getUser();
+                IamUser user = iamContext.getUser();
                 if (user != null && user.getAccessToken() != null) {
                     token = user.getAccessToken();
                 } else {

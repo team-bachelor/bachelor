@@ -2,7 +2,7 @@ package cn.org.bachelor.iam.acm.controller;
 
 import cn.org.bachelor.iam.acm.domain.Role;
 import cn.org.bachelor.iam.acm.service.RoleServiceStub;
-import cn.org.bachelor.iam.vo.UserVo;
+import cn.org.bachelor.iam.pojo.IamUser;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.Operation;
@@ -139,7 +139,7 @@ public class RoleController {
             @Parameter(name = "users", description = "要添加的用户编码", in = ParameterIn.QUERY, required = true, example = "[{\"\"}]")
     })
     @RequestMapping(value = "/users/{roleCode}", method = RequestMethod.POST)
-    public HttpEntity<JsonResponse> addRoleUser(@PathVariable("roleCode") String roleCode, @RequestBody List<UserVo> users) {
+    public HttpEntity<JsonResponse> addRoleUser(@PathVariable("roleCode") String roleCode, @RequestBody List<IamUser> users) {
         roleService.addUsersToRole(roleCode, users);
         return JsonResponse.createHttpEntity(HttpStatus.OK);
     }

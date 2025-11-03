@@ -5,11 +5,10 @@ import cn.org.bachelor.iam.acm.annotation.AcmDomain;
 import cn.org.bachelor.iam.acm.annotation.AcmPermission;
 import cn.org.bachelor.iam.acm.domain.ObjDomain;
 import cn.org.bachelor.iam.acm.domain.ObjOperation;
-import cn.org.bachelor.iam.acm.domain.ObjPermission;
 import cn.org.bachelor.iam.acm.service.ObjDomainService;
 import cn.org.bachelor.iam.acm.service.ObjOperationService;
 import cn.org.bachelor.iam.acm.service.ObjPermissionService;
-import cn.org.bachelor.iam.acm.vo.ObjPermissionVo;
+import cn.org.bachelor.iam.acm.pojo.ObjPermission;
 import cn.org.bachelor.web.json.JsonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,13 +52,13 @@ public class AcmInitController {
     @Operation(description = "初始化权限点")
     @GetMapping(value = "/init")
     public ResponseEntity<JsonResponse> initPermissions() {
-        List<ObjPermissionVo> list = getObjPermissionVos();
+        List<ObjPermission> list = getObjPermissions();
         String userCode = iamContext.getUserCode();
         Map<String, ObjOperation> opMap = new HashMap<>();
         Map<String, ObjDomain> domainMap = new HashMap<>();
-        List<ObjPermission> permissions = new ArrayList<>(list.size());
+        List<cn.org.bachelor.iam.acm.domain.ObjPermission> permissions = new ArrayList<>(list.size());
         //将数据写入到权限表中 cmn_auth_objects
-        for (ObjPermissionVo p : list) {
+        for (ObjPermission p : list) {
             //获取权限点，并加入到list中
             getObjPermission(p, permissions, userCode);
 
@@ -76,7 +75,7 @@ public class AcmInitController {
         return JsonResponse.createHttpEntity(list, HttpStatus.OK);
     }
 
-    private void getDomain(ObjPermissionVo p, Map<String, ObjDomain> domainMap, String userCode) {
+    private void getDomain(ObjPermission p, Map<String, ObjDomain> domainMap, String userCode) {
         ObjDomain newDoMain = new ObjDomain();
         newDoMain.setId(UUID.randomUUID().toString());
         newDoMain.setName(p.getDomainName());
@@ -90,7 +89,7 @@ public class AcmInitController {
         }
     }
 
-    private void getOperation(ObjPermissionVo p, Map<String, ObjOperation> opMap, String userCode) {
+    private void getOperation(ObjPermission p, Map<String, ObjOperation> opMap, String userCode) {
         ObjOperation newOperation = new ObjOperation();
         newOperation.setId(UUID.randomUUID().toString());
         newOperation.setName(p.getOperateName());
@@ -104,8 +103,8 @@ public class AcmInitController {
         }
     }
 
-    private void getObjPermission(ObjPermissionVo p, List<ObjPermission> permissions, String userCode) {
-        ObjPermission newPermission = new ObjPermission();
+    private void getObjPermission(ObjPermission p, List<cn.org.bachelor.iam.acm.domain.ObjPermission> permissions, String userCode) {
+        cn.org.bachelor.iam.acm.domain.ObjPermission newPermission = new cn.org.bachelor.iam.acm.domain.ObjPermission();
         newPermission.setId(UUID.randomUUID().toString());
         newPermission.setName(p.getName());
         newPermission.setCode(p.getCode());
@@ -123,7 +122,7 @@ public class AcmInitController {
         permissions.add(newPermission);
     }
 
-    private List<ObjPermissionVo> getObjPermissionVos() {
+    private List<ObjPermission> getObjPermissions() {
         // 获取springmvc处理器映射器组件对象 RequestMappingHandlerMapping无法直接注入
         RequestMappingHandlerMapping mapping = applicationContext.getBean(RequestMappingHandlerMapping.class);
         List<ObjOperation> dbOperations = operationService.getOperations(true);
@@ -134,7 +133,7 @@ public class AcmInitController {
         });
         //获取url与类和方法的对应信息
         Map<RequestMappingInfo, HandlerMethod> methodMap = mapping.getHandlerMethods();
-        List<ObjPermissionVo> list = new ArrayList<>(methodMap.size());
+        List<ObjPermission> list = new ArrayList<>(methodMap.size());
         for (Map.Entry<RequestMappingInfo, HandlerMethod> m : methodMap.entrySet()) {
             //循环每一个映射
             //获取映射信息
@@ -149,13 +148,13 @@ public class AcmInitController {
             //获取映射处理器信息
             HandlerMethod handler = m.getValue();
 
-            ObjPermissionVo permissionVo = new ObjPermissionVo();
+            ObjPermission permission = new ObjPermission();
             Method method = handler.getMethod();
             //获取swagger的api定义
             Operation apiOperation = method.getAnnotation(Operation.class);
             //如果有swagger定义则使用swagger信息命名当前权限
             if (null != apiOperation) {
-                permissionVo.setName(apiOperation.description());
+                permission.setName(apiOperation.description());
             }
 
             //获取权限定义
@@ -172,11 +171,11 @@ public class AcmInitController {
                 if (isEmptyString(code)) {
                     code = acmDomain.value();
                 }
-                permissionVo.setDomainCode(code);//域编码
+                permission.setDomainCode(code);//域编码
                 if (isEmptyString(acmDomain.value())) {
-                    permissionVo.setDomainName(acmDomain.name());//域编码
+                    permission.setDomainName(acmDomain.name());//域编码
                 } else {
-                    permissionVo.setDomainName(acmDomain.value());//域编码
+                    permission.setDomainName(acmDomain.value());//域编码
                 }
             }
 
@@ -184,40 +183,40 @@ public class AcmInitController {
             String httpMethod = methodsCondition.getMethods().toArray()[0].toString().toLowerCase();
 
             //设置基本信息
-            permissionVo.setUri(url);
-            permissionVo.setCode(httpMethod + ":" + url);
-            permissionVo.setHttpMethod(httpMethod);//请求方式
-            permissionVo.setDefAuthOp(acmPermission.checkLevel().toString());//接口权限
+            permission.setUri(url);
+            permission.setCode(httpMethod + ":" + url);
+            permission.setHttpMethod(httpMethod);//请求方式
+            permission.setDefAuthOp(acmPermission.checkLevel().toString());//接口权限
 
             // 设置操作信息
             // 默认用当前
-            permissionVo.setOperate(httpMethod);//操作编码
+            permission.setOperate(httpMethod);//操作编码
             if (isEmptyString(acmPermission.opTypeCode())) {
                 if (dbopMap.containsKey(httpMethod)) {
                     ObjOperation dbop = dbopMap.get(httpMethod);
-                    permissionVo.setOperate(dbop.getCode());//操作编码
-                    permissionVo.setOperateName(dbop.getName());
+                    permission.setOperate(dbop.getCode());//操作编码
+                    permission.setOperateName(dbop.getName());
                 }
             } else {
-                permissionVo.setOperate(acmPermission.opTypeCode());//操作编码
-                permissionVo.setOperateName(acmPermission.opType());
+                permission.setOperate(acmPermission.opTypeCode());//操作编码
+                permission.setOperateName(acmPermission.opType());
             }
 
             //设置权限名称
             if (isEmptyString(acmPermission.value())) {
-                StringBuilder name = new StringBuilder(permissionVo.getOperateName());
+                StringBuilder name = new StringBuilder(permission.getOperateName());
                 if (acmDomain != null) {
                     name.append(acmDomain.name() == null ? acmDomain.value() : acmDomain.name());
                 }
-                permissionVo.setName(name.toString());
+                permission.setName(name.toString());
             } else {
-                permissionVo.setName(acmPermission.value());
+                permission.setName(acmPermission.value());
             }
-            permissionVo.setType(acmPermission.type().toString());//接口类型
-            permissionVo.setSeqOrder(acmPermission.order());
-            permissionVo.setServeFor(Arrays.toString(acmPermission.serveFor()));
+            permission.setType(acmPermission.type().toString());//接口类型
+            permission.setSeqOrder(acmPermission.order());
+            permission.setServeFor(Arrays.toString(acmPermission.serveFor()));
 
-            list.add(permissionVo);
+            list.add(permission);
         }
         return list;
     }

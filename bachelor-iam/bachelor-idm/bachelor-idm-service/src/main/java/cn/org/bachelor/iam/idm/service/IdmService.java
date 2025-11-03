@@ -3,8 +3,8 @@ package cn.org.bachelor.iam.idm.service;
 import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.credential.AbstractIamCredential;
+import cn.org.bachelor.iam.pojo.IamUser;
 import cn.org.bachelor.iam.token.JwtToken;
-import cn.org.bachelor.iam.vo.UserVo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ public class IdmService {
     @Autowired(required = false)
     private List<UserExtendInfoProvider> userExtendInfoProviders;
 
-    public UserVo getUserDetail(String userId) {
+    public IamUser getUserDetail(String userId) {
         return userSysService.findUsersDetail(userId);
     }
 
@@ -74,7 +74,7 @@ public class IdmService {
     private JwtToken getJwtToken(HttpServletRequest request, String userId) {
         AbstractIamCredential upCC = (AbstractIamCredential) request.getSession()
                 .getAttribute(IamConstant.SESSION_AUTHENTICATION_KEY);
-        UserVo userDetail = getUserDetail(userId);
+        IamUser userDetail = getUserDetail(userId);
         userDetail.setExtendInfo(getUserExtInfo((JSONObject)JSON.toJSON(userDetail)));
         return JwtToken.create(userDetail, upCC);
     }

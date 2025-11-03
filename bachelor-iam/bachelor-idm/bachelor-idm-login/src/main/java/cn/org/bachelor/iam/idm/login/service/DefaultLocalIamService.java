@@ -2,7 +2,7 @@ package cn.org.bachelor.iam.idm.login.service;
 
 import cn.org.bachelor.iam.idm.service.IamSysParam;
 import cn.org.bachelor.iam.idm.service.IamSysService;
-import cn.org.bachelor.iam.vo.*;
+import cn.org.bachelor.iam.pojo.*;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,82 +15,82 @@ import java.util.Set;
 public class DefaultLocalIamService implements IamSysService {
 
     @Override
-    public AppVo findAppByCode(String appCode) {
+    public IamApp findAppByCode(String appCode) {
         return null;
     }
 
     @Override
-    public List<AppVo> findUserApps(String userId) {
+    public List<IamApp> findUserApps(String userId) {
         return null;
     }
 
     @Override
-    public List<UserVo> findUsersInApp(String appID) {
+    public List<IamUser> findUsersInApp(String appID) {
         return null;
     }
 
     @Override
-    public List<UserVo> findUsersInApp(IamSysParam param) {
+    public List<IamUser> findUsersInApp(IamSysParam param) {
         return null;
     }
 
     @Override
-    public UserVo findUsersDetail(String userId) {
+    public IamUser findUsersDetail(String userId) {
         return null;
     }
 
     @Override
-    public List<RoleVo> findUserRolesInApp(IamSysParam param) {
+    public List<IamRole> findUserRolesInApp(IamSysParam param) {
         return null;
     }
 
     @Override
-    public List<UserVo> findUsersById(String... userIds) {
+    public List<IamUser> findUsersById(String... userIds) {
         return null;
     }
 
     @Override
-    public List<UserVo> findUsers(IamSysParam param) {
+    public List<IamUser> findUsers(IamSysParam param) {
         return null;
     }
 
     @Override
-    public List<OrgVo> findAllOrgs() {
+    public List<IamOrg> findAllOrgs() {
         return null;
     }
 
     @Override
-    public OrgVo findOrg(String orgId) {
+    public IamOrg findOrg(String orgId) {
         return null;
     }
 
     @Override
-    public List<OrgVo> findOrg(IamSysParam param) {
+    public List<IamOrg> findOrg(IamSysParam param) {
         return null;
     }
 
     @Override
-    public DeptDetailVo findDeptDetail(String deptId) {
+    public IamDept findDeptDetail(String deptId) {
         return null;
     }
 
     @Override
-    public List<OrgVo> findDeptsByOrgId(String orgId) {
+    public List<IamOrg> findDeptsByOrgId(String orgId) {
         return null;
     }
 
     @Override
-    public List<OrgVo> findDepts(IamSysParam param) {
+    public List<IamOrg> findDepts(IamSysParam param) {
         return null;
     }
 
     @Override
-    public DataPermVo processDataPerm(String orgId, Set<String> deptIds, boolean isAdmin) {
+    public DataPermission processDataPerm(String orgId, Set<String> deptIds, boolean isAdmin) {
         return null;
     }
 
     @Override
-    public boolean assertIsAdmin(UserVo user) {
+    public boolean assertIsAdmin(IamUser user) {
         return false;
     }
 

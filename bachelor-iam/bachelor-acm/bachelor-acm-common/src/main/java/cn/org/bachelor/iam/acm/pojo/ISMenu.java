@@ -1,11 +1,9 @@
-package cn.org.bachelor.iam.acm.vo;
+package cn.org.bachelor.iam.acm.pojo;
 
 import cn.org.bachelor.iam.acm.permission.PermissionModel;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +13,7 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor
-public class ISMenuVo extends MenuVo{
+public class ISMenu extends Menu {
     private String activePath;//code 仅二级
     private String entry;//code
     private String title;//name
@@ -29,9 +27,9 @@ public class ISMenuVo extends MenuVo{
      * 权限所有者
      */
     private String owner;
-    private List<ISMenuVo> children;
+    private List<ISMenu> children;
 
-    public ISMenuVo() {
+    public ISMenu() {
     }
 
 }

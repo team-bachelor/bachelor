@@ -1,8 +1,8 @@
-package cn.org.bachelor.iam.acm.vo;
+package cn.org.bachelor.iam.acm.pojo;
 
 import java.util.Date;
 
-public class ObjPermissionVo {
+public class ObjPermission {
     /**
      * ID
      */

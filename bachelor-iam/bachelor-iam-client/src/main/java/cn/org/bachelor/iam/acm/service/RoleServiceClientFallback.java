@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.acm.service;
 
 import cn.org.bachelor.iam.acm.domain.Role;
-import cn.org.bachelor.iam.vo.UserVo;
+import cn.org.bachelor.iam.pojo.IamUser;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,12 +37,12 @@ public class RoleServiceClientFallback implements RoleServiceClient {
     }
 
     @Override
-    public List<UserVo> getRoleUsers(@PathVariable String roleCode) {
+    public List<IamUser> getRoleUsers(@PathVariable String roleCode) {
         return null;
     }
 
     @Override
-    public List<UserVo> getLocalRoleUsers(String roleCode) {
+    public List<IamUser> getLocalRoleUsers(String roleCode) {
         return null;
     }
 
@@ -52,7 +52,7 @@ public class RoleServiceClientFallback implements RoleServiceClient {
     }
 
     @Override
-    public void addUsersToRole(@PathVariable String roleCode, List<UserVo> users) {
+    public void addUsersToRole(@PathVariable String roleCode, List<IamUser> users) {
 
     }
 

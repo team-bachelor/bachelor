@@ -2,9 +2,9 @@ package cn.org.bachelor.iam.idm.login.util;
 
 import cn.org.bachelor.iam.acm.domain.User;
 import cn.org.bachelor.iam.idm.login.LoginUser;
+import cn.org.bachelor.iam.pojo.IamUser;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.utils.JwtUtil;
-import cn.org.bachelor.iam.vo.UserVo;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ public class UserUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(UserUtil.class);
 
-    public static LoginUser vo2LoginUser(UserVo vo) {
+    public static LoginUser vo2LoginUser(IamUser vo) {
         User po = new User();
         LoginUser lu = new LoginUser(po);
         po.setId(vo.getId());
@@ -63,11 +63,11 @@ public class UserUtil {
         return lu;
     }
 
-    public static UserVo loginUser2Vo(LoginUser lu) {
+    public static IamUser loginUser2IamUser(LoginUser lu) {
         if (lu == null || lu.getUser() == null) {
             return null;
         }
-        UserVo vo = new UserVo();
+        IamUser vo = new IamUser();
         User user = lu.getUser();
         vo.setId(user.getId());
         vo.setOrgId(user.getOrgId());

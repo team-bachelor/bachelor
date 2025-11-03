@@ -58,7 +58,7 @@
 | bachelor.iam.client.as-url.authorize | String | 授权的接口地址 | /authorize |
 | bachelor.iam.client.as-url.base | String | 认证服务的根接口地址 |  |
 | bachelor.iam.client.as-url.logout | String | 登出的接口地址 | /logout |
-| bachelor.iam.client.as-url.user-info | String | 获取用户基本信息的接口地址 | /userInfo |
+| bachelor.iam.client.as-url.user-info | String | 获取用户基本信息的接口地址 | /iamUser |
 | bachelor.iam.client.id | String | 用户平台中的client_id |  |
 | bachelor.iam.client.login-filter-enable | Boolean | 是否启用登录过滤器(过滤未登录的请求) | true |
 | bachelor.iam.client.login-redirect-url | String | 登录的重定向回调地址 |  |
@@ -68,7 +68,7 @@
 | bachelor.iam.client.rs-url.base | String | 资源服务根地址 |  |
 | bachelor.iam.client.rs-url.dept-details | String | 获取部门详细信息的接口地址 | /deptDetails |
 | bachelor.iam.client.rs-url.depts | String | 获取部门信息的接口地址 | /depts |
-| bachelor.iam.client.rs-url.mt-user-roles | String | 获取用户角色信息的接口地址 | /mtUserRoles |
+| bachelor.iam.client.rs-url.mt-user-iamRoles | String | 获取用户角色信息的接口地址 | /mtUserRoles |
 | bachelor.iam.client.rs-url.orgs | String | 获取组织结构信息的接口地址 | /orgs |
 | bachelor.iam.client.rs-url.user-by-client-i-d | String | 获取可访问应用的全部用户的接口地址 | /users/authorizeByApp |
 | bachelor.iam.client.rs-url.user-by-ids | String | 根据用户id获取用户信息的接口地址  | ../userapi/user/getUserByIds |

@@ -2,7 +2,7 @@ package cn.org.bachelor.iam.acm.rpc;
 
 import cn.org.bachelor.iam.acm.domain.Role;
 import cn.org.bachelor.iam.acm.service.RoleServiceStub;
-import cn.org.bachelor.iam.vo.UserVo;
+import cn.org.bachelor.iam.pojo.IamUser;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.Operation;
@@ -109,7 +109,7 @@ public class RpcRoleController {
             @Parameter(name = "local", description = "是否只取本地角色", in = ParameterIn.PATH, required = false)
     })
     @RequestMapping(value = "/users/{roleCode}", method = RequestMethod.GET)
-    public List<UserVo> getRoleUsers(@PathVariable("roleCode") String roleCode) {
+    public List<IamUser> getRoleUsers(@PathVariable("roleCode") String roleCode) {
         return roleService.getRoleUsers(roleCode);
     }
 
@@ -119,7 +119,7 @@ public class RpcRoleController {
             @Parameter(name = "local", description = "是否只取本地角色", in = ParameterIn.PATH, required = false)
     })
     @RequestMapping(value = "/local/users/{roleCode}", method = RequestMethod.GET)
-    public List<UserVo> getLocalRoleUsers(@PathVariable("roleCode") String roleCode) {
+    public List<IamUser> getLocalRoleUsers(@PathVariable("roleCode") String roleCode) {
         return roleService.getLocalRoleUsers(roleCode);
     }
 
@@ -136,7 +136,7 @@ public class RpcRoleController {
             @Parameter(name = "users", description = "要添加的用户编码", in = ParameterIn.QUERY, required = true, example = "[{\"\"}]")
     })
     @RequestMapping(value = "/users/{roleCode}", method = RequestMethod.POST)
-    public void addUsersToRole(@PathVariable("roleCode") String roleCode, @RequestBody List<UserVo> users) {
+    public void addUsersToRole(@PathVariable("roleCode") String roleCode, @RequestBody List<IamUser> users) {
         roleService.addUsersToRole(roleCode, users);
     }
 

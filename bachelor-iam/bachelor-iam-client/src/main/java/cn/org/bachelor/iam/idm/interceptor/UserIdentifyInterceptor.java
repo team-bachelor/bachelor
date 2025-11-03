@@ -4,8 +4,8 @@ import cn.org.bachelor.iam.IamConfiguration;
 import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.credential.AbstractIamCredential;
+import cn.org.bachelor.iam.pojo.IamUser;
 import cn.org.bachelor.iam.token.JwtToken;
-import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.web.util.RequestUtil;
 import com.alibaba.fastjson.JSONObject;
 import jakarta.annotation.Resource;
@@ -45,7 +45,7 @@ public class UserIdentifyInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         log.info("进入用户信息拦截器，开始组装用户信息：" + request.getServletPath());
 
-        UserVo user = getUserVoFromRequest(request);
+        IamUser user = getUserInfoFromRequest(request);
         if (log.isDebugEnabled()) {
             log.debug("user info assembly: " + JSONObject.toJSONString(user));
         }
@@ -67,7 +67,7 @@ public class UserIdentifyInterceptor implements HandlerInterceptor {
                     user.setDeptName(getSessionString(request, IamConstant.UP_DEPT_NAME));
                 } else if (JwtToken.Ver2.equals(ver)) {
                     String personStr = getSessionString(request, IamConstant.UP_USER);
-                    UserVo userInSession = JSONObject.parseObject(personStr, UserVo.class);
+                    IamUser userInSession = JSONObject.parseObject(personStr, IamUser.class);
                     user.setName(userInSession.getName());
                     user.setOrgId(userInSession.getOrgId());
                     user.setOrgName(userInSession.getOrgName());
@@ -92,10 +92,10 @@ public class UserIdentifyInterceptor implements HandlerInterceptor {
         return (String) request.getSession().getAttribute(key);
     }
 
-    private UserVo getUserVoFromRequest(HttpServletRequest request) {
+    private IamUser getUserInfoFromRequest(HttpServletRequest request) {
         boolean enableGateWay = config.isEnableGateway();
 
-        UserVo user = new UserVo();
+        IamUser user = new IamUser();
         Map<String, Object> claims;
         if (enableGateWay) {
             claims = getHeaderMap(request);
@@ -127,7 +127,7 @@ public class UserIdentifyInterceptor implements HandlerInterceptor {
         return headers;
     }
 
-    private void fillUserByClaims(UserVo user, Map<String, Object> claims) {
+    private void fillUserByClaims(IamUser user, Map<String, Object> claims) {
         if (claims == null || claims.size() == 0) {
             return;
         }

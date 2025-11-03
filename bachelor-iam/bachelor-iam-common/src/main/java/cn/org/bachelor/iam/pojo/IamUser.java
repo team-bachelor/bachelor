@@ -1,4 +1,4 @@
-package cn.org.bachelor.iam.vo;
+package cn.org.bachelor.iam.pojo;
 
 import cn.org.bachelor.context.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -14,7 +14,7 @@ import java.util.Map;
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserVo implements IUser {
+public class IamUser implements IUser {
 
     @Schema(name = "id")
     private String id;

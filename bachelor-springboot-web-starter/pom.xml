@@ -16,7 +16,7 @@
         <developer>
             <name>bachelor</name>
             <email>liuzhuo84@hotmail.com</email>
-            <organization>bachelor</organization>
+            <iamOrg>bachelor</iamOrg>
             <organizationUrl>http://www.bachelor.org.cn</organizationUrl>
         </developer>
     </developers>

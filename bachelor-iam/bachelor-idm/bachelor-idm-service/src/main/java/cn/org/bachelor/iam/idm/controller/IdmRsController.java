@@ -2,8 +2,8 @@ package cn.org.bachelor.iam.idm.controller;
 
 import cn.org.bachelor.iam.idm.service.IamSysParam;
 import cn.org.bachelor.iam.idm.service.IamSysService;
-import cn.org.bachelor.iam.vo.AppVo;
-import cn.org.bachelor.iam.vo.UserVo;
+import cn.org.bachelor.iam.pojo.IamApp;
+import cn.org.bachelor.iam.pojo.IamUser;
 import cn.org.bachelor.web.json.JsonResponse;
 import com.github.pagehelper.PageHelper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,7 +56,7 @@ public class IdmRsController {
         param.setUserName(userName);
         param.setPageSize(pageSize);
         param.setPageNum(pageNum);
-        List<UserVo> result = userSysService.findUsers(param);
+        List<IamUser> result = userSysService.findUsers(param);
         //ResponseEntity response = JsonResponse.createHttpEntity(result.getRows());
 
         //response.getHeaders().add("total", String.valueOf(result.getTotal()));
@@ -172,8 +172,8 @@ public class IdmRsController {
     })
     @RequestMapping(value = "/users/ids", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUserByIds(String userIds) {
-        List<UserVo> userVoList = userSysService.findUsersById(userIds.split(","));
-        return JsonResponse.createHttpEntity(userVoList);
+        List<IamUser> iamUserList = userSysService.findUsersById(userIds.split(","));
+        return JsonResponse.createHttpEntity(iamUserList);
     }
 
 
@@ -186,7 +186,7 @@ public class IdmRsController {
         if (portalCode == null || "".equalsIgnoreCase(portalCode))
             return JsonResponse.createHttpEntity(HttpStatus.NOT_FOUND);
         else {
-            AppVo app = userSysService.findAppByCode(portalCode);
+            IamApp app = userSysService.findAppByCode(portalCode);
             return JsonResponse.createHttpEntity(app == null ? "" : app.getUrl());
         }
     }
@@ -197,7 +197,7 @@ public class IdmRsController {
     })
     @RequestMapping(value = "/app/{appCode}", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getAppByCode(@PathVariable String appCode) {
-        AppVo app = userSysService.findAppByCode(appCode);
+        IamApp app = userSysService.findAppByCode(appCode);
         return JsonResponse.createHttpEntity(app);
     }
 
@@ -207,7 +207,7 @@ public class IdmRsController {
     })
     @RequestMapping(value = "/user/{userId}/apps", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getAppByUserId(@PathVariable String userId) {
-        List<AppVo> apps = userSysService.findUserApps(userId);
+        List<IamApp> apps = userSysService.findUserApps(userId);
         return JsonResponse.createHttpEntity(apps);
     }
 

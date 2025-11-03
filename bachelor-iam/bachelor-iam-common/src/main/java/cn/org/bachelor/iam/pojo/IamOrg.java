@@ -1,4 +1,4 @@
-package cn.org.bachelor.iam.vo;
+package cn.org.bachelor.iam.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OrgVo {
+public class IamOrg {
 
     @Schema(name = "id")
     @JsonProperty("id")
@@ -42,10 +42,10 @@ public class OrgVo {
 
     @Schema(name = "子机构")
     @JsonProperty("subs")
-    private List<OrgVo> subOrgs;
+    private List<IamOrg> subOrgs;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private OrgVo parent;
+    private IamOrg parent;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean hold;

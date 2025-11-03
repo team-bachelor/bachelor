@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.acm.service;
 
 import cn.org.bachelor.iam.acm.domain.Role;
-import cn.org.bachelor.iam.vo.UserVo;
+import cn.org.bachelor.iam.pojo.IamUser;
 
 import java.util.List;
 
@@ -43,8 +43,8 @@ public interface RoleServiceStub {
      * @param roleCode
      * @return
      */
-    List<UserVo> getRoleUsers(String roleCode);
-    List<UserVo> getLocalRoleUsers(String roleCode);
+    List<IamUser> getRoleUsers(String roleCode);
+    List<IamUser> getLocalRoleUsers(String roleCode);
 
     /**
      * @param userCode
@@ -56,7 +56,7 @@ public interface RoleServiceStub {
      * @param roleCode
      * @param users
      */
-    void addUsersToRole(String roleCode, List<UserVo> users);
+    void addUsersToRole(String roleCode, List<IamUser> users);
 
     /**
      * @param roleCode

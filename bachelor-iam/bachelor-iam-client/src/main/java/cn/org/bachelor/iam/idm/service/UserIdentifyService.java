@@ -3,16 +3,14 @@ package cn.org.bachelor.iam.idm.service;
 import cn.org.bachelor.iam.IamConstant;
 import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.credential.AbstractIamCredential;
-import cn.org.bachelor.iam.idm.interceptor.UserIdentifyInterceptor;
+import cn.org.bachelor.iam.pojo.IamUser;
 import cn.org.bachelor.iam.token.JwtToken;
-import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.web.util.RequestUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -40,9 +38,9 @@ public class UserIdentifyService {
         }
     }
 
-    public UserVo getAndSetUser2Context(HttpServletRequest request) {
+    public IamUser getAndSetUser2Context(HttpServletRequest request) {
         logger.info("进入用户信息拦截器，开始组装用户信息：" + request.getServletPath());
-        UserVo user = new UserVo();
+        IamUser user = new IamUser();
         user.setId(request.getHeader(JwtToken.PayloadKey.USER_ID));
         user.setCode(request.getHeader(JwtToken.PayloadKey.USER_CODE));
         user.setName(urlDecode(request.getHeader(JwtToken.PayloadKey.USER_NAME)));
@@ -70,7 +68,7 @@ public class UserIdentifyService {
                 user.setAccessToken((String) ucc.getCredential());
                 user.setId(ucc.getSubject());
                 String personStr = (String) request.getSession().getAttribute(IamConstant.UP_USER);
-                UserVo userInSession = JSONObject.parseObject(personStr, UserVo.class);
+                IamUser userInSession = JSONObject.parseObject(personStr, IamUser.class);
                 user.setName(userInSession.getName());
                 user.setOrgId(userInSession.getOrgId());
                 user.setOrgName(userInSession.getOrgName());

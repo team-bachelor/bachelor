@@ -8,7 +8,7 @@ import cn.org.bachelor.iam.acm.permission.PermissionGroup;
 import cn.org.bachelor.iam.acm.permission.PermissionModel;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.permission.PermissionPoint;
-import cn.org.bachelor.iam.vo.UserVo;
+import cn.org.bachelor.iam.pojo.IamUser;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -244,9 +244,9 @@ public class AuthorizeService implements AuthorizeServiceStub {
             } else {
                 //如果不存在则插入数据库
                 String userId = "system";
-                UserVo userVo = iamContext.getUser();
-                if (userVo != null && StringUtils.isNotEmpty(userVo.getCode())) {
-                    userId = userVo.getCode();
+                IamUser iamUser = iamContext.getUser();
+                if (iamUser != null && StringUtils.isNotEmpty(iamUser.getCode())) {
+                    userId = iamUser.getCode();
                 }
                 rolePermissionMapper.insert(forRolePermission(userId, roleCode, r));
             }
@@ -316,9 +316,9 @@ public class AuthorizeService implements AuthorizeServiceStub {
             } else {
                 //如果不存在则插入数据库
                 String userId = "system";
-                UserVo userVo = iamContext.getUser();
-                if (userVo == null || StringUtils.isEmpty(userVo.getCode())) {
-                    userId = userVo.getCode();
+                IamUser iamUser = iamContext.getUser();
+                if (iamUser == null || StringUtils.isEmpty(iamUser.getCode())) {
+                    userId = iamUser.getCode();
                 }
                 orgPermissionMapper.insert(forOrgPermission(userId, orgId, r));
             }

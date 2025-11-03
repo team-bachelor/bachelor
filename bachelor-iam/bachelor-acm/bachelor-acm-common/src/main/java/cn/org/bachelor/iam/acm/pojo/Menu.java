@@ -1,4 +1,4 @@
-package cn.org.bachelor.iam.acm.vo;
+package cn.org.bachelor.iam.acm.pojo;
 
 import cn.org.bachelor.iam.acm.permission.PermissionModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,7 +13,7 @@ import java.util.List;
  * @创建时间: 2018/11/9
  */
 @Data
-public class MenuVo {
+public class Menu {
     private String id;
     private String code;
     private String name;
@@ -21,7 +21,7 @@ public class MenuVo {
     private String icon;
     private boolean hidden;
     @JsonIgnore
-    private MenuVo parent;
+    private Menu parent;
     private String parentId;
     private int seqOrder;
     private String comment;
@@ -36,19 +36,19 @@ public class MenuVo {
      * 权限所有者
      */
     private String owner;
-    private List<MenuVo> subMenus;
+    private List<Menu> subMenus;
 
-    public MenuVo() {
+    public Menu() {
     }
 
-    public MenuVo(String id,
-                  String code,
-                  String uri,
-                  String icon,
-                  String comment,
-                  PermissionModel type,
-                  MenuVo parent,
-                  List<MenuVo> subMenus) {
+    public Menu(String id,
+                String code,
+                String uri,
+                String icon,
+                String comment,
+                PermissionModel type,
+                Menu parent,
+                List<Menu> subMenus) {
         this.id = id;
         this.code = code;
         this.uri = uri;
@@ -59,9 +59,9 @@ public class MenuVo {
         this.subMenus = subMenus;
     }
 
-    public List<MenuVo> getSubMenus() {
+    public List<Menu> getSubMenus() {
         if (subMenus == null) {
-            subMenus = new ArrayList<MenuVo>(5);
+            subMenus = new ArrayList<Menu>(5);
         }
         return subMenus;
     }
