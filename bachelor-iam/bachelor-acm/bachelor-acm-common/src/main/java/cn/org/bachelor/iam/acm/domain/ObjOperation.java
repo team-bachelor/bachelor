@@ -3,7 +3,7 @@ package cn.org.bachelor.iam.acm.domain;
 import lombok.Data;
 
 import java.util.Date;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Data
 @Table(name = "cmn_acm_obj_operation")

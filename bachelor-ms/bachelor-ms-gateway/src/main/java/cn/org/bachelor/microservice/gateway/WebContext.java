@@ -8,8 +8,8 @@ package cn.org.bachelor.microservice.gateway;
 import cn.org.bachelor.context.IContext;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 

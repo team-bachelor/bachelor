@@ -6,18 +6,17 @@ import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.acm.permission.PermissionOptions;
 import cn.org.bachelor.iam.acm.service.AuthorizeServiceStub;
 import cn.org.bachelor.iam.vo.UserVo;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
@@ -30,10 +29,10 @@ import java.util.Date;
  * @author liuzhuo
  * @version 2.0
  */
-public class UserAccessControlInterceptor extends HandlerInterceptorAdapter {
+public class UserAccessControlInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(UserAccessControlInterceptor.class);
 
-    @Autowired
+    @Resource
     private IamContext iamContext;
 
     @Resource
@@ -50,7 +49,7 @@ public class UserAccessControlInterceptor extends HandlerInterceptorAdapter {
 //        return true;
         /** 判断请求方式是否符合规范 **/
         PermissionOptions.AccessType accessType = getAccessType(handler);
-        if(accessType == null){
+        if (accessType == null) {
             return true;
         }
         // 获取访问方法

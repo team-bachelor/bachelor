@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.org.bachelor</groupId>
     <artifactId>bachelor-dependencies</artifactId>
-    <version>2.2.0-SNAPSHOT</version>
+    <version>3.2.0-SNAPSHOT</version>
     <name>bachelor-dependencies</name>
     <description>bachelor-dependencies</description>
     <packaging>pom</packaging>
@@ -17,62 +17,45 @@
         </developer>
     </developers>
     <distributionManagement>
-<!--        <repository>-->
-<!--            <id>central_maven_release</id>-->
-<!--            <name>releases</name>-->
-<!--            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>-->
-<!--        </repository>-->
-<!--        <snapshotRepository>-->
-<!--            <id>central_maven_snapshot</id>-->
-<!--            <name>snapshots</name>-->
-<!--            <url>https://oss.sonatype.org/content/repositories/snapshots</url>-->
-<!--            <layout>default</layout>-->
-<!--        </snapshotRepository>-->
-<!--            <snapshotRepository>-->
-<!--                <id>central_maven_snapshot</id>-->
-<!--                <name>snapshots</name>-->
-<!--                <url>https://central.sonatype.com/repository/maven-snapshots/</url>-->
-<!--                <layout>default</layout>-->
-<!--            </snapshotRepository>-->
     </distributionManagement>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>2.3.12.RELEASE</spring-boot.version>
-        <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
+        <spring-boot.version>3.2.8</spring-boot.version>
+        <spring-cloud.version>2023.0.0</spring-cloud.version>
         <!--Spring Boot 应用的管理和监控-->
-        <spring-boot-admin.version>2.7.5</spring-boot-admin.version>
-        <!--spring jwt组件-->
-        <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
+        <spring-boot-admin.version>3.4.5</spring-boot-admin.version>
         <!--springboot 打包插件-->
-        <spring-boot-plugin.version>2.3.1.RELEASE</spring-boot-plugin.version>
+        <spring-boot-plugin.version>3.2.8</spring-boot-plugin.version>
+        <!--为springboot添加配置说明和自动完成-->
+        <sbcp.version>3.2.8</sbcp.version>
         <!--api 文档工具-->
-        <swagger2.version>2.9.2</swagger2.version>
-        <knife4j.version>2.0.9</knife4j.version>
+<!--        <swagger2.version>2.10.5</swagger2.version>-->
+<!--        <swagger-annotations.version>1.6.16</swagger-annotations.version>-->
+        <knife4j.version>4.5.0</knife4j.version>
         <!--api 文档工具-->
-        <tk-mybatis.version>4.2.1</tk-mybatis.version>
-        <mybatis-pagehelper.version>1.4.1</mybatis-pagehelper.version>
+        <tk-mybatis.version>5.0.0</tk-mybatis.version>
+        <mybatis-pagehelper.version>1.4.7</mybatis-pagehelper.version>
         <mybatis-generator-core.version>1.4.1</mybatis-generator-core.version>
+        <mybatis-springboot.autoconfigure.version>3.0.4</mybatis-springboot.autoconfigure.version>
+        <mysql-connector.version>8.0.33</mysql-connector.version>
+        <jakarta.persistence.version>3.2.0</jakarta.persistence.version>
         <!--json处理-->
         <fastjson.version>2.0.14</fastjson.version>
         <!--实现漏桶算法-->
         <bucket4j-core.version>8.1.0</bucket4j-core.version>
         <!--版本管理的maven插件-->
-        <versions-maven-plugin.version>2.12.0</versions-maven-plugin.version>
+        <versions-maven-plugin.version>2.19.0</versions-maven-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <!--XML转换为JSON-->
         <jettison.version>1.5.0</jettison.version>
-        <!--为springboot添加配置说明和自动完成-->
-        <sbcp.version>2.7.3</sbcp.version>
         <!--远程调用-->
-        <feign.version>1.4.7.RELEASE</feign.version>
-        <nacos.version>2.2.0.RELEASE</nacos.version>
+        <spring-cloud-alibaba.version>2023.0.3.1</spring-cloud-alibaba.version>
         <nimbus-jose-jwt.version>9.31</nimbus-jose-jwt.version>
-        <spring-cloud-nacos.version>0.9.0.RELEASE</spring-cloud-nacos.version>
-        <bachelor-fw.version>2.2.0-SNAPSHOT</bachelor-fw.version>
-        <bachelor-iam.version>2.2.0-SNAPSHOT</bachelor-iam.version>
-        <bachelor-oauth2.version>2.2.0-SNAPSHOT</bachelor-oauth2.version>
+        <bachelor-fw.version>3.2.0-SNAPSHOT</bachelor-fw.version>
+        <bachelor-iam.version>3.2.0-SNAPSHOT</bachelor-iam.version>
+        <bachelor-oauth2.version>3.2.0-SNAPSHOT</bachelor-oauth2.version>
     </properties>
 
     <dependencyManagement>
@@ -92,23 +75,43 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${swagger2.version}</version>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-server</artifactId>
+                <version>${spring-boot-admin.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${swagger2.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring-boot.version}</version>
             </dependency>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>io.springfox</groupId>-->
+<!--                <artifactId>springfox-swagger-ui</artifactId>-->
+<!--                <version>${swagger2.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>io.springfox</groupId>-->
+<!--                <artifactId>springfox-swagger2</artifactId>-->
+<!--                <version>${swagger2.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>io.springfox</groupId>-->
+<!--                <artifactId>springfox-swagger-common</artifactId>-->
+<!--                <version>${swagger2.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>io.swagger</groupId>-->
+<!--                <artifactId>swagger-annotations</artifactId>-->
+<!--                <version>${swagger-annotations.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-micro-spring-boot-starter</artifactId>
-                <version>${knife4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
                 <version>${knife4j.version}</version>
             </dependency>
             <dependency>
@@ -122,14 +125,14 @@
                 <version>${tk-mybatis.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.codecentric</groupId>
-                <artifactId>spring-boot-admin-starter-server</artifactId>
-                <version>${spring-boot-admin.version}</version>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-base</artifactId>
+                <version>${tk-mybatis.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.codecentric</groupId>
-                <artifactId>spring-boot-admin-starter-client</artifactId>
-                <version>${spring-boot-admin.version}</version>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-autoconfigure</artifactId>
+                <version>${mybatis-springboot.autoconfigure.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mybatis.generator</groupId>
@@ -142,13 +145,8 @@
                 <version>${fastjson.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-jwt</artifactId>
-                <version>${spring-security-jwt.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.bucket4j</groupId>
-                <artifactId>bucket4j_jdk8-core</artifactId>
+                <artifactId>bucket4j_jdk17-core</artifactId>
                 <version>${bucket4j-core.version}</version>
             </dependency>
             <dependency>
@@ -186,11 +184,11 @@
                 <artifactId>bachelor-iam</artifactId>
                 <version>${bachelor-iam.version}</version>
             </dependency>
-            <!--            <dependency>-->
-            <!--                <groupId>cn.org.bachelor</groupId>-->
-            <!--                <artifactId>bachelor-usermanage</artifactId>-->
-            <!--                <version>${bachelor-iam.version}</version>-->
-            <!--            </dependency>-->
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-idm-login</artifactId>
+                <version>${bachelor-iam.version}</version>
+            </dependency>
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
                 <artifactId>bachelor-oauth2-client</artifactId>
@@ -199,6 +197,11 @@
             <dependency>
                 <groupId>cn.org.bachelor</groupId>
                 <artifactId>bachelor-oauth2-common</artifactId>
+                <version>${bachelor-oauth2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.org.bachelor</groupId>
+                <artifactId>bachelor-oauth2-resource-service</artifactId>
                 <version>${bachelor-oauth2.version}</version>
             </dependency>
             <dependency>
@@ -256,23 +259,11 @@
                 <artifactId>spring-boot-configuration-processor</artifactId>
                 <version>${sbcp.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-feign</artifactId>
-                <version>${feign.version}</version>
-            </dependency>
             <!--            spring cloud alibaba nacos-->
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${nacos.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-starter-alibaba</artifactId>
-                <version>${nacos.version}</version>
+                <version>${spring-cloud-alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -280,6 +271,16 @@
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
                 <version>${nimbus-jose-jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
+                <version>${mysql-connector.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.persistence</groupId>
+                <artifactId>jakarta.persistence-api</artifactId>
+                <version>${jakarta.persistence.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

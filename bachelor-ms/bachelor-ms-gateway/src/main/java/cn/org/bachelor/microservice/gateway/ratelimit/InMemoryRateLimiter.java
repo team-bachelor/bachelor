@@ -1,6 +1,7 @@
 package cn.org.bachelor.microservice.gateway.ratelimit;
 
 import io.github.bucket4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.ratelimit.AbstractRateLimiter;
 import org.springframework.cloud.gateway.support.ConfigurationService;
 import org.springframework.validation.annotation.Validated;
@@ -25,12 +26,19 @@ public class InMemoryRateLimiter extends AbstractRateLimiter<InMemoryRateLimiter
 
     private final Map<String, Bucket> ipBucketMap = new ConcurrentHashMap<>();
 
-    public InMemoryRateLimiter() {
-        super(InMemoryRateLimiter.Config.class, CONFIGURATION_PROPERTY_NAME, new ConfigurationService());
+    // 1. 添加 ConfigurationService 成员变量（由 Spring 注入）
+    private final ConfigurationService configurationService;
+
+    // 2. 主构造函数：通过 Spring 自动注入 ConfigurationService
+    public InMemoryRateLimiter(ConfigurationService configurationService) {
+        super(InMemoryRateLimiter.Config.class, CONFIGURATION_PROPERTY_NAME, configurationService);
+        this.configurationService = configurationService;
     }
 
-    public InMemoryRateLimiter(int defaultReplenishRate, int defaultBurstCapacity) {
-        super(Config.class, CONFIGURATION_PROPERTY_NAME, new ConfigurationService());
+    // 3. 带默认限流参数的构造函数（仍需传入 Spring 管理的 ConfigurationService）
+    public InMemoryRateLimiter(int defaultReplenishRate, int defaultBurstCapacity, ConfigurationService configurationService) {
+        super(Config.class, CONFIGURATION_PROPERTY_NAME, configurationService);
+        this.configurationService = configurationService;
         this.defaultConfig = new InMemoryRateLimiter.Config()
                 .setReplenishRate(defaultReplenishRate)
                 .setBurstCapacity(defaultBurstCapacity);
@@ -58,7 +66,7 @@ public class InMemoryRateLimiter extends AbstractRateLimiter<InMemoryRateLimiter
         Bucket bucket = ipBucketMap.computeIfAbsent(id, k -> {
             Refill refill = Refill.greedy(replenishRate, Duration.ofSeconds(1));
             Bandwidth limit = Bandwidth.classic(burstCapacity, refill);
-            return Bucket4j.builder().addLimit(limit).build();
+            return Bucket.builder().addLimit(limit).build();
         });
 
         // tryConsume returns false immediately if no tokens available with the bucket

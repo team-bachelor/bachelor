@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.org.bachelor</groupId>
         <artifactId>bachelor-acm</artifactId>
-        <version>2.2.1-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>bachelor-acm-standalone-runner</artifactId>
@@ -18,8 +18,8 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -29,38 +29,31 @@
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-acm-common</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-acm-service</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-idm-service</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-dac-service</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-iam-client</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-oauth2-client</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-iam-common</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

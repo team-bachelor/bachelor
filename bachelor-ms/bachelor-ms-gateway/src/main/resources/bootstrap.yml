@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: dev
   application:
     name: bachelor-ms-gateway
     workbench-code: workbench-manage
@@ -19,8 +21,17 @@ spring:
         locator:
           enabled: true
           lowerCaseServiceId: true
+    config:
+      enabled: true
+    nacos:
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml
+        group: ${spring.profiles.active}_GROUP
+        data-id: ${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
   messages:
     basename: i18n/messages
+
 
 #    config:
 #      name: gateway
@@ -39,6 +50,9 @@ spring:
       maxFileSize: 30MB
       # maxRequestSize 是总数据大小
       maxRequestSize: 100MB
+  config:
+    import:
+      - "optional:nacos:${spring.application.name}"
 server:
   port: 8899
 #  connection-timeout: 1000

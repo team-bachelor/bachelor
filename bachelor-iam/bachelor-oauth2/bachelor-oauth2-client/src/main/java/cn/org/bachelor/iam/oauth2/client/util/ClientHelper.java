@@ -5,10 +5,10 @@ import cn.org.bachelor.iam.oauth2.client.OAuth2ClientConfig;
 import cn.org.bachelor.iam.oauth2.client.model.OAuth2ClientCertification;
 import com.alibaba.fastjson.JSONObject;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**

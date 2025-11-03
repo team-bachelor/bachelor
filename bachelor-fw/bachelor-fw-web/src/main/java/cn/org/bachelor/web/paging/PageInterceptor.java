@@ -23,16 +23,15 @@ import org.springframework.http.HttpMethod;
 // 引入 Spring 框架中的 Nullable 注解，用于表示参数或返回值可以为 null
 import org.springframework.lang.Nullable;
 // 引入 Spring MVC 框架中的 ModelAndView 类，用于封装模型数据和视图信息
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-// 引入 Spring MVC 框架中的 HandlerInterceptorAdapter 类，用于实现拦截器功能
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.ServletInputStream;
+import jakarta.servlet.ServletInputStream;
 // 引入 Servlet API 中的 HttpServletRequest 类，用于表示 HTTP 请求
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.http.HttpServletRequest;
 // 引入 Servlet API 中的 HttpServletResponse 类，用于表示 HTTP 响应
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 // 引入 Java IO 库中的 BufferedReader 类，用于缓冲读取字符流
 import java.io.BufferedReader;
 // 引入 Java IO 库中的 InputStreamReader 类，用于将字节流转换为字符流
@@ -47,7 +46,7 @@ import java.io.InputStreamReader;
 // 当配置属性 bachelor.paging.enabled 为 true 时加载该拦截器，若未配置则默认加载
 @ConditionalOnProperty(prefix = "bachelor.paging",
         name = {"enabled"}, havingValue = "true", matchIfMissing = true)
-public class PageInterceptor extends HandlerInterceptorAdapter {
+public class PageInterceptor implements HandlerInterceptor {
 
     // 定义分页页码参数名的常量
     public static final String PAGE_NUM = "pageNum";

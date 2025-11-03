@@ -1,6 +1,5 @@
 package cn.org.bachelor.microservice.gateway.controller;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import cn.org.bachelor.microservice.gateway.service.DynamicRouteService;
 import cn.org.bachelor.microservice.gateway.vo.GatewayFilterDefinition;
 import cn.org.bachelor.microservice.gateway.vo.GatewayPredicateDefinition;
@@ -37,7 +36,6 @@ public class RouteController {
      * @return
      */
     @PostMapping("/add")
-    @HystrixCommand(commandKey = "route")
     public ResponseEntity<JsonResponse> add(@RequestBody GatewayRouteDefinition gwdefinition) {
         RouteDefinition definition = assembleRouteDefinition(gwdefinition);
         this.dynamicRouteService.add(definition);
@@ -45,20 +43,17 @@ public class RouteController {
     }
 
     @GetMapping("/defaultFilter")
-    @HystrixCommand(commandKey = "route")
     public ResponseEntity<JsonResponse> getDefaultFilter() {
         return JsonResponse.createHttpEntity(gatewayProperties.getDefaultFilters());
     }
 
     @GetMapping("/delete/{id}")
-    @HystrixCommand(commandKey = "route")
     public ResponseEntity<JsonResponse> delete(@PathVariable String id) {
         this.dynamicRouteService.delete(id);
         return JsonResponse.createHttpEntity(HttpStatus.OK);
     }
 
     @PostMapping("/update")
-    @HystrixCommand(commandKey = "route")
     public ResponseEntity<JsonResponse> update(@RequestBody GatewayRouteDefinition gwdefinition) {
         RouteDefinition definition = assembleRouteDefinition(gwdefinition);
         this.dynamicRouteService.update(definition);

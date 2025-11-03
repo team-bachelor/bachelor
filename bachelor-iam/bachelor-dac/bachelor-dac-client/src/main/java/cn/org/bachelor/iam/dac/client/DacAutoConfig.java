@@ -20,8 +20,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.annotation.Nullable;
-import javax.persistence.Table;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +45,9 @@ public class DacAutoConfig implements InitializingBean, WebMvcConfigurer {
     private IUserContext logonUserContext;
 
 
-    public DacAutoConfig(List<SqlSessionFactory> sqlSessionFactoryList, DacConfiguration configuration, @Nullable IUserContext logonUserContext) {
+    public DacAutoConfig(List<SqlSessionFactory> sqlSessionFactoryList,
+                         DacConfiguration configuration,
+                         @Nullable IUserContext logonUserContext) {
         this.sqlSessionFactoryList = sqlSessionFactoryList;
         this.configuration = configuration;
         this.logonUserContext = logonUserContext;

@@ -4,18 +4,17 @@ package cn.org.bachelor.iam.oauth2.rs;
 import cn.org.bachelor.iam.IamConfiguration;
 import cn.org.bachelor.iam.IamContext;
 import cn.org.bachelor.iam.oauth2.OAuthConstant;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 
 /**
@@ -27,15 +26,15 @@ import javax.servlet.http.HttpServletResponse;
  * @version 2.0
  */
 @Slf4j
-public class RsInterceptor extends HandlerInterceptorAdapter {
+public class RsInterceptor implements HandlerInterceptor {
 
-    @Autowired
+    @Resource
     private IamContext iamContext;
 
     @Resource
     private IamConfiguration iamConfiguration;
 
-    @Autowired
+    @Resource
     private TokenStore tokenStore;
 
     @Override

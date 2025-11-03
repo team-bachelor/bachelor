@@ -1,11 +1,12 @@
 package cn.org.bachelor.iam.acm.controller;
 
 import cn.org.bachelor.iam.acm.permission.PermissionPoint;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.Operation;
 import cn.org.bachelor.iam.acm.service.AuthorizeService;
 import cn.org.bachelor.web.json.JsonResponse;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -37,10 +38,10 @@ public class PermissionController {
      * @return 设置结果
      * @更新履历 2021.1.28 访问路径 /role_permission/{role} => /role/{role}
      */
-    @ApiOperation(value = "设置角色的权限")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "role", value = "角色的编码", paramType = "path", required = true),
-            @ApiImplicitParam(name = "perms", value = "要设置给角色的权限", paramType = "body", required = true)
+    @Operation(description = "设置角色的权限")
+    @Parameters({
+            @Parameter(name = "role", description = "角色的编码", in = ParameterIn.PATH, required = true),
+            @Parameter(name = "perms", description = "要设置给角色的权限", in = ParameterIn.QUERY, required = true)
     })
     @RequestMapping(value = "/role/{role}", method = RequestMethod.POST)
     public ResponseEntity setRolePermission(@PathVariable("role") String role, @RequestBody List<PermissionPoint> perms) {
@@ -54,8 +55,8 @@ public class PermissionController {
      * @return 设置结果
      * @更新履历 2021.1.28 访问路径 /role_permission/{role} => /role/{role}
      */
-    @ApiOperation(value = "获得角色的权限")
-    @ApiImplicitParam(name = "role", value = "角色的编码", paramType = "path", required = true)
+    @Operation(description = "获得角色的权限")
+    @Parameter(name = "role", description = "角色的编码", in = ParameterIn.PATH, required = true)
     @RequestMapping(value = "/role/{role}", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getRolePermission(@PathVariable String role) {
         List permg = authorizeService.getRolePermission(role);
@@ -69,10 +70,10 @@ public class PermissionController {
      * @return 设置结果
      * @更新履历 2021.1.28 访问路径 /org_permission/{org} => /org/{org}
      */
-    @ApiOperation(value = "设置机构的权限")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "org", value = "机构的编码", paramType = "path", required = true),
-            @ApiImplicitParam(name = "perms", value = "要设置给机构的权限", paramType = "body", required = true)
+    @Operation(description = "设置机构的权限")
+    @Parameters({
+            @Parameter(name = "org", description = "机构的编码", in = ParameterIn.PATH, required = true),
+            @Parameter(name = "perms", description = "要设置给机构的权限", in = ParameterIn.QUERY, required = true)
     })
     @RequestMapping(value = "/org/{org}", method = RequestMethod.POST)
     public ResponseEntity setOrgPermission(@PathVariable("org") String org, @RequestBody List<PermissionPoint> perms) {
@@ -86,8 +87,8 @@ public class PermissionController {
      * @return 设置结果
      * @更新履历 2021.1.28 访问路径 /org_permission/{org} => /org/{org}
      */
-    @ApiOperation(value = "获得机构的权限")
-    @ApiImplicitParam(name = "org", value = "机构的编码", paramType = "path", required = true)
+    @Operation(description = "获得机构的权限")
+    @Parameter(name = "org", description = "机构的编码", in = ParameterIn.PATH, required = true)
     @RequestMapping(value = "/org/{org}", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getOrgPermission(@PathVariable String org) {
         List permg = authorizeService.getOrgPermission(org);
@@ -100,8 +101,8 @@ public class PermissionController {
      * @return 设置结果
      * @更新履历 2021.1.28 访问路径 /permissions => /grouped
      */
-    @ApiOperation(value = "获得全部权限")
-    @ApiImplicitParam(name = "orgID", value = "机构的编码（租户ID）", paramType = "query", required = true)
+    @Operation(description = "获得全部权限")
+    @Parameter(name = "orgID", description = "机构的编码（租户ID）", in = ParameterIn.QUERY, required = true)
     @RequestMapping(value = "/grouped", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getPermissions(String orgID) {
         return JsonResponse.createHttpEntity(authorizeService.getPermissionGroupList(orgID));
@@ -114,8 +115,8 @@ public class PermissionController {
      * @return 设置结果
      * @更新履历 2021.1.28 访问路径 /user_permission/{user} => /user/{user}
      */
-    @ApiOperation(value = "获得用户的权限")
-    @ApiImplicitParam(name = "user", value = "用户的编码", paramType = "path", required = true)
+    @Operation(description = "获得用户的权限")
+    @Parameter(name = "user", description = "用户的编码", in = ParameterIn.PATH, required = true)
     @RequestMapping(value = "/user/{user}", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUserPermission(@PathVariable String user) {
         Map permg = authorizeService.calUserPermission(user);

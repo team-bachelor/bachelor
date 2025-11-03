@@ -1,10 +1,11 @@
 package cn.org.bachelor.web.config;
 
+import lombok.Getter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 // 此导入未被使用，后续可考虑移除
-import org.springframework.stereotype.Component;
+
 
 /**
  * 该类用于配置 Swagger 的相关属性。
@@ -15,33 +16,61 @@ import org.springframework.stereotype.Component;
  * @since 2018/11/5
  */
 @Configuration
-@ConfigurationProperties(prefix = "bachelor.swagger")
-@ConditionalOnProperty(prefix = "bachelor.swagger",
+@ConfigurationProperties(prefix = "bachelor.api")
+@ConditionalOnProperty(prefix = "bachelor.api",
         name = {"enabled"}, havingValue = "true", matchIfMissing = true)
-public class SwaggerConfig {
+public class OpenAPIConfig {
 
     /**
      * swagger 扫描的基础包
      * 用于指定 Swagger 扫描 API 接口的基础包路径。
+     * -- GETTER --
+     *  获取 swagger 扫描的基础包。
+     *  此方法可能可以使用 Lombok 的 @Getter 注解替代，以简化代码。
+     *
+     * @return swagger 扫描的基础包数组
+
      */
+    @Getter
     String[] basePackages;
 
     /**
      * swagger 页面标题
      * 显示在 Swagger UI 页面上的标题。
+     * -- GETTER --
+     *  获取 swagger 页面标题。
+     *  此方法可能可以使用 Lombok 的 @Getter 注解替代，以简化代码。
+     *
+     * @return swagger 页面标题
+
      */
+    @Getter
     String title;
 
     /**
      * API 版本
      * 标识当前 API 的版本号。
+     * -- GETTER --
+     *  获取 API 版本。
+     *  此方法可能可以使用 Lombok 的 @Getter 注解替代，以简化代码。
+     *
+     * @return API 版本
+
      */
+    @Getter
     String version;
 
     /**
      * 模块描述
      * 对当前 Swagger 配置所涉及模块的描述信息。
+     * -- GETTER --
+     *  获取模块描述。
+     *  此方法可能可以使用 Lombok 的 @Getter 注解替代，以简化代码。
+     *
+     * @return 模块描述
+
      */
+    @Getter
     String description;
 
     /**
@@ -51,32 +80,12 @@ public class SwaggerConfig {
     Boolean hidden;
 
     /**
-     * 获取 swagger 扫描的基础包。
-     * 此方法可能可以使用 Lombok 的 @Getter 注解替代，以简化代码。
-     *
-     * @return swagger 扫描的基础包数组
-     */
-    public String[] getBasePackages() {
-        return basePackages;
-    }
-
-    /**
      * 设置 swagger 扫描的基础包。
      *
      * @param basePackages swagger 扫描的基础包数组
      */
     public void setBasePackages(String[] basePackages) {
         this.basePackages = basePackages;
-    }
-
-    /**
-     * 获取 swagger 页面标题。
-     * 此方法可能可以使用 Lombok 的 @Getter 注解替代，以简化代码。
-     *
-     * @return swagger 页面标题
-     */
-    public String getTitle() {
-        return title;
     }
 
     /**
@@ -89,32 +98,12 @@ public class SwaggerConfig {
     }
 
     /**
-     * 获取 API 版本。
-     * 此方法可能可以使用 Lombok 的 @Getter 注解替代，以简化代码。
-     *
-     * @return API 版本
-     */
-    public String getVersion() {
-        return version;
-    }
-
-    /**
      * 设置 API 版本。
      *
      * @param version API 版本
      */
     public void setVersion(String version) {
         this.version = version;
-    }
-
-    /**
-     * 获取模块描述。
-     * 此方法可能可以使用 Lombok 的 @Getter 注解替代，以简化代码。
-     *
-     * @return 模块描述
-     */
-    public String getDescription() {
-        return description;
     }
 
     /**

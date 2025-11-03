@@ -12,7 +12,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.cloud.gateway.filter.ratelimit.RateLimiter;
-import org.springframework.cloud.netflix.hystrix.EnableHystrix;
+import org.springframework.cloud.gateway.support.ConfigurationService;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -54,8 +54,9 @@ public class GatewayApplication {
 
     @Bean
     @Primary
-    public RateLimiter inMemoryRateLimiter() {
-        return new InMemoryRateLimiter();
+    public InMemoryRateLimiter inMemoryRateLimiter(ConfigurationService configurationService) {
+        // 可根据需求选择构造函数，此处示例使用默认限流参数
+        return new InMemoryRateLimiter(2, 4, configurationService); // replenishRate=2, burstCapacity=4
     }
 
     @Bean(name = IpAddressKeyResolver.BEAN_NAME)

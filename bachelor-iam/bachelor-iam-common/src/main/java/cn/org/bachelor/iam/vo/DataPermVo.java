@@ -1,6 +1,6 @@
 package cn.org.bachelor.iam.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 import java.util.Map;
@@ -8,18 +8,18 @@ import java.util.Map;
 /**
  * <p>数据权限信息</p>
  * 创建时间: 2019/6/26
- * @author liuzhuo
  *
+ * @author liuzhuo
  */
 public class DataPermVo {
 
-    @ApiModelProperty("部门列表")
+    @Schema(name = "部门列表")
     private List<OrgVo> depts;
 
-    @ApiModelProperty("机构id与机构")
+    @Schema(name = "机构id与机构")
     private Map<String, OrgVo> deptMap;
 
-    @ApiModelProperty("机构id与用户列表")
+    @Schema(name = "机构id与用户列表")
     private Map<String, List<UserVo>> orgUserMap;
 
     public DataPermVo(List<OrgVo> treeOrgs, Map<String, OrgVo> deptMap, Map<String, List<UserVo>> userMap) {

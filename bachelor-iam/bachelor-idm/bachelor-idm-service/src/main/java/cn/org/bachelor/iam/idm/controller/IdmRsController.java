@@ -6,9 +6,10 @@ import cn.org.bachelor.iam.vo.AppVo;
 import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.web.json.JsonResponse;
 import com.github.pagehelper.PageHelper;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,17 +36,16 @@ import java.util.List;
 public class IdmRsController {
 
     private static final Logger logger = LoggerFactory.getLogger(IdmRsController.class);
-
     @Autowired
     private IamSysService userSysService;
 
-    @ApiOperation(value = "根据当前clientID查询用户")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orgId", value = "组织机构编码", paramType = "path", required = true),
-            @ApiImplicitParam(name = "deptId", value = "部门编码", paramType = "query", required = false),
-            @ApiImplicitParam(name = "userName", value = "用户名（模糊匹配）", paramType = "query", required = false),
-            @ApiImplicitParam(name = "pageSize", value = "每页的记录数", paramType = "query", required = false),
-            @ApiImplicitParam(name = "pageNum", value = "当前页数", paramType = "query", required = false)
+    @Operation(description = "根据当前clientID查询用户")
+    @Parameters({
+            @Parameter(name = "orgId", description = "组织机构编码", in = ParameterIn.PATH, required = true),
+            @Parameter(name = "deptId", description = "部门编码", in = ParameterIn.QUERY, required = false),
+            @Parameter(name = "userName", description = "用户名（模糊匹配）", in = ParameterIn.QUERY, required = false),
+            @Parameter(name = "pageSize", description = "每页的记录数", in = ParameterIn.QUERY, required = false),
+            @Parameter(name = "pageNum", description = "当前页数", in = ParameterIn.QUERY, required = false)
     })
     @RequestMapping(value = "/users/{orgId}", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUsers(@PathVariable String orgId, String deptId, String userName, Integer pageSize, Integer pageNum) {
@@ -71,11 +71,11 @@ public class IdmRsController {
      * @param keyWord 查询关键词，同时用于匹配用户名称和编码
      * @return
      */
-    @ApiOperation(value = "根据组织机构编码、部门编码查询用户")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orgId", value = "组织机构编码", paramType = "query", required = true),
-            @ApiImplicitParam(name = "deptId", value = "部门编码", paramType = "query", required = false),
-            @ApiImplicitParam(name = "keyWord", value = "查询关键词，同时用于匹配用户名称和编码", paramType = "query", required = false)
+    @Operation(description = "根据组织机构编码、部门编码查询用户")
+    @Parameters({
+            @Parameter(name = "orgId", description = "组织机构编码", in = ParameterIn.QUERY, required = true),
+            @Parameter(name = "deptId", description = "部门编码", in = ParameterIn.QUERY, required = false),
+            @Parameter(name = "keyWord", description = "查询关键词，同时用于匹配用户名称和编码", in = ParameterIn.QUERY, required = false)
     })
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUsers(String orgId, String deptId, String keyWord) {
@@ -92,9 +92,9 @@ public class IdmRsController {
      * @param userID 用户ID
      * @return 返回用户列表
      */
-    @ApiOperation(value = "查询用户")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userID", value = "用户ID", paramType = "path", required = true)
+    @Operation(description = "查询用户")
+    @Parameters({
+            @Parameter(name = "userID", description = "用户ID", in = ParameterIn.PATH, required = true)
     })
     @RequestMapping(value = "/user/{userID}", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUser(@PathVariable String userID) {
@@ -109,10 +109,10 @@ public class IdmRsController {
      * @param orgId    机构ID
      * @return 返回用户列表
      */
-    @ApiOperation(value = "查询用户")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userCode", value = "用户编码", paramType = "query", required = true),
-            @ApiImplicitParam(name = "orgId", value = "机构ID", paramType = "query", required = true)
+    @Operation(description = "查询用户")
+    @Parameters({
+            @Parameter(name = "userCode", description = "用户编码", in = ParameterIn.QUERY, required = true),
+            @Parameter(name = "orgId", description = "机构ID", in = ParameterIn.QUERY, required = true)
     })
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUserByCode(String userCode, String orgId) {
@@ -122,11 +122,11 @@ public class IdmRsController {
         return JsonResponse.createHttpEntity(userSysService.findUsers(param));
     }
 
-    @ApiOperation(value = "获得机构下部门列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orgId", value = "父机构ID", paramType = "query", required = true),
-            @ApiImplicitParam(name = "tree", value = "是否要树状结构", paramType = "query", required = false, defaultValue = "false"),
-            @ApiImplicitParam(name = "deptId", value = "父部门ID", paramType = "query", required = false)
+    @Operation(description = "获得机构下部门列表")
+    @Parameters({
+            @Parameter(name = "orgId", description = "父机构ID", in = ParameterIn.QUERY, required = true),
+            @Parameter(name = "tree", description = "是否要树状结构", in = ParameterIn.QUERY, required = false),
+            @Parameter(name = "deptId", description = "父部门ID", in = ParameterIn.QUERY, required = false)
     })
     @RequestMapping(value = "/depts", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getDepts(String orgId, String deptId, boolean tree) {
@@ -139,17 +139,17 @@ public class IdmRsController {
         return JsonResponse.createHttpEntity(permg);
     }
 
-    @ApiOperation(value = "为当前用户登出系统")
+    @Operation(description = "为当前用户登出系统")
     @RequestMapping(value = "/dept/detail", method = RequestMethod.GET)
     public ResponseEntity<JsonResponse> searchDept(@RequestParam("id") String deptId) {
         logger.info("deptId {}", deptId);
         return JsonResponse.createHttpEntity(userSysService.findDeptDetail(deptId), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "获得机构列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "机构ID", paramType = "query", required = true),
-            @ApiImplicitParam(name = "code", value = "机构编码", paramType = "query", required = true)
+    @Operation(description = "获得机构列表")
+    @Parameters({
+            @Parameter(name = "id", description = "机构ID", in = ParameterIn.QUERY, required = true),
+            @Parameter(name = "code", description = "机构编码", in = ParameterIn.QUERY, required = true)
     })
     @RequestMapping(value = "/orgs", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getOrgs() {
@@ -157,18 +157,18 @@ public class IdmRsController {
         return JsonResponse.createHttpEntity(permg);
     }
 
-    @ApiOperation(value = "获得指定机构")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orgId", value = "机构ID", paramType = "query", required = true),
+    @Operation(description = "获得指定机构")
+    @Parameters({
+            @Parameter(name = "orgId", description = "机构ID", in = ParameterIn.QUERY, required = true),
     })
     @RequestMapping(value = "/org/{orgId}", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getOrg(@PathVariable String orgId) {
         return JsonResponse.createHttpEntity(userSysService.findOrg(orgId));
     }
 
-    @ApiOperation(value = "根据用户ID获取用户列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userIds", value = "用户ID（逗号分隔）", paramType = "query", required = true)
+    @Operation(description = "根据用户ID获取用户列表")
+    @Parameters({
+            @Parameter(name = "userIds", description = "用户ID（逗号分隔）", in = ParameterIn.QUERY, required = true)
     })
     @RequestMapping(value = "/users/ids", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getUserByIds(String userIds) {
@@ -180,7 +180,7 @@ public class IdmRsController {
     @Value("${spring.application.portal-code:}")
     private String portalCode;
 
-    @ApiOperation(value = "获取跳转会portal的地址")
+    @Operation(description = "获取跳转会portal的地址")
     @RequestMapping(value = "/app/portal/url", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getPortalURL() {
         if (portalCode == null || "".equalsIgnoreCase(portalCode))
@@ -191,9 +191,9 @@ public class IdmRsController {
         }
     }
 
-    @ApiOperation(value = "根据app的编码获取app详细信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "appCode", value = "app的编码", paramType = "path", required = true)
+    @Operation(description = "根据app的编码获取app详细信息")
+    @Parameters({
+            @Parameter(name = "appCode", description = "app的编码", in = ParameterIn.PATH, required = true)
     })
     @RequestMapping(value = "/app/{appCode}", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getAppByCode(@PathVariable String appCode) {
@@ -201,9 +201,9 @@ public class IdmRsController {
         return JsonResponse.createHttpEntity(app);
     }
 
-    @ApiOperation(value = "根据用户ID获取该用户可以登录的app")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "用户ID", paramType = "path", required = true)
+    @Operation(description = "根据用户ID获取该用户可以登录的app")
+    @Parameters({
+            @Parameter(name = "userId", description = "用户ID", in = ParameterIn.PATH, required = true)
     })
     @RequestMapping(value = "/user/{userId}/apps", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getAppByUserId(@PathVariable String userId) {
@@ -216,14 +216,14 @@ public class IdmRsController {
      *
      * @return 返回用户列表
      */
-    @ApiOperation(value = "根据当前clientID查询用户")
+    @Operation(description = "根据当前clientID查询用户")
     @RequestMapping(value = "/usersInClient", method = RequestMethod.GET)
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "deptId", value = "部门编码", paramType = "query", required = false),
-            @ApiImplicitParam(name = "deptName", value = "部门名（模糊匹配）", paramType = "query", required = false),
-            @ApiImplicitParam(name = "userName", value = "用户名（模糊匹配）", paramType = "query", required = false),
-            @ApiImplicitParam(name = "pageSize", value = "每页的记录数", paramType = "query", required = false),
-            @ApiImplicitParam(name = "page", value = "当前页数", paramType = "query", required = false)
+    @Parameters({
+            @Parameter(name = "deptId", description = "部门编码", in = ParameterIn.QUERY, required = false),
+            @Parameter(name = "deptName", description = "部门名（模糊匹配）", in = ParameterIn.QUERY, required = false),
+            @Parameter(name = "userName", description = "用户名（模糊匹配）", in = ParameterIn.QUERY, required = false),
+            @Parameter(name = "pageSize", description = "每页的记录数", in = ParameterIn.QUERY, required = false),
+            @Parameter(name = "page", description = "当前页数", in = ParameterIn.QUERY, required = false)
     })
     public HttpEntity<JsonResponse> getUsersByClient(String deptId, String deptName, String userName, Integer pageSize, Integer pageNum) {
         IamSysParam param = new IamSysParam();

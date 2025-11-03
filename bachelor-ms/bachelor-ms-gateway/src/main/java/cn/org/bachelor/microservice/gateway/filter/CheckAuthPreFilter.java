@@ -6,8 +6,6 @@ import cn.org.bachelor.iam.utils.JwtUtil;
 import cn.org.bachelor.microservice.gateway.service.ITenantIdProvider;
 import cn.org.bachelor.web.json.JsonResponse;
 import com.alibaba.fastjson.JSONObject;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +56,6 @@ public class CheckAuthPreFilter implements GlobalFilter {
      * @Return
      */
     @Override
-    @HystrixCommand(commandKey = "authPre")
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         logger.info("auth checking pre filter");
         ServerHttpRequest request = exchange.getRequest();

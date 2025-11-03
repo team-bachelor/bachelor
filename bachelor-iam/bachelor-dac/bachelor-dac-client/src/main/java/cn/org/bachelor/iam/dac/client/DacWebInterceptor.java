@@ -2,10 +2,10 @@ package cn.org.bachelor.iam.dac.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
  * 用于数据访问控制的WEB拦截器
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0
  */
 
-public class DacWebInterceptor extends HandlerInterceptorAdapter {
+public class DacWebInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(DacWebInterceptor.class);
 
 

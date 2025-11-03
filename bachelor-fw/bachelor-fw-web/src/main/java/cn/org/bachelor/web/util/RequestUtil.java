@@ -7,11 +7,11 @@
 package cn.org.bachelor.web.util;
 
 // 引入 ServletConfig 类，用于获取 Servlet 的配置信息
-import javax.servlet.ServletConfig;
+import jakarta.servlet.ServletConfig;
 // 引入 ServletContext 类，用于获取 Servlet 上下文信息
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 // 引入 HttpServletRequest 类，用于处理 HTTP 请求
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 // 引入 Spring 的 RequestContextHolder 类，用于获取当前请求的上下文信息
 import org.springframework.web.context.request.RequestContextHolder;

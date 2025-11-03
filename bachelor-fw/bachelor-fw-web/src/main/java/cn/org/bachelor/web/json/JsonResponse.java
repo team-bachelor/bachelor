@@ -1,47 +1,83 @@
 package cn.org.bachelor.web.json;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * 该类用于封装异步请求的返回值，是一个泛型类，可处理不同类型的数据内容。
  *
  * @param <T> 数据内容的类型
  * @author lz
  */
-@ApiModel("异步请求返回值")
+@Getter
+@Schema(name = "异步请求返回值")
 public class JsonResponse<T> {
 
     /**
      * 返回结果的状态
+     * -- GETTER --
+     *  获取返回结果的状态
+     *  注意：此方法未被使用，可考虑移除
+     *
+     * -- SETTER --
+     *  设置返回结果的状态
+     *
+     * @param status 返回结果的状态
+
      */
-    @ApiModelProperty(value = "返回结果的状态", position = 0)
+    @Setter
+    @Schema(name = "返回结果的状态")
     private ResponseStatus status;
 
     /**
      * 结果代码
+     * -- GETTER --
+     *  获取结果代码
+     *
      */
-    @ApiModelProperty(value = "结果代码", position = 1)
+    @Schema(name = "结果代码")
     private String code;
 
     /**
      * 结果消息
+     * -- GETTER --
+     *  获取结果消息
+     *
+     * -- SETTER --
+     *  设置结果消息
+     *
+     * @param msg 结果消息
+
      */
-    @ApiModelProperty(value = "结果消息", position = 2)
+    @Setter
+    @Schema(name = "结果消息")
     private String msg;
 
     /**
      * 结果数据
+     * -- GETTER --
+     *  获取结果数据
+     *
+     * -- SETTER --
+     *  设置结果数据
+     *
+     * @param data 结果数据
+
      */
-    @ApiModelProperty(value = "结果数据", position = 3)
+    @Setter
+    @Schema(name = "结果数据")
     private T data;
 
     /**
      * 返回值生成的时间戳，使用 final 修饰可确保其值在初始化后不可变
+     * -- GETTER --
+     *  获取返回值生成的时间戳
+     *  注意：此方法未被使用，可考虑移除
+     *
      */
-    @ApiModelProperty(value = "返回值生成的时间戳", position = 4)
+    @Schema(name = "返回值生成的时间戳")
     private final Long time;
 
     /**
@@ -84,80 +120,6 @@ public class JsonResponse<T> {
         this(data, msg);
         this.setCode(code);
         this.setStatus(status);
-    }
-
-    /**
-     * 获取返回结果的状态
-     * 注意：此方法未被使用，可考虑移除
-     *
-     * @return 返回结果的状态
-     */
-    public ResponseStatus getStatus() {
-        return status;
-    }
-
-    /**
-     * 设置返回结果的状态
-     *
-     * @param status 返回结果的状态
-     */
-    public void setStatus(ResponseStatus status) {
-        this.status = status;
-    }
-
-    /**
-     * 获取结果消息
-     *
-     * @return 结果消息
-     */
-    public String getMsg() {
-        return msg;
-    }
-
-    /**
-     * 设置结果消息
-     *
-     * @param msg 结果消息
-     */
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    /**
-     * 获取结果数据
-     *
-     * @return 结果数据
-     */
-    public T getData() {
-        return data;
-    }
-
-    /**
-     * 设置结果数据
-     *
-     * @param data 结果数据
-     */
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    /**
-     * 获取返回值生成的时间戳
-     * 注意：此方法未被使用，可考虑移除
-     *
-     * @return 返回值生成的时间戳
-     */
-    public Long getTime() {
-        return time;
-    }
-
-    /**
-     * 获取结果代码
-     *
-     * @return 结果代码
-     */
-    public String getCode() {
-        return code;
     }
 
     /**

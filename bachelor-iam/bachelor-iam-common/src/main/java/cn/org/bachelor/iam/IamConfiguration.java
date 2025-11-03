@@ -5,7 +5,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -166,6 +166,6 @@ public class IamConfiguration implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        PasswordEncoderHolder.setConfig(this.getPasswordEncoder());
+//        PasswordEncoderHolder.setConfig(this.getPasswordEncoder());
     }
 }

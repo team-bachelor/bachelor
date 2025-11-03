@@ -1,16 +1,15 @@
 package cn.org.bachelor.iam.dac.service.pojo.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-@ApiModel
+@Schema(name = "查询参数")
 @Data
 public class QueryDTO {
-    @ApiModelProperty(value = "页数", required = true, dataType = "java.lang.Integer")
+    @Schema(name = "页数", requiredMode = Schema.RequiredMode.REQUIRED, type = "java.lang.Integer")
     private Integer pageNum;
 
-    @ApiModelProperty(value = "每页条数", required = true, dataType = "java.lang.Integer")
+    @Schema(name = "每页条数", requiredMode = Schema.RequiredMode.REQUIRED, type = "java.lang.Integer")
     private Integer pageSize;
 }
 

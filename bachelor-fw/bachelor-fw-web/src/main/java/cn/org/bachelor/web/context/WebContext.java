@@ -7,19 +7,14 @@
 package cn.org.bachelor.web.context;
 
 // 引入 IContext 接口，该类实现了此接口的功能
+
 import cn.org.bachelor.context.IContext;
-// 引入 RequestUtil 工具类，用于获取请求和 Servlet 上下文相关信息
 import cn.org.bachelor.web.util.RequestUtil;
-// 引入 Spring 的 Component 注解，将该类标记为 Spring 组件
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
-// 引入 ServletContext 类，用于表示 Servlet 上下文
-import javax.servlet.ServletContext;
-// 引入 HttpServletRequest 类，用于表示 HTTP 请求
-import javax.servlet.http.HttpServletRequest;
-// 引入 HashMap 类，用于存储键值对
 import java.util.HashMap;
-// 引入 Map 接口，是 HashMap 实现的接口
 import java.util.Map;
 
 /**

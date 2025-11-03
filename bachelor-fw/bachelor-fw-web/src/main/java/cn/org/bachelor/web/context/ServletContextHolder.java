@@ -6,9 +6,9 @@ import cn.org.bachelor.web.util.RequestUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.ServletConfigAware;
 import org.springframework.web.context.ServletContextAware;
-import javax.annotation.Resource;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
+import jakarta.annotation.Resource;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
 
 /**
  * ServletContextHolder 类实现了 ServletContextAware 和 ServletConfigAware 接口，

@@ -1,6 +1,5 @@
 package cn.org.bachelor.iam.idm.login.controller;
 
-import cn.org.bachelor.iam.idm.login.LoginConstant;
 import cn.org.bachelor.iam.idm.login.RedisCacheHelper;
 import cn.org.bachelor.web.json.JsonResponse;
 import com.wf.captcha.utils.CaptchaUtil;
@@ -14,9 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.concurrent.TimeUnit;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Slf4j
 @Controller

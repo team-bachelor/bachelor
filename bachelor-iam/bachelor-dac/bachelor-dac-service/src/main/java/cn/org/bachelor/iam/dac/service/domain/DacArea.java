@@ -1,11 +1,10 @@
 package cn.org.bachelor.iam.dac.service.domain;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -18,37 +17,37 @@ import java.util.List;
  * @Version 1.0
  */
 @Data
-@ApiModel(value = "DacArea", description = "")
+@Schema(name = "DacArea", description = "DacArea")
 public class DacArea implements Serializable {
-    @ApiModelProperty(value = "ID")
+    @Schema(name = "ID")
     @Column(name = "ID")
     private String id;
 
-    @ApiModelProperty(value = "NAME")
+    @Schema(name = "NAME")
     @Column(name = "NAME")
     private String name;
 
-    @ApiModelProperty(value = "CODE")
+    @Schema(name = "CODE")
     @Column(name = "CODE")
     private String code;
 
-    @ApiModelProperty(value = "PARENT_CODE")
+    @Schema(name = "PARENT_CODE")
     @Column(name = "PARENT_CODE")
     private String parentCode;
 
-    @ApiModelProperty(value = "更新人")
+    @Schema(name = "更新人")
     @Column(name = "UPDATE_USER")
     private String updateUser;
 
-    @ApiModelProperty(value = "更新时间")
+    @Schema(name = "更新时间")
     @Column(name = "UPDATE_TIME")
     private Date updateTime;
 
-    @ApiModelProperty(value = "创建人")
+    @Schema(name = "创建人")
     @Column(name = "CREATE_USER")
     private String createUser;
 
-    @ApiModelProperty(value = "创建时间")
+    @Schema(name = "创建时间")
     @Column(name = "CREATE_TIME")
     private Date createTime;
 

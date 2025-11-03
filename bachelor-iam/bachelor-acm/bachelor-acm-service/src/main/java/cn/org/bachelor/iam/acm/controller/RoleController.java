@@ -3,15 +3,16 @@ package cn.org.bachelor.iam.acm.controller;
 import cn.org.bachelor.iam.acm.domain.Role;
 import cn.org.bachelor.iam.acm.service.RoleServiceStub;
 import cn.org.bachelor.iam.vo.UserVo;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.Operation;
 import cn.org.bachelor.web.json.JsonResponse;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.List;
 
 /**
@@ -35,9 +36,9 @@ public class RoleController {
      * @param role 角色数据
      * @return 返回创建后的角色信息
      */
-    @ApiOperation(value = "创建角色")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "role", value = "角色数据", paramType = "body", required = true)
+    @Operation(description = "创建角色")
+    @Parameters({
+            @Parameter(name = "role", description = "角色数据", in = ParameterIn.QUERY, required = true)
     })
     @RequestMapping(value = "", method = RequestMethod.POST)
     public HttpEntity<JsonResponse> createRole(@RequestBody Role role) {
@@ -50,9 +51,9 @@ public class RoleController {
      * @param role 角色数据
      * @return 更新成功返回OK
      */
-    @ApiOperation(value = "修改角色")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "role", value = "要修改的角色", paramType = "body", required = true)
+    @Operation(description = "修改角色")
+    @Parameters({
+            @Parameter(name = "role", description = "要修改的角色", in = ParameterIn.QUERY, required = true)
     })
     @RequestMapping(value = "", method = RequestMethod.PUT)
     public HttpEntity<JsonResponse> modifyRole(@RequestBody Role role) {
@@ -66,9 +67,9 @@ public class RoleController {
      * @param roleID 角色ID
      * @return 角色对象
      */
-    @ApiOperation(value = "根据角色ID获取角色")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "roleID", value = "角色ID", paramType = "path", required = true)
+    @Operation(description = "根据角色ID获取角色")
+    @Parameters({
+            @Parameter(name = "roleID", description = "角色ID", in = ParameterIn.PATH, required = true)
     })
     @RequestMapping(value = "/{roleID}", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getRole(@PathVariable String roleID) {
@@ -81,9 +82,9 @@ public class RoleController {
      * @param roleID 角色的ID
      * @return 删除成功返回OK
      */
-    @ApiOperation(value = "删除角色")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "roleID", value = "角色的ID", paramType = "path", required = true)
+    @Operation(description = "删除角色")
+    @Parameters({
+            @Parameter(name = "roleID", description = "角色的ID", in = ParameterIn.PATH, required = true)
     })
     @RequestMapping(value = "/{roleID}", method = RequestMethod.DELETE)
     public HttpEntity<JsonResponse> deleteRole(@PathVariable String roleID) {
@@ -98,10 +99,10 @@ public class RoleController {
      * @param keyWord 查询关键词，同时用于匹配角色名称和编码
      * @return 返回角色列表
      */
-    @ApiOperation(value = "查询角色")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "orgCode", value = "组织机构编码", paramType = "query", required = true),
-            @ApiImplicitParam(name = "keyWord", value = "查询关键词，同时用于匹配角色名称和编码", paramType = "query", required = true)
+    @Operation(description = "查询角色")
+    @Parameters({
+            @Parameter(name = "orgCode", description = "组织机构编码", in = ParameterIn.QUERY, required = true),
+            @Parameter(name = "keyWord", description = "查询关键词，同时用于匹配角色名称和编码", in = ParameterIn.QUERY, required = true)
     })
     @RequestMapping(value = "/roles", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> findRoles(String orgCode, String keyWord) {
@@ -115,9 +116,9 @@ public class RoleController {
      * @return 用户列表
      * @更新履历 2021.1.28 访问路径 /role_user/{roleCode} => /role/users/{roleCode}
      */
-    @ApiOperation(value = "获取角色下的用户")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "roleCode", value = "角色的编码", paramType = "path", required = true)
+    @Operation(description = "获取角色下的用户")
+    @Parameters({
+            @Parameter(name = "roleCode", description = "角色的编码", in = ParameterIn.PATH, required = true)
     })
     @RequestMapping(value = "/users/{roleCode}", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getRoleUser(@PathVariable("roleCode") String roleCode) {
@@ -132,10 +133,10 @@ public class RoleController {
      * @return 增加结果
      * @更新履历 2021.1.28 访问路径 /role_user/{roleCode} => /role/users/{roleCode}
      */
-    @ApiOperation(value = "为角色增加用户")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "roleCode", value = "角色的编码", paramType = "path", required = true),
-            @ApiImplicitParam(name = "users", value = "要添加的用户编码", paramType = "body", required = true, example = "[{\"\"}]")
+    @Operation(description = "为角色增加用户")
+    @Parameters({
+            @Parameter(name = "roleCode", description = "角色的编码", in = ParameterIn.PATH, required = true),
+            @Parameter(name = "users", description = "要添加的用户编码", in = ParameterIn.QUERY, required = true, example = "[{\"\"}]")
     })
     @RequestMapping(value = "/users/{roleCode}", method = RequestMethod.POST)
     public HttpEntity<JsonResponse> addRoleUser(@PathVariable("roleCode") String roleCode, @RequestBody List<UserVo> users) {
@@ -151,10 +152,10 @@ public class RoleController {
      * @return 删除结果
      * @更新履历 2021.1.28 访问路径 /role_user/{roleCode} => /role/users/{roleCode}
      */
-    @ApiOperation(value = "将用户从角色中删除")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "roleCode", value = "角色的编码", paramType = "path", required = true),
-            @ApiImplicitParam(name = "users", value = "要删除的用户编码", paramType = "body", required = true)
+    @Operation(description = "将用户从角色中删除")
+    @Parameters({
+            @Parameter(name = "roleCode", description = "角色的编码", in = ParameterIn.PATH, required = true),
+            @Parameter(name = "users", description = "要删除的用户编码", in = ParameterIn.QUERY, required = true)
     })
     @RequestMapping(value = "/users/{roleCode}", method = RequestMethod.PUT)
     public HttpEntity<JsonResponse> delRoleUser(@PathVariable("roleCode") String roleCode, @RequestBody List<String> users) {
@@ -172,14 +173,14 @@ public class RoleController {
         ////     * @更新履历 2021.1.28 转移到RsController.usersInClient
         ////     *
         ////     */
-//    @ApiOperation(value = "根据当前clientID查询用户")
+//    @Operation(description = "根据当前clientID查询用户")
 //    @RequestMapping(value = "/users", method = RequestMethod.GET)
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "deptId", value = "部门编码", paramType = "query", required = false),
-//            @ApiImplicitParam(name = "deptName", value = "部门名（模糊匹配）", paramType = "query", required = false),
-//            @ApiImplicitParam(name = "userName", value = "用户名（模糊匹配）", paramType = "query", required = false),
-//            @ApiImplicitParam(name = "pageSize", value = "每页的记录数", paramType = "query", required = false),
-//            @ApiImplicitParam(name = "page", value = "当前页数", paramType = "query", required = false)
+//    @Parameters({
+//            @Parameter(name = "deptId", description = "部门编码", in = ParameterIn.QUERY, required = false),
+//            @Parameter(name = "deptName", description = "部门名（模糊匹配）", in = ParameterIn.QUERY, required = false),
+//            @Parameter(name = "userName", description = "用户名（模糊匹配）", in = ParameterIn.QUERY, required = false),
+//            @Parameter(name = "pageSize", description = "每页的记录数", in = ParameterIn.QUERY, required = false),
+//            @Parameter(name = "page", description = "当前页数", in = ParameterIn.QUERY, required = false)
 //    })
 //    public HttpEntity<JsonResponse> getUsers(String deptId, String deptName, String userName, Integer pageSize, Integer page) {
 //        IamSysParam param = new IamSysParam();
@@ -197,9 +198,9 @@ public class RoleController {
      * @param userCode 用户编码
      * @return 返回用户列表
      */
-    @ApiOperation(value = "查询用户")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userCode", value = "用户编码", paramType = "path", required = true)
+    @Operation(description = "查询用户")
+    @Parameters({
+            @Parameter(name = "userCode", description = "用户编码", in = ParameterIn.PATH, required = true)
     })
     @RequestMapping(value = "/roles/{userCode}", method = RequestMethod.GET)
     public HttpEntity<JsonResponse> getRolesViaUser(@PathVariable String userCode) {

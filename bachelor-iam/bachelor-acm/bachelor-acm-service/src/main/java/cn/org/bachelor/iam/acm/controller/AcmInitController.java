@@ -11,8 +11,8 @@ import cn.org.bachelor.iam.acm.service.ObjOperationService;
 import cn.org.bachelor.iam.acm.service.ObjPermissionService;
 import cn.org.bachelor.iam.acm.vo.ObjPermissionVo;
 import cn.org.bachelor.web.json.JsonResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondit
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -35,7 +35,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping(value = "/acm")
-@Api(tags = {"初始化权限数据"})
+@Tag(name = "初始化权限数据")
 public class AcmInitController {
 
     @Resource
@@ -50,7 +50,7 @@ public class AcmInitController {
     private IamContext iamContext;
 
 
-    @ApiOperation(value = "初始化权限点")
+    @Operation(description = "初始化权限点")
     @GetMapping(value = "/init")
     public ResponseEntity<JsonResponse> initPermissions() {
         List<ObjPermissionVo> list = getObjPermissionVos();
@@ -152,10 +152,10 @@ public class AcmInitController {
             ObjPermissionVo permissionVo = new ObjPermissionVo();
             Method method = handler.getMethod();
             //获取swagger的api定义
-            ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
+            Operation apiOperation = method.getAnnotation(Operation.class);
             //如果有swagger定义则使用swagger信息命名当前权限
             if (null != apiOperation) {
-                permissionVo.setName(apiOperation.value());
+                permissionVo.setName(apiOperation.description());
             }
 
             //获取权限定义

@@ -6,17 +6,15 @@
     <parent>
         <groupId>cn.org.bachelor</groupId>
         <artifactId>bachelor-idm</artifactId>
-        <version>2.2.1-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>bachelor-idm-login-test</artifactId>
     <packaging>jar</packaging>
     <name>bachelor-idm-login-test</name>
-    <version>2.2.1-SNAPSHOT</version>
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <iam.version>2.0-SNAPSHOT</iam.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
@@ -26,33 +24,23 @@
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-idm-login</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-iam-client</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>cn.org.bachelor</groupId>-->
-<!--            <artifactId>bachelor-iam-service</artifactId>-->
-<!--            <version>2.2.1-SNAPSHOT</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-acm-common</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-iam-common</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-acm-service</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

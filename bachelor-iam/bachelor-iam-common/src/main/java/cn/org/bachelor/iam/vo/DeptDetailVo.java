@@ -1,83 +1,82 @@
 package cn.org.bachelor.iam.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Date;
 
 /**
- *
  * @author liuzhuo
  */
 public class DeptDetailVo {
 
 
-    @ApiModelProperty("id")
+    @Schema(name = "id")
     @JsonProperty("id")
     private String id;
 
-    @ApiModelProperty("编码")
+    @Schema(name = "编码")
     private String code;
 
-    @ApiModelProperty("名称")
+    @Schema(name = "名称")
     @JsonProperty("name")
     private String name;
 
-    @ApiModelProperty("机构id")
+    @Schema(name = "机构id")
     private String orgId;
 
-    @ApiModelProperty("父部门ID")
+    @Schema(name = "父部门ID")
     private String pid;
 
-    @ApiModelProperty("部门类型ID")
+    @Schema(name = "部门类型ID")
     private String deptTypeId;
 
-    @ApiModelProperty("邮编")
+    @Schema(name = "邮编")
     private String postcode;
 
-    @ApiModelProperty("地址")
+    @Schema(name = "地址")
     private String address;
 
-    @ApiModelProperty("电话")
+    @Schema(name = "电话")
     private String telephone;
 
-    @ApiModelProperty("传真")
+    @Schema(name = "传真")
     private String fax;
 
-    @ApiModelProperty("区域ID")
+    @Schema(name = "区域ID")
     private String areaId;
 
-    @ApiModelProperty("隶属关系")
+    @Schema(name = "隶属关系")
     private String relationshipId;
 
-    @ApiModelProperty("单位级别")
+    @Schema(name = "单位级别")
     private String levelId;
 
-    @ApiModelProperty("主管单位名称")
+    @Schema(name = "主管单位名称")
     private String chargeDeptName;
 
-    @ApiModelProperty("单位性质")
+    @Schema(name = "单位性质")
     private String propertyId;
 
-    @ApiModelProperty("机构id与机构")
+    @Schema(name = "机构id与机构")
     private String economicTypeId;
 
-    @ApiModelProperty("机构id与机构")
+    @Schema(name = "机构id与机构")
     private String industryId;
 
-    @ApiModelProperty("机构id与机构")
+    @Schema(name = "机构id与机构")
     private String sort;
 
-    @ApiModelProperty("更新人")
+    @Schema(name = "更新人")
     private String updateUser;
 
-    @ApiModelProperty("更新时间")
+    @Schema(name = "更新时间")
     private Date updateTime;
 
-    @ApiModelProperty("创建人")
+    @Schema(name = "创建人")
     private String createUser;
 
-    @ApiModelProperty("创建时间")
+    @Schema(name = "创建时间")
     private Date createTime;
 
     public String getId() {

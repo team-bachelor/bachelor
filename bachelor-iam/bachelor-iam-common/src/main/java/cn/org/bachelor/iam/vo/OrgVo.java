@@ -2,44 +2,45 @@ package cn.org.bachelor.iam.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
 
 /**
  * 组织机构信息
- * @author  liuzhuo
+ *
+ * @author liuzhuo
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OrgVo {
 
-    @ApiModelProperty("id")
+    @Schema(name = "id")
     @JsonProperty("id")
     private String id;
 
-    @ApiModelProperty("编码")
+    @Schema(name = "编码")
     @JsonProperty("code")
     private String code;
 
-    @ApiModelProperty("简称")
+    @Schema(name = "简称")
     @JsonProperty("name")
     private String name;
 
-    @ApiModelProperty("全名")
+    @Schema(name = "全名")
     @JsonProperty("fullName")
     private String fullName;
 
-    @ApiModelProperty("上级名称")
+    @Schema(name = "上级名称")
     @JsonProperty("pid")
     private String parentId;
 
-    @ApiModelProperty("统一社会信用代码")
+    @Schema(name = "统一社会信用代码")
     @JsonProperty("uscCode")
     private String uscCode;
 
-    @ApiModelProperty("子机构")
+    @Schema(name = "子机构")
     @JsonProperty("subs")
     private List<OrgVo> subOrgs;
 

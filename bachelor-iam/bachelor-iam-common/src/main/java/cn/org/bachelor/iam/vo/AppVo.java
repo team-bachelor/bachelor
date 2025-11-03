@@ -2,53 +2,53 @@ package cn.org.bachelor.iam.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Date;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AppVo {
-    @ApiModelProperty("id")
+    @Schema(name = "id")
     @JsonProperty("id")
     private String id;
 
-    @ApiModelProperty("编码")
+    @Schema(name = "编码")
     private String code;
 
-    @ApiModelProperty("名称")
+    @Schema(name = "名称")
     @JsonProperty("name")
     private String name;
 
-    @ApiModelProperty("")
+    @Schema(name = "")
     @JsonProperty("地址")
     private String url;
 
-    @ApiModelProperty("客户端ID")
+    @Schema(name = "客户端ID")
     private String clientId;
 
-    @ApiModelProperty("客户端秘钥")
+    @Schema(name = "客户端秘钥")
     private String clientSecret;
 
-    @ApiModelProperty("at过期时间atk_validaty")
+    @Schema(name = "at过期时间atk_validaty")
     private Integer accessTokenExpiry;
 
-    @ApiModelProperty("rt过期时间")
+    @Schema(name = "rt过期时间")
     private Integer refreshTokenExpiry;
 
-    @ApiModelProperty("排序")
+    @Schema(name = "排序")
     private Integer sort;
 
-    @ApiModelProperty("更新人")
+    @Schema(name = "更新人")
     private String updateUser;
 
-    @ApiModelProperty("更新时间")
+    @Schema(name = "更新时间")
     private Date updateTime;
 
-    @ApiModelProperty("创建人")
+    @Schema(name = "创建人")
     private String createUser;
 
-    @ApiModelProperty("创建时间")
+    @Schema(name = "创建时间")
     private Date createTime;
 
     public String getId() {

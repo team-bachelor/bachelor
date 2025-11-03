@@ -6,9 +6,10 @@ import cn.org.bachelor.iam.idm.service.IdmService;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.utils.StringUtils;
 import cn.org.bachelor.web.json.JsonResponse;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,8 +53,8 @@ public class IdmAsController {
      * @return 合并了astoken和用户基本信息的JWT
      * @描述 根据code从用户系统获取accesstoken接口，生成的accesstoken和userid等信息，计算返回JWT
      */
-    @ApiOperation(value = "根据授权码获取访问令牌")
-    @ApiImplicitParams({@ApiImplicitParam(name = "code", value = "授权码", paramType = "query", required = true)})
+    @Operation(description = "根据授权码获取访问令牌")
+    @Parameters({@Parameter(name = "code", description = "授权码", in = ParameterIn.QUERY, required = true)})
     @RequestMapping(value = "/accesstoken", method = RequestMethod.GET)
     public ResponseEntity<JsonResponse> accesstoken(@RequestParam String code, HttpServletRequest request, HttpServletResponse response) {
         if (StringUtils.isEmpty(code)) {
@@ -74,7 +75,7 @@ public class IdmAsController {
      * @return 刷新后的JWT
      * @描述 刷新JWT
      */
-    @ApiOperation(value = "刷新JWT")
+    @Operation(description = "刷新JWT")
     @RequestMapping(value = "/refreshToken", method = RequestMethod.POST)
     public ResponseEntity<JsonResponse> refreshToken(@RequestHeader(IamConstant.HTTP_HEADER_TOKEN_KEY) String authorization, HttpServletRequest request, HttpServletResponse response) {
         JwtToken jwt = JwtToken.decode(authorization);
@@ -90,7 +91,7 @@ public class IdmAsController {
      * @return 当前系统退出登录处理结果
      * @描述 退出当前系统的应用状态，单点登录的状态由app client处理 解析accesstoken，将退出登录的token存入redis，并设置有效期为token的到期时间
      */
-    @ApiOperation(value = "为当前用户登出系统")
+    @Operation(description = "为当前用户登出系统")
     @RequestMapping(value = "/logout", method = RequestMethod.PUT)
     public ResponseEntity<JsonResponse> logout(@RequestHeader(value = IamConstant.HTTP_HEADER_TOKEN_KEY, required = false) String authorization) {
         if (StringUtils.isNotEmpty(authorization)) {

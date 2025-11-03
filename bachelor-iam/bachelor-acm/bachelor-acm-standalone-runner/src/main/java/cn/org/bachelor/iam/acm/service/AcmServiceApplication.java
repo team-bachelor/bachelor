@@ -1,9 +1,8 @@
-package cn.org.bachelor.iam.service;
+package cn.org.bachelor.iam.acm.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -30,10 +29,10 @@ import java.net.UnknownHostException;
 @EnableTransactionManagement
 @SpringBootApplication(scanBasePackages = {"cn.org.bachelor.**.*"})
 @Slf4j
-public class IamServiceApplication {
+public class AcmServiceApplication {
 
 	public static void main(String[] args) throws UnknownHostException {
-		ConfigurableApplicationContext application = SpringApplication.run(IamServiceApplication.class, args);
+		ConfigurableApplicationContext application = SpringApplication.run(AcmServiceApplication.class, args);
 		Environment env = application.getEnvironment();
 		log.info("\n----------------------------------------------------------\n\t" +
 						"Application '{}' is running! Access URLs:\n\t" +

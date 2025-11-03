@@ -2,7 +2,7 @@ package cn.org.bachelor.iam.oauth2.client.util;
 
 import lombok.Data;
 
-import javax.servlet.http.Cookie;
+import jakarta.servlet.http.Cookie;
 
 @Data
 public class ClientRequestInfo {

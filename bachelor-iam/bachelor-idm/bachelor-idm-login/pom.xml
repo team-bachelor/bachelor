@@ -6,17 +6,16 @@
     <parent>
         <groupId>cn.org.bachelor</groupId>
         <artifactId>bachelor-idm</artifactId>
-        <version>2.2.1-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>bachelor-idm-login</artifactId>
-    <version>2.2.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
     <name>bachelor-idm-login</name>
+    <packaging>jar</packaging>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <iam.version>2.0-SNAPSHOT</iam.version>
+        <iam.version>3.2.0-SNAPSHOT</iam.version>
     </properties>
     <dependencies>
         <dependency>
@@ -45,36 +44,23 @@
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-iam-common</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-iam-client</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-acm-common</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>cn.org.bachelor</groupId>
             <artifactId>bachelor-acm-service</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>cn.org.bachelor</groupId>-->
-<!--            <artifactId>bachelor-iam-service</artifactId>-->
-<!--            <version>2.2.1-SNAPSHOT</version>-->
-<!--        </dependency>-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
         </dependency>
         <dependency>
-            <groupId>cn.org.bachelor</groupId>
-            <artifactId>bachelor-fw-web</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

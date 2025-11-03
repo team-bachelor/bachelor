@@ -1,55 +1,53 @@
 package cn.org.bachelor.log.operate.domain;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
 @Table(name="cmn_operate_log")
-@ApiModel(value = "CmnOperateLog", description = "数据操作日志")
+@Schema(name = "CmnOperateLog", description = "数据操作日志")
 public class OperateLog implements Serializable {
     @Id
     private String id;
-    @ApiModelProperty("操作人账号")
+    @Schema(name = "操作人账号")
     private String opAccount;
 
-    @ApiModelProperty("操作人账号名")
+    @Schema(name = "操作人账号名")
     private String opAccountName;
 
-    @ApiModelProperty("操作人所属机构")
+    @Schema(name = "操作人所属机构")
     private String opOrgId;
 
-    @ApiModelProperty("操作人所属机构名")
+    @Schema(name = "操作人所属机构名")
     private String opOrgName;
 
-    @ApiModelProperty("操作时间")
+    @Schema(name = "操作时间")
     private Date opTime;
-    @ApiModelProperty("操作库名称")
+    @Schema(name = "操作库名称")
     private String dataBase;
-    @ApiModelProperty("操作定语")
+    @Schema(name = "操作定语")
     private String attribute;
-    @ApiModelProperty("操作动作")
+    @Schema(name = "操作动作")
     private String predicate;
-    @ApiModelProperty("操作主题")
+    @Schema(name = "操作主题")
     private String subject;
-    @ApiModelProperty("操作结果")
+    @Schema(name = "操作结果")
     private String result;
-    @ApiModelProperty("操作对象标识")
+    @Schema(name = "操作对象标识")
     private String identify;
-    @ApiModelProperty("操作内容")
+    @Schema(name = "操作内容")
     private String detail;
     @Transient
-    @ApiModelProperty("操作开始时间")
+    @Schema(name = "操作开始时间")
     private Date operatorTimeStart;
     @Transient
-    @ApiModelProperty("操作结束时间")
+    @Schema(name = "操作结束时间")
     private Date operatorTimeEnd;
     // 流水号
-    @ApiModelProperty("操作对象id")
+    @Schema(name = "操作对象id")
     private String seriesNumber;
 
     public String getId() {

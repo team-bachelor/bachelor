@@ -8,13 +8,13 @@ import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.iam.vo.UserVo;
 import cn.org.bachelor.web.util.RequestUtil;
 import com.alibaba.fastjson.JSONObject;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.servlet.HandlerInterceptor;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Enumeration;
@@ -32,8 +32,8 @@ import static cn.org.bachelor.iam.IamConstant.ACCESS_BACKEND;
  * @version 1.0
  */
 @Slf4j
-public class UserIdentifyInterceptor extends HandlerInterceptorAdapter {
-    @Autowired
+public class UserIdentifyInterceptor implements HandlerInterceptor {
+    @Resource
     private IamContext iamContext;
     //    @Autowired
 //    private IamSysService iamSysService;

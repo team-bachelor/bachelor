@@ -2,14 +2,14 @@ package cn.org.bachelor.iam;
 
 import cn.org.bachelor.iam.acm.interceptor.UserAccessControlInterceptor;
 import cn.org.bachelor.iam.idm.interceptor.UserIdentifyInterceptor;
+import jakarta.annotation.Resource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import javax.annotation.Resource;
 
 /**
  * @author liuzhuo
@@ -26,7 +26,7 @@ public class IamClientWebConfig implements WebMvcConfigurer {
      * @return 访问控制拦截器
      */
     @Bean
-    public HandlerInterceptorAdapter authInterceptor() {
+    public HandlerInterceptor authInterceptor() {
         return new UserAccessControlInterceptor();
     }
 
@@ -34,7 +34,7 @@ public class IamClientWebConfig implements WebMvcConfigurer {
      * @return 用户识别拦截器
      */
     @Bean
-    public HandlerInterceptorAdapter userInterceptor() {
+    public HandlerInterceptor userInterceptor() {
         return new UserIdentifyInterceptor();
     }
 
