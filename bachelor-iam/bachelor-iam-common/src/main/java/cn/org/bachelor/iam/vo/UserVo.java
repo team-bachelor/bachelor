@@ -4,6 +4,8 @@ import cn.org.bachelor.context.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Map;
+
 /**
  * @描述:
  * @创建人: liuzhuo
@@ -131,6 +133,13 @@ public class UserVo implements IUser {
     //base64编码的字符串，需要自己反解。
     private String picture;
 
+    public Map<String, Object> getExtendInfo() {
+        return extendInfo;
+    }
+
+    //扩展信息
+    @JsonProperty("extendInfo")
+    private Map<String, Object> extendInfo;
 
     @Override
     public String getAreaId() {
