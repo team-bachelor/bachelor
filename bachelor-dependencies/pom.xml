@@ -50,6 +50,8 @@
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <!--XML转换为JSON-->
         <jettison.version>1.5.0</jettison.version>
+        <!--jsonwebtoken-->
+        <jjwt.version>0.12.3</jjwt.version>
         <!--远程调用-->
         <spring-cloud-alibaba.version>2023.0.3.1</spring-cloud-alibaba.version>
         <nimbus-jose-jwt.version>9.31</nimbus-jose-jwt.version>
@@ -281,6 +283,21 @@
                 <groupId>jakarta.persistence</groupId>
                 <artifactId>jakarta.persistence-api</artifactId>
                 <version>${jakarta.persistence.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

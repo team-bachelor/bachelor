@@ -8,10 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.web.embedded.netty.NettyReactiveWebServerFactory;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
-import org.springframework.cloud.gateway.filter.ratelimit.RateLimiter;
 import org.springframework.cloud.gateway.support.ConfigurationService;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +33,7 @@ import java.net.UnknownHostException;
 @EnableDiscoveryClient
 @RefreshScope
 @ComponentScan("cn.org.bachelor.**.*")
-@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 //@EnableHystrix
 public class GatewayApplication {
     private static Logger logger = LoggerFactory.getLogger(GatewayApplication.class);
@@ -68,5 +68,6 @@ public class GatewayApplication {
     public KeyResolver tokenKeyResolver() {
         return new TokenKeyResolver();
     }
+
 
 }

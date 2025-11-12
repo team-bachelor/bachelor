@@ -3,12 +3,12 @@ package cn.org.bachelor.iam.token;
 import cn.org.bachelor.context.IUser;
 import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.exception.SystemException;
-import cn.org.bachelor.iam.credential.AbstractIamCredential;
 import cn.org.bachelor.iam.utils.StringUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
+import org.apache.commons.lang3.time.DateUtils;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -18,7 +18,8 @@ import static cn.org.bachelor.iam.token.JwtToken.PayloadKey.*;
 
 /**
  * JSONWebToken
- * @author  liuzhuo
+ *
+ * @author liuzhuo
  */
 public class JwtToken {
 
@@ -120,20 +121,21 @@ public class JwtToken {
     /**
      * 根据用户信息和凭证创建 JwtToken 实例。
      *
-     * @param userDetail 用户详细信息
-     * @param credential 抽象 IAM 凭证
+     * @param userDetail  用户详细信息
+     * @param expiresTime 过期时间
      * @return 创建好的 JwtToken 实例
      */
-    public static JwtToken create(IUser userDetail, AbstractIamCredential credential) {
+    public static JwtToken create(IUser userDetail, Date expiresTime) {
         if (userDetail == null) {
             throw new BusinessException("user detail can not be null!");
         }
-        Date expTime_Date = credential.getExpiresTime();
+        Date expTime_Date = expiresTime;
         // 有效期保持与用户系统一致
+        if (expTime_Date == null) {
+            expTime_Date = DateUtils.addHours(new Date(), 3);
+        }
         long expTime = expTime_Date.getTime();
         long currentTime = new Date().getTime();
-//        Map<String, Object> userObject = JSONParser.parseJSON(userinfo);
-//        userinfo.put(ACCESS_TOKEN, accesstoken);
         JwtToken token = new JwtToken();
         token.setExp(expTime);
         token.setIat(currentTime);
@@ -150,44 +152,15 @@ public class JwtToken {
         map.put(ORG_NAME, userDetail.getOrgName());
         map.put(DEPT_ID, userDetail.getDeptId());
         map.put(DEPT_NAME, userDetail.getDeptName());
-        map.put(ACCESS_TOKEN, credential.getCredential());
+        map.put(ACCESS_TOKEN, userDetail.getAccessToken());
         map.put(USER_ID, userDetail.getId());
-        if(userDetail.getExtendInfo() != null && userDetail.getExtendInfo().size() > 0){
+        if (userDetail.getExtendInfo() != null && userDetail.getExtendInfo().size() > 0) {
             map.putAll(userDetail.getExtendInfo());
         }
         token.setClaims(map);
-        // 存储refreshToken为token有效期的2倍
-//        userSysService.saveRefreshToken(userinfo.getString("account"), refreshToken, 2 * (expTime - currentTime));
-//        userinfo.put(JwtToken.PayloadKey.EXP, expTime);
-//        userinfo.put(JwtToken.PayloadKey.IAT, currentTime);
-//
-//        userinfo.put(JwtToken.PayloadKey.ISS, ""); // jwt签发者
-//        userinfo.put(JwtToken.PayloadKey.SUB, userinfo.get("account")); // jwt所面向的用户
-//        userinfo.put(JwtToken.PayloadKey.AUD, ""); // 接收jwt的一方
-//        userinfo.put(JwtToken.PayloadKey.NBF, ""); // 接收jwt的一方
-//        userinfo.put(JwtToken.PayloadKey.JTI, ""); // jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击
-//
-//        userinfo.put(JwtToken.PayloadKey.USER_NAME, userinfo.get("username"));
-//        userinfo.put(JwtToken.PayloadKey.USER_CODE, userinfo.get("account"));
-//
-////        userinfo.put(USER_ID, userId);
-//
-//        if (userDetail != null) {
-//            userinfo.put(JwtToken.PayloadKey.ORG_ID, userDetail.getOrgId());
-//            userinfo.put(JwtToken.PayloadKey.ORG_NAME, userDetail.getOrgName());
-//            userinfo.put(JwtToken.PayloadKey.DEPT_ID, userDetail.getDeptId());
-//            userinfo.put(JwtToken.PayloadKey.DEPT_NAME, userDetail.getDeptName());
-//        }
-//        logger.info(userinfo.toString());
-//        String userStr = null;
-//        if(userinfo instanceof  JSONObject){
-//            userStr = ((JSONObject) userinfo).toJSONString();
-//        }else{
-//            userStr = JSONObject.toJSONString(userinfo);
-//        }token.generate(privateKey);
-//        String token = JwtToken.generate(userStr, privateKey);
         return token;
     }
+
     /**
      * 解析和验证 JWT 字符串。
      *
@@ -227,6 +200,7 @@ public class JwtToken {
             throw new SystemException(e);
         }
     }
+
     // jwt签发者
     private String iss;
 
@@ -256,6 +230,7 @@ public class JwtToken {
 
     /**
      * 获取规范外的其他内容
+     *
      * @return 包含规范外其他内容的Map对象
      */
     public Map<String, Object> getClaims() {
@@ -264,6 +239,7 @@ public class JwtToken {
 
     /**
      * 设置规范外的其他内容
+     *
      * @param claims 包含规范外其他内容的Map对象
      */
     public void setClaims(Map<String, Object> claims) {
@@ -272,6 +248,7 @@ public class JwtToken {
 
     /**
      * 获取 jwt 签发者
+     *
      * @return jwt 签发者的字符串
      */
     public String getIss() {
@@ -280,6 +257,7 @@ public class JwtToken {
 
     /**
      * 设置 jwt 签发者
+     *
      * @param iss jwt 签发者的字符串
      */
     public void setIss(String iss) {
@@ -288,6 +266,7 @@ public class JwtToken {
 
     /**
      * 获取 jwt 所面向的用户
+     *
      * @return jwt 所面向用户的字符串
      */
     public String getSub() {
@@ -296,6 +275,7 @@ public class JwtToken {
 
     /**
      * 设置 jwt 所面向的用户
+     *
      * @param sub jwt 所面向用户的字符串
      */
     public void setSub(String sub) {
@@ -304,6 +284,7 @@ public class JwtToken {
 
     /**
      * 获取接收 jwt 的一方
+     *
      * @return 接收 jwt 一方的字符串
      */
     public String getAud() {
@@ -312,6 +293,7 @@ public class JwtToken {
 
     /**
      * 设置接收 jwt 的一方
+     *
      * @param aud 接收 jwt 一方的字符串
      */
     public void setAud(String aud) {
@@ -320,6 +302,7 @@ public class JwtToken {
 
     /**
      * 获取 jwt 的过期时间
+     *
      * @return jwt 过期时间的 Long 类型值
      */
     public Long getExp() {
@@ -328,6 +311,7 @@ public class JwtToken {
 
     /**
      * 设置 jwt 的过期时间
+     *
      * @param exp jwt 过期时间的 Long 类型值
      */
     public void setExp(Long exp) {
@@ -336,6 +320,7 @@ public class JwtToken {
 
     /**
      * 获取 jwt 在什么时间之前不可用
+     *
      * @return 表示不可用时间的 Long 类型值
      */
     public Long getNbf() {
@@ -344,6 +329,7 @@ public class JwtToken {
 
     /**
      * 设置 jwt 在什么时间之前不可用
+     *
      * @param nbf 表示不可用时间的 Long 类型值
      */
     public void setNbf(Long nbf) {
@@ -352,6 +338,7 @@ public class JwtToken {
 
     /**
      * 获取 jwt 的签发时间
+     *
      * @return jwt 签发时间的 Long 类型值
      */
     public Long getIat() {
@@ -360,6 +347,7 @@ public class JwtToken {
 
     /**
      * 设置 jwt 的签发时间
+     *
      * @param iat jwt 签发时间的 Long 类型值
      */
     public void setIat(Long iat) {
@@ -368,6 +356,7 @@ public class JwtToken {
 
     /**
      * 获取 jwt 的唯一身份标识
+     *
      * @return jwt 唯一身份标识的字符串
      */
     public String getJti() {
@@ -376,6 +365,7 @@ public class JwtToken {
 
     /**
      * 设置 jwt 的唯一身份标识
+     *
      * @param jti jwt 唯一身份标识的字符串
      */
     public void setJti(String jti) {
@@ -384,6 +374,7 @@ public class JwtToken {
 
     /**
      * 获取 jwt 的版本
+     *
      * @return jwt 版本的字符串
      */
     public String getVer() {
@@ -392,6 +383,7 @@ public class JwtToken {
 
     /**
      * 设置 jwt 的版本
+     *
      * @param ver jwt 版本的字符串
      */
     public void setVer(String ver) {

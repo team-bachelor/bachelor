@@ -18,7 +18,7 @@ import java.util.List;
  * @创建时间 2021/09/29
  */
 @RestController
-@RequestMapping("/acm/rpc/role")
+@RequestMapping("/rpc/acm/role")
 public class RpcRoleController {
 
     @Resource

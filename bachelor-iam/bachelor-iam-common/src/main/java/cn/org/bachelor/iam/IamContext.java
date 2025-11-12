@@ -9,6 +9,8 @@ import cn.org.bachelor.context.IContext;
 import cn.org.bachelor.context.IUserContext;
 import cn.org.bachelor.iam.pojo.IamUser;
 import cn.org.bachelor.iam.utils.StringUtils;
+import lombok.Getter;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.Resource;
@@ -17,21 +19,27 @@ import java.util.Objects;
 /**
  * @author Team Bachelor
  */
+@Getter
 @Component
+@Primary
 public class IamContext implements IUserContext {
 
+    /**
+     * -- GETTER --
+     *  获取基础上下文
+     *
+     * @return IContext 上下文
+     */
     @Resource
     private IContext baseContext;
 
-    private String remoteIP;
-
     /**
-     * 获取基础上下文
-     * @return IContext 上下文
+     * -- GETTER --
+     *  获取远程访问的IP
+     *
+     * @return 远程访问的IP
      */
-    public IContext getBaseContext() {
-        return baseContext;
-    }
+    private String remoteIP;
 
     @Deprecated
     /**
@@ -105,14 +113,6 @@ public class IamContext implements IUserContext {
         }
         String orgId = user.getOrgId();
         return orgId;
-    }
-
-    /**
-     * 获取远程访问的IP
-     * @return 远程访问的IP
-     */
-    public String getRemoteIP() {
-        return remoteIP;
     }
 
     /**

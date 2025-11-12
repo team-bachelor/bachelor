@@ -6,6 +6,7 @@ import java.util.Map;
 /**
  * @author liuzhuo
  */
+@InjectDeny
 public interface IUser {
 
     String getId();
@@ -23,6 +24,8 @@ public interface IUser {
     String getDeptName();
 
     String getAccessToken();
+
+    String getRefreshToken();
 
     String getTenantId();
 

@@ -1,6 +1,8 @@
 spring:
+  main:
+    web-application-type: reactive
   profiles:
-    active: dev
+    active: 4pl
   application:
     name: bachelor-ms-gateway
     workbench-code: workbench-manage
@@ -13,7 +15,6 @@ spring:
           statuses: BAD_GATEWAY
       - name: RequestRateLimiter
         args:
-#          keyResolver: '#{@tokenKeyResolver}'
           in-memory-rate-limiter:
             replenish-rate: 10000
             burst-capacity: 2000
@@ -21,26 +22,10 @@ spring:
         locator:
           enabled: true
           lowerCaseServiceId: true
-    config:
-      enabled: true
-    nacos:
-      config:
-        server-addr: localhost:8848
-        file-extension: yaml
-        group: ${spring.profiles.active}_GROUP
-        data-id: ${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+#    config:
+#      enabled: true
   messages:
     basename: i18n/messages
-
-
-#    config:
-#      name: gateway
-#      profile: dev
-#      label: master
-#      discovery:
-#        enabled: true
-#        service-id: config-service
-
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -55,19 +40,9 @@ spring:
       - "optional:nacos:${spring.application.name}"
 server:
   port: 8899
-#  connection-timeout: 1000
 feign:
   hystrix:
     enabled: true
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://localhost:8740/eureka
-#  instance:
-#    prefer-ip-address: true
-#    instance-id: ${spring.cloud.client.ip-address}:${server.port}
-#    metadata-map:
-#      swagger-hidden: true
 management:
   endpoints:
     web:

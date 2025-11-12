@@ -1,7 +1,9 @@
 package cn.org.bachelor.service;
 
-import java.util.List;
+import cn.org.bachelor.context.InjectDeny;
 
+import java.util.List;
+@InjectDeny
 public interface IService<T> {
     /**
      * 持久化

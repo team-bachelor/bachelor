@@ -48,7 +48,7 @@ public class RouteController {
     }
 
     @GetMapping("/delete/{id}")
-    public ResponseEntity<JsonResponse> delete(@PathVariable String id) {
+    public ResponseEntity<JsonResponse> delete(@PathVariable("id") String id) {
         this.dynamicRouteService.delete(id);
         return JsonResponse.createHttpEntity(HttpStatus.OK);
     }

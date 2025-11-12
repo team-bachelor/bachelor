@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @RestController
 //@CrossOrigin
-@RequestMapping("/acm/permission")
+@RequestMapping("/api/acm/permission")
 public class PermissionController {
     @Autowired
     private AuthorizeService authorizeService;
@@ -44,7 +44,8 @@ public class PermissionController {
             @Parameter(name = "perms", description = "要设置给角色的权限", in = ParameterIn.QUERY, required = true)
     })
     @RequestMapping(value = "/role/{role}", method = RequestMethod.POST)
-    public ResponseEntity setRolePermission(@PathVariable("role") String role, @RequestBody List<PermissionPoint> perms) {
+    public ResponseEntity setRolePermission(@PathVariable("role") String role,
+                                            @RequestBody List<PermissionPoint> perms) {
         authorizeService.setRolePermission(role, perms);
         return JsonResponse.createHttpEntity(HttpStatus.OK);
     }
@@ -58,7 +59,7 @@ public class PermissionController {
     @Operation(description = "获得角色的权限")
     @Parameter(name = "role", description = "角色的编码", in = ParameterIn.PATH, required = true)
     @RequestMapping(value = "/role/{role}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getRolePermission(@PathVariable String role) {
+    public HttpEntity<JsonResponse> getRolePermission(@PathVariable("role") String role) {
         List permg = authorizeService.getRolePermission(role);
         return JsonResponse.createHttpEntity(permg);
     }
@@ -76,7 +77,8 @@ public class PermissionController {
             @Parameter(name = "perms", description = "要设置给机构的权限", in = ParameterIn.QUERY, required = true)
     })
     @RequestMapping(value = "/org/{org}", method = RequestMethod.POST)
-    public ResponseEntity setOrgPermission(@PathVariable("org") String org, @RequestBody List<PermissionPoint> perms) {
+    public ResponseEntity setOrgPermission(@PathVariable("org") String org,
+                                           @RequestBody List<PermissionPoint> perms) {
         authorizeService.setOrgPermission(org, perms);
         return JsonResponse.createHttpEntity(HttpStatus.OK);
     }
@@ -90,7 +92,7 @@ public class PermissionController {
     @Operation(description = "获得机构的权限")
     @Parameter(name = "org", description = "机构的编码", in = ParameterIn.PATH, required = true)
     @RequestMapping(value = "/org/{org}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getOrgPermission(@PathVariable String org) {
+    public HttpEntity<JsonResponse> getOrgPermission(@PathVariable("org") String org) {
         List permg = authorizeService.getOrgPermission(org);
         return JsonResponse.createHttpEntity(permg);
     }
@@ -118,7 +120,7 @@ public class PermissionController {
     @Operation(description = "获得用户的权限")
     @Parameter(name = "user", description = "用户的编码", in = ParameterIn.PATH, required = true)
     @RequestMapping(value = "/user/{user}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getUserPermission(@PathVariable String user) {
+    public HttpEntity<JsonResponse> getUserPermission(@PathVariable("user") String user) {
         Map permg = authorizeService.calUserPermission(user);
 
         if (permg != null) {

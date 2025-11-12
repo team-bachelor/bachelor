@@ -20,7 +20,7 @@ import java.util.Map;
  * @创建时间 2021/09/29
  */
 @RestController
-@RequestMapping("/acm/rpc/authorize")
+@RequestMapping("/rpc/acm/authorize")
 public class RpcAuthorizeController {
 
     @Resource

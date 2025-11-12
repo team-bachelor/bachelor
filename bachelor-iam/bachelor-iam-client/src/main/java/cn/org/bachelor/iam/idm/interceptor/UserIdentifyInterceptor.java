@@ -63,26 +63,27 @@ public class UserIdentifyInterceptor implements HandlerInterceptor {
                     user.setOrgId(getSessionString(request, IamConstant.UP_ORG_ID));
                     user.setName(getSessionString(request, IamConstant.UP_USER_NAME));
                     user.setOrgName(getSessionString(request, IamConstant.UP_ORG_NAME));
+                    user.setTenantId(getSessionString(request, IamConstant.UP_USER_ID));
                     user.setDeptId(getSessionString(request, IamConstant.UP_DEPT_ID));
                     user.setDeptName(getSessionString(request, IamConstant.UP_DEPT_NAME));
                 } else if (JwtToken.Ver2.equals(ver)) {
                     String personStr = getSessionString(request, IamConstant.UP_USER);
                     IamUser userInSession = JSONObject.parseObject(personStr, IamUser.class);
+                    user.setTenantId(userInSession.getTenantId());
                     user.setName(userInSession.getName());
                     user.setOrgId(userInSession.getOrgId());
                     user.setOrgName(userInSession.getOrgName());
                     user.setDeptId(userInSession.getDeptId());
                     user.setDeptName(userInSession.getDeptName());
                 }
-                if (log.isDebugEnabled()) {
-                    log.debug("user info in session: " + JSONObject.toJSONString(user));
-                }
             }
         }
         iamContext.setUser(user);
-        log.debug("---------------↓↓↓↓↓setting user info↓↓↓↓↓---------------");
-        log.debug(JSONObject.toJSONString(user));
-        log.debug("---------------↑↑↑↑↑setting user info↑↑↑↑↑---------------");
+        if (log.isDebugEnabled()) {
+            log.debug("---------------↓↓↓↓↓setting user info↓↓↓↓↓---------------");
+            log.debug(JSONObject.toJSONString(user));
+            log.debug("---------------↑↑↑↑↑setting user info↑↑↑↑↑---------------");
+        }
 //        iamSysService.refreshToken(request, response, user);
         iamContext.setRemoteIP(RequestUtil.getIpAddr(request));
         return true;

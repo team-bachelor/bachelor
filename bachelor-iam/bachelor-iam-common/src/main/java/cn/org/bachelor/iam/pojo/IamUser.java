@@ -46,6 +46,9 @@ public class IamUser implements IUser {
     @Schema(name = "访问令牌")
     private String accessToken;
 
+    @Schema(name = "刷新令牌")
+    private String refreshToken;
+
     @Schema(name = "租户ID")
     private String tenantId;
 
@@ -70,51 +73,6 @@ public class IamUser implements IUser {
 
     @Schema(name = "扩展信息")
     private Map<String, Object> extendInfo;
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public String getCode() {
-        return code;
-    }
-
-    @Override
-    public String getOrgId() {
-        return orgId;
-    }
-
-    @Override
-    public String getDeptId() {
-        return deptId;
-    }
-
-    @Override
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    @Override
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    @Override
-    public boolean isAdministrator() {
-        return isAdministrator;
-    }
-
-    @Override
-    public Map<String, Object> getExtendInfo() {
-        return this.extendInfo;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
 
     public void setUsername(String name){
         this.username = name;

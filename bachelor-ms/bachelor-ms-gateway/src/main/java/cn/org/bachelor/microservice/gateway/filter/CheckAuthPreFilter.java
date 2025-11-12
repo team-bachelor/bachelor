@@ -105,6 +105,8 @@ public class CheckAuthPreFilter implements GlobalFilter {
                                 getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.ORG_ID, false))
                         .header(JwtToken.PayloadKey.ORG_CODE,
                                 getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.ORG_CODE, false))
+                        .header(JwtToken.PayloadKey.TENANT_ID,
+                                getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.TENANT_ID, false))
                         .header(JwtToken.PayloadKey.USER_CODE,
                                 getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.USER_CODE, false))
                         .header(JwtToken.PayloadKey.USER_ID,

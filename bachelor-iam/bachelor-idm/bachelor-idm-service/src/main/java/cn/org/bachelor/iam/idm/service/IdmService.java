@@ -76,7 +76,8 @@ public class IdmService {
                 .getAttribute(IamConstant.SESSION_AUTHENTICATION_KEY);
         IamUser userDetail = getUserDetail(userId);
         userDetail.setExtendInfo(getUserExtInfo((JSONObject)JSON.toJSON(userDetail)));
-        return JwtToken.create(userDetail, upCC);
+        userDetail.setAccessToken(upCC.getCredential().toString());
+        return JwtToken.create(userDetail, upCC.getExpiresTime());
     }
 
     public Map<String, Object> getUserExtInfo(Map<String, Object> user) {

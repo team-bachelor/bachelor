@@ -10,6 +10,7 @@ package cn.org.bachelor.context;
  *
  * @author Team Bachelor
  */
+@InjectDeny
 public interface IContext {
 
 

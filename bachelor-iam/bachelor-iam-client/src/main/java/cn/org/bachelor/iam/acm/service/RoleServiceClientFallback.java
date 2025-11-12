@@ -27,7 +27,7 @@ public class RoleServiceClientFallback implements RoleServiceClient {
     }
 
     @Override
-    public void deleteRole(@PathVariable String roleID) {
+    public void deleteRole(@PathVariable("roleID") String roleID) {
 
     }
 
@@ -37,7 +37,7 @@ public class RoleServiceClientFallback implements RoleServiceClient {
     }
 
     @Override
-    public List<IamUser> getRoleUsers(@PathVariable String roleCode) {
+    public List<IamUser> getRoleUsers(@PathVariable("roleCode") String roleCode) {
         return null;
     }
 
@@ -47,22 +47,22 @@ public class RoleServiceClientFallback implements RoleServiceClient {
     }
 
     @Override
-    public List<String> getUserRoles(@PathVariable String userCode) {
+    public List<String> getUserRoles(@PathVariable("userCode") String userCode) {
         return null;
     }
 
     @Override
-    public void addUsersToRole(@PathVariable String roleCode, List<IamUser> users) {
+    public void addUsersToRole(@PathVariable("roleCode") String roleCode, List<IamUser> users) {
 
     }
 
     @Override
-    public void deleteUsersFromRole(@PathVariable String roleCode, List<String> users) {
+    public void deleteUsersFromRole(@PathVariable("roleCode") String roleCode, List<String> users) {
 
     }
 
     @Override
-    public Role selectByPrimaryKey(@PathVariable String roleID) {
+    public Role selectByPrimaryKey(@PathVariable("roleID") String roleID) {
         return null;
     }
 }

@@ -33,7 +33,7 @@ import java.util.*;
  * Created by gxf on 2021/1/21 9:49
  */
 @RestController
-@RequestMapping(value = "/acm")
+@RequestMapping(value = "/api/acm")
 @Tag(name = "初始化权限数据")
 public class AcmInitController {
 

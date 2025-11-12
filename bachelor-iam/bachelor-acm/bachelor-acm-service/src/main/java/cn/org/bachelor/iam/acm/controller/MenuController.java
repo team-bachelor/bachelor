@@ -22,7 +22,7 @@ import java.util.List;
  * @创建时间 2018/10/22
  */
 @RestController
-@RequestMapping("/acm")
+@RequestMapping("/api/acm")
 //@CrossOrigin
 public class MenuController {
 
@@ -94,7 +94,7 @@ public class MenuController {
             @Parameter(name = "menuId", description = "菜单数据", in = ParameterIn.PATH, required = true)
     })
     @DeleteMapping(value = "/menu/{menuId}")
-    public ResponseEntity updateMenu(@PathVariable String menuId) {
+    public ResponseEntity updateMenu(@PathVariable("menuId") String menuId) {
         menuService.delete(menuId);
         return JsonResponse.createHttpEntity(HttpStatus.OK);
     }
@@ -109,7 +109,7 @@ public class MenuController {
     @Operation(description = "获得角色的菜单")
     @Parameter(name = "role", description = "角色的编码", in = ParameterIn.PATH, required = true)
     @RequestMapping(value = "/role/menu/{role}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getRoleMenu(@PathVariable String role) {
+    public HttpEntity<JsonResponse> getRoleMenu(@PathVariable("role") String role) {
         return JsonResponse.createHttpEntity(menuService.getRoleMenu(role));
     }
 
@@ -141,7 +141,7 @@ public class MenuController {
     @Operation(description = "获得机构的菜单")
     @Parameter(name = "org", description = "机构的编码", in = ParameterIn.PATH, required = true)
     @RequestMapping(value = "/org/menu/{org}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getOrgMenu(@PathVariable String org) {
+    public HttpEntity<JsonResponse> getOrgMenu(@PathVariable("org") String org) {
         return JsonResponse.createHttpEntity(menuService.getOrgMenu(org));
     }
 
@@ -154,7 +154,7 @@ public class MenuController {
     @Operation(description = "获得全部菜单")
     @Parameter(name = "orgID", description = "组织机构的编码", in = ParameterIn.QUERY, required = false)
     @RequestMapping(value = "/menus", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getMenus(String orgID) {
+    public HttpEntity<JsonResponse> getMenus(@RequestParam(value = "orgID", required = false) String orgID) {
         return JsonResponse.createHttpEntity(menuService.getMenuList());
     }
 
@@ -168,7 +168,7 @@ public class MenuController {
     @Operation(description = "获得用户的菜单")
     @Parameter(name = "user", description = "用户的编码", in = ParameterIn.PATH, required = true)
     @RequestMapping(value = "/user/menu/{userCode}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getUserMenu(@PathVariable String userCode) {
+    public HttpEntity<JsonResponse> getUserMenu(@PathVariable("userCode") String userCode) {
         List menus = menuService.calUserMenu(userCode);
         return JsonResponse.createHttpEntity(menus);
     }
@@ -188,8 +188,8 @@ public class MenuController {
             @Parameter(name = "parentId", description = "父级菜单ID", in = ParameterIn.QUERY)
     })
     @RequestMapping(value = "/user/menu/{userCode}/{group}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getUserMenu(@PathVariable String userCode,
-                                                @PathVariable String group,
+    public HttpEntity<JsonResponse> getUserMenu(@PathVariable("userCode") String userCode,
+                                                @PathVariable("group") String group,
                                                 @RequestParam(value = "parent", required = false) String parentId) {
         List menus = menuService.calUserMenu(userCode, group, parentId);
         return JsonResponse.createHttpEntity(menus);
@@ -209,8 +209,8 @@ public class MenuController {
             @Parameter(name = "parentId", description = "父级菜单ID", in = ParameterIn.QUERY)
     })
     @RequestMapping(value = "/user/menu/is/{userCode}/{group}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getIsUserMenu(@PathVariable String userCode,
-                                                  @PathVariable String group,
+    public HttpEntity<JsonResponse> getIsUserMenu(@PathVariable("userCode") String userCode,
+                                                  @PathVariable("group") String group,
                                                   @RequestParam(value = "parent", required = false) String parentId) {
         List menus = menuService.getUserISMenu(userCode, group, parentId);
         return JsonResponse.createHttpEntity(menus);

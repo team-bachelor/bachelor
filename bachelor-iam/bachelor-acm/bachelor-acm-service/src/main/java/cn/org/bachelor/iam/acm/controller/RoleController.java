@@ -22,7 +22,7 @@ import java.util.List;
  * @更新履历 2021.1.28 访问路径 => /acm/role
  */
 @RestController
-@RequestMapping("/acm/role")
+@RequestMapping("/api/acm/role")
 //@CrossOrigin
 public class RoleController {
 
@@ -72,7 +72,7 @@ public class RoleController {
             @Parameter(name = "roleID", description = "角色ID", in = ParameterIn.PATH, required = true)
     })
     @RequestMapping(value = "/{roleID}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getRole(@PathVariable String roleID) {
+    public HttpEntity<JsonResponse> getRole(@PathVariable("roleId") String roleID) {
         return JsonResponse.createHttpEntity(roleService.selectByPrimaryKey(roleID));
     }
 
@@ -87,7 +87,7 @@ public class RoleController {
             @Parameter(name = "roleID", description = "角色的ID", in = ParameterIn.PATH, required = true)
     })
     @RequestMapping(value = "/{roleID}", method = RequestMethod.DELETE)
-    public HttpEntity<JsonResponse> deleteRole(@PathVariable String roleID) {
+    public HttpEntity<JsonResponse> deleteRole(@PathVariable("roleId") String roleID) {
         roleService.deleteRole(roleID);
         return JsonResponse.createHttpEntity(HttpStatus.OK);
     }
@@ -203,7 +203,7 @@ public class RoleController {
             @Parameter(name = "userCode", description = "用户编码", in = ParameterIn.PATH, required = true)
     })
     @RequestMapping(value = "/roles/{userCode}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getRolesViaUser(@PathVariable String userCode) {
+    public HttpEntity<JsonResponse> getRolesViaUser(@PathVariable("userCode") String userCode) {
         return JsonResponse.createHttpEntity(roleService.getUserRoles(userCode));
     }
 

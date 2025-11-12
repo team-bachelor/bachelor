@@ -42,7 +42,7 @@ public class RoleService implements RoleServiceStub {
     private RoleMenuMapper roleMenuMapper;
 
     @Qualifier("Oauth2IamSysService")
-    @Autowired
+    @Autowired(required = false)
     private IamSysService iamSysService;
 
     @Value("${bachelor.iam.client.id:}")
@@ -157,13 +157,15 @@ public class RoleService implements RoleServiceStub {
         if (!local) {
             IamSysParam usp = new IamSysParam();
             usp.setClientId(clientId);
-            List<IamUser> remote = iamSysService.findUsersInApp(usp);
             Map<String, IamUser> rMap = new HashMap<>(userRoles.size());
+            if(iamSysService != null){
+            List<IamUser> remote = iamSysService.findUsersInApp(usp);
             if (remote != null) {
                 remote.forEach(i -> {
                     if (i == null) return;
                     rMap.put(i.getCode(), i);
                 });
+            }
             }
             userRoles.forEach(i -> {
                 //访问用户服务调用查询

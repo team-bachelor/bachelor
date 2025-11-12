@@ -6,6 +6,7 @@
 package cn.org.bachelor.microservice.gateway;
 
 import cn.org.bachelor.context.IContext;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import jakarta.servlet.ServletContext;
@@ -17,6 +18,7 @@ import java.util.Map;
  * @author Team Bachelor
  */
 @Component
+@Primary
 public class WebContext implements IContext {
 
     private static final ThreadLocal<Map<String, Object>> tls = new ThreadLocal<>();

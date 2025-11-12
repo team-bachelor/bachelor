@@ -48,7 +48,7 @@ public class IdmRsController {
             @Parameter(name = "pageNum", description = "当前页数", in = ParameterIn.QUERY, required = false)
     })
     @RequestMapping(value = "/users/{orgId}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getUsers(@PathVariable String orgId, String deptId, String userName, Integer pageSize, Integer pageNum) {
+    public HttpEntity<JsonResponse> getUsers(@PathVariable("orgId") String orgId, String deptId, String userName, Integer pageSize, Integer pageNum) {
         PageHelper.startPage(pageNum, pageSize);
         IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
@@ -97,7 +97,7 @@ public class IdmRsController {
             @Parameter(name = "userID", description = "用户ID", in = ParameterIn.PATH, required = true)
     })
     @RequestMapping(value = "/user/{userID}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getUser(@PathVariable String userID) {
+    public HttpEntity<JsonResponse> getUser(@PathVariable("userID") String userID) {
         List l = userSysService.findUsersById(userID);
         return JsonResponse.createHttpEntity(l == null || l.size() == 0 ? null : l.get(0));
     }
@@ -162,7 +162,7 @@ public class IdmRsController {
             @Parameter(name = "orgId", description = "机构ID", in = ParameterIn.QUERY, required = true),
     })
     @RequestMapping(value = "/org/{orgId}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getOrg(@PathVariable String orgId) {
+    public HttpEntity<JsonResponse> getOrg(@PathVariable("orgId") String orgId) {
         return JsonResponse.createHttpEntity(userSysService.findOrg(orgId));
     }
 
@@ -196,7 +196,7 @@ public class IdmRsController {
             @Parameter(name = "appCode", description = "app的编码", in = ParameterIn.PATH, required = true)
     })
     @RequestMapping(value = "/app/{appCode}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getAppByCode(@PathVariable String appCode) {
+    public HttpEntity<JsonResponse> getAppByCode(@PathVariable("appCode") String appCode) {
         IamApp app = userSysService.findAppByCode(appCode);
         return JsonResponse.createHttpEntity(app);
     }
@@ -206,7 +206,7 @@ public class IdmRsController {
             @Parameter(name = "userId", description = "用户ID", in = ParameterIn.PATH, required = true)
     })
     @RequestMapping(value = "/user/{userId}/apps", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getAppByUserId(@PathVariable String userId) {
+    public HttpEntity<JsonResponse> getAppByUserId(@PathVariable("userId") String userId) {
         List<IamApp> apps = userSysService.findUserApps(userId);
         return JsonResponse.createHttpEntity(apps);
     }

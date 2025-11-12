@@ -12,6 +12,7 @@ import cn.org.bachelor.context.IContext;
 import cn.org.bachelor.web.util.RequestUtil;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

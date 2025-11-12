@@ -113,7 +113,4 @@ public class LoginUser implements UserDetails, IUser {
         return extendInfo;
     }
 
-    public void setIsAdministrator(boolean isAdministrator){
-        this.isAdministrator = isAdministrator;
-    }
 }

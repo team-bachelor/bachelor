@@ -86,15 +86,10 @@ public class LoginService {
     public String getJwt(Authentication authenticate) {
         //使用userid生成token
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
-        AbstractIamCredential credential = new AbstractIamCredential<String>() {
-        };
-        credential.setCredential("");
-        credential.setExpiresTime(getLoginExpiresTime());
-        JwtToken token = JwtToken.create(loginUser, credential);
-        String jwt = token.generate(iamConf.getPrivateKey());
-
+        loginUser.setAccessToken("");
+        JwtToken token = JwtToken.create(loginUser, getLoginExpiresTime());
         //把token响应给前端
-        return jwt;
+        return token.generate(iamConf.getPrivateKey());
     }
 
     private Date getLoginExpiresTime() {

@@ -58,7 +58,7 @@ public class DacAreaController {
 
     @Operation(description = "删除权限区域")
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<JsonResponse> deleteArea(@PathVariable String id) {
+    public ResponseEntity<JsonResponse> deleteArea(@PathVariable("id") String id) {
         dacAreaService.deleteArea(id);
         return JsonResponse.createHttpEntity(HttpStatus.OK);
     }
