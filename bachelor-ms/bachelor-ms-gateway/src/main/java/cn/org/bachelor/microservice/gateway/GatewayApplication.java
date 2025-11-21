@@ -3,6 +3,7 @@ package cn.org.bachelor.microservice.gateway;
 import cn.org.bachelor.microservice.gateway.ratelimit.InMemoryRateLimiter;
 import cn.org.bachelor.microservice.gateway.ratelimit.IpAddressKeyResolver;
 import cn.org.bachelor.microservice.gateway.ratelimit.TokenKeyResolver;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -30,18 +31,17 @@ import java.net.UnknownHostException;
  * @Version 1.0
  **/
 
+@Slf4j
 @EnableDiscoveryClient
 @RefreshScope
 @ComponentScan("cn.org.bachelor.**.*")
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 //@EnableHystrix
 public class GatewayApplication {
-    private static Logger logger = LoggerFactory.getLogger(GatewayApplication.class);
-
     public static void main(String[] args) throws UnknownHostException {
         ConfigurableApplicationContext application = SpringApplication.run(GatewayApplication.class, args);
         Environment env = application.getEnvironment();
-        logger.info("\n----------------------------------------------------------\n\t" +
+        log.info("\n----------------------------------------------------------\n\t" +
                         "Application '{}' is running! Access URLs:\n\t" +
                         "Local: \t\thttp://localhost:{}\n\t" +
                         "External: \thttp://{}:{}\n\t" +
@@ -51,23 +51,4 @@ public class GatewayApplication {
                 InetAddress.getLocalHost().getHostAddress(),
                 env.getProperty("server.port"));
     }
-
-    @Bean
-    @Primary
-    public InMemoryRateLimiter inMemoryRateLimiter(ConfigurationService configurationService) {
-        // 可根据需求选择构造函数，此处示例使用默认限流参数
-        return new InMemoryRateLimiter(2, 4, configurationService); // replenishRate=2, burstCapacity=4
-    }
-
-    @Bean(name = IpAddressKeyResolver.BEAN_NAME)
-    public KeyResolver ipAddressKeyResolver() {
-        return new IpAddressKeyResolver();
-    }
-
-    //    @Bean(name = TokenKeyResolver.BEAN_NAME)
-    public KeyResolver tokenKeyResolver() {
-        return new TokenKeyResolver();
-    }
-
-
 }

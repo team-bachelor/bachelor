@@ -44,7 +44,7 @@
         <!--json处理-->
         <fastjson.version>2.0.14</fastjson.version>
         <!--实现漏桶算法-->
-        <bucket4j-core.version>8.1.0</bucket4j-core.version>
+        <bucket4j-core.version>8.15.0</bucket4j-core.version>
         <!--版本管理的maven插件-->
         <versions-maven-plugin.version>2.19.0</versions-maven-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
