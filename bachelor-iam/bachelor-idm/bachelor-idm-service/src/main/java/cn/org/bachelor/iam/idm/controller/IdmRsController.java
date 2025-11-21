@@ -32,7 +32,7 @@ import java.util.List;
  * 将原auth-login合并，原/user/接口一并归到/dim/
  */
 //@CrossOrigin
-@RequestMapping("/idm/rs")
+@RequestMapping("/api/idm/rs")
 public class IdmRsController {
 
     private static final Logger logger = LoggerFactory.getLogger(IdmRsController.class);
@@ -48,7 +48,11 @@ public class IdmRsController {
             @Parameter(name = "pageNum", description = "当前页数", in = ParameterIn.QUERY, required = false)
     })
     @RequestMapping(value = "/users/{orgId}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getUsers(@PathVariable("orgId") String orgId, String deptId, String userName, Integer pageSize, Integer pageNum) {
+    public HttpEntity<JsonResponse> getUsers(@PathVariable("orgId") String orgId,
+                                             @RequestParam(value = "deptId", required = false) String deptId,
+                                             @RequestParam(value = "userName", required = false) String userName,
+                                             @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize,
+                                             @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum) {
         PageHelper.startPage(pageNum, pageSize);
         IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
@@ -78,7 +82,9 @@ public class IdmRsController {
             @Parameter(name = "keyWord", description = "查询关键词，同时用于匹配用户名称和编码", in = ParameterIn.QUERY, required = false)
     })
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getUsers(String orgId, String deptId, String keyWord) {
+    public HttpEntity<JsonResponse> getUsers(@RequestParam("orgId") String orgId,
+                                             @RequestParam(value = "deptId", required = false) String deptId,
+                                             @RequestParam(value = "keyWord", required = false) String keyWord) {
         IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
         param.setDeptId(deptId);
@@ -89,16 +95,16 @@ public class IdmRsController {
     /**
      * 查询用户
      *
-     * @param userID 用户ID
+     * @param userId 用户ID
      * @return 返回用户列表
      */
     @Operation(description = "查询用户")
     @Parameters({
-            @Parameter(name = "userID", description = "用户ID", in = ParameterIn.PATH, required = true)
+            @Parameter(name = "userId", description = "用户ID", in = ParameterIn.PATH, required = true)
     })
-    @RequestMapping(value = "/user/{userID}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getUser(@PathVariable("userID") String userID) {
-        List l = userSysService.findUsersById(userID);
+    @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
+    public HttpEntity<JsonResponse> getUser(@PathVariable("userId") String userId) {
+        List l = userSysService.findUsersById(userId);
         return JsonResponse.createHttpEntity(l == null || l.size() == 0 ? null : l.get(0));
     }
 
@@ -115,7 +121,7 @@ public class IdmRsController {
             @Parameter(name = "orgId", description = "机构ID", in = ParameterIn.QUERY, required = true)
     })
     @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getUserByCode(String userCode, String orgId) {
+    public HttpEntity<JsonResponse> getUserByCode(@RequestParam("userCode") String userCode, @RequestParam("orgId") String orgId) {
         IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
         param.setUserCode(userCode);
@@ -129,7 +135,9 @@ public class IdmRsController {
             @Parameter(name = "deptId", description = "父部门ID", in = ParameterIn.QUERY, required = false)
     })
     @RequestMapping(value = "/depts", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getDepts(String orgId, String deptId, boolean tree) {
+    public HttpEntity<JsonResponse> getDepts(@RequestParam("orgId") String orgId,
+                                             @RequestParam(value = "deptId", required = false) String deptId,
+                                             @RequestParam(value = "tree", required = false, defaultValue = "false") boolean tree) {
         IamSysParam param = new IamSysParam();
         param.setOrgId(orgId);
         param.setDeptId(deptId);
@@ -141,7 +149,7 @@ public class IdmRsController {
 
     @Operation(description = "为当前用户登出系统")
     @RequestMapping(value = "/dept/detail", method = RequestMethod.GET)
-    public ResponseEntity<JsonResponse> searchDept(@RequestParam("id") String deptId) {
+    public ResponseEntity<JsonResponse> searchDept(@RequestParam("deptId") String deptId) {
         logger.info("deptId {}", deptId);
         return JsonResponse.createHttpEntity(userSysService.findDeptDetail(deptId), HttpStatus.OK);
     }
@@ -171,7 +179,7 @@ public class IdmRsController {
             @Parameter(name = "userIds", description = "用户ID（逗号分隔）", in = ParameterIn.QUERY, required = true)
     })
     @RequestMapping(value = "/users/ids", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getUserByIds(String userIds) {
+    public HttpEntity<JsonResponse> getUserByIds(@RequestParam("userIds") String userIds) {
         List<IamUser> iamUserList = userSysService.findUsersById(userIds.split(","));
         return JsonResponse.createHttpEntity(iamUserList);
     }
@@ -225,7 +233,11 @@ public class IdmRsController {
             @Parameter(name = "pageSize", description = "每页的记录数", in = ParameterIn.QUERY, required = false),
             @Parameter(name = "page", description = "当前页数", in = ParameterIn.QUERY, required = false)
     })
-    public HttpEntity<JsonResponse> getUsersByClient(String deptId, String deptName, String userName, Integer pageSize, Integer pageNum) {
+    public HttpEntity<JsonResponse> getUsersByClient(@RequestParam(value = "deptId", required = false) String deptId,
+                                                     @RequestParam(value = "deptName", required = false) String deptName,
+                                                     @RequestParam(value = "userName", required = false) String userName,
+                                                     @RequestParam(value = "pageSize", required = false) Integer pageSize,
+                                                     @RequestParam(value = "page", required = false) Integer pageNum) {
         IamSysParam param = new IamSysParam();
         param.setDeptId(deptId);
         param.setUserName(userName);

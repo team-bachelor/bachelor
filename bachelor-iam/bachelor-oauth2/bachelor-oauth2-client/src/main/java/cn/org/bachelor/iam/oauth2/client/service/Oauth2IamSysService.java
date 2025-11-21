@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,6 +43,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Service("Oauth2IamSysService")
 @ConditionalOnClass(OAuth2Client.class)
+@ConditionalOnProperty(prefix = "bachelor.iam",
+        name = {"service-provider"}, havingValue = "rpc")
 public class Oauth2IamSysService implements IamSysService {
 
     private static final Logger logger = LoggerFactory.getLogger(Oauth2IamSysService.class);

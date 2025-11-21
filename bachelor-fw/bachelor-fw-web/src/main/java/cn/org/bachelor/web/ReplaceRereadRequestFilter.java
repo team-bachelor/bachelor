@@ -1,9 +1,9 @@
 package cn.org.bachelor.web;
 
-import lombok.extern.slf4j.Slf4j;
-
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 
 /**
@@ -25,14 +25,18 @@ public class ReplaceRereadRequestFilter implements Filter {
      */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        try {
-            // 尝试将原始的 ServletRequest 转换为 HttpServletRequest，并封装为 RequestWrapper
-            // 此操作的目的是为了让请求体可以被重复读取
-            // 原始代码中声明了一个冗余的局部变量 requestWrapper，可优化为直接赋值给 request
-            request = new RequestWrapper((HttpServletRequest) request);
-        } catch (Exception e) {
-            // 若转换过程中出现异常，记录错误日志并继续处理请求
-            log.error("转换失败，继续处理", e);
+        if (RequestWrapper.isSupport(request)) {
+            try {
+                // 尝试将原始的 ServletRequest 转换为 HttpServletRequest，并封装为 RequestWrapper
+                // 此操作的目的是为了让请求体可以被重复读取
+                // 原始代码中声明了一个冗余的局部变量 requestWrapper，可优化为直接赋值给 request
+
+
+                request = new RequestWrapper((HttpServletRequest) request);
+            } catch (Exception e) {
+                // 若转换过程中出现异常，记录错误日志并继续处理请求
+                log.error("转换失败，继续处理", e);
+            }
         }
         // 将修改后的请求和响应传递给过滤器链中的下一个过滤器或目标资源
         chain.doFilter(request, response);

@@ -2,7 +2,7 @@ spring:
   main:
     web-application-type: reactive
   profiles:
-    active: 4pl
+    active: local
   application:
     name: bachelor-ms-gateway
     workbench-code: workbench-manage

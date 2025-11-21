@@ -7,7 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.security.InvalidParameterException;
 
 @Configuration
-public class PasswordEncoderHolder {
+public class PasswordEncoderProvider {
 
 
     @Getter
@@ -24,6 +24,6 @@ public class PasswordEncoderHolder {
         if (!(o instanceof PasswordEncoder)) {
             throw new InvalidParameterException("passwordEncoderName: [" + config + "] is not a PasswordEncoder.");
         }
-        PasswordEncoderHolder.passwordEncoder = (PasswordEncoder) o;
+        PasswordEncoderProvider.passwordEncoder = (PasswordEncoder) o;
     }
 }

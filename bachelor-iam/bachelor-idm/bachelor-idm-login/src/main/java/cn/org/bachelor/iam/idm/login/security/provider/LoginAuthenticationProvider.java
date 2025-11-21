@@ -1,7 +1,7 @@
 package cn.org.bachelor.iam.idm.login.security.provider;
 
 import cn.org.bachelor.iam.idm.login.service.UserDetailsService;
-import cn.org.bachelor.iam.PasswordEncoderHolder;
+import cn.org.bachelor.iam.PasswordEncoderProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +23,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         Object credentials = authentication.getCredentials();
         String password = credentials == null ? null : credentials.toString();
         UserDetails user = loadUserByUsername(username);
-        if (user == null || !PasswordEncoderHolder.getPasswordEncoder().matches(password, user.getPassword())) {
+        if (user == null || !PasswordEncoderProvider.getPasswordEncoder().matches(password, user.getPassword())) {
             return null;
         }
         //还可以填充其他信息

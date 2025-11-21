@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/acm/areaUser")
 @Slf4j
-@Tag(name = "用户管理", description = "用户管理")
+@Tag(name = "区域用户管理", description = "区域用户管理")
 public class AreaUserController {
 
     @Autowired

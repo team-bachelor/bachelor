@@ -64,16 +64,16 @@ public class RoleController {
     /**
      * @描述 根据角色ID获取角色
      *
-     * @param roleID 角色ID
+     * @param roleId 角色ID
      * @return 角色对象
      */
     @Operation(description = "根据角色ID获取角色")
     @Parameters({
             @Parameter(name = "roleID", description = "角色ID", in = ParameterIn.PATH, required = true)
     })
-    @RequestMapping(value = "/{roleID}", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getRole(@PathVariable("roleId") String roleID) {
-        return JsonResponse.createHttpEntity(roleService.selectByPrimaryKey(roleID));
+    @RequestMapping(value = "/{roleId}", method = RequestMethod.GET)
+    public HttpEntity<JsonResponse> getRole(@PathVariable("roleId") String roleId) {
+        return JsonResponse.createHttpEntity(roleService.selectByPrimaryKey(roleId));
     }
 
     /**
@@ -101,11 +101,11 @@ public class RoleController {
      */
     @Operation(description = "查询角色")
     @Parameters({
-            @Parameter(name = "orgCode", description = "组织机构编码", in = ParameterIn.QUERY, required = true),
+            @Parameter(name = "orgCode", description = "组织机构编码", in = ParameterIn.QUERY, required = false),
             @Parameter(name = "keyWord", description = "查询关键词，同时用于匹配角色名称和编码", in = ParameterIn.QUERY, required = true)
     })
     @RequestMapping(value = "/roles", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> findRoles(String orgCode, String keyWord) {
+    public HttpEntity<JsonResponse> findRoles(@RequestParam(name = "orgCode", required = false) String orgCode, @RequestParam("keyWord") String keyWord) {
         return JsonResponse.createHttpEntity(roleService.findViaOrg(orgCode, keyWord));
     }
 

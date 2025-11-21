@@ -1,17 +1,19 @@
 package cn.org.bachelor.microservice.gateway;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import cn.org.bachelor.exception.BusinessException;
 import cn.org.bachelor.exception.RemoteException;
 import cn.org.bachelor.exception.SystemException;
 import cn.org.bachelor.web.json.JsonResponse;
 import cn.org.bachelor.web.json.ResponseStatus;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.cloud.gateway.support.NotFoundException;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.reactive.resource.NoResourceFoundException;
 
 import java.util.Locale;
 
@@ -21,7 +23,6 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 /**
- *
  * @author liuzhuo
  * @创建时间: 2018/11/9
  * 全局异常处理
@@ -54,10 +55,23 @@ public class GlobalExceptionHandler {
         return createExceptionResponseEntity(e.getMessage(), null, SYS_ERR, INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(value = NoResourceFoundException.class)
+    public ResponseEntity handleNoResourceFoundException(Throwable e) throws Exception {
+        logger.error(e);
+        NoResourceFoundException nrf = (NoResourceFoundException) e;
+        return createExceptionResponseEntity(nrf.getMessage(), null, BIZ_ERR, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = NotFoundException.class)
+    public ResponseEntity handleNotFoundException(Throwable e) throws Exception {
+        logger.error(e);
+        return createExceptionResponseEntity(e.getMessage(), null, SYS_ERR, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
     @ExceptionHandler(value = Throwable.class)
     public ResponseEntity handleException(Throwable e) throws Exception {
         logger.error(e);
-        return createExceptionResponseEntity("UNEXPECT_SYSTEM_EXCEPTION", null, SYS_ERR, INTERNAL_SERVER_ERROR);
+        return createExceptionResponseEntity("UNEXPECT_SYSTEM_EXCEPTION:" + e.getMessage(), null, SYS_ERR, INTERNAL_SERVER_ERROR);
     }
 
     private ResponseEntity createExceptionResponseEntity(String code, String[] args, ResponseStatus rs, HttpStatus hs) {

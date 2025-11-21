@@ -151,6 +151,7 @@ public class JwtToken {
         map.put(ORG_ID, userDetail.getOrgId());
         map.put(ORG_NAME, userDetail.getOrgName());
         map.put(DEPT_ID, userDetail.getDeptId());
+        map.put(TENANT_ID, userDetail.getTenantId());
         map.put(DEPT_NAME, userDetail.getDeptName());
         map.put(ACCESS_TOKEN, userDetail.getAccessToken());
         map.put(USER_ID, userDetail.getId());
@@ -195,11 +196,13 @@ public class JwtToken {
             if (StringUtils.isEmpty(payloadDto.getVer()) || Ver1.equals(payloadDto.getVer())) {
                 payloadDto.setClaims(JSONObject.parseObject(payload));
             }
+
             return payloadDto;
         } catch (Exception e) {
             throw new SystemException(e);
         }
     }
+
 
     // jwt签发者
     private String iss;

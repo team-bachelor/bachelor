@@ -31,12 +31,16 @@ public class RequestWrapper extends HttpServletRequestWrapper {
      * @param request 原始的 HttpServletRequest 对象
      */
     public RequestWrapper(HttpServletRequest request) {
+
         super(request);
 
         // 将body数据存储起来
         body = getBodyString(request).getBytes(Charset.defaultCharset());
     }
 
+    public static boolean isSupport(ServletRequest request) {
+        return request.getContentType() != null && !request.getContentType().toLowerCase().startsWith("multipart/");
+    }
     /**
      * 获取请求Body
      * 从 ServletRequest 对象中获取请求体的字符串表示。

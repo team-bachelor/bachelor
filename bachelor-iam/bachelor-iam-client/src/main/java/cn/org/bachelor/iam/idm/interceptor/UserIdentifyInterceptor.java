@@ -8,6 +8,7 @@ import cn.org.bachelor.iam.pojo.IamUser;
 import cn.org.bachelor.iam.token.JwtToken;
 import cn.org.bachelor.web.util.RequestUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,9 +18,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static cn.org.bachelor.iam.IamConstant.ACCESS_BACKEND;
 
@@ -35,13 +34,29 @@ import static cn.org.bachelor.iam.IamConstant.ACCESS_BACKEND;
 public class UserIdentifyInterceptor implements HandlerInterceptor {
     @Resource
     private IamContext iamContext;
-    //    @Autowired
-//    private IamSysService iamSysService;
     @Resource
     private IamConfiguration config;
 
 
-    //private Set<String> urlCache;
+    private static final Set<String> denyKeys =
+            new HashSet<>(Arrays.asList(
+                    "connection",
+                    "cookie",
+                    "content-length",
+                    "postman-token",
+                    "x-forwarded-port",
+                    "x-forwarded-host",
+                    "x-forwarded-prefix",
+                    "host",
+                    "content-type",
+                    "ver",
+                    "x-forwarded-proto",
+                    "x-forwarded-for",
+                    "forwarded",
+                    "accept",
+                    "accept-encoding",
+                    "user-agent"));
+
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         log.info("进入用户信息拦截器，开始组装用户信息：" + request.getServletPath());
 
@@ -123,7 +138,18 @@ public class UserIdentifyInterceptor implements HandlerInterceptor {
         Enumeration<String> names = request.getHeaderNames();
         while (names.hasMoreElements()) {
             String name = names.nextElement();
-            headers.put(name, request.getHeader(name));
+            if (!denyKeys.contains(name)) {
+                String value = request.getHeader(name);
+                Object obj = null;
+                if (JSON.isValidArray(value)) {
+                    obj = JSON.parseArray(value);
+                } else if (JSON.isValidObject(value)) {
+                    obj = JSON.parseObject(value);
+                } else {
+                    obj = value;
+                }
+                headers.put(name, obj);
+            }
         }
         return headers;
     }

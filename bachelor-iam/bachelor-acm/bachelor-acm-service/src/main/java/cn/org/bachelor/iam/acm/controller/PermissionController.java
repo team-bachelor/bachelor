@@ -99,15 +99,15 @@ public class PermissionController {
 
     /**
      * @描述 获得所有权限（按组分开）
-     * @param orgID 机构的编码（租户ID）
+     * @param orgId 机构的编码（租户ID）
      * @return 设置结果
      * @更新履历 2021.1.28 访问路径 /permissions => /grouped
      */
     @Operation(description = "获得全部权限")
-    @Parameter(name = "orgID", description = "机构的编码（租户ID）", in = ParameterIn.QUERY, required = true)
+    @Parameter(name = "orgId", description = "机构的编码（租户ID）", in = ParameterIn.QUERY, required = true)
     @RequestMapping(value = "/grouped", method = RequestMethod.GET)
-    public HttpEntity<JsonResponse> getPermissions(String orgID) {
-        return JsonResponse.createHttpEntity(authorizeService.getPermissionGroupList(orgID));
+    public HttpEntity<JsonResponse> getPermissions(@RequestParam("orgId") String orgId) {
+        return JsonResponse.createHttpEntity(authorizeService.getPermissionGroupList(orgId));
     }
 
     /**

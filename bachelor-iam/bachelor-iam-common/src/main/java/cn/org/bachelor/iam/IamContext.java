@@ -9,11 +9,11 @@ import cn.org.bachelor.context.IContext;
 import cn.org.bachelor.context.IUserContext;
 import cn.org.bachelor.iam.pojo.IamUser;
 import cn.org.bachelor.iam.utils.StringUtils;
+import jakarta.annotation.Resource;
 import lombok.Getter;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.Resource;
 import java.util.Objects;
 
 /**
@@ -26,7 +26,7 @@ public class IamContext implements IUserContext {
 
     /**
      * -- GETTER --
-     *  获取基础上下文
+     * 获取基础上下文
      *
      * @return IContext 上下文
      */
@@ -35,7 +35,7 @@ public class IamContext implements IUserContext {
 
     /**
      * -- GETTER --
-     *  获取远程访问的IP
+     * 获取远程访问的IP
      *
      * @return 远程访问的IP
      */
@@ -51,6 +51,7 @@ public class IamContext implements IUserContext {
 
     /**
      * 获取当前登录用户
+     *
      * @return IamUser 当前登录用户
      */
     @Deprecated
@@ -60,6 +61,7 @@ public class IamContext implements IUserContext {
 
     /**
      * 获取当前用户是否登录
+     *
      * @return 当前用户是否已登录
      */
     public boolean isUserLogon() {
@@ -69,6 +71,7 @@ public class IamContext implements IUserContext {
 
     /**
      * 设置当前登录用户
+     *
      * @param user 当前登录用户
      */
     public void setUser(IamUser user) {
@@ -77,18 +80,23 @@ public class IamContext implements IUserContext {
 
     /**
      * 获取当前登录用户
+     *
      * @return 当前登录用户
      */
     public IamUser getUser() {
         Object uo = baseContext.getRequestAttribute(IamConstant.USER_KEY);
         if (uo != null) {
             return (IamUser) uo;
+        }else{
+            uo = new IamUser();
+            setUser((IamUser) uo);
         }
-        return null;
+        return (IamUser) uo;
     }
 
     /**
      * 获取当前登录用户的编码
+     *
      * @return 当前登录用户的编码
      */
     public String getUserCode() {
@@ -104,6 +112,7 @@ public class IamContext implements IUserContext {
 
     /**
      * 获取当前登录用户的组织机构编码
+     *
      * @return 当前登录用户的组织机构编码
      */
     public String getUserOrgId() {
@@ -117,6 +126,7 @@ public class IamContext implements IUserContext {
 
     /**
      * 设置远程访问的IP
+     *
      * @param remoteIP 远程访问的IP
      */
     public void setRemoteIP(String remoteIP) {
@@ -125,6 +135,7 @@ public class IamContext implements IUserContext {
 
     /**
      * 设置基础上下文
+     *
      * @param baseContext 基础上下文
      */
     public void setBaseContext(IContext baseContext) {

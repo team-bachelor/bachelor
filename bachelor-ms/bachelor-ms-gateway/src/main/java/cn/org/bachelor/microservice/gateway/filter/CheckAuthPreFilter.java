@@ -123,7 +123,6 @@ public class CheckAuthPreFilter implements GlobalFilter {
                                 getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.ACCESS_TOKEN, false))
                         .header(JwtToken.PayloadKey.VER,
                                 getAndRemoveTokenClaim(tokenClaims, JwtToken.PayloadKey.VER, false));
-
                 tokenClaims.keySet().forEach(key -> {
                     builder.header(key, getAndTokenClaim(tokenClaims, key, false, false));
                 });

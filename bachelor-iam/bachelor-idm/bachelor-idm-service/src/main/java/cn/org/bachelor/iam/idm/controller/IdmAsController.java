@@ -35,7 +35,7 @@ import java.util.Map;
  * /user/logout       -> /idm/as/logout
  */
 //@CrossOrigin
-@RequestMapping("/idm/as")
+@RequestMapping("/api/idm/as")
 public class IdmAsController {
 
     private static final Logger logger = LoggerFactory.getLogger(IdmAsController.class);
@@ -56,7 +56,7 @@ public class IdmAsController {
     @Operation(description = "根据授权码获取访问令牌")
     @Parameters({@Parameter(name = "code", description = "授权码", in = ParameterIn.QUERY, required = true)})
     @RequestMapping(value = "/accesstoken", method = RequestMethod.GET)
-    public ResponseEntity<JsonResponse> accesstoken(@RequestParam String code, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<JsonResponse> accesstoken(@RequestParam("code") String code, HttpServletRequest request, HttpServletResponse response) {
         if (StringUtils.isEmpty(code)) {
             // 返回提示，client重新引导用户登录
             logger.info("code 为空,url: {} {}", request.getRequestURI(), request.getQueryString());
