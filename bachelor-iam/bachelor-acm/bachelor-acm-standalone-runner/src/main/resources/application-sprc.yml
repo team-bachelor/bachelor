@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: sprc-cmn-acm
+  datasource:
+    ##测试服
+    url: jdbc:mysql://10.0.160.219:3306/sprc_acm?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+    username: root
+    password: i<Wrftox8r%
+bachelor:
+  iam:
+  ########################################↓权限配置↓########################################
+    client:
+      id: f74381f3ad4b4fb681cbf1e6e2fd74f5
+      secret: ff5aadc7c33e4a398800575a4389512b
+#      id: 3ce0cab2277d428eb17caf7d1bd196a2
+#      secret: 01bd345836644d3780cb0d4db17689af
+  ########################################↑权限配置↑########################################

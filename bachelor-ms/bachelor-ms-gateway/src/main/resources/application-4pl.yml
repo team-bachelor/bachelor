@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: yg4pl-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 121.42.229.106:8848
+        namespace: 46ef7ed0-0489-49e0-8e7e-1e77a2c4de8d
+        username: 4pl_dev
+        password: yiguan156
+      config:
+        server-addr: 121.42.229.106:8848
+        file-extension: yaml
+        namespace: 46ef7ed0-0489-49e0-8e7e-1e77a2c4de8d
+        username: 4pl_dev
+        password: yiguan156
+        data-id: ${spring.application.name}.${spring.cloud.nacos.config.file-extension}
+        group: DEFAULT_GROUP
+        refresh-enabled: true
+        import-check:
+          enabled: false
+bachelor:
+  iam:
+  ########################################↓权限配置↓########################################
+    client:
+      id: f74381f3ad4b4fb681cbf1e6e2fd74f5
+      secret: ff5aadc7c33e4a398800575a4389512b
+#      id: 3ce0cab2277d428eb17caf7d1bd196a2
+#      secret: 01bd345836644d3780cb0d4db17689af
+  ########################################↑权限配置↑########################################

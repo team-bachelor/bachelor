@@ -57,3 +57,7 @@ swagger:
   title: "服务网关的Restful API"
   version: "1.0"
   description: "服务网关API 描述"
+knife4j:
+  gateway:
+    enabled: true
+    strategy: discover

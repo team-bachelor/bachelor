@@ -127,12 +127,14 @@ public class OperateLogService {
             ol.setOpAccountName("未获取");
             ol.setOpOrgId("未获取");
             ol.setOpOrgName("未获取");
+
         } else {
             ol.setOpAccount(user.getCode());
             ol.setOpAccountName(user.getName());
             ol.setOpOrgId(user.getOrgId());
             ol.setOpOrgName(user.getOrgName());
         }
+        ol.setOpIp(logonUserContext == null ? "未获取" : logonUserContext.getRemoteIP());
         ol.setOpTime(new Date());
         ol.setSeriesNumber(data.getSerialNumber());
         return ol;

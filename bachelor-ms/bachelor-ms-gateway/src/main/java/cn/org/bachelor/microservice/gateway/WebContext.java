@@ -23,9 +23,6 @@ public class WebContext implements IContext {
 
     private static final ThreadLocal<Map<String, Object>> tls = new ThreadLocal<>();
 
-    /* (non-Javadoc)
-     * @see cn.org.bachelor.vl.service.IVariableLifecycleService#setGloableAttribute(java.lang.String, java.lang.Object)
-     */
     @Override
     public void setApplicationAttribute(String key, Object value) {
         ServletContext sc = RequestUtils.getServletContext();
@@ -35,9 +32,6 @@ public class WebContext implements IContext {
 
     }
 
-    /* (non-Javadoc)
-     * @see cn.org.bachelor.vl.service.IVariableLifecycleService#getGloableAttribute(java.lang.String)
-     */
     @Override
     public Object getApplicationAttribute(String key) {
         ServletContext sc = RequestUtils.getServletContext();
@@ -47,9 +41,6 @@ public class WebContext implements IContext {
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see cn.org.bachelor.vl.service.IVariableLifecycleService#removeGloableAttribute(java.lang.String)
-     */
     @Override
     public Object removeApplicationAttribute(String key) {
         ServletContext sc = RequestUtils.getServletContext();
@@ -61,9 +52,6 @@ public class WebContext implements IContext {
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see cn.org.bachelor.vl.service.IVariableLifecycleService#setSessionAttribute(java.lang.String, java.lang.Object)
-     */
     @Override
     public void setSessionAttribute(String key, Object value) {
         HttpServletRequest request = RequestUtils.getRequest();
@@ -74,9 +62,7 @@ public class WebContext implements IContext {
         request.getSession(true).setAttribute(key, value);
     }
 
-    /* (non-Javadoc)
-     * @see cn.org.bachelor.vl.service.IVariableLifecycleService#getSessionAttribute(java.lang.String)
-     */
+
     @Override
     public Object getSessionAttribute(String key) {
         HttpServletRequest request = RequestUtils.getRequest();
@@ -89,10 +75,6 @@ public class WebContext implements IContext {
 
     }
 
-
-    /* (non-Javadoc)
-     * @see cn.org.bachelor.vl.service.IVariableLifecycleService#removeSessionAttribute(java.lang.String)
-     */
     @Override
     public Object removeSessionAttribute(String key) {
         HttpServletRequest request = RequestUtils.getRequest();
@@ -104,9 +86,6 @@ public class WebContext implements IContext {
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see cn.org.bachelor.vl.service.IVariableLifecycleService#setRequestAttribute(java.lang.String, java.lang.Object)
-     */
     @Override
     public void setRequestAttribute(String key, Object value) {
         HttpServletRequest request = RequestUtils.getRequest();
@@ -123,9 +102,6 @@ public class WebContext implements IContext {
 
     }
 
-    /* (non-Javadoc)
-     * @see cn.org.bachelor.vl.service.IVariableLifecycleService#getRequestAttribute(java.lang.String)
-     */
     @Override
     public Object getRequestAttribute(String key) {
         HttpServletRequest request = RequestUtils.getRequest();
@@ -141,9 +117,6 @@ public class WebContext implements IContext {
 
     }
 
-    /* (non-Javadoc)
-     * @see cn.org.bachelor.vl.service.IVariableLifecycleService#removeRequestAttribute(java.lang.String)
-     */
     @Override
     public Object removeRequestAttribute(String key) {
         HttpServletRequest request = RequestUtils.getRequest();

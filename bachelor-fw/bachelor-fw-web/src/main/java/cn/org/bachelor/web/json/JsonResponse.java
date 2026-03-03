@@ -139,7 +139,7 @@ public class JsonResponse<T> {
      * @param <K>  返回数据的类型
      * @return 封装为 ResponseEntity，包含了共通字段的返回值
      */
-    public static <K> ResponseEntity<JsonResponse> createHttpEntity(K data) {
+    public static <K> ResponseEntity<JsonResponse<K>> createHttpEntity(K data) {
         return createHttpEntity(data, HttpStatus.OK);
     }
 
@@ -151,7 +151,7 @@ public class JsonResponse<T> {
      * @param <K>  返回数据的类型
      * @return 封装为 ResponseEntity，包含了共通字段的返回值
      */
-    public static <K> ResponseEntity<JsonResponse> createHttpEntity(K data, String msg) {
+    public static <K> ResponseEntity<JsonResponse<K>> createHttpEntity(K data, String msg) {
         return createHttpEntity(data, msg, HttpStatus.OK);
     }
 
@@ -163,7 +163,7 @@ public class JsonResponse<T> {
      * @param <K>    返回数据的类型
      * @return 封装为 ResponseEntity，包含了共通字段的返回值
      */
-    public static <K> ResponseEntity<JsonResponse> createHttpEntity(K data, HttpStatus status) {
+    public static <K> ResponseEntity<JsonResponse<K>> createHttpEntity(K data, HttpStatus status) {
         return createHttpEntity(data, null, status);
     }
 
@@ -176,8 +176,8 @@ public class JsonResponse<T> {
      * @param <K>    返回数据的类型
      * @return 封装为 ResponseEntity，包含了共通字段的返回值
      */
-    public static <K> ResponseEntity<JsonResponse> createHttpEntity(K data, String msg, HttpStatus status) {
-        JsonResponse response = new JsonResponse<K>(data, msg);
+    public static <K> ResponseEntity<JsonResponse<K>> createHttpEntity(K data, String msg, HttpStatus status) {
+        JsonResponse<K> response = new JsonResponse<>(data, msg);
         setJsonResponseStatus(response, status);
         // 返回包含 JsonResponse 的 ResponseEntity
         return new ResponseEntity<>(response, status);
@@ -191,7 +191,7 @@ public class JsonResponse<T> {
      * @param <K>  返回数据的类型
      * @return 封装为 ResponseEntity，包含了共通字段的返回值
      */
-    public static <K> ResponseEntity<JsonResponse> createHttpEntityPrecise(K data) {
+    public static <K> ResponseEntity<JsonResponse<K>> createHttpEntityPrecise(K data) {
         return createHttpEntityPrecise(data, HttpStatus.OK);
     }
 
@@ -231,10 +231,10 @@ public class JsonResponse<T> {
      * @param <K>    返回数据的类型
      * @return 封装为 ResponseEntity，包含了共通字段的返回值
      */
-    public static <K> ResponseEntity<JsonResponse>  createHttpEntityPrecise(K data, String msg, HttpStatus status) {
-        JsonResponse response = new JsonResponse<K>(data, msg);
+    public static <K> ResponseEntity<JsonResponse<K>> createHttpEntityPrecise(K data, String msg, HttpStatus status) {
+        JsonResponse<K> response = new JsonResponse<>(data, msg);
         setJsonResponseStatus(response, status);
-        return new ResponseEntity(response, status);
+        return new ResponseEntity<>(response, status);
     }
 
     /*****************************************************************************/

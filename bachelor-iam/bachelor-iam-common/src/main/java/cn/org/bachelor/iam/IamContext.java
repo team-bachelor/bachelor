@@ -110,6 +110,11 @@ public class IamContext implements IUserContext {
         return name;
     }
 
+    @Override
+    public String getRemoteIP() {
+        return this.remoteIP;
+    }
+
     /**
      * 获取当前登录用户的组织机构编码
      *
